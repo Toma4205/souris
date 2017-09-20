@@ -1,6 +1,6 @@
 <?php
 
-echo "Salut Souris";
+echo "Salut Tom la grosse souris";
 echo phpinfo();
 
 
