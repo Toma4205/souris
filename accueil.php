@@ -1,3 +1,23 @@
+<?php
+  // Ouverture de la session
+  session_start();
+
+  // Si l'URL contient le paramètre 'deconnexion'
+  if (isset($_GET['deconnexion']) AND $_GET['deconnexion'] == 'true')
+  {
+      // Si un nom est stocké => on détruit la session
+      if (isset($_SESSION['nom']))
+      {
+        session_destroy();
+        $_SESSION['nom'] = NULL;
+        echo 'Session détruite !';
+      }
+      // Sinon, la session n'a pas été initialisée => on ne fait rien
+      else {
+        echo 'Session : ' . session_id() . ', statut=' . session_status();
+      }
+  }
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -20,7 +40,13 @@
           <h1>Connexion</h1>
 
           <!-- MEMO : types d'input d'un formulaire -->
-          <p>Nom coach : <input type="text" name="nom" /></p>
+          
+          <p>Nom coach : <input type="text" name="nom" value="<?php
+              if(isset($_SESSION['nom']))
+              {
+                echo $_SESSION['nom'];
+              }
+            ?>" /></p>
           <p>Mot de passe : <input type="password" name="mot_de_passe" /></p>
           <p>Code postal :
             <select name="code_postal">
