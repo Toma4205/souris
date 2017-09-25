@@ -10,6 +10,7 @@
       {
         session_destroy();
         $_SESSION['nom'] = NULL;
+        $_SESSION['nom_crea'] = NULL;
         echo 'Session détruite !';
       }
       // Sinon, la session n'a pas été initialisée => on ne fait rien
@@ -30,24 +31,56 @@
     <!-- L'en-tête -->
     <?php include("commun/entete.php"); ?>
 
+    <?php
+      if (isset($_GET['erreur']))
+      {
+        switch ($_GET['erreur']) {
+          case 'connexion':
+            echo '<p><strong>Couple nom/mot de passe invalide !</strong></p>';
+            break;
+          case 'inscription':
+            echo '<p><strong>Un coach utilise déjà ce nom !</strong></p>';
+            break;
+          case 'champs':
+            echo '<p><strong>Nom et mot de passe obligatoires !</strong></p>';
+            break;
+        }
+      }
+    ?>
+
     <!-- Le menu -->
-    <?php include("commun/menu.php"); ?>
+    <?php // include("commun/menu.php"); ?>
 
     <!-- Le corps -->
-    <form method="post" action="cible.php">
-
-      <div id="corps">
-          <h1>Connexion</h1>
-
-          <!-- MEMO : types d'input d'un formulaire -->
-          
+    <div id="corps">
+      <form method="post" action="cible.php?action=connexion">
+          <h1>Déjà inscrit ?</h1>
           <p>Nom coach : <input type="text" name="nom" value="<?php
               if(isset($_SESSION['nom']))
               {
-                echo $_SESSION['nom'];
+                echo htmlspecialchars($_SESSION['nom']);
               }
-            ?>" /></p>
+            ?>" size="40" /></p>
           <p>Mot de passe : <input type="password" name="mot_de_passe" /></p>
+          <br/>
+          <input type="submit" value="Se connecter" />
+        </form>
+
+        <form method="post" action="cible.php?action=inscription">
+          <h1>Nouveau coach ?</h1>
+          <p>Nom coach : <input type="text" name="nom_crea" value="<?php
+              if(isset($_SESSION['nom_crea']))
+              {
+                echo htmlspecialchars($_SESSION['nom_crea']);
+              }
+            ?>" size="40" /></p>
+          <p>Mot de passe : <input type="password" name="mot_de_passe_crea" /></p>
+          <p>Confirmation mot de passe : <input type="password" name="confirm_mot_de_passe_crea" /></p>
+
+          <br/>
+          <input type="submit" value="S'inscrire" />
+        </form>
+          <!-- MEMO : types d'input d'un formulaire
           <p>Code postal :
             <select name="code_postal">
               <option value=""></option>
@@ -67,12 +100,8 @@
           <p>Commentaire : <textarea name="comentaire" rows="8" cols="45"></textarea></p>
 
           <input type="hidden" name="info_cachee" value="toto" />
-
-          <br/>
-          <input type="submit" value="Valider" />
+          -->
       </div>
-
-    </form>
 
     <!-- Le pied de page -->
     <?php include("commun/pied_de_page.php"); ?>

@@ -8,7 +8,7 @@ CREATE TABLE Coach (
     mail VARCHAR(50) NOT NULL,
     mot_de_passe CHAR(32) NOT NULL,
     INDEX ind_nom (nom(10)),
-    UNIQUE ind_uni_mail (mail) 
+    --UNIQUE ind_uni_mail (mail) 
 );
 
 CREATE TABLE Ligue (
