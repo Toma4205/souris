@@ -5,7 +5,7 @@
  * written by KDO kdo@zpmag.com
  * @see        ClasseMere
  */
-require_once('/../ClasseBase.php');
+require_once('/../classeBase.php');
 
 class Ami extends ClasseMere {
 
@@ -28,14 +28,7 @@ class Ami extends ClasseMere {
 	 * @var Coach
 	 * @access private
 	 */
-	private  $coachDemandeur;
-
-	/**
-	 *
-	 * @var Coach
-	 * @access private
-	 */
-	private  $coachDemande;
+	private  $coachAmi;
 
 
 	/**
@@ -43,9 +36,9 @@ class Ami extends ClasseMere {
 	 * @param array $donnees
 	 * @return void
 	 */
-
 	public final  function __construct($donnees) {
-
+		$this->_coachAmi = new Coach($donnees);
+		parent::hydrate($donnees);
 	}
 
 
@@ -53,9 +46,8 @@ class Ami extends ClasseMere {
 	 * @access public
 	 * @return timestamp
 	 */
-
 	public final  function dateAjout() {
-
+		return $this->_date_ajout;
 	}
 
 
@@ -63,20 +55,26 @@ class Ami extends ClasseMere {
 	 * @access public
 	 * @return timestamp
 	 */
-
 	public final  function dateRefus() {
-
+		return $this->_date_refus;
 	}
 
+
+		/**
+		 * @access public
+		 * @return Coach
+		 */
+		public final  function coachAmi() {
+			return $this->_coachAmi;
+		}
 
 	/**
 	 * @access public
 	 * @param timestamp $dateAjout
 	 * @return void
 	 */
-
-	public final  function setDateAjout(timestamp $dateAjout) {
-
+	public final  function setDate_ajout($dateAjout) {
+		$this->_date_ajout = $dateAjout;
 	}
 
 
@@ -85,53 +83,8 @@ class Ami extends ClasseMere {
 	 * @param timestamp $dateRefus
 	 * @return void
 	 */
-
-	public final  function setDateRefus(timestamp $dateRefus) {
-
+	public final  function setDate_refus($dateRefus) {
+		$this->_date_refus = $dateRefus;
 	}
-
-
-	/**
-	 * @access public
-	 * @return Coach
-	 */
-
-	public final  function coachDemandeur() {
-
-	}
-
-
-	/**
-	 * @access public
-	 * @return Coach
-	 */
-
-	public final  function coachDemande() {
-
-	}
-
-
-	/**
-	 * @access public
-	 * @param string $id
-	 * @return void
-	 */
-
-	public final  function setIdCoachDemandeur($id) {
-
-	}
-
-
-	/**
-	 * @access public
-	 * @param string $id
-	 * @return void
-	 */
-
-	public final  function setIdCoachDemande($id) {
-
-	}
-
-
 }
 ?>

@@ -2,16 +2,16 @@
 
 class CoachManager
 {
-  private $_db; // Instance de PDO.
+  private $_bdd; // Instance de PDO.
 
-  public function __construct($db)
+  public function __construct($bdd)
   {
-    $this->setDb($db);
+    $this->setDb($bdd);
   }
 
   public function creerCoach(Coach $coach)
   {
-    $q = $this->_db->prepare('INSERT INTO coach(nom, mot_de_passe, date_creation) VALUES(:nom, :motDePasse, NOW())');
+    $q = $this->_bdd->prepare('INSERT INTO coach(nom, mot_de_passe, date_creation) VALUES(:nom, :motDePasse, NOW())');
     $q->bindValue(':nom', $coach->nom());
     $q->bindValue(':motDePasse', $coach->motDePasse());
 
@@ -22,21 +22,23 @@ class CoachManager
   {
     $id = (int) $id;
 
-    $q = $this->_db->prepare('SELECT * FROM coach WHERE id = :id');
+    $q = $this->_bdd->prepare('SELECT * FROM coach WHERE id = :id');
     $q->bindValue(':id', $id);
 
     $donnees = $q->fetch(PDO::FETCH_ASSOC);
+
+    $q->closeCursor();
 
     return new Coach($donnees);
   }
 
   public function findByNomMotDePasse(Coach $coach)
   {
-    //$q = $this->_db->prepare('SELECT c.*, a.*
+    //$q = $this->_bdd->prepare('SELECT c.*, a.*
     //        FROM coach c
     //        LEFT JOIN ami a ON a.id_coach = c.id
     //        WHERE nom = :nom AND mot_de_passe = :motDePasse');
-    $q = $this->_db->prepare('SELECT *
+    $q = $this->_bdd->prepare('SELECT *
             FROM coach
             WHERE nom = :nom AND mot_de_passe = :motDePasse');
     $q->execute([':nom' => $coach->nom(), ':motDePasse' => $coach->motDePasse()]);
@@ -45,29 +47,14 @@ class CoachManager
 
     $donnees = $q->fetch(PDO::FETCH_ASSOC);
 
+    $q->closeCursor();
+
     return new Coach($donnees);
-  }
-
-  public function findCoachAmiById($idCoach)
-  {
-    $coachs = [];
-
-    $q = $this->_db->prepare('SELECT id, nom, code_postal
-            FROM coach
-            WHERE id IN (SELECT id_coach_ami FROM ami WHERE id_coach = :id)');
-    $q->execute([':id' => $idCoach]);
-
-    while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
-    {
-      $coachs[] = new Coach($donnees);
-    }
-
-    return $coachs;
   }
 
   public function existeByNom($nom)
   {
-      $q = $this->_db->prepare('SELECT COUNT(*) FROM coach WHERE nom = :nom');
+      $q = $this->_bdd->prepare('SELECT COUNT(*) FROM coach WHERE nom = :nom');
       $q->execute([':nom' => $nom]);
 
       return (bool) $q->fetchColumn();
@@ -75,7 +62,7 @@ class CoachManager
 
   public function existeByNomMotDePasse(Coach $coach)
   {
-        $q = $this->_db->prepare('SELECT COUNT(*) FROM coach WHERE nom = :nom AND mot_de_passe = :motDePasse');
+        $q = $this->_bdd->prepare('SELECT COUNT(*) FROM coach WHERE nom = :nom AND mot_de_passe = :motDePasse');
         $q->execute([':nom' => $coach->nom(), ':motDePasse' => $coach->motDePasse()]);
 
         return (bool) $q->fetchColumn();
@@ -85,7 +72,7 @@ class CoachManager
   {
       $coachs = [];
 
-      $q = $this->_db->prepare('SELECT id, nom, code_postal
+      $q = $this->_bdd->prepare('SELECT id, nom, code_postal
             FROM coach
             WHERE nom LIKE :nom
             AND id != :id
@@ -96,17 +83,18 @@ class CoachManager
       {
         $coachs[] = new Coach($donnees);
       }
+      $q->closeCursor();
 
       return $coachs;
   }
 
   public function count()
   {
-    return $this->_db->query('SELECT COUNT(*) FROM coach')->fetchColumn();
+    return $this->_bdd->query('SELECT COUNT(*) FROM coach')->fetchColumn();
   }
 
-  public function setDb(PDO $db)
+  public function setDb(PDO $bdd)
   {
-    $this->_db = $db;
+    $this->_bdd = $bdd;
   }
 }

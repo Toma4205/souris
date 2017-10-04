@@ -1,6 +1,6 @@
 <?php
 
-require_once('/../ClasseBase.php');
+require_once('/../classeBase.php');
 
 class Coach extends ClasseMere
 {
