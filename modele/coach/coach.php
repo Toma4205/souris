@@ -1,33 +1,21 @@
 <?php
 
-class Coach
+require_once('/../ClasseBase.php');
+
+class Coach extends ClasseMere
 {
   private $_id;
   private $_nom;
   private $_motDePasse;
   private $_mail;
   private $_codePostal;
+  private $_dateCreation;
+  private $_dateMaj;
+  private $_amis;
 
   public function __construct(array $donnees)
   {
-    $this->hydrate($donnees);
-  }
-
-  // Un tableau de données doit être passé à la fonction (d'où le préfixe « array »).
-  public function hydrate(array $donnees)
-  {
-    foreach ($donnees as $key => $value)
-    {
-      // On récupère le nom du setter correspondant à l'attribut.
-      $method = 'set'.ucfirst($key);
-
-      // Si le setter correspondant existe.
-      if (method_exists($this, $method))
-      {
-        // On appelle le setter.
-        $this->$method($value);
-      }
-    }
+    parent::hydrate($donnees);
   }
 
   public function id() { return $this->_id; }
@@ -35,6 +23,9 @@ class Coach
   public function motDePasse() { return $this->_motDePasse; }
   public function mail() { return $this->_mail; }
   public function codePostal() { return $this->_codePostal; }
+  public function dateCreation() { return $this->_dateCreation; }
+  public function dateMaj() { return $this->_dateMaj; }
+  public function amis() { return $this->_amis; }
 
   public function setId($id)
   {
@@ -47,7 +38,7 @@ class Coach
       $this->_nom = $nom;
   }
 
-  public function setMotDePasse($motDePasse)
+  public function setMot_de_passe($motDePasse)
   {
       $this->_motDePasse = $motDePasse;
   }
@@ -57,11 +48,20 @@ class Coach
       $this->_mail = $mail;
   }
 
-  public function setCodePostal($codePostal)
+  public function setCode_postal($codePostal)
   {
       $this->_codePostal = $codePostal;
   }
-}
 
+  public function setDate_creation($dateCreation)
+  {
+      $this->_dateCreation = $dateCreation;
+  }
+
+  public function setDate_maj($dateMaj)
+  {
+      $this->_dateMaj = $dateMaj;
+  }
+}
 
  ?>

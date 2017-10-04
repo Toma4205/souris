@@ -275,10 +275,10 @@ creerLienCoachLigueEntreAmis<y:LabelModel>
     <node id="n15">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="30.0" width="150.69411590952916" x="-675.3470579547645" y="59.470579547646594"/>
+          <y:Geometry height="30.0" width="249.39751947516936" x="-724.6987597375846" y="59.470579547646594"/>
           <y:Fill color="#99CCFF" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="131.400390625" x="9.646862642264523" y="5.6494140625">isToutesEquipesCreees<y:LabelModel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="243.466796875" x="2.9653613000846235" y="5.6494140625">isToutesEquipesCreees =&gt; compterParLigue<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -484,7 +484,6 @@ creerLienCoachLigueEntreAmis<y:LabelModel>
       </data>
     </edge>
     <edge id="e16" source="n12" target="n16">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -495,7 +494,6 @@ creerLienCoachLigueEntreAmis<y:LabelModel>
       </data>
     </edge>
     <edge id="e17" source="n16" target="n15">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -506,7 +504,6 @@ creerLienCoachLigueEntreAmis<y:LabelModel>
       </data>
     </edge>
     <edge id="e18" source="n15" target="n17">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>

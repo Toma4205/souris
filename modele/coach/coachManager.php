@@ -9,19 +9,11 @@ class CoachManager
     $this->setDb($db);
   }
 
-  public function add(Coach $coach)
+  public function creerCoach(Coach $coach)
   {
-    $q = $this->_db->prepare('INSERT INTO coach(nom, mot_de_passe) VALUES(:nom, :motDePasse)');
+    $q = $this->_db->prepare('INSERT INTO coach(nom, mot_de_passe, date_creation) VALUES(:nom, :motDePasse, NOW())');
     $q->bindValue(':nom', $coach->nom());
     $q->bindValue(':motDePasse', $coach->motDePasse());
-
-    $q->execute();
-  }
-
-  public function delete(Coach $coach)
-  {
-    $q = $this->_db->prepare('DELETE FROM coach WHERE id = :id');
-    $q->bindValue(':id', $coach->id());
 
     $q->execute();
   }
@@ -30,8 +22,8 @@ class CoachManager
   {
     $id = (int) $id;
 
-    $q = $this->_db->prepare('SELECT id, nom, mot_de_passe, mail, code_postal FROM coach WHERE id = :id');
-    $q->bindValue(':id', $coach->id());
+    $q = $this->_db->prepare('SELECT * FROM coach WHERE id = :id');
+    $q->bindValue(':id', $id);
 
     $donnees = $q->fetch(PDO::FETCH_ASSOC);
 
@@ -40,12 +32,37 @@ class CoachManager
 
   public function findByNomMotDePasse(Coach $coach)
   {
-    $q = $this->_db->prepare('SELECT id, nom, mot_de_passe, mail, code_postal FROM coach WHERE nom = :nom AND mot_de_passe = :motDePasse');
+    //$q = $this->_db->prepare('SELECT c.*, a.*
+    //        FROM coach c
+    //        LEFT JOIN ami a ON a.id_coach = c.id
+    //        WHERE nom = :nom AND mot_de_passe = :motDePasse');
+    $q = $this->_db->prepare('SELECT *
+            FROM coach
+            WHERE nom = :nom AND mot_de_passe = :motDePasse');
     $q->execute([':nom' => $coach->nom(), ':motDePasse' => $coach->motDePasse()]);
+
+    // TODO MPL récupération du fil actu, des amis et des ligues en même temps
 
     $donnees = $q->fetch(PDO::FETCH_ASSOC);
 
     return new Coach($donnees);
+  }
+
+  public function findCoachAmiById($idCoach)
+  {
+    $coachs = [];
+
+    $q = $this->_db->prepare('SELECT id, nom, code_postal
+            FROM coach
+            WHERE id IN (SELECT id_coach_ami FROM ami WHERE id_coach = :id)');
+    $q->execute([':id' => $idCoach]);
+
+    while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+    {
+      $coachs[] = new Coach($donnees);
+    }
+
+    return $coachs;
   }
 
   public function existeByNom($nom)
@@ -64,18 +81,23 @@ class CoachManager
         return (bool) $q->fetchColumn();
   }
 
-  public function getAll()
+  public function findByNom($nom, $idCoach)
   {
-    $coachs = [];
+      $coachs = [];
 
-    $q = $this->_db->query('SELECT id, nom, mot_de_passe, mail, code_postal FROM coach ORDER BY nom');
+      $q = $this->_db->prepare('SELECT id, nom, code_postal
+            FROM coach
+            WHERE nom LIKE :nom
+            AND id != :id
+            ORDER BY nom');
+      $q->execute([':nom' => '%' . $nom . '%', ':id' => $idCoach]);
 
-    while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
-    {
-      $coachs[] = new Coach($donnees);
-    }
+      while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+      {
+        $coachs[] = new Coach($donnees);
+      }
 
-    return $coachs;
+      return $coachs;
   }
 
   public function count()

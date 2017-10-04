@@ -1,0 +1,12 @@
+.tableBase {
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+.tableBase th {
+   border: 1px solid black;
+}
+
+.tableBase td {
+   border: 1px solid black;
+}
