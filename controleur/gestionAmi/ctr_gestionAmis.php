@@ -1,18 +1,6 @@
 <?php
-/* On enregistre notre autoload.
-function chargerClasse($classname)
-{
-  require $classname.'.php';
-}
 
-spl_autoload_register('chargerClasse');*/
-
-require '/../modele/coach/coach.php';
-require '/../modele/coach/coachManager.php';
-require '/../modele/ami/ami.php';
-require '/../modele/ami/amiManager.php';
-
-session_start(); // On appelle session_start() APRÈS avoir enregistré l'autoload.
+session_start();
 
 if (isset($_SESSION[ConstantesSession::COACH]))
 {
