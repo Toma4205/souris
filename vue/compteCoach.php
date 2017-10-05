@@ -54,7 +54,7 @@ require_once("vue/commun/entete.php");
       }
       else
       {
-        echo '<p>Aucune demande d\'ajout. Soyez plus sympathique avec vos congénaires.</p>';
+        echo '<p>Aucune demande d\'ajout. Soyez plus sympathique avec vos congénères.</p>';
       }
       ?>
     </fieldset>
