@@ -20,9 +20,9 @@ if (isset($_GET['deconnexion']))
   exit();
 }
 
-if (isset($_SESSION['coach'])) // Si la session coach existe, on restaure l'objet.
+if (isset($_SESSION[ConstantesSession::COACH])) // Si la session coach existe, on restaure l'objet.
 {
-  $coach = $_SESSION['coach'];
+  $coach = $_SESSION[ConstantesSession::COACH];
 }
 
 $manager = new CoachManager($bdd);
@@ -77,7 +77,7 @@ elseif(isset($_POST['connexion']))
 
 if (isset($coach)) // Si on utilise un coach (nouveau ou pas).
 {
-  $_SESSION['coach'] = $coach;
+  $_SESSION[ConstantesSession::COACH] = $coach;
   // Redirection du visiteur vers la page d'accueil
   header('Location: souris.php?section=compteCoach');
 }

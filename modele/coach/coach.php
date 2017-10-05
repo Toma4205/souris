@@ -4,6 +4,7 @@ require_once('/../classeBase.php');
 
 class Coach extends ClasseMere
 {
+  // Champs BDD
   private $_id;
   private $_nom;
   private $_motDePasse;
@@ -11,6 +12,8 @@ class Coach extends ClasseMere
   private $_codePostal;
   private $_dateCreation;
   private $_dateMaj;
+
+  // Champs pour Vue
   private $_amis;
 
   public function __construct(array $donnees)

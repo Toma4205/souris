@@ -9,17 +9,14 @@ spl_autoload_register('chargerClasse');*/
 
 require '/../modele/coach/coach.php';
 require '/../modele/coach/coachManager.php';
+require '/../modele/ami/ami.php';
 require '/../modele/ami/amiManager.php';
 
 session_start(); // On appelle session_start() APRÈS avoir enregistré l'autoload.
 
-if (isset($_SESSION['coach']))
+if (isset($_SESSION[ConstantesSession::COACH]))
 {
-  if (isset($_POST['retour']))
-  {
-    header('Location: souris.php?section=compteCoach');
-  }
-  $coach = $_SESSION['coach'];
+  $coach = $_SESSION[ConstantesSession::COACH];
 }
 else {
   header('Location: souris.php');
@@ -29,19 +26,23 @@ else {
 $coachManager = new CoachManager($bdd);
 $amiManager = new AmiManager($bdd);
 
+if (isset($_SESSION[ConstantesSession::LISTE_RECH_AMIS]))
+{
+  $coachsRech = $_SESSION[ConstantesSession::LISTE_RECH_AMIS];
+}
+
+$amis = $_SESSION[ConstantesSession::LISTE_AMIS];
+
+// Recherche des coachs par nom
 if (isset($_POST['rechercher']))
 {
   if (isset($_POST['nomCoach']) && !empty($_POST['nomCoach']))
   {
-    if (!isset($_SESSION['rechAmi']) || $_SESSION['rechAmi'] != $_POST['nomCoach'])
+    if (!isset($_SESSION[ConstantesSession::RECH_AMI]) || $_SESSION[ConstantesSession::RECH_AMI] != $_POST['nomCoach'])
     {
-      $coachs = $coachManager->findByNom($_POST['nomCoach'], $coach->id());
-      $_SESSION['rechAmi'] = $_POST['nomCoach'];
-      $_SESSION['listeRechAmi'] = $coachs;
-    }
-    else
-    {
-      $coachs = $_SESSION['listeRechAmi'];
+      $coachsRech = $coachManager->findByNom($_POST['nomCoach'], $coach->id());
+      $_SESSION[ConstantesSession::RECH_AMI] = $_POST['nomCoach'];
+      $_SESSION[ConstantesSession::LISTE_RECH_AMIS] = $coachsRech;
     }
   }
   else
@@ -49,19 +50,49 @@ if (isset($_POST['rechercher']))
     $message = 'La recherche ne doit pas être vide.';
   }
 }
+// Envoi d'une demande d'ajout à un autre coach
 elseif (isset($_POST['ajouter']))
 {
-  $coachs = $_SESSION['listeRechAmi'];
-
   foreach($_POST['ajouter'] as $cle => $value)
   {
     $amiManager->creerAmi($coach, $cle);
   }
-
-  $amis = $manager->findCoachAmiById($coach->id());
-  $_SESSION['listeAmis'] = $amis;
-  // TODO MPL supprimer coach ajouté de la liste
 }
+// Acceptation d'une demande d'ajout d'un autre coach
+elseif (isset($_POST['accepter']))
+{
+  foreach($_POST['accepter'] as $cle => $value)
+  {
+    $amiManager->accepterAmi($coach, $cle);
+  }
+
+  // Maj liste des amis
+  $amis = $amiManager->findAmisByIdCoach($coach->id());
+  $_SESSION[ConstantesSession::LISTE_AMIS] = $amis;
+}
+// Refus d'une demande d'ajout d'un autre coach
+elseif (isset($_POST['refuser']))
+{
+  foreach($_POST['refuser'] as $cle => $value)
+  {
+    $amiManager->refuserAmi($coach, $cle);
+  }
+}
+// Suppression d'un coach ami
+elseif (isset($_POST['supprimer']))
+{
+  foreach($_POST['supprimer'] as $cle => $value)
+  {
+    $amiManager->supprimerAmi($coach, $cle);
+  }
+
+  // Maj liste des amis
+  $amis = $amiManager->findAmisByIdCoach($coach->id());
+  $_SESSION[ConstantesSession::LISTE_AMIS] = $amis;
+}
+
+$demandesAjout = $amiManager->findDemandeAjoutByIdCoach($coach->id());
+$amisDemandesEnCours = $amiManager->findAmiDemandeEnCoursByIdCoach($coach->id());
 
 include_once('vue/gestionAmis.php');
 ?>

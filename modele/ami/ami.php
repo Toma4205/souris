@@ -14,6 +14,13 @@ class Ami extends ClasseMere {
 	 * @var timestamp
 	 * @access private
 	 */
+	private  $date_demande;
+
+	/**
+	 *
+	 * @var timestamp
+	 * @access private
+	 */
 	private  $date_ajout;
 
 	/**
@@ -42,6 +49,15 @@ class Ami extends ClasseMere {
 	}
 
 
+		/**
+		 * @access public
+		 * @return timestamp
+		 */
+		public final  function dateDemande() {
+			return $this->_date_demande;
+		}
+
+
 	/**
 	 * @access public
 	 * @return timestamp
@@ -67,6 +83,15 @@ class Ami extends ClasseMere {
 		public final  function coachAmi() {
 			return $this->_coachAmi;
 		}
+
+			/**
+			 * @access public
+			 * @param timestamp $dateDemande
+			 * @return void
+			 */
+			public final  function setDate_demande($dateDemande) {
+				$this->_date_demande = $dateDemande;
+			}
 
 	/**
 	 * @access public

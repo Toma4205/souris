@@ -1,6 +1,6 @@
 <?php
 // entete
-include("vue/commun/entete.php");
+require_once("vue/commun/entete.php");
 ?>
     <p>Nombre de coachs : <?= $managerCoach->count() ?></p>
 
@@ -68,5 +68,5 @@ include("vue/commun/entete.php");
 
 <?php
 // Le pied de page
-include("vue/commun/pied_de_page.php");
+require_once("vue/commun/pied_de_page.php");
 ?>

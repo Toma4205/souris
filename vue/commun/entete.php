@@ -10,7 +10,7 @@
 <?php
 if (isset($coach))
 {
-  echo '<p><b><a href="souris.php?deconnexion=true">Déconnexion</a></b></p>';
+  echo '<p><b><a href="souris.php?section=compteCoach">Mon compte</a> - <a href="souris.php?deconnexion=true">Déconnexion</a></b> Je suis ' . $coach->nom() . ' (id=' . $coach->id() . ')</p>';
 }
 if (isset($message)) // On a un message à afficher ?
 {
