@@ -4,16 +4,15 @@ if (isset($_POST['creerLigue']))
 {
     header('Location: souris.php?section=creationLigue');
 }
-elseif (isset($_POST['gererAmis'])) 
+elseif (isset($_POST['gererConfreres']))
 {
-    header('Location: souris.php?section=gestionAmis');
+    header('Location: souris.php?section=gestionConfreres');
 }
 
-$managerAmi = new AmiManager($bdd);
+$managerConfrere = new ConfrereManager($bdd);
 
-$amis = $managerAmi->findAmisByIdCoach($coach->id());
-$nbDemandeAjout = (int) $managerAmi->compterNbDemandeAjout($coach->id());
-$_SESSION[ConstantesSession::LISTE_AMIS] = $amis;
+$confreres = $managerConfrere->findConfreresByIdCoach($coach->id());
+$_SESSION[ConstantesSession::LISTE_CONFRERES] = $confreres;
 
 include_once('vue/compteCoach.php');
 ?>

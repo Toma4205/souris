@@ -40,11 +40,8 @@ elseif (isset($_POST['connexion']) && isset($_POST['nom']) && isset($_POST['motD
   $coach = new Coach(['nom' => $_POST['nom'],
                       'mot_de_passe' => $_POST['motDePasse']]);
 
-  if ($manager->existeByNomMotDePasse($coach))
-  {
-    $coach = $manager->findByNomMotDePasse($coach);
-  }
-  else
+  $coach = $manager->findByNomMotDePasse($coach);
+  if (null == $coach->id())
   {
     $message = 'Couple nom/mot de passe invalide !';
     unset($coach);
@@ -56,7 +53,7 @@ elseif(isset($_POST['inscription']))
 }
 elseif(isset($_POST['connexion']))
 {
-  $message = 'Pour se connecter, veuillez saisir les 2 champs.';
+  $message = 'Couple nom/mot de passe invalide !';
 }
 
 if (isset($coach)) // Si on utilise un coach (nouveau ou pas).

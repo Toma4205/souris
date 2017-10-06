@@ -12,9 +12,9 @@ require_once("vue/commun/entete.php");
       </p>
     </fieldset>
     <fieldset>
-      <legend>Liste amis</legend>
+      <legend>Liste confreres</legend>
       <?php
-        if (sizeof($amis) > 0)
+        if (sizeof($confreres) > 0)
         {
       ?>
         <table class="tableBase">
@@ -23,37 +23,24 @@ require_once("vue/commun/entete.php");
               <th>Id</th>
               <th>Nom</th>
               <th>Code postal</th>
-              <th>Date Ajout</th>
-              <th>Date Refus</th>
+              <th>Depuis</th>
             </tr>
           </thead>
           <tbody>
       <?php
-        foreach($amis as $value)
+        foreach($confreres as $value)
         {
-            echo '<tr><td>' . $value->coachAmi()->id() . '</td>';
-            echo '<td>' . $value->coachAmi()->nom() . '</td>';
-            echo '<td>' . $value->coachAmi()->codePostal() . '</td>';
-            echo '<td>' . $value->dateAjout() . '</td>';
-            echo '<td>' . $value->dateRefus() . '</td></tr>';
+            echo '<tr><td>' . $value->coachConfrere()->id() . '</td>';
+            echo '<td>' . $value->coachConfrere()->nom() . '</td>';
+            echo '<td>' . $value->coachConfrere()->codePostal() . '</td>';
+            echo '<td>' . $value->dateDebut() . '</td></tr>';
         }
         echo '</tbody></table>';
       }
       else
       {
         echo '<br/>';
-        echo 'Aucun coach ami.';
-      }
-
-      echo '<br/>';
-
-      if ($nbDemandeAjout > 0)
-      {
-        echo '<p>Vous avez ' . $nbDemandeAjout . ' demande(s) d\'ajout. Consultez la rubrique \'Gérer mes amis\'.</p>';
-      }
-      else
-      {
-        echo '<p>Aucune demande d\'ajout. Soyez plus sympathique avec vos congénères.</p>';
+        echo 'Aucun confrere.';
       }
       ?>
     </fieldset>
@@ -61,7 +48,7 @@ require_once("vue/commun/entete.php");
         <legend>Gestion</legend>
         <form action="" method="post">
           <!--<input type="submit" value="Créer une ligue" name="creerLigue" />-->
-          <input type="submit" value="Gérer mes amis" name="gererAmis" />
+          <input type="submit" value="Gérer mes confreres" name="gererConfreres" />
         </form>
     </fieldset>
 

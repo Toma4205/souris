@@ -13,9 +13,6 @@ class Coach extends ClasseMere
   private $_dateCreation;
   private $_dateMaj;
 
-  // Champs pour Vue
-  private $_amis;
-
   public function __construct(array $donnees)
   {
     parent::hydrate($donnees);
@@ -28,7 +25,6 @@ class Coach extends ClasseMere
   public function codePostal() { return $this->_codePostal; }
   public function dateCreation() { return $this->_dateCreation; }
   public function dateMaj() { return $this->_dateMaj; }
-  public function amis() { return $this->_amis; }
 
   public function setId($id)
   {

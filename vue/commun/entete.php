@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <title>Mon super site</title>
-        <link rel="stylesheet" href="vue/css/commun.css" type="text/css">
+        <link rel="stylesheet" href="web/css/commun.css" type="text/css">
     </head>
     <body>
 

@@ -4,9 +4,9 @@
 class ConstantesSession {
 
     const COACH = 'coach';
-    const LISTE_AMIS = 'listeAmis';
-    const LISTE_RECH_AMIS = 'listeRechAmi';
-    const RECH_AMI = 'rechAmi';
+    const LISTE_CONFRERES = 'listeConfreres';
+    const LISTE_RECH_CONFRERES = 'listeRechConfrere';
+    const RECH_CONFRERE = 'rechConfrere';
 
 }
 
