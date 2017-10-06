@@ -2,7 +2,6 @@
 // entete
 require_once("vue/commun/entete.php");
 ?>
-    <p>Nombre de coachs : <?= $managerCoach->count() ?></p>
 
     <fieldset>
       <legend>Mes informations</legend>
