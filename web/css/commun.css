@@ -1,12 +1,81 @@
+div.avecBordure {
+  border: solid black 1px;
+}
+
+div#bandeau_appli {
+  text-align:center;
+	height:50px;
+  width:100%;
+	background-color:pink;
+}
+div#bandeau_appli_col1 {
+	float: left;
+	width: 100px;
+	margin-right: 10px;
+}
+div#bandeau_appli_centre {
+  margin-left: 110px;
+  height: inherit;
+  vertical-align: middle;
+}
+
+
+div#bandeau_compte {
+  display: inline-block;
+	height:50px;
+  width:100%;
+	background-color:#C0C0C0;
+}
+div#bandeau_compte_col1 {
+	float: left;
+	width: 100px;
+	margin-right: 10px;
+}
+div#bandeau_compte_centre {
+  margin-left: 110px;
+}
+
+
+div#bandeau_ligue {
+	height:50px;
+  width:100%;
+	background-color:yellow;
+}
+
+
+footer#pied_de_page {
+	height:50px;
+  width:100%;
+	background-color:#C0C0C0;
+  border: solid black 1px;
+}
+
+
+div.colonnes {
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: separate; /* Pour s'assurer que les cellules ne sont pas collées */
+    border-spacing: 5px; /* 5 pixels d'écartement entre les colonnes */
+}
+p.colonne, p.contenu, div.colonne, div.contenu {
+    display: table-cell;
+    padding: 5px;
+    border: 1px solid black;
+}
+p.colonne {
+    text-align: center; /* Centrage horizontal */
+    vertical-align: middle; /* Centrage vertical */
+}
+
+/* Tableaux */
 .tableBase {
     border-collapse: collapse;
     border: 1px solid black;
 }
-
 .tableBase th {
    border: 1px solid black;
 }
-
 .tableBase td {
    border: 1px solid black;
 }

@@ -44,13 +44,6 @@ require_once("vue/commun/entete.php");
       }
       ?>
     </fieldset>
-    <fieldset>
-        <legend>Gestion</legend>
-        <form action="" method="post">
-          <!--<input type="submit" value="Créer une ligue" name="creerLigue" />-->
-          <input type="submit" value="Gérer mes confreres" name="gererConfreres" />
-        </form>
-    </fieldset>
 
 <?php
 // Le pied de page

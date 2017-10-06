@@ -20,9 +20,17 @@ elseif (isset($_SESSION[ConstantesSession::COACH]))
     {
         require_once('controleur/compteCoach/ctr_compteCoach.php');
     }
-    elseif ($_GET['section'] == 'gestionConfreres')
+    elseif ($_GET['section'] == 'gestionConfrere')
     {
         require_once('controleur/gestionConfrere/ctr_gestionConfreres.php');
+    }
+    elseif ($_GET['section'] == 'creationLigue')
+    {
+        require_once('controleur/creationLigue/ctr_creationLigue.php');
+    }
+    elseif ($_GET['section'] == 'prepaMercato')
+    {
+        require_once('controleur/prepaMercato/ctr_prepaMercato.php');
     }
 }
 else
