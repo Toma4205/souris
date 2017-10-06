@@ -1,16 +1,5 @@
 <?php
 
-session_start();
-
-if (isset($_SESSION[ConstantesSession::COACH]))
-{
-  $coach = $_SESSION[ConstantesSession::COACH];
-}
-else {
-  header('Location: souris.php');
-  exit();
-}
-
 $coachManager = new CoachManager($bdd);
 $amiManager = new AmiManager($bdd);
 
