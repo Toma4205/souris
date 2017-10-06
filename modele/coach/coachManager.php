@@ -18,6 +18,18 @@ class CoachManager
     $q->execute();
   }
 
+  public function majCoach(Coach $coach)
+  {
+    $q = $this->_bdd->prepare('UPDATE coach SET nom = :nom, mail = :mail, code_postal = :code, date_maj = NOW()
+        WHERE id = :id');
+    $q->bindValue(':nom', $coach->nom());
+    $q->bindValue(':mail', $coach->mail());
+    $q->bindValue(':code', $coach->codePostal());
+    $q->bindValue(':id', $coach->id());
+
+    $q->execute();
+  }
+
   public function findByNomMotDePasse(Coach $coach)
   {
     $q = $this->_bdd->prepare('SELECT *
