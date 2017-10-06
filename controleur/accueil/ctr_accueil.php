@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 if (isset($_GET['deconnexion']))
 {
   $_SESSION = array();
@@ -9,11 +7,6 @@ if (isset($_GET['deconnexion']))
   // Redirection du visiteur vers la page d'accueil
   header('Location: souris.php');
   exit();
-}
-
-if (isset($_SESSION[ConstantesSession::COACH])) // Si la session coach existe, on restaure l'objet.
-{
-  $coach = $_SESSION[ConstantesSession::COACH];
 }
 
 $manager = new CoachManager($bdd);
