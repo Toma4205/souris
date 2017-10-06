@@ -5,6 +5,9 @@ require_once('controleur/constantesSession.php');
 
 session_start();
 
+// Récupération de la connexion
+$bdd = ConnexionBDD::getInstance();
+
 if (!isset($_GET['section']) OR $_GET['section'] == 'index')
 {
     require_once('controleur/accueil/ctr_accueil.php');
