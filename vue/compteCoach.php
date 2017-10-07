@@ -2,49 +2,28 @@
 // entete
 require_once("vue/commun/entete.php");
 ?>
-
+<form action="" method="post">
+<div class="colonnes">
+  <div class="colonne">
     <fieldset>
-      <legend>Mes informations</legend>
+      <legend>Mes actions en attente</legend>
+        A venir...
+    </fieldset>
+    <fieldset>
+      <legend>Actualités</legend>
       <p>
-        Nom         : <?= htmlspecialchars($coach->nom()) ?><br />
-        Mail        : <?= $coach->mail() ?><br />
-        Code Postal : <?= $coach->codePostal() ?><br />
+        A venir...
       </p>
     </fieldset>
+  </div>
+  <div class="colonne">
     <fieldset>
-      <legend>Liste confreres</legend>
-      <?php
-        if (sizeof($confreres) > 0)
-        {
-      ?>
-        <table class="tableBase">
-          <thead>
-            <tr>
-              <th>Id</th>
-              <th>Nom</th>
-              <th>Code postal</th>
-              <th>Depuis</th>
-            </tr>
-          </thead>
-          <tbody>
-      <?php
-        foreach($confreres as $value)
-        {
-            echo '<tr><td>' . $value->coachConfrere()->id() . '</td>';
-            echo '<td>' . $value->coachConfrere()->nom() . '</td>';
-            echo '<td>' . $value->coachConfrere()->codePostal() . '</td>';
-            echo '<td>' . $value->dateDebut() . '</td></tr>';
-        }
-        echo '</tbody></table>';
-      }
-      else
-      {
-        echo '<br/>';
-        echo 'Aucun confrere.';
-      }
-      ?>
+      <legend>Mes ligues</legend>
+        A venir...
     </fieldset>
-
+  </div>
+</div>
+</form>
 <?php
 // Le pied de page
 require_once("vue/commun/pied_de_page.php");

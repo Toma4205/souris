@@ -42,6 +42,9 @@ div#bandeau_ligue {
 	background-color:yellow;
 }
 
+div#contenu {
+  /*height:400px;*/
+}
 
 footer#pied_de_page {
 	height:50px;
@@ -50,6 +53,9 @@ footer#pied_de_page {
   border: solid black 1px;
 }
 
+p.menuEnCours {
+  background-color: beige;
+}
 
 div.colonnes {
     display: table;
@@ -57,6 +63,7 @@ div.colonnes {
     margin-right: auto;
     border-collapse: separate; /* Pour s'assurer que les cellules ne sont pas collées */
     border-spacing: 5px; /* 5 pixels d'écartement entre les colonnes */
+    width: 100%;
 }
 p.colonne, p.contenu, div.colonne, div.contenu {
     display: table-cell;
@@ -66,6 +73,11 @@ p.colonne, p.contenu, div.colonne, div.contenu {
 p.colonne {
     text-align: center; /* Centrage horizontal */
     vertical-align: middle; /* Centrage vertical */
+}
+
+.centre {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Tableaux */

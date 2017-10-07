@@ -5,7 +5,7 @@ require_once("vue/commun/entete.php");
 
 <form action="" method="post">
   <fieldset>
-    <legend>Liste confreres</legend>
+    <legend>Liste confrères</legend>
       <?php
       if (sizeof($confreres) > 0)
       {
@@ -40,7 +40,7 @@ require_once("vue/commun/entete.php");
           ?>
   </fieldset>
   <fieldset>
-    <legend>Ajouter un confrere</legend>
+    <legend>Ajouter un confrère</legend>
       <p>Nom : <input type="text" size="40" name="nomCoach" value="<?php
               if(isset($_POST['nomCoach']))
               {

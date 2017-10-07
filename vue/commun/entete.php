@@ -4,6 +4,7 @@
         <meta charset="utf-8" />
         <title>Mon super site</title>
         <link rel="stylesheet" href="web/css/commun.css" type="text/css">
+        <link rel="stylesheet" href="web/css/taille.css" type="text/css">
     </head>
     <body>
 
@@ -24,11 +25,11 @@ if (isset($coach) && !isset($ligue))
   echo 'Je suis ' . $coach->nom() . ' (id=' . $coach->id() . ')'; ?></div>
   <div id="bandeau_compte_centre">
     <div class="colonnes">
-      <p class="colonne"><a href="souris.php?section=compteCoach">Mon bureau</a></p>
-      <p class="colonne"><a href="souris.php?section=gestionConfrere">Mes confrères</a></p>
-      <p class="colonne"><a href="souris.php?section=creationLigue">Créer une ligue</a></p>
-      <p class="colonne"><a href="souris.php?section=prepaMercato">Préparer mon mercato</a></p>
-      <p class="colonne"><a href="souris.php?section=gestionCompteCoach">Mon compte</a></p>
+      <p class="colonne<?php if($_GET['section'] == 'compteCoach') echo ' menuEnCours'; ?>"><a href="souris.php?section=compteCoach">Mon bureau</a></p>
+      <p class="colonne<?php if($_GET['section'] == 'gestionConfrere') echo ' menuEnCours'; ?>"><a href="souris.php?section=gestionConfrere">Mes confrères</a></p>
+      <p class="colonne<?php if($_GET['section'] == 'creationLigue') echo ' menuEnCours'; ?>"><a href="souris.php?section=creationLigue">Créer une ligue</a></p>
+      <p class="colonne<?php if($_GET['section'] == 'prepaMercato') echo ' menuEnCours'; ?>"><a href="souris.php?section=prepaMercato">Préparer mon mercato</a></p>
+      <p class="colonne<?php if($_GET['section'] == 'gestionCompteCoach') echo ' menuEnCours'; ?>"><a href="souris.php?section=gestionCompteCoach">Mon compte</a></p>
       <p class="colonne"><a href="souris.php?deconnexion=true">Déconnexion</a></p>
     </div>
   </div>
@@ -51,3 +52,4 @@ if (isset($message)) // On a un message à afficher ?
   echo '<p><b>', $message, '</b></p>'; // Si oui, on l'affiche.
 }
  ?>
+<div id="contenu">
