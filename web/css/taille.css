@@ -1,3 +1,10 @@
+.height_20px {
+  height: 20px;
+}
+.height_30px {
+  height: 30px;
+}
+
 .width_50px {
   width: 50px !important;
 }

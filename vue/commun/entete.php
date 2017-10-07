@@ -13,7 +13,7 @@
           <img src="./web/img/logo.jpg" alt="Logo du site" width="100px" height="50px" />
         </div>
         <div id="bandeau_appli_centre">
-        Titre du site ?
+          <h2>T'es un homme ou une souris ?'</h2>
         </div>
       </div>
 <?php
