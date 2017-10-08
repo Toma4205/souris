@@ -5,14 +5,15 @@ require_once("vue/commun/entete.php");
 <form action="" method="post">
 <fieldset>
     <legend>Paramètres de ligue</legend>
-    <p>Nom : <input type="text" class="width_200px" name="nom" size="40" value=<?php
+    <p>Nom <br/>
+      <input type="text" class="width_200px" name="nom" size="40" value=<?php
         echo '"';
         if(isset($_POST['nom']))
         {
           echo htmlspecialchars($_POST['nom']);
         }
         echo '"', (isset($creaLigue) ? ' disabled' : ' enabled');?>/></p>
-    <p>Nombre d'équipes :
+    <p>Nombre d'équipes <br/>
       <select name="nbEquipe" <?php
             if (isset($creaLigue))
             {
@@ -38,7 +39,7 @@ require_once("vue/commun/entete.php");
          ?>
       </select>
     </p>
-    <p>Mode expert :
+    <p>Mode expert <br/>
       <input type="checkbox" name="modeExpert" <?php
           if (isset($_POST['modeExpert']))
           {
@@ -47,7 +48,7 @@ require_once("vue/commun/entete.php");
           echo ' ', (isset($creaLigue) ? ' disabled' : ' enabled');?>/>
       <span class="italic"> cf réglement</span>
     </p>
-    <p>Libelle pari :
+    <p>Libelle pari <br/>
       <textarea name="libellePari" rows="5" cols="30" <?php
           echo '"', (isset($creaLigue) ? ' disabled' : ' enabled');?>><?php
            if(isset($_POST['libellePari']))
@@ -55,17 +56,17 @@ require_once("vue/commun/entete.php");
              echo htmlspecialchars($_POST['libellePari']);
            }?></textarea>
     </p>
+    <?php
+      // Création ligue non validée
+      if (!isset($creaLigue))
+      {
+        echo '<input type="submit" value="Créer" name="creation" />';
+      }
+    ?>
 </fieldset>
 <?php
-  // Création ligue non validée
-  if (!isset($creaLigue))
-  {
-?>
-<input type="submit" value="Créer" name="creation" />
-<?php
-  }
   // Création ligue validée => envoi demande aux confrères
-  else
+  if (isset($creaLigue))
   {
 ?>
 <fieldset>

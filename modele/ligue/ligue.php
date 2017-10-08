@@ -21,6 +21,14 @@ class Ligue extends ClasseBase
   public function nom() { return $this->_nom; }
   public function libellePari() { return $this->_libellePari; }
   public function modeExpert() { return $this->_modeExpert; }
+  public function modeExpertBool() {
+    $mode = false;
+    if (isset($this->_modeExpert))
+    {
+      $mode = true;
+    }
+    return $mode; 
+  }
   public function nbEquipe() { return $this->_nbEquipe; }
   public function dateCreation() { return $this->_dateCreation; }
 

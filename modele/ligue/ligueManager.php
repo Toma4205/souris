@@ -16,7 +16,7 @@ class LigueManager extends ManagerBase
       VALUES(:nom, :libellePari, :modeExpert, :nbEquipe, NOW())');
     $q->bindValue(':nom', $ligue->nom());
     $q->bindValue(':libellePari', $ligue->libellePari());
-    $q->bindValue(':modeExpert', $ligue->modeExpert());
+    $q->bindValue(':modeExpert', $ligue->modeExpertBool());
     $q->bindValue(':nbEquipe', $ligue->nbEquipe());
 
     $q->execute();
