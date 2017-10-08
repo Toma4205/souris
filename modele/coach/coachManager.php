@@ -70,8 +70,9 @@ class CoachManager extends ManagerBase
             FROM coach
             WHERE nom LIKE :nom
             AND id != :id
+            AND id NOT IN (SELECT id_coach_confrere FROM confrere WHERE id_coach = :id2)
             ORDER BY nom');
-      $q->execute([':nom' => '%' . $nom . '%', ':id' => $idCoach]);
+      $q->execute([':nom' => '%' . $nom . '%', ':id' => $idCoach, ':id2' => $idCoach]);
 
       while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
       {
