@@ -26,7 +26,7 @@ class ClasseBase {
 				$this->$method($value);
 			}
 			else {
-				echo '<b> Méthode inconnue -> ' . $method . '</b><br/>';
+				//echo '<b> Méthode inconnue -> ' . $method . '</b><br/>';
 			}
 		}
 	}
