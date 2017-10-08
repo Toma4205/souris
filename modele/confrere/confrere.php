@@ -5,7 +5,7 @@
  * written by KDO kdo@zpmag.com
  * @see        ClasseMere
  */
-require_once('/../classeBase.php');
+require_once(__DIR__ . '/../classeBase.php');
 
 class Confrere extends ClasseBase {
 

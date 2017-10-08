@@ -1,6 +1,6 @@
 <?php
 
-require_once('/../managerBase.php');
+require_once(__DIR__ . '/../managerBase.php');
 
 class CoachManager extends ManagerBase
 {

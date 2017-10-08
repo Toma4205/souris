@@ -1,6 +1,6 @@
 <?php
 
-require_once('/../classeBase.php');
+require_once(__DIR__ . '/../classeBase.php');
 
 class Equipe extends ClasseBase
 {
