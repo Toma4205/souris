@@ -8,10 +8,12 @@ session_start();
 // Récupération de la connexion
 $bdd = ConnexionBDD::getInstance();
 
+// URL de base pour l'application
 if (!isset($_GET['section']) OR $_GET['section'] == 'index')
 {
     require_once('controleur/accueil/ctr_accueil.php');
 }
+// Si la SESSION possède un Coach, l'utilisateur est bien idientifié => navigation autorisée
 elseif (isset($_SESSION[ConstantesSession::COACH]))
 {
     $coach = $_SESSION[ConstantesSession::COACH];
@@ -37,6 +39,7 @@ elseif (isset($_SESSION[ConstantesSession::COACH]))
         require_once('controleur/prepaMercato/ctr_prepaMercato.php');
     }
 }
+// Sinon, on redirige l'utilisateur vers l'accueil
 else
 {
     header('Location: souris.php');
