@@ -11,7 +11,7 @@ class CoachManager extends ManagerBase
 
   public function creerCoach(Coach $coach)
   {
-    $q = $this->_bdd->prepare('INSERT INTO coach(nom, mot_de_passe, date_creation) VALUES(:nom, :motDePasse, NOW())');
+    $q = $this->_bdd->prepare('INSERT INTO coach(nom, mot_de_passe, date_creation, date_maj) VALUES(:nom, :motDePasse, NOW(), NOW())');
     $q->bindValue(':nom', $coach->nom());
     $q->bindValue(':motDePasse', $coach->motDePasse());
 
