@@ -39,14 +39,13 @@ require_once("vue/commun/entete.php");
          ?>
       </select>
     </p>
-    <p>Mode expert <br/>
+    <p>Mode expert <span class="italic">(cf réglement)</span> <br/>
       <input type="checkbox" name="modeExpert" <?php
           if (isset($_POST['modeExpert']))
           {
             echo 'checked';
           }
           echo ' ', (isset($creaLigue) ? ' disabled' : ' enabled');?>/>
-      <span class="italic"> cf réglement</span>
     </p>
     <p>Un petit pari pour mettre du piquant ?<br/>
       <textarea name="libellePari" rows="5" cols="30" <?php
