@@ -39,11 +39,23 @@ if (isset($coach) && !isset($ligue))
 elseif (isset($ligue))
 {
 ?>
-      <div id="bandeau_ligue">
-      </div>
- <?php
+<div id="bandeau_ligue">
+  <div id="bandeau_ligue_col1"><?php
+  echo 'Je suis ' . $coach->nom() . ' (id=' . $coach->id() . ')'; ?></div>
+  <div id="bandeau_ligue_centre">
+    <div class="colonnes">
+      <p class="colonne<?php if($_GET['section'] == 'compteCoach') echo ' menuEnCours'; ?>"><a href="souris.php?section=compteCoach">Mon bureau</a></p>
+      <p class="colonne<?php if($_GET['section'] == 'equipe') echo ' menuEnCours'; ?>"><a href="souris.php?section=equipe">Mon équipe</a></p>
+      <p class="colonne<?php if($_GET['section'] == 'classementLigue') echo ' menuEnCours'; ?>"><a href="souris.php?section=classementLigue">Classement</a></p>
+      <p class="colonne<?php if($_GET['section'] == 'calendrier') echo ' menuEnCours'; ?>"><a href="souris.php?section=calendrier">Calendrier</a></p>
+      <p class="colonne<?php if($_GET['section'] == 'forum') echo ' menuEnCours'; ?>"><a href="souris.php?section=forum">Forum</a></p>
+      <p class="colonne"><a href="souris.php?deconnexion=true">Déconnexion</a></p>
+    </div>
+  </div>
+</div>
+<?php
  }
- ?>
+?>
 
 
 <?php

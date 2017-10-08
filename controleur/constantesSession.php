@@ -8,6 +8,8 @@ class ConstantesSession {
     const LISTE_RECH_CONFRERES = 'listeRechConfrere';
     const RECH_CONFRERE = 'rechConfrere';
 
+    const LISTE_LIGUES = 'listeLigues';
+    const LIGUE = 'ligue';
 }
 
  ?>

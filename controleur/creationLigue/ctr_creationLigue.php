@@ -17,5 +17,10 @@ elseif (isset($_POST['creation']))
   $message = 'Le nom de la ligue est obligatoire.';
 }
 
+if (isset($creaLigue))
+{
+  // TODO MPL
+}
+
 include_once('vue/creationLigue.php');
 ?>

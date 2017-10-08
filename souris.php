@@ -20,6 +20,7 @@ elseif (isset($_SESSION[ConstantesSession::COACH]))
 
     if ($_GET['section'] == 'compteCoach')
     {
+        unset($_SESSION[ConstantesSession::LIGUE]);
         require_once('controleur/compteCoach/ctr_compteCoach.php');
     }
     elseif ($_GET['section'] == 'gestionCompteCoach')
@@ -37,6 +38,27 @@ elseif (isset($_SESSION[ConstantesSession::COACH]))
     elseif ($_GET['section'] == 'prepaMercato')
     {
         require_once('controleur/prepaMercato/ctr_prepaMercato.php');
+    }
+
+    if (isset($_SESSION[ConstantesSession::LIGUE]))
+    {
+      $ligue = $_SESSION[ConstantesSession::LIGUE];
+      if ($_GET['section'] == 'equipe')
+      {
+          require_once('controleur/equipe/ctr_equipe.php');
+      }
+      elseif ($_GET['section'] == 'classementLigue')
+      {
+          require_once('controleur/classementLigue/ctr_classementLigue.php');
+      }
+      elseif ($_GET['section'] == 'calendrier')
+      {
+          require_once('controleur/calendrier/ctr_calendrier.php');
+      }
+      elseif ($_GET['section'] == 'forum')
+      {
+          require_once('controleur/forum/ctr_forum.php');
+      }
     }
 }
 // Sinon, on redirige l'utilisateur vers l'accueil

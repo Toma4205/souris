@@ -27,7 +27,7 @@ if (isset($_POST['rechercher']))
     $message = 'La recherche ne doit pas être vide.';
   }
 }
-// Envoi d'une demande d'ajout à un autre coach
+// Ajout d'un confrère dans la liste
 elseif (isset($_POST['ajouter']))
 {
   foreach($_POST['ajouter'] as $cle => $value)

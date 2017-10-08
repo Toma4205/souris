@@ -7,10 +7,15 @@ class Ligue extends ClasseBase
   // Champs BDD
   private $_id;
   private $_nom;
+  private $_etat;
   private $_libellePari;
   private $_modeExpert;
   private $_nbEquipe;
   private $_dateCreation;
+
+  // Champs de coach_ligue
+  private $_createur;
+  private $_dateValidation;
 
   public function __construct(array $donnees)
   {
@@ -19,6 +24,7 @@ class Ligue extends ClasseBase
 
   public function id() { return $this->_id; }
   public function nom() { return $this->_nom; }
+  public function etat() { return $this->_etat; }
   public function libellePari() { return $this->_libellePari; }
   public function modeExpert() { return $this->_modeExpert; }
   public function modeExpertBool() {
@@ -27,10 +33,12 @@ class Ligue extends ClasseBase
     {
       $mode = true;
     }
-    return $mode; 
+    return $mode;
   }
   public function nbEquipe() { return $this->_nbEquipe; }
   public function dateCreation() { return $this->_dateCreation; }
+  public function createur() { return $this->_createur; }
+  public function dateValidation() { return $this->_dateValidation; }
 
   public function setId($id)
   {
@@ -40,6 +48,11 @@ class Ligue extends ClasseBase
   public function setNom($nom)
   {
       $this->_nom = $nom;
+  }
+
+  public function setEtat($etat)
+  {
+      $this->_etat = $etat;
   }
 
   public function setLibellePari($libellePari)
@@ -60,5 +73,15 @@ class Ligue extends ClasseBase
   public function setDate_creation($dateCreation)
   {
       $this->_dateCreation = $dateCreation;
+  }
+
+  public function setCreateur($createur)
+  {
+      $this->_createur = $createur;
+  }
+
+  public function setDate_validation($dateValidation)
+  {
+      $this->_dateValidation = $dateValidation;
   }
 }

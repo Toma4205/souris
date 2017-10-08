@@ -37,9 +37,18 @@ div#bandeau_compte_centre {
 
 
 div#bandeau_ligue {
+  display: inline-block;
 	height:50px;
   width:100%;
-	background-color:yellow;
+	background-color:#C0C0C0;
+}
+div#bandeau_ligue_col1 {
+	float: left;
+	width: 100px;
+	margin-right: 10px;
+}
+div#bandeau_ligue_centre {
+  margin-left: 110px;
 }
 
 div#contenu {

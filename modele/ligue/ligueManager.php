@@ -12,9 +12,10 @@ class LigueManager extends ManagerBase
   public function creerLigue($idCoach, Ligue $ligue)
   {
     // création de la ligue
-    $q = $this->_bdd->prepare('INSERT INTO ligue(nom, libelle_pari, mode_expert, nb_equipe, date_creation)
-      VALUES(:nom, :libellePari, :modeExpert, :nbEquipe, NOW())');
+    $q = $this->_bdd->prepare('INSERT INTO ligue(nom, etat, libelle_pari, mode_expert, nb_equipe, date_creation)
+      VALUES(:nom, :etat, :libellePari, :modeExpert, :nbEquipe, NOW())');
     $q->bindValue(':nom', $ligue->nom());
+    $q->bindValue(':etat', EtatLigue::CREATION);
     $q->bindValue(':libellePari', $ligue->libellePari());
     $q->bindValue(':modeExpert', $ligue->modeExpertBool());
     $q->bindValue(':nbEquipe', $ligue->nbEquipe());
@@ -34,4 +35,35 @@ class LigueManager extends ManagerBase
 
     return $idLigue;
   }
+
+  public function findLiguesByIdCoach($idCoach)
+	{
+		$ligues = [];
+
+		// Ligues du coach
+		$q = $this->_bdd->prepare('SELECT l.*, c.createur, c.date_validation
+						FROM ligue l
+						INNER JOIN coach_ligue c ON c.id_ligue = l.id
+						WHERE c.id_coach = :id');
+		$q->execute([':id' => $idCoach]);
+
+		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+		{
+			$ligues[] = new Ligue($donnees);
+		}
+		$q->closeCursor();
+
+		return $ligues;
+	}
+
+  public function findLigueById($idLigue)
+	{
+    $q = $this->_bdd->prepare('SELECT * FROM ligue WHERE id = :id');
+    $q->execute([':id' => $idLigue]);
+
+    $donnees = $q->fetch(PDO::FETCH_ASSOC);
+    $q->closeCursor();
+
+    return new Ligue($donnees);
+	}
 }
