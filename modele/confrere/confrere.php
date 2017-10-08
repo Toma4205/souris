@@ -7,7 +7,7 @@
  */
 require_once('/../classeBase.php');
 
-class Confrere extends ClasseMere {
+class Confrere extends ClasseBase {
 
 	/**
 	 *

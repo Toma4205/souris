@@ -5,7 +5,7 @@
  * written by KDO kdo@zpmag.com
  */
 
-class ClasseMere {
+class ClasseBase {
 
 	/**
 	 * @access public
@@ -26,7 +26,7 @@ class ClasseMere {
 				$this->$method($value);
 			}
 			else {
-				//echo '<b> Méthode inconnue -> ' . $method . '</b><br/>';
+				echo '<b> Méthode inconnue -> ' . $method . '</b><br/>';
 			}
 		}
 	}

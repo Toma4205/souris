@@ -2,7 +2,7 @@
 
 require_once('/../classeBase.php');
 
-class Coach extends ClasseMere
+class Coach extends ClasseBase
 {
   // Champs BDD
   private $_id;
@@ -28,7 +28,6 @@ class Coach extends ClasseMere
 
   public function setId($id)
   {
-    // L'identifiant du personnage sera, quoi qu'il arrive, un nombre entier.
     $this->_id = (int) $id;
   }
 

@@ -79,6 +79,9 @@ p.colonne {
   margin-left: auto;
   margin-right: auto;
 }
+.italic {
+  font-style: italic;
+}
 
 /* Tableaux */
 .tableBase {

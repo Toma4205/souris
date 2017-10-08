@@ -1,9 +1,9 @@
 <?php
 
-class CoachManager
-{
-  private $_bdd; // Instance de PDO.
+require_once('/../managerBase.php');
 
+class CoachManager extends ManagerBase
+{
   public function __construct($bdd)
   {
     $this->setDb($bdd);
@@ -85,10 +85,5 @@ class CoachManager
   public function count()
   {
     return $this->_bdd->query('SELECT COUNT(*) FROM coach')->fetchColumn();
-  }
-
-  public function setDb(PDO $bdd)
-  {
-    $this->_bdd = $bdd;
   }
 }
