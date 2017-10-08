@@ -48,7 +48,7 @@ require_once("vue/commun/entete.php");
           echo ' ', (isset($creaLigue) ? ' disabled' : ' enabled');?>/>
       <span class="italic"> cf réglement</span>
     </p>
-    <p>Libelle pari <br/>
+    <p>Un petit pari pour mettre du piquant ?<br/>
       <textarea name="libellePari" rows="5" cols="30" <?php
           echo '"', (isset($creaLigue) ? ' disabled' : ' enabled');?>><?php
            if(isset($_POST['libellePari']))
