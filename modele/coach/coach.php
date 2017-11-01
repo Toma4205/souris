@@ -13,6 +13,9 @@ class Coach extends ClasseBase
   private $_dateCreation;
   private $_dateMaj;
 
+  // Champs Table coach_ligue
+  private $_dateValidationLigue;
+
   public function __construct(array $donnees)
   {
     parent::hydrate($donnees);
@@ -25,6 +28,7 @@ class Coach extends ClasseBase
   public function codePostal() { return $this->_codePostal; }
   public function dateCreation() { return $this->_dateCreation; }
   public function dateMaj() { return $this->_dateMaj; }
+  public function dateValidationLigue() { return $this->_dateValidationLigue; }
 
   public function setId($id)
   {
@@ -59,6 +63,11 @@ class Coach extends ClasseBase
   public function setDate_maj($dateMaj)
   {
       $this->_dateMaj = $dateMaj;
+  }
+
+  public function setDate_validation_ligue($dateValid)
+  {
+      $this->_dateValidationLigue = $dateValid;
   }
 }
 

@@ -24,6 +24,8 @@ class ClasseBase {
 			{
 				// On appelle le setter.
 				$this->$method($value);
+
+				//echo '<b> Méthode -> ' . $method . '</b><br/>';
 			}
 			else {
 				//echo '<b> Méthode inconnue -> ' . $method . '</b><br/>';

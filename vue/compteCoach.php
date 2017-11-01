@@ -45,22 +45,31 @@ require_once("vue/commun/entete.php");
             {
               if ($value->createur())
               {
-                echo 'A venir...';
-                // echo '<td><input type="submit" value="Modifier" name="modifier[' . $value->id() . ']" /></td>';
+                echo '<td><input type="submit" value="Poursuivre la création" name="continuerCreaLigue[' . $value->id() . ']" /></td>';
               }
               else
               {
-                echo '<td>En attente de validation des autres coachs...</td>';
+                if (null != $value->dateValidation())
+                {
+                  echo '<td>En attente de validation du coach créateur...</td>';
+                }
+                else
+                {
+                  echo '<td>';
+                  echo '<input type="submit" value="Accepter invitation" name="accepterInvitation[' . $value->id() . ']" /> ';
+                  echo ' <input type="submit" value="Refuser invitation" name="refuserInvitation[' . $value->id() . ']" />';
+                  echo '</td>';
+                }
               }
             }
             elseif ($value->etat() == EtatLigue::MERCATO) {
-              echo 'A venir...';
+              echo '<td>A venir... (M)</td>';
             }
             elseif ($value->etat() == EtatLigue::EN_COURS) {
               echo '<td><input type="submit" value="Rejoindre" name="rejoindre[' . $value->id() . ']" /></td>';
             }
             elseif ($value->etat() == EtatLigue::TERMINEE) {
-              echo 'A venir...';
+              echo '<td>A venir... (T)</td>';
               //echo '<td><input type="submit" value="Masquer" name="masquer[' . $value->id() . ']" /></td>';
             }
             echo '</tr>';

@@ -9,6 +9,7 @@ class ConstantesSession {
     const RECH_CONFRERE = 'rechConfrere';
 
     const LISTE_LIGUES = 'listeLigues';
+    const LIGUE_CREA = 'ligueCreation';
     const LIGUE = 'ligue';
 }
 

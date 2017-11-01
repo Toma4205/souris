@@ -27,14 +27,6 @@ class Ligue extends ClasseBase
   public function etat() { return $this->_etat; }
   public function libellePari() { return $this->_libellePari; }
   public function modeExpert() { return $this->_modeExpert; }
-  public function modeExpertBool() {
-    $mode = false;
-    if (isset($this->_modeExpert))
-    {
-      $mode = true;
-    }
-    return $mode;
-  }
   public function nbEquipe() { return $this->_nbEquipe; }
   public function dateCreation() { return $this->_dateCreation; }
   public function createur() { return $this->_createur; }
@@ -55,17 +47,17 @@ class Ligue extends ClasseBase
       $this->_etat = $etat;
   }
 
-  public function setLibellePari($libellePari)
+  public function setLibelle_pari($libellePari)
   {
       $this->_libellePari = $libellePari;
   }
 
-  public function setModeExpert($modeExpert)
+  public function setMode_expert($modeExpert)
   {
       $this->_modeExpert = $modeExpert;
   }
 
-  public function setNbEquipe($nbEquipe)
+  public function setNb_equipe($nbEquipe)
   {
       $this->_nbEquipe = $nbEquipe;
   }

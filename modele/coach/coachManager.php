@@ -83,6 +83,26 @@ class CoachManager extends ManagerBase
       return $coachs;
   }
 
+  public function findCoachsInvitesByIdLigue($idLigue)
+  {
+    $coachsInvites = [];
+
+    // Ligues du coach
+    $q = $this->_bdd->prepare('SELECT cl.date_validation as date_validation_ligue, c.id, c.nom, c.code_postal
+            FROM coach_ligue cl
+            JOIN coach c ON cl.id_coach = c.id
+            WHERE id_ligue = :id AND createur = FALSE');
+    $q->execute([':id' => $idLigue]);
+
+    while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+    {
+      $coachsInvites[] = new Coach($donnees);
+    }
+    $q->closeCursor();
+
+    return $coachsInvites;
+  }
+
   public function count()
   {
     return $this->_bdd->query('SELECT COUNT(*) FROM coach')->fetchColumn();

@@ -8,6 +8,9 @@ session_start();
 // Récupération de la connexion
 $bdd = ConnexionBDD::getInstance();
 
+// Pour le DEBUG
+foreach($_POST as $key => $val) echo '$_POST["'.$key.'"]='.$val.'<br />';
+
 // URL de base pour l'application
 if (!isset($_GET['section']) OR $_GET['section'] == 'index')
 {
@@ -21,14 +24,17 @@ elseif (isset($_SESSION[ConstantesSession::COACH]))
     if ($_GET['section'] == 'compteCoach')
     {
         unset($_SESSION[ConstantesSession::LIGUE]);
+        unset($_SESSION[ConstantesSession::LIGUE_CREA]);
         require_once('controleur/compteCoach/ctr_compteCoach.php');
     }
     elseif ($_GET['section'] == 'gestionCompteCoach')
     {
+        unset($_SESSION[ConstantesSession::LIGUE_CREA]);
         require_once('controleur/gestionCompteCoach/ctr_gestionCompteCoach.php');
     }
     elseif ($_GET['section'] == 'gestionConfrere')
     {
+        unset($_SESSION[ConstantesSession::LIGUE_CREA]);
         require_once('controleur/gestionConfrere/ctr_gestionConfrere.php');
     }
     elseif ($_GET['section'] == 'creationLigue')
@@ -37,6 +43,7 @@ elseif (isset($_SESSION[ConstantesSession::COACH]))
     }
     elseif ($_GET['section'] == 'prepaMercato')
     {
+        unset($_SESSION[ConstantesSession::LIGUE_CREA]);
         require_once('controleur/prepaMercato/ctr_prepaMercato.php');
     }
 

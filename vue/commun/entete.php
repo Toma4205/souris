@@ -25,11 +25,11 @@ if (isset($coach) && !isset($ligue))
   echo 'Je suis ' . $coach->nom() . ' (id=' . $coach->id() . ')'; ?></div>
   <div id="bandeau_compte_centre">
     <div class="colonnes">
-      <p class="colonne<?php if($_GET['section'] == 'compteCoach') echo ' menuEnCours'; ?>"><a href="souris.php?section=compteCoach">Mon bureau</a></p>
-      <p class="colonne<?php if($_GET['section'] == 'gestionConfrere') echo ' menuEnCours'; ?>"><a href="souris.php?section=gestionConfrere">Mes confrères</a></p>
-      <p class="colonne<?php if($_GET['section'] == 'creationLigue') echo ' menuEnCours'; ?>"><a href="souris.php?section=creationLigue">Créer une ligue</a></p>
-      <p class="colonne<?php if($_GET['section'] == 'prepaMercato') echo ' menuEnCours'; ?>"><a href="souris.php?section=prepaMercato">Préparer mon mercato</a></p>
-      <p class="colonne<?php if($_GET['section'] == 'gestionCompteCoach') echo ' menuEnCours'; ?>"><a href="souris.php?section=gestionCompteCoach">Mon compte</a></p>
+      <p class="colonne<?php if($_GET['section'] == 'compteCoach') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'compteCoach') { ?><a href="souris.php?section=compteCoach"><?php } ?>Mon bureau<?php if($_GET['section'] != 'compteCoach') { ?></a><?php } ?></p>
+      <p class="colonne<?php if($_GET['section'] == 'gestionConfrere') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'gestionConfrere') { ?><a href="souris.php?section=gestionConfrere"><?php } ?>Mes confrères<?php if($_GET['section'] != 'gestionConfrere') { ?></a><?php } ?></p>
+      <p class="colonne<?php if($_GET['section'] == 'creationLigue') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'creationLigue') { ?><a href="souris.php?section=creationLigue"><?php } ?>Créer une ligue<?php if($_GET['section'] != 'creationLigue') { ?></a><?php } ?></p>
+      <p class="colonne<?php if($_GET['section'] == 'prepaMercato') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'prepaMercato') { ?><a href="souris.php?section=prepaMercato"><?php } ?>Préparer mon mercato<?php if($_GET['section'] != 'prepaMercato') { ?></a><?php } ?></p>
+      <p class="colonne<?php if($_GET['section'] == 'gestionCompteCoach') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'gestionCompteCoach') { ?><a href="souris.php?section=gestionCompteCoach"><?php } ?>Mon compte<?php if($_GET['section'] != 'gestionCompteCoach') { ?></a><?php } ?></p>
       <p class="colonne"><a href="souris.php?deconnexion=true">Déconnexion</a></p>
     </div>
   </div>
