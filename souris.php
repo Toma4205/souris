@@ -2,6 +2,7 @@
 require_once('controleur/autoLoad.php');
 require_once('modele/connexionSQL.php');
 require_once('controleur/constantesSession.php');
+require_once('controleur/constantesAppli.php');
 
 session_start();
 

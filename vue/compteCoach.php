@@ -63,7 +63,7 @@ require_once("vue/commun/entete.php");
               }
             }
             elseif ($value->etat() == EtatLigue::MERCATO) {
-              echo '<td>A venir... (M)</td>';
+              echo '<td><input type="submit" value="Construire mon équipe" name="continuerCreaLigue[' . $value->id() . ']" /></td>';
             }
             elseif ($value->etat() == EtatLigue::EN_COURS) {
               echo '<td><input type="submit" value="Rejoindre" name="rejoindre[' . $value->id() . ']" /></td>';

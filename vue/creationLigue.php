@@ -3,9 +3,12 @@
 require_once("vue/commun/entete.php");
 ?>
 <form action="" method="post">
+  <!-- ***************************************
+  //   ***** DEBUT PARTIE CREATION LIGUE *****
+  //   *************************************** -->
 <fieldset>
     <legend>Paramètres de ligue</legend>
-    <p>Nom <br/>
+    <p>Nom *<br/>
       <input type="text" class="width_200px" name="nom" size="40" value=<?php
         echo '"';
         if(isset($creaLigue))
@@ -63,6 +66,9 @@ require_once("vue/commun/entete.php");
       }
     ?>
 </fieldset>
+<!-- *********************************************
+//   ***** DEBUT PARTIE GESTION PARTICIPANTS *****
+//   ********************************************* -->
 <?php
   // Création ligue validée => envoi demande aux confrères
   if (isset($creaLigue) && null != $creaLigue->id() && $creaLigue->etat() == EtatLigue::CREATION)
@@ -191,15 +197,18 @@ require_once("vue/commun/entete.php");
         ?>
   </fieldset>
 </div>
+<!-- ****************************************
+//   ***** DEBUT PARTIE CREATION EQUIPE *****
+//   **************************************** -->
 <?php
   }
   // Particpants validés => création équipe + mercato
-  elseif (isset($creaLigue) && null != $creaLigue->id() && $creaLigue->etat() == EtatLigue::MERCATO)
+  elseif (isset($creaLigue) && $creaLigue->etat() == EtatLigue::MERCATO)
   {
 ?>
 <fieldset>
-    <legend>Votre équipe</legend>
-    <p>Nom <br/>
+    <legend>Mon équipe</legend>
+    <p>Nom *<br/>
       <input type="text" class="width_200px" name="nomEquipe" size="30" value=<?php
         echo '"';
         if(isset($equipe))
@@ -207,7 +216,7 @@ require_once("vue/commun/entete.php");
           echo htmlspecialchars($equipe->nom());
         }
         echo '"', (isset($equipe) && null != $equipe->id() ? ' disabled' : ' enabled');?>/></p>
-    <p>Ville <br/>
+    <p>Ville *<br/>
       <input type="text" class="width_200px" name="villeEquipe" size="30" value=<?php
         echo '"';
         if(isset($equipe))
@@ -215,7 +224,7 @@ require_once("vue/commun/entete.php");
           echo htmlspecialchars($equipe->ville());
         }
         echo '"', (isset($equipe) && null != $equipe->id() ? ' disabled' : ' enabled');?>/></p>
-    <p>Stade <br/>
+    <p>Stade *<br/>
       <input type="text" class="width_200px" name="stadeEquipe" size="30" value=<?php
         echo '"';
         if(isset($equipe))
@@ -231,8 +240,32 @@ require_once("vue/commun/entete.php");
       }
     ?>
 </fieldset>
+<!-- ****************************************
+//   ***** DEBUT PARTIE GESTION MERCATO *****
+//   **************************************** -->
 <?php
-  }
+      if (isset($equipe) && null != $equipe->id())
+      {
+?>
+<fieldset>
+    <legend>Gardiens</legend>
+    <p>A venir...</p>
+</fieldset>
+<fieldset>
+    <legend>Défenseurs</legend>
+    <p>A venir...</p>
+</fieldset>
+<fieldset>
+    <legend>Milieux</legend>
+    <p>A venir...</p>
+</fieldset>
+<fieldset>
+    <legend>Attaquants</legend>
+    <p>A venir...</p>
+</fieldset>
+<?php
+      } // Fin du IF affichant la partie mercato
+  } // Fin du IF affichant la partie équipe
 ?>
 </form>
 <?php

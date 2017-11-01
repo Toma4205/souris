@@ -61,13 +61,39 @@ class Equipe extends ClasseBase
       $this->_budgetRestant = $budgetRestant;
   }
 
-  public function setFin_mercatot($finMercato)
+  public function setFin_mercato($finMercato)
   {
       $this->_finMercato = $finMercato;
   }
 
-    public function setNb_match($nbMatch)
-    {
-        $this->_nbMatch = $nbMatch;
-    }
+  public function setNb_match($nbMatch)
+  {
+      $this->_nbMatch = $nbMatch;
+  }
+
+  public function setNb_victoire($nbVictoire)
+  {
+      $this->_nbVictoire = $nbVictoire;
+  }
+
+  public function setNb_nul($nbNul)
+  {
+      $this->_nbNul = $nbNul;
+  }
+
+  public function setNb_defaite($nbDefaite)
+  {
+      $this->_nbDefaite = $nbDefaite;
+  }
+
+  public function setNb_but_pour($nbButPour)
+  {
+      $this->_nbButPour = $nbButPour;
+  }
+
+  public function setNb_but_contre($nbButContre)
+  {
+      $this->_nbButContre = $nbButContre;
+  }
+}
 ?>

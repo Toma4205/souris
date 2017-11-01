@@ -1,7 +1,8 @@
 <?php
 
-$ligueManager = new LigueManager($bdd);
 $coachManager = new CoachManager($bdd);
+$ligueManager = new LigueManager($bdd);
+$equipeManager = new EquipeManager($bdd);
 
 // ***************************************
 // ***** DEBUT PARTIE CREATION LIGUE *****
@@ -84,11 +85,29 @@ if (isset($creaLigue) && $creaLigue->etat() == EtatLigue::CREATION)
 // ***** DEBUT PARTIE CREATION EQUIPE *****
 // ****************************************
 
-if (isset($_POST['creationLigue']))
+if (isset($_POST['creationEquipe']))
 {
   $equipe = new Equipe(['nom' => $_POST['nomEquipe'],
                       'ville' => $_POST['villeEquipe'],
                       'stade' => $_POST['stadeEquipe']]);
+
+  if (isset($_POST['nomEquipe']) && !empty($_POST['nomEquipe'])
+      && isset($_POST['villeEquipe']) && !empty($_POST['villeEquipe'])
+      && isset($_POST['stadeEquipe']) && !empty($_POST['stadeEquipe']))
+  {
+    $equipeManager->creerEquipe($equipe, $coach->id(), $creaLigue->id());
+  }
+  else
+  {
+      $message = 'Le nom, la ville et le stade doivent être renseignés.';
+  }
+}
+
+// Si la ligue est validée, on recherche l'équipe et les joueurs achetés
+if (isset($creaLigue) && $creaLigue->etat() == EtatLigue::MERCATO)
+{
+  $equipe = $equipeManager->findEquipeByCoachEtLigue($coach->id(), $creaLigue->id());
+  // TODO MPL rechercher les joueur_fictif
 }
 
 include_once('vue/creationLigue.php');
