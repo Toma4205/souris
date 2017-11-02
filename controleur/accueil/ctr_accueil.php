@@ -37,6 +37,10 @@ if (isset($_POST['inscription']) && isset($_POST['nomCrea']) && isset($_POST['mo
 elseif (isset($_POST['connexion']) && isset($_POST['nom']) && isset($_POST['motDePasse'])
   && !empty($_POST['nom']) && !empty($_POST['motDePasse']))
 {
+  if ('admin' == $_POST['nom'])
+  {
+    header('Location: admin.php');
+  }
   $coach = new Coach(['nom' => $_POST['nom'],
                       'mot_de_passe' => $_POST['motDePasse']]);
 
