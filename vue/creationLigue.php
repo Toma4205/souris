@@ -248,8 +248,60 @@ require_once("vue/commun/entete.php");
       {
 ?>
 <fieldset>
+    <legend>Mercato</legend>
+    <p>Budget restant : <output id="budgetRestant" name="budgetRestant"><?php echo $equipe->budgetRestant(); ?></output></p>
+    <br/>
+<fieldset>
     <legend>Gardiens</legend>
-    <p>A venir...</p>
+    <?php
+      if (isset($joueursReelsGB))
+      {
+     ?>
+     <div class="colonnes">
+       <div class="colonne" style="width:50%;">
+     <table class="display" id="tableMercatoGB">
+       <thead>
+         <tr>
+           <th>Nom</th>
+           <th>Prénom</th>
+           <th>Equipe</th>
+           <th>Prix</th>
+         </tr>
+       </thead>
+       <tbody>
+         <?php
+         foreach($joueursReelsGB as $value)
+         {
+           echo '<tr><td>' . $value->nom() . '</td>';
+           echo '<td>' . $value->prenom() . '</td>';
+           echo '<td>' . $value->equipe() . '</td>';
+           echo '<td>10</td>';
+           echo '</tr>';
+         }
+         echo '</tbody></table>';
+       }
+       else
+       {
+         echo '<br/>';
+         echo 'Aucun gardien en base !!!';
+       }
+         ?>
+    </div>
+    <div class="colonne" style="width:50%;">
+      <table class="display" id="tableMercatoGBAchat">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Equipe</th>
+            <th>Prix</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </fieldset>
 <fieldset>
     <legend>Défenseurs</legend>
@@ -262,6 +314,7 @@ require_once("vue/commun/entete.php");
 <fieldset>
     <legend>Attaquants</legend>
     <p>A venir...</p>
+</fieldset>
 </fieldset>
 <?php
       } // Fin du IF affichant la partie mercato

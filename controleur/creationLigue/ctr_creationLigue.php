@@ -3,6 +3,7 @@
 $coachManager = new CoachManager($bdd);
 $ligueManager = new LigueManager($bdd);
 $equipeManager = new EquipeManager($bdd);
+$joueurReelManager = new JoueurReelManager($bdd);
 
 // ***************************************
 // ***** DEBUT PARTIE CREATION LIGUE *****
@@ -108,6 +109,7 @@ if (isset($creaLigue) && $creaLigue->etat() == EtatLigue::MERCATO)
 {
   $equipe = $equipeManager->findEquipeByCoachEtLigue($coach->id(), $creaLigue->id());
   // TODO MPL rechercher les joueur_fictif
+  $joueursReelsGB = $joueurReelManager->findByPosition(ConstantesAppli::GARDIEN);
 }
 
 include_once('vue/creationLigue.php');
