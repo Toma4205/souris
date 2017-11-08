@@ -10,16 +10,24 @@ CREATE TABLE `equipe` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT , `id_ligue` IN
 ALTER TABLE `equipe` ADD UNIQUE(`id_ligue`, `id_coach`);
 CREATE TABLE `confrere` (`id_coach` MEDIUMINT UNSIGNED NOT NULL , `id_coach_confrere` MEDIUMINT UNSIGNED NOT NULL , `date_debut` DATETIME NOT NULL , PRIMARY KEY (`id_coach`, `id_coach_confrere`)) ENGINE = InnoDB;
 
-CREATE TABLE `joueur_reel_temp` (
+CREATE TABLE `joueur_reel` (
 `prenom_nom` VARCHAR(100) NOT NULL,
 `prenom` VARCHAR(100),
 `nom` VARCHAR(100),
-`equipe` CHAR(3),
-`position` VARCHAR(20),
+`equipe` CHAR(3) NOT NULL,
+`position` VARCHAR(20) NOT NULL,
+`prix` TINYINT(3) UNSIGNED NOT NULL,
 PRIMARY KEY (`prenom_nom`)
 ) ENGINE = InnoDB;
 
 --LOAD DATA LOCAL INFILE 'C:\\Bitnami\\ListeJoueursReels.csv' INTO TABLE joueur_reel_temp FIELDS TERMINATED BY ';' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
+
+CREATE TABLE `prepa_mercato` (
+`id_coach` MEDIUMINT UNSIGNED NOT NULL ,
+`id_joueur_reel` VARCHAR(100) NOT NULL,
+`prix` MEDIUMINT UNSIGNED NOT NULL,
+PRIMARY KEY (`id_coach`, `id_joueur_reel`)
+) ENGINE = InnoDB;
 
 CREATE TABLE `joueur_temp` (
 `id` VARCHAR(100) NOT NULL ,
@@ -146,3 +154,5 @@ ALTER TABLE `equipe` ADD FOREIGN KEY (`id_ligue`) REFERENCES `ligue`(`id`) ON DE
 ALTER TABLE `equipe` ADD FOREIGN KEY (`code_caricature`) REFERENCES `nomenclature_caricature`(`code`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE `confrere` ADD FOREIGN KEY (`id_coach`) REFERENCES `coach`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `confrere` ADD FOREIGN KEY (`id_coach_confrere`) REFERENCES `coach`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `prepa_mercato` ADD FOREIGN KEY (`id_coach`) REFERENCES `coach`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `prepa_mercato` ADD FOREIGN KEY (`id_joueur_reel`) REFERENCES `joueur_reel`(`prenom_nom`) ON DELETE CASCADE ON UPDATE CASCADE;

@@ -276,7 +276,7 @@ require_once("vue/commun/entete.php");
          $id = 0;
          foreach($joueursReelsGB as $value)
          {
-           echo '<tr id="GB' . $id . '"><td>' . $value->nom() . '</td>';
+           echo '<tr id="GB' . $value->prenomNom() . '"><td>' . $value->nom() . '</td>';
            echo '<td>' . $value->prenom() . '</td>';
            echo '<td>' . $value->equipe() . '</td>';
            echo '<td>10</td>';

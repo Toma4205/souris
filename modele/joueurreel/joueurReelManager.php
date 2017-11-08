@@ -13,7 +13,7 @@ class JoueurReelManager extends ManagerBase
   {
     $joueurs = [];
 
-		$q = $this->_bdd->prepare('SELECT * FROM joueur_reel_temp
+		$q = $this->_bdd->prepare('SELECT * FROM joueur_reel
         WHERE position = :position');
     $q->execute([':position' => $position]);
 

@@ -2,31 +2,33 @@
 
 require_once(__DIR__ . '/../classeBase.php');
 
-class JoueurReel extends ClasseBase
+class JoueurPrepaMercato extends ClasseBase
 {
   // Champs BDD
-  private $_prenomNom;
+  private $_id;
   private $_nom;
   private $_prenom;
   private $_equipe;
   private $_position;
-  private $_prix;
+  private $_prixOrigine;
+  private $_prixAchat;
 
   public function __construct(array $donnees)
   {
     parent::hydrate($donnees);
   }
 
-  public function prenomNom() { return $this->_prenomNom; }
+  public function id() { return $this->_id; }
   public function nom() { return $this->_nom; }
   public function prenom() { return $this->_prenom; }
   public function equipe() { return $this->_equipe; }
   public function position() { return $this->_position; }
-  public function prix() { return $this->_prix; }
+  public function prixOrigine() { return $this->_prixOrigine; }
+  public function prixAchat() { return $this->_prixAchat; }
 
-  public function setPrenom_nom($prenomNom)
+  public function setId($id)
   {
-    $this->_prenomNom = $prenomNom;
+    $this->_id = $id;
   }
 
   public function setNom($nom)
@@ -49,9 +51,14 @@ class JoueurReel extends ClasseBase
       $this->_position = $position;
   }
 
-  public function setPrix($prix)
+  public function setPrixOrigine($prixOrigine)
   {
-      $this->_prix = $prix;
+      $this->_prixOrigine = $prixOrigine;
+  }
+
+  public function setPrixAchat($prixAchat)
+  {
+      $this->_prixAchat = $prixAchat;
   }
 }
 ?>
