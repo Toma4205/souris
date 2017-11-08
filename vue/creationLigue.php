@@ -249,10 +249,13 @@ require_once("vue/commun/entete.php");
 ?>
 <fieldset>
     <legend>Mercato</legend>
-    <p>Budget restant : <output id="budgetRestant" name="budgetRestant"><?php echo $equipe->budgetRestant(); ?></output></p>
+    <p>Budget restant : <output id="budgetRestant" name="budgetRestant"><?php echo $equipe->budgetRestant(); ?></output>
+      <img id="imageBudget" src="./web/img/validation.jpg" alt="Logo du site" width="20px" height="20px" />
+      <input type="submit" id="validationMercato" value="Valider mes offres" name="validationMercato" />
+    </p>
     <br/>
 <fieldset>
-    <legend>Gardiens</legend>
+    <legend>Gardiens (2 min.)  <img id="imageGB" src="./web/img/erreur.jpg" alt="Logo du site" width="20px" height="20px" /></legend>
     <?php
       if (isset($joueursReelsGB))
       {
@@ -270,13 +273,16 @@ require_once("vue/commun/entete.php");
        </thead>
        <tbody>
          <?php
+         $id = 0;
          foreach($joueursReelsGB as $value)
          {
-           echo '<tr><td>' . $value->nom() . '</td>';
+           echo '<tr id="GB' . $id . '"><td>' . $value->nom() . '</td>';
            echo '<td>' . $value->prenom() . '</td>';
            echo '<td>' . $value->equipe() . '</td>';
            echo '<td>10</td>';
            echo '</tr>';
+
+           $id++;
          }
          echo '</tbody></table>';
        }
@@ -288,13 +294,15 @@ require_once("vue/commun/entete.php");
          ?>
     </div>
     <div class="colonne" style="width:50%;">
-      <table class="display" id="tableMercatoGBAchat">
+      <table class="tableBase" id="tableMercatoGBAchat">
         <thead>
           <tr>
             <th>Nom</th>
             <th>Prénom</th>
             <th>Equipe</th>
+            <th>Prix origine</th>
             <th>Prix</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -304,15 +312,15 @@ require_once("vue/commun/entete.php");
   </div>
 </fieldset>
 <fieldset>
-    <legend>Défenseurs</legend>
+    <legend>Défenseurs (6 min.)</legend>
     <p>A venir...</p>
 </fieldset>
 <fieldset>
-    <legend>Milieux</legend>
+    <legend>Milieux (6 min.)</legend>
     <p>A venir...</p>
 </fieldset>
 <fieldset>
-    <legend>Attaquants</legend>
+    <legend>Attaquants (3 min.)</legend>
     <p>A venir...</p>
 </fieldset>
 </fieldset>
