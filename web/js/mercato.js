@@ -53,10 +53,10 @@ function effectuerControlesSuiteModif()
 {
   verifierBoutonValiderMercato();
   controlerImageBudget();
-  controlerImageGB();
-  controlerImageDEF();
-  controlerImageMIL();
-  controlerImageATT();
+  controlerImageTableMercato('GB', 2);
+  controlerImageTableMercato('DEF', 6);
+  controlerImageTableMercato('MIL', 6);
+  controlerImageTableMercato('ATT', 3);
 }
 
 function supprimerAchatJoueur(id, idTable)
@@ -104,43 +104,13 @@ function verifierBoutonValiderMercato()
   }
 }
 
-function controlerImageGB()
+function controlerImageTableMercato(position, nbMin)
 {
-  var nbGB = $('#tableMercatoGBAchat tbody tr').length;
-  if (nbGB >= 2) {
-    $('#imageGB').attr("src","./web/img/validation.jpg");
+  var nbATT = $('#tableMercato' + position + 'Achat tbody tr').length;
+  if (nbATT >= nbMin) {
+    $('#image' + position).attr("src","./web/img/validation.jpg");
   } else {
-    $('#imageGB').attr("src","./web/img/erreur.jpg");
-  }
-}
-
-function controlerImageDEF()
-{
-  var nbDEF = $('#tableMercatoDEFAchat tbody tr').length;
-  if (nbDEF >= 6) {
-    $('#imageDEF').attr("src","./web/img/validation.jpg");
-  } else {
-    $('#imageDEF').attr("src","./web/img/erreur.jpg");
-  }
-}
-
-function controlerImageMIL()
-{
-  var nbMIL = $('#tableMercatoMILAchat tbody tr').length;
-  if (nbMIL >= 6) {
-    $('#imageMIL').attr("src","./web/img/validation.jpg");
-  } else {
-    $('#imageMIL').attr("src","./web/img/erreur.jpg");
-  }
-}
-
-function controlerImageATT()
-{
-  var nbATT = $('#tableMercatoATTAchat tbody tr').length;
-  if (nbATT >= 3) {
-    $('#imageATT').attr("src","./web/img/validation.jpg");
-  } else {
-    $('#imageATT').attr("src","./web/img/erreur.jpg");
+    $('#image' + position).attr("src","./web/img/erreur.jpg");
   }
 }
 

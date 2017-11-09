@@ -16,7 +16,7 @@ elseif (isset($_POST['validationMercato']))
   {
     if (substr($cle, 0, 5) === "name_")
     {
-      $idJoueur = str_replace("_", " ", substr($cle, 5));
+      $idJoueur = substr($cle, 5);
       $joueurPrepaMercatoManager->creerJoueurPrepaMercato($coach->id(), $idJoueur, $prixAchat);
     }
   }

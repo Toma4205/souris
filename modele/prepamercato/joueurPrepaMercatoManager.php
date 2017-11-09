@@ -31,9 +31,9 @@ class JoueurPrepaMercatoManager extends ManagerBase
   {
     $joueurs = [];
 
-		$q = $this->_bdd->prepare('SELECT p.prix as prixAchat, j.prenom_nom as id,
+		$q = $this->_bdd->prepare('SELECT p.prix as prixAchat, j.id,
         j.nom, j.prenom, j.equipe, j.position, j.prix as prixOrigine FROM prepa_mercato p
-        JOIN joueur_reel j ON p.id_joueur_reel = j.prenom_nom
+        JOIN joueur_reel j ON p.id_joueur_reel = j.id
         WHERE p.id_coach = :id');
     $q->execute([':id' => $idCoach]);
 

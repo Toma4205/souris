@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../classeBase.php');
 class JoueurReel extends ClasseBase
 {
   // Champs BDD
-  private $_prenomNom;
+  private $_id;
   private $_nom;
   private $_prenom;
   private $_equipe;
@@ -17,16 +17,16 @@ class JoueurReel extends ClasseBase
     parent::hydrate($donnees);
   }
 
-  public function prenomNom() { return $this->_prenomNom; }
+  public function id() { return $this->_id; }
   public function nom() { return $this->_nom; }
   public function prenom() { return $this->_prenom; }
   public function equipe() { return $this->_equipe; }
   public function position() { return $this->_position; }
   public function prix() { return $this->_prix; }
 
-  public function setPrenom_nom($prenomNom)
+  public function setId($id)
   {
-    $this->_prenomNom = $prenomNom;
+    $this->_id = (int) $id;
   }
 
   public function setNom($nom)

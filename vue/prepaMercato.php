@@ -32,7 +32,7 @@ require_once("vue/commun/entete.php");
          <?php
          foreach($joueursReelsGB as $value)
          {
-           echo '<tr id="' . $value->prenomNom() . '"><td>' . $value->nom() . '</td>';
+           echo '<tr id="' . $value->id() . '"><td>' . $value->nom() . '</td>';
            echo '<td>' . $value->prenom() . '</td>';
            echo '<td>' . $value->equipe() . '</td>';
            echo '<td>' . $value->prix() . '</td>';
@@ -103,7 +103,7 @@ require_once("vue/commun/entete.php");
        <?php
        foreach($joueursReelsDEF as $value)
        {
-         echo '<tr id="' . $value->prenomNom() . '"><td>' . $value->nom() . '</td>';
+         echo '<tr id="' . $value->id() . '"><td>' . $value->nom() . '</td>';
          echo '<td>' . $value->prenom() . '</td>';
          echo '<td>' . $value->equipe() . '</td>';
          echo '<td>' . $value->prix() . '</td>';
@@ -174,7 +174,7 @@ require_once("vue/commun/entete.php");
        <?php
        foreach($joueursReelsMIL as $value)
        {
-         echo '<tr id="' . $value->prenomNom() . '"><td>' . $value->nom() . '</td>';
+         echo '<tr id="' . $value->id() . '"><td>' . $value->nom() . '</td>';
          echo '<td>' . $value->prenom() . '</td>';
          echo '<td>' . $value->equipe() . '</td>';
          echo '<td>' . $value->prix() . '</td>';
@@ -245,7 +245,7 @@ require_once("vue/commun/entete.php");
        <?php
        foreach($joueursReelsATT as $value)
        {
-         echo '<tr id="' . $value->prenomNom() . '"><td>' . $value->nom() . '</td>';
+         echo '<tr id="' . $value->id() . '"><td>' . $value->nom() . '</td>';
          echo '<td>' . $value->prenom() . '</td>';
          echo '<td>' . $value->equipe() . '</td>';
          echo '<td>' . $value->prix() . '</td>';
