@@ -3,23 +3,48 @@ CREATE DATABASE souris CHARACTER SET 'utf8';
 GRANT ALL PRIVILEGES ON souris.* TO 'souris'@'localhost' IDENTIFIED BY 'souris';
 
 CREATE TABLE `coach` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT , `nom` VARCHAR(40) NOT NULL , `mot_de_passe` CHAR(32) NOT NULL , `mail` VARCHAR(50) NULL , `code_postal` CHAR(5) NULL , `date_creation` DATE NOT NULL , `date_maj` DATETIME NOT NULL , PRIMARY KEY (`id`), UNIQUE INDEX `ind_uni_nom` (`nom`(10)), UNIQUE `ind_uni_mail` (`mail`)) ENGINE = InnoDB;
+
 CREATE TABLE `ligue` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT , `nom` VARCHAR(40) NOT NULL , `etat` INT UNSIGNED NOT NULL , `date_creation` DATETIME NOT NULL , `libelle_pari` TEXT NULL, `mode_expert` BOOLEAN NOT NULL , `nb_equipe` TINYINT UNSIGNED NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
 CREATE TABLE `coach_ligue` (`id_coach` MEDIUMINT UNSIGNED NOT NULL , `id_ligue` INT UNSIGNED NOT NULL , `createur` BOOLEAN NOT NULL , `date_validation` DATETIME NULL , PRIMARY KEY (`id_coach`, `id_ligue`)) ENGINE = InnoDB;
+
 CREATE TABLE `equipe` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT , `id_ligue` INT UNSIGNED NOT NULL , `id_coach` MEDIUMINT UNSIGNED NOT NULL , `nom` VARCHAR(30) NOT NULL , `ville` VARCHAR(30) NOT NULL , `stade` VARCHAR(30) NOT NULL , `budget_restant` SMALLINT NOT NULL , `fin_mercato` BOOLEAN NOT NULL , `nb_match` TINYINT UNSIGNED NOT NULL , `nb_victoire` TINYINT UNSIGNED NOT NULL , `nb_nul` TINYINT UNSIGNED NOT NULL , `nb_defaite` TINYINT UNSIGNED NOT NULL ,
 `nb_but_pour` TINYINT UNSIGNED NOT NULL , `nb_but_contre` TINYINT UNSIGNED NOT NULL , `code_caricature` VARCHAR(30) NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 ALTER TABLE `equipe` ADD UNIQUE(`id_ligue`, `id_coach`);
 CREATE TABLE `confrere` (`id_coach` MEDIUMINT UNSIGNED NOT NULL , `id_coach_confrere` MEDIUMINT UNSIGNED NOT NULL , `date_debut` DATETIME NOT NULL , PRIMARY KEY (`id_coach`, `id_coach_confrere`)) ENGINE = InnoDB;
 
 CREATE TABLE `joueur_reel_temp` (
-`prenom_nom` VARCHAR(100) NOT NULL,
+`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+`cle_roto_primaire` VARCHAR(100) NOT NULL,
 `prenom` VARCHAR(100),
 `nom` VARCHAR(100),
 `equipe` CHAR(3),
 `position` VARCHAR(20),
-PRIMARY KEY (`prenom_nom`)
+`prix` TINYINT(3) UNSIGNED NOT NULL,
+`cle_roto_secondaire` VARCHAR(100),
+PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
---LOAD DATA LOCAL INFILE 'C:\\Bitnami\\ListeJoueursReels.csv' INTO TABLE joueur_reel_temp FIELDS TERMINATED BY ';' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
+--LOAD DATA LOCAL INFILE 'C:\\Bitnami\\ListeJoueursReelsNouvelleTable.csv' INTO TABLE joueur_reel_temp FIELDS TERMINATED BY ';' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
+
+CREATE TABLE `resultatsL1_reel` (
+`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+`journee` INT UNSIGNED NOT NULL,
+`equipeDomicile` VARCHAR(30),
+`homeDomicile` VARCHAR(30),
+`butDomicile` INT UNSIGNED NOT NULL,
+`winOrLoseDomicile` VARCHAR(30), 
+`penaltyDomicile` INT UNSIGNED NOT NULL,
+`equipeVisiteur` VARCHAR(30),
+`homeVisiteur` VARCHAR(30),
+`butVisiteur` INT UNSIGNED NOT NULL,
+`winOrLoseVisiteur` VARCHAR(30), 
+`penaltyVisiteur` INT UNSIGNED NOT NULL,
+PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
+
+--LOAD DATA LOCAL INFILE 'C:\\Bitnami\\resultatsL1.csv' INTO TABLE resultatsL1_reel FIELDS TERMINATED BY ';' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
+
 
 CREATE TABLE `joueur_temp` (
 `id` VARCHAR(100) NOT NULL ,
