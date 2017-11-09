@@ -191,41 +191,78 @@
 			 </tr>
 			
 	</form>
-	
 	<table border="1">
+	<h3 id="titreResultatsEquipeEnBase">Resultats L1 presents en BDD</h3>
 	<tbody>
 	<?php
 		echo "<br />\n";
-		$row_resultatFile=0;
-		if (($resultatFile = fopen("admin/csvResultatsEquipes/resultatsL1.csv", "r")) !== FALSE) {
-			$tmp_var=0;
-			while (($data_resultatsL1 = fgetcsv($resultatFile, 1000, ";")) !== FALSE) {
-				$num_resultats = count($data_resultatsL1);
-	?>
-	<tr>
-	<?php
-				for ($c=0; $c < $num_resultats; $c++) {
-	?>
-	<td>
-	<?php
-					echo $data_resultatsL1[$c];
-					$tmp_var++;
-	?>
-	</td>
-	<?php
-				}
-	?>
-	</tr>
-	<?php
-			}
-				if($tmp_var!==0){
-					$row_resultatFile++;
-					echo "<br />\n";
-				}
-		}	
-		fclose($resultatFile);
+		//Récupération des résultats de L1 déjà présent en base de donnée
+		require_once(__DIR__ . '/modele/connexionSQL.php');
+		try
+		{
+			// Récupération de la connexion
+			$bdd = ConnexionBDD::getInstance();
+		}
+		catch (Exception $e)
+		{
+			die('Erreur : ' . $e->getMessage());
+			echo $e;
+		}
 		
-	?>
+		$req = $bdd->query('SELECT * FROM resultatsL1_reel ORDER BY journee DESC');
+		// On affiche chaque entrée une à une
+		while ($donnees = $req->fetch())
+		{
+		 ?>
+		 <tr><td>
+		<?php
+			echo $donnees['journee'];
+		?>	
+		</td><td>
+		<?php
+			echo $donnees['equipeDomicile'];
+		?>
+		</td><td>
+		<?php
+			echo $donnees['homeDomicile'];
+		?>	
+		</td><td>
+		<?php
+			echo $donnees['butDomicile'];
+		?>
+		</td><td>
+		<?php
+			echo $donnees['winOrLoseDomicile'];
+		?>
+		</td><td>
+		<?php
+			echo $donnees['penaltyDomicile'];
+		?>
+		</td><td>
+		<?php
+			echo $donnees['equipeVisiteur'];
+		?>
+		</td><td>
+		<?php
+			echo $donnees['homeVisiteur'];
+		?>	
+		</td><td>
+		<?php
+			echo $donnees['butVisiteur'];
+		?>
+		</td><td>
+		<?php
+			echo $donnees['winOrLoseVisiteur'];
+		?>
+		</td><td>
+		<?php
+			echo $donnees['penaltyVisiteur'];
+		?>
+		</td></tr>
+		<?php
+		}
+		$req->closeCursor();
+		?>
 	</tbody>
 	</table>
 	
