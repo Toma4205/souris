@@ -2,6 +2,7 @@
 CREATE DATABASE souris CHARACTER SET 'utf8';
 GRANT ALL PRIVILEGES ON souris.* TO 'souris'@'localhost' IDENTIFIED BY 'souris';
 
+CREATE TABLE nomenclature_equipe (`code` VARCHAR(3) NOT NULL , `libelle` VARCHAR(255) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
 CREATE TABLE nomenclature_tactique (`code` VARCHAR(10) NOT NULL , `libelle` VARCHAR(255) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
 CREATE TABLE nomenclature_position (`code` VARCHAR(10) NOT NULL , `libelle` VARCHAR(100) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
 CREATE TABLE nomenclature_caricature (`code` VARCHAR(30) NOT NULL , `libelle` VARCHAR(255) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;

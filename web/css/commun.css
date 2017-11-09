@@ -91,6 +91,9 @@ p.colonne {
 .italic {
   font-style: italic;
 }
+.cache {
+  display: none;
+}
 
 /* Tableaux */
 .tableBase {
@@ -102,4 +105,11 @@ p.colonne {
 }
 .tableBase td {
    border: 1px solid black;
+}
+
+/* DataTable */
+.filtrePosteEquipe {
+  float: left;
+  margin-left: 0.5em;
+  padding: 1px;
 }

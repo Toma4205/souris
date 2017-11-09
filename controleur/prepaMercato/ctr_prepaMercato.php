@@ -29,7 +29,7 @@ $budgetRestant = ConstantesAppli::BUDGET_INIT;
 // Rech joueurs enregistrés
 $joueursPrepaMercato = $joueurPrepaMercatoManager->findByCoach($coach->id());
 // Rech joueurs réels
-$joueursReelsGB = $joueurReelManager->findByPosition(ConstantesAppli::GARDIEN);
+$joueursReels = $joueurReelManager->findAll();
 $joueursReelsDEF = $joueurReelManager->findByPosition(ConstantesAppli::DEFENSEUR);
 $joueursReelsMIL = $joueurReelManager->findByPosition(ConstantesAppli::MILIEU);
 $joueursReelsATT = $joueurReelManager->findByPosition(ConstantesAppli::ATTAQUANT);

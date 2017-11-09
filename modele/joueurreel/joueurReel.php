@@ -12,6 +12,9 @@ class JoueurReel extends ClasseBase
   private $_position;
   private $_prix;
 
+  // Libelle Equipe
+  private $_libelleEquipe;
+
   public function __construct(array $donnees)
   {
     parent::hydrate($donnees);
@@ -23,6 +26,25 @@ class JoueurReel extends ClasseBase
   public function equipe() { return $this->_equipe; }
   public function position() { return $this->_position; }
   public function prix() { return $this->_prix; }
+  public function libelleEquipe() { return $this->_libelleEquipe; }
+
+  public function positionIHM()
+  {
+    $positionIHM = ConstantesAppli::GARDIEN_IHM;
+    if ($this->_position == ConstantesAppli::DEFENSEUR)
+    {
+      $positionIHM = ConstantesAppli::DEFENSEUR_IHM;
+    }
+    else if ($this->_position == ConstantesAppli::MILIEU)
+    {
+      $positionIHM = ConstantesAppli::MILIEU_IHM;
+    }
+    else if ($this->_position == ConstantesAppli::ATTAQUANT)
+    {
+      $positionIHM = ConstantesAppli::ATTAQUANT_IHM;
+    }
+    return $positionIHM;
+  }
 
   public function setId($id)
   {
@@ -52,6 +74,11 @@ class JoueurReel extends ClasseBase
   public function setPrix($prix)
   {
       $this->_prix = $prix;
+  }
+
+  public function setLibelleEquipe($libelleEquipe)
+  {
+      $this->_libelleEquipe = $libelleEquipe;
   }
 }
 ?>

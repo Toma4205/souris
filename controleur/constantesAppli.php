@@ -8,6 +8,10 @@ class ConstantesAppli {
     const DEFENSEUR = 'Defender';
     const MILIEU = 'Midfielder';
     const ATTAQUANT = 'Forward';
+    const GARDIEN_IHM = 'Gardien';
+    const DEFENSEUR_IHM = 'Défenseur';
+    const MILIEU_IHM = 'Milieu';
+    const ATTAQUANT_IHM = 'Attaquant';
 }
 
  ?>
