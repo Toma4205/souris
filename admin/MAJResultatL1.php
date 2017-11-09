@@ -3,7 +3,7 @@
 
 <?php
 	
-	function ajoutResultatDansCSV(){
+	function ajoutResultatDansBDD(){
 		$idJournee = isset($_POST['idJournee']) ? $_POST['idJournee'] : NULL;
 		$teamDom = isset($_POST['teamDom']) ? $_POST['teamDom'] : NULL;
 		$butsDom = isset($_POST['butsDom']) ? $_POST['butsDom'] : NULL;
@@ -76,32 +76,40 @@
 		}
 		
 		
-		$req = $bdd->prepare('INSERT INTO resultatsL1_reel( journee,equipeDomicile,homeDomicile,butDomicile,winOrLoseDomicile,penaltyDomicile,equipeVisiteur,homeVisiteur,butVisiteur,WinOrLoseVisiteur,penaltyVisiteur) VALUES(
-		:journee,
-		:equipeDomicile,
-		:homeDomicile,
-		:butDomicile,
-		:winOrLoseDomicile,
-		:penaltyDomicile,
-		:equipeVisiteur,
-		:homeVisiteur,
-		:butVisiteur,
-		:WinOrLoseVisiteur,
-		:penaltyVisiteur)');
-		$req->execute(array(
-		    'journee' => $tableau[0][0],
-			'equipeDomicile' => $tableau[0][1],
-			'homeDomicile' => $tableau[0][2],
-			'butDomicile' => $tableau[0][3],
-			'winOrLoseDomicile' => $tableau[0][4],
-			'penaltyDomicile' => $tableau[0][5],
-			'equipeVisiteur' => $tableau[0][6],
-			'homeVisiteur' => $tableau[0][7],
-			'butVisiteur' => $tableau[0][8],
-			'WinOrLoseVisiteur' => $tableau[0][9],
-			'penaltyVisiteur' => $tableau[0][10]
-			));
-			
+		$resultat_nouveau = $bdd->prepare('SELECT id FROM resultatsL1_reel WHERE journee = :journee AND equipeDomicile = :equipeDomicile AND equipeVisiteur = :equipeVisiteur');
+		$resultat_nouveau->execute (array('journee' => $tableau[0][0],'equipeDomicile' => $tableau[0][1],'equipeVisiteur' => $tableau[0][6]));
+		$nbResultat_nouveau = $resultat_nouveau->rowCount();
+		
+		if($nbResultat_nouveau < 1){
+			$req = $bdd->prepare('INSERT INTO resultatsL1_reel( journee,equipeDomicile,homeDomicile,butDomicile,winOrLoseDomicile,penaltyDomicile,equipeVisiteur,homeVisiteur,butVisiteur,WinOrLoseVisiteur,penaltyVisiteur) VALUES(
+			:journee,
+			:equipeDomicile,
+			:homeDomicile,
+			:butDomicile,
+			:winOrLoseDomicile,
+			:penaltyDomicile,
+			:equipeVisiteur,
+			:homeVisiteur,
+			:butVisiteur,
+			:WinOrLoseVisiteur,
+			:penaltyVisiteur)');
+			$req->execute(array(
+				'journee' => $tableau[0][0],
+				'equipeDomicile' => $tableau[0][1],
+				'homeDomicile' => $tableau[0][2],
+				'butDomicile' => $tableau[0][3],
+				'winOrLoseDomicile' => $tableau[0][4],
+				'penaltyDomicile' => $tableau[0][5],
+				'equipeVisiteur' => $tableau[0][6],
+				'homeVisiteur' => $tableau[0][7],
+				'butVisiteur' => $tableau[0][8],
+				'WinOrLoseVisiteur' => $tableau[0][9],
+				'penaltyVisiteur' => $tableau[0][10]
+				));
+			echo 'INSERT en BDD => OK';
+		}else{
+			echo 'Ce résultat est déjà présent en base de donnée ';
+		}	
 	}
 	
 	function testResultatsCorrect(){
@@ -168,8 +176,7 @@
 	if(strlen(testResultatsCorrect())>1){
 		echo testResultatsCorrect();
 	}else{
-		ajoutResultatDansCSV();
-		echo 'Importation réalisée avec succès';
+		ajoutResultatDansBDD();
 		
 	}
 	
