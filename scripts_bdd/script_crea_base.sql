@@ -13,6 +13,7 @@ CREATE TABLE `equipe` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT , `id_ligue` IN
 ALTER TABLE `equipe` ADD UNIQUE(`id_ligue`, `id_coach`);
 CREATE TABLE `confrere` (`id_coach` MEDIUMINT UNSIGNED NOT NULL , `id_coach_confrere` MEDIUMINT UNSIGNED NOT NULL , `date_debut` DATETIME NOT NULL , PRIMARY KEY (`id_coach`, `id_coach_confrere`)) ENGINE = InnoDB;
 
+
 CREATE TABLE `joueur_reel_temp` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 `cle_roto_primaire` VARCHAR(100) NOT NULL,
@@ -45,6 +46,13 @@ PRIMARY KEY (`id`)
 
 --LOAD DATA LOCAL INFILE 'C:\\Bitnami\\resultatsL1.csv' INTO TABLE resultatsL1_reel FIELDS TERMINATED BY ';' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
 
+
+CREATE TABLE `prepa_mercato` (
+`id_coach` MEDIUMINT UNSIGNED NOT NULL ,
+`id_joueur_reel` VARCHAR(100) NOT NULL,
+`prix` MEDIUMINT UNSIGNED NOT NULL,
+PRIMARY KEY (`id_coach`, `id_joueur_reel`)
+) ENGINE = InnoDB;
 
 CREATE TABLE `joueur_temp` (
 `id` VARCHAR(100) NOT NULL ,
@@ -171,3 +179,5 @@ ALTER TABLE `equipe` ADD FOREIGN KEY (`id_ligue`) REFERENCES `ligue`(`id`) ON DE
 ALTER TABLE `equipe` ADD FOREIGN KEY (`code_caricature`) REFERENCES `nomenclature_caricature`(`code`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE `confrere` ADD FOREIGN KEY (`id_coach`) REFERENCES `coach`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `confrere` ADD FOREIGN KEY (`id_coach_confrere`) REFERENCES `coach`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `prepa_mercato` ADD FOREIGN KEY (`id_coach`) REFERENCES `coach`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `prepa_mercato` ADD FOREIGN KEY (`id_joueur_reel`) REFERENCES `joueur_reel`(`prenom_nom`) ON DELETE CASCADE ON UPDATE CASCADE;
