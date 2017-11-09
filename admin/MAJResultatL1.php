@@ -2,6 +2,7 @@
 <body>
 
 <?php
+	
 	function ajoutResultatDansCSV(){
 		$idJournee = isset($_POST['idJournee']) ? $_POST['idJournee'] : NULL;
 		$teamDom = isset($_POST['teamDom']) ? $_POST['teamDom'] : NULL;
@@ -48,17 +49,59 @@
 		
 		
 		//Ajout à la suite du fichier csv
-		$chemin = 'csvResultatsEquipes/resultatsL1.csv';
+		/*$chemin = 'csvResultatsEquipes/resultatsL1.csv';
 		$delimiteur = ';';
 		$fichier_csv = fopen($chemin, 'a');
 		//fprintf($fichier_csv, chr(0xEF).chr(0xBB).chr(0xBF));
+		
 		foreach($tableau as $ligne){
 			// chaque ligne en cours de lecture est insérée dans le fichier
 			// les valeurs présentes dans chaque ligne seront séparées par $delimiteur
-		fputcsv($fichier_csv, $ligne, $delimiteur);
-}
+			fputcsv($fichier_csv, $ligne, $delimiteur);
+		}
 		// fermeture du fichier csv
 		fclose($fichier_csv);
+		*/
+		
+		require_once(__DIR__ . '/../modele/connexionSQL.php');
+		try
+		{
+			// Récupération de la connexion
+			$bdd = ConnexionBDD::getInstance();
+		}
+		catch (Exception $e)
+		{
+			die('Erreur : ' . $e->getMessage());
+			echo $e;
+		}
+		
+		
+		$req = $bdd->prepare('INSERT INTO resultatsL1_reel( journee,equipeDomicile,homeDomicile,butDomicile,winOrLoseDomicile,penaltyDomicile,equipeVisiteur,homeVisiteur,butVisiteur,WinOrLoseVisiteur,penaltyVisiteur) VALUES(
+		:journee,
+		:equipeDomicile,
+		:homeDomicile,
+		:butDomicile,
+		:winOrLoseDomicile,
+		:penaltyDomicile,
+		:equipeVisiteur,
+		:homeVisiteur,
+		:butVisiteur,
+		:WinOrLoseVisiteur,
+		:penaltyVisiteur)');
+		$req->execute(array(
+		    'journee' => $tableau[0][0],
+			'equipeDomicile' => $tableau[0][1],
+			'homeDomicile' => $tableau[0][2],
+			'butDomicile' => $tableau[0][3],
+			'winOrLoseDomicile' => $tableau[0][4],
+			'penaltyDomicile' => $tableau[0][5],
+			'equipeVisiteur' => $tableau[0][6],
+			'homeVisiteur' => $tableau[0][7],
+			'butVisiteur' => $tableau[0][8],
+			'WinOrLoseVisiteur' => $tableau[0][9],
+			'penaltyVisiteur' => $tableau[0][10]
+			));
+			
 	}
 	
 	function testResultatsCorrect(){
