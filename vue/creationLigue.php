@@ -254,75 +254,10 @@ require_once("vue/commun/entete.php");
       <input type="submit" id="validationMercato" value="Valider mes offres" name="validationMercato" />
     </p>
     <br/>
-<fieldset>
-    <legend>Gardiens (2 min.)  <img id="imageGB" src="./web/img/erreur.jpg" alt="Logo du site" width="20px" height="20px" /></legend>
-    <?php
-      if (isset($joueursReelsGB))
-      {
-     ?>
-     <div class="colonnes">
-       <div class="colonne" style="width:50%;">
-     <table class="display" id="tableMercatoGB">
-       <thead>
-         <tr>
-           <th>Nom</th>
-           <th>Prénom</th>
-           <th>Equipe</th>
-           <th>Prix</th>
-         </tr>
-       </thead>
-       <tbody>
-         <?php
-         $id = 0;
-         foreach($joueursReelsGB as $value)
-         {
-           echo '<tr id="GB' . $value->prenomNom() . '"><td>' . $value->nom() . '</td>';
-           echo '<td>' . $value->prenom() . '</td>';
-           echo '<td>' . $value->equipe() . '</td>';
-           echo '<td>10</td>';
-           echo '</tr>';
-
-           $id++;
-         }
-         echo '</tbody></table>';
-       }
-       else
-       {
-         echo '<br/>';
-         echo 'Aucun gardien en base !!!';
-       }
-         ?>
-    </div>
-    <div class="colonne" style="width:50%;">
-      <table class="tableBase" id="tableMercatoGBAchat">
-        <thead>
-          <tr>
-            <th>Nom</th>
-            <th>Prénom</th>
-            <th>Equipe</th>
-            <th>Prix origine</th>
-            <th>Prix</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</fieldset>
-<fieldset>
-    <legend>Défenseurs (6 min.)</legend>
-    <p>A venir...</p>
-</fieldset>
-<fieldset>
-    <legend>Milieux (6 min.)</legend>
-    <p>A venir...</p>
-</fieldset>
-<fieldset>
-    <legend>Attaquants (3 min.)</legend>
-    <p>A venir...</p>
-</fieldset>
+    <fieldset>
+      <legend>Joueurs</legend>
+      <p>A venir...</p>
+    </fieldset>
 </fieldset>
 <?php
       } // Fin du IF affichant la partie mercato
