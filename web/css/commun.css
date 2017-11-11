@@ -94,6 +94,10 @@ p.colonne {
 .cache {
   display: none;
 }
+.floatRight {
+  float: right;
+  background-color: white !important;
+}
 
 /* Tableaux */
 .tableBase {
@@ -108,8 +112,22 @@ p.colonne {
 }
 
 /* DataTable */
-.filtrePosteEquipe {
+.filtreMercato {
   float: left;
   margin-left: 0.5em;
   padding: 1px;
+}
+
+.erreurPrix {
+ border:1px solid red;
+}
+
+.joueurAchete {
+  width: 400px !important;
+  margin-right: 0px !important;
+  background-color: #98FB98;
+}
+
+.inputPrix {
+  width: 35px !important;
 }

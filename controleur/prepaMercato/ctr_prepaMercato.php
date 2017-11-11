@@ -2,6 +2,7 @@
 
 $joueurReelManager = new JoueurReelManager($bdd);
 $joueurPrepaMercatoManager = new JoueurPrepaMercatoManager($bdd);
+$nomenclEquipeManager = new NomenclatureManager($bdd);
 
 if (isset($_POST['reinitialisation']))
 {
@@ -33,6 +34,9 @@ $joueursReels = $joueurReelManager->findAll();
 $joueursReelsDEF = $joueurReelManager->findByPosition(ConstantesAppli::DEFENSEUR);
 $joueursReelsMIL = $joueurReelManager->findByPosition(ConstantesAppli::MILIEU);
 $joueursReelsATT = $joueurReelManager->findByPosition(ConstantesAppli::ATTAQUANT);
+
+// TODO MPL voir s'il est possible de stocker qqpart cette nomenclature
+$equipes = $nomenclEquipeManager->findNomenclatureEquipe();
 
 include_once('vue/prepaMercato.php');
 ?>
