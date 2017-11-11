@@ -179,7 +179,7 @@ CREATE TABLE `joueur_stats` (
 `bonus_victoire` SMALLINT UNSIGNED NOT NULL,
 `coup_franc_rate` SMALLINT UNSIGNED NOT NULL,
 `note` SMALLINT UNSIGNED NOT NULL,
-PRIMARY KEY (`id`)
+PRIMARY KEY (`id`,`journee`)
 ) ENGINE = InnoDB;
 
 --LOAD DATA LOCAL INFILE 'C:\\Bitnami\\fichierJ9.csv' INTO TABLE joueur_temp FIELDS TERMINATED BY ';' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
