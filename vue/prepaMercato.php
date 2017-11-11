@@ -29,8 +29,6 @@ function afficherJoueurDejaAchete($joueursPrepaMercato, $position)
       <input type="submit" id="reinitialisation" value="Réinitialiser" name="reinitialisation" />
   </p>
   <br/>
-  <fieldset>
-    <legend>Joueurs</legend>
     <?php
       if (isset($joueursReels))
       {
@@ -131,7 +129,6 @@ function afficherJoueurDejaAchete($joueursPrepaMercato, $position)
       </div>
     </div>
   </div>
-</fieldset>
 </fieldset>
 </form>
 <?php
