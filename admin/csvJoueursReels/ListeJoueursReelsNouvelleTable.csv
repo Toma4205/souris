@@ -220,7 +220,7 @@ ID;IDRECHERCHE1;PRENOM;NOM;TEAM;POS;PRIX;IDRECHERCHE2
 ;SerticGregoryMAR;Gregory;Sertic;MAR;Midfielder;10;
 ;FofanaGuessoumaAMN;Guessouma;Fofana;AMN;Midfielder;10;
 ;GhezzalRachidMON;Rachid;Ghezzal;MON;Midfielder;10;
-;NGossoGuyAMN;Guy;NGosso;AMN;Midfielder;10;N'GossoGuyAMN
+;NGossoGuyAMN;Guy;NGosso;AMN;Midfielder;10;N'GossoGuyAMN;
 ;FigueiredoAfonsoREN;Afonso;Figueiredo;REN;Defender;10;
 ;KeytaHamidouETI;Hamidou;Keyta;ETI;Forward;10;
 ;ManzalaHarissonAMN;Harisson;Manzala;AMN;Midfielder;10;
@@ -307,7 +307,7 @@ ID;IDRECHERCHE1;PRENOM;NOM;TEAM;POS;PRIX;IDRECHERCHE2
 ;JorgeMON;;Jorge;MON;Defender;10;
 ;JoveticStevanMON;Stevan;Jovetic;MON;Forward;10;
 ;KeitaMON;;Keita;MON;Forward;10;
-;RolandoJorgeMAR;Jorge;Rolando;MAR;Defender;10;RolandoMAR
+;RolandoJorgeMAR;Jorge;Rolando;MAR;Defender;10;RolandoMAR;
 ;JorginhoETI;;Jorginho;ETI;Midfielder;10;
 ;HunouAdrienREN;Adrien;Hunou;REN;Midfielder;10;
 ;KayembeJorisNTE;Joris;Kayembe;NTE;Midfielder;10;

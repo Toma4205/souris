@@ -79,6 +79,7 @@
 		$resultat_nouveau = $bdd->prepare('SELECT id FROM resultatsL1_reel WHERE journee = :journee AND equipeDomicile = :equipeDomicile AND equipeVisiteur = :equipeVisiteur');
 		$resultat_nouveau->execute (array('journee' => $tableau[0][0],'equipeDomicile' => $tableau[0][1],'equipeVisiteur' => $tableau[0][6]));
 		$nbResultat_nouveau = $resultat_nouveau->rowCount();
+		$resultat_nouveau->closeCursor();
 		
 		if($nbResultat_nouveau < 1){
 			$req = $bdd->prepare('INSERT INTO resultatsL1_reel( journee,equipeDomicile,homeDomicile,butDomicile,winOrLoseDomicile,penaltyDomicile,equipeVisiteur,homeVisiteur,butVisiteur,WinOrLoseVisiteur,penaltyVisiteur) VALUES(
@@ -106,6 +107,7 @@
 				'WinOrLoseVisiteur' => $tableau[0][9],
 				'penaltyVisiteur' => $tableau[0][10]
 				));
+				$req->closeCursor();
 			echo 'INSERT en BDD => OK';
 		}else{
 			echo 'Ce résultat est déjà présent en base de donnée ';

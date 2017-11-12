@@ -104,7 +104,7 @@ function buildTableauJournee($journee,$row_resultatFile) {
 	
 
 	fclose($resultatFile);
-	//print_r($resultatsJourneeTab);
+	//	print_r($resultatsJourneeTab);
 	return $resultatsJourneeTab;
 	}
 }
