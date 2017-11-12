@@ -277,7 +277,7 @@ function appliquerTousLesFiltresSurLigne(tr)
 function getHTMLLigneDivAchat(tr)
 {
   return '<p id="Achat_' + tr.attr('id') + '" class="joueurAchete"><b>'
-  + tr.find('td:first').html() + ' - ' + tr.find('td:nth-child(3)').html() + '</b> (prix = ' + tr.find('td:last').html() + ')'
+  + tr.find('td:first').html() + '</b> - ' + tr.find('td:nth-child(3)').html() + ' (prix = ' + tr.find('td:last').html() + ')'
   + '<span class="floatRight">'
   + '<input type="text" class="inputPrix" name="name_' + tr.attr('id') + '" value="' + tr.find('td:last').html() + '" onchange="javascript:recalculerBudgetRestant();"/>'
   + ' <img src="./web/img/croix.jpg" alt="Supprimer" width="15px" height="15px" onclick="javascript:supprimerAchatJoueur(\'' + tr.attr('id') + '\');" />'

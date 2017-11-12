@@ -11,7 +11,7 @@ function afficherJoueurDejaAchete($joueursPrepaMercato, $position)
     if ($value->position() == $position)
     {
       echo '<p id="Achat_' . $value->id() . '" class="joueurAchete">';
-      echo '<b>' . $value->nom() . ' ' . $value->prenom() . '</b> - ' . $value->equipe() . ' (prix = ' . $value->prixOrigine() . ')';
+      echo '<b>' . $value->nom() . ' ' . $value->prenom() . '</b> - ' . $value->libelleEquipe() . ' (prix = ' . $value->prixOrigine() . ')';
       echo '<span class="floatRight">';
       echo '<input type="text" class="inputPrix" name="name_' . $value->id() . '" value="' . $value->prixAchat() . '" onchange="javascript:recalculerBudgetRestant();"/>';
       echo ' <img src="./web/img/croix.jpg" alt="Supprimer" width="15px" height="15px" onclick="javascript:supprimerAchatJoueur(\'' . $value->id() . '\');" />';
@@ -23,7 +23,7 @@ function afficherJoueurDejaAchete($joueursPrepaMercato, $position)
 <form action="" method="post">
 <fieldset>
   <legend>Mercato</legend>
-  <p>Budget restant : <output id="budgetRestant" name="budgetRestant"><?php echo $budgetRestant; ?></output>
+  <p>Budget restant : <output id="budgetRestant" name="budgetRestant"><?php echo $budgetRestant; ?></output> M€ (T'as jamais été aussi riche)
       <img id="imageBudget" src="./web/img/validation.jpg" width="20px" height="20px" />
       <input type="submit" id="validationMercato" value="Valider mes offres" name="validationMercato" />
       <input type="submit" id="reinitialisation" value="Réinitialiser" name="reinitialisation" />
