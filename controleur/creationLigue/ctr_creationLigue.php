@@ -97,22 +97,19 @@ if (isset($_POST['creationEquipe']))
   }
 }
 
-// ********************************
-// ***** DEBUT PARTIE MERCATO *****
-// ********************************
-
-// Si la ligue est validée, on recherche l'équipe et les joueurs achetés
+// Si la ligue est validée
 if (isset($creaLigue) && $creaLigue->etat() == EtatLigue::MERCATO)
 {
   $equipe = $equipeManager->findEquipeByCoachEtLigue($coach->id(), $creaLigue->id());
-  // TODO MPL rechercher les joueur_fictif
-  $joueursReelsGB = $joueurReelManager->findByPosition(ConstantesAppli::GARDIEN);
+  $_SESSION[ConstantesSession::EQUIPE_CREA] = $equipe;
 }
 
-if (isset($_POST['validationMercato']))
+if (isset($creaLigue) && $creaLigue->etat() == EtatLigue::MERCATO)
 {
-  // TODO MPL enregistrer joueurs achetés
+  include_once('vue/creationEquipe.php');
 }
-
-include_once('vue/creationLigue.php');
+else
+{
+  include_once('vue/creationLigue.php');
+}
 ?>
