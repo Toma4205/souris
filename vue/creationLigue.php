@@ -16,8 +16,8 @@ require_once("vue/commun/entete.php");
           echo htmlspecialchars($creaLigue->nom());
         }
         echo '"', (isset($creaLigue) && null != $creaLigue->id() ? ' disabled' : ' enabled');?>/></p>
-    <p>Nombre d'équipes <br/>
-      <select name="nbEquipe" <?php
+    <p>Pack Bonus/Malus <br/>
+      <select name="bonusMalus" <?php
             if (isset($creaLigue) && null != $creaLigue->id())
             {
               echo ' disabled>';
@@ -26,17 +26,21 @@ require_once("vue/commun/entete.php");
             {
               echo '>';
             }
-            $arrayNbEquipe = [2,3,4,5,6,7,8,9,10];
-            foreach ($arrayNbEquipe as $value)
+
+            $arrayBonusMalus = [];
+            $arrayBonusMalus[ConstantesAppli::BONUS_MALUS_AUCUN] = 'Aucun';
+            $arrayBonusMalus[ConstantesAppli::BONUS_MALUS_CLASSIQUE] = 'Classique';
+            $arrayBonusMalus[ConstantesAppli::BONUS_MALUS_FOLIE] = 'Folie';
+            foreach ($arrayBonusMalus as $cle => $value)
             {
-              if((isset($creaLigue) && $creaLigue->nbEquipe() == $value)
-                || (!isset($creaLigue) && $value == 2))
+              if((isset($creaLigue) && $creaLigue->bonusMalus() == $value)
+                || (!isset($creaLigue) && $cle == ConstantesAppli::BONUS_MALUS_AUCUN))
               {
-                  echo '<option value="' . $value . '" selected="selected">' . $value . '</option>';
+                  echo '<option value="' . $cle . '" selected="selected">' . $value . '</option>';
               }
               else
               {
-                  echo '<option value="' . $value . '">' . $value . '</option>';
+                  echo '<option value="' . $cle . '">' . $value . '</option>';
               }
             }
          ?>
@@ -49,6 +53,35 @@ require_once("vue/commun/entete.php");
             echo 'checked';
           }
           echo ' ', (isset($creaLigue) && null != $creaLigue->id() ? ' disabled' : ' enabled');?>/>
+    </p>
+    <p>Mode mercato <br/>
+      <select name="modeMercato" <?php
+            if (isset($creaLigue) && null != $creaLigue->id())
+            {
+              echo ' disabled>';
+            }
+            else
+            {
+              echo '>';
+            }
+
+            $arrayModeMercato = [];
+            $arrayModeMercato[ConstantesAppli::MERCATO_ENCHERE] = 'Enchères';
+            $arrayModeMercato[ConstantesAppli::MERCATO_DRAFT] = 'Draft';
+            foreach ($arrayModeMercato as $cle => $value)
+            {
+              if((isset($creaLigue) && $creaLigue->bonusMalus() == $value)
+                || (!isset($creaLigue) && $cle == ConstantesAppli::MERCATO_ENCHERE))
+              {
+                  echo '<option value="' . $cle . '" selected="selected">' . $value . '</option>';
+              }
+              else
+              {
+                  echo '<option value="' . $cle . '">' . $value . '</option>';
+              }
+            }
+         ?>
+      </select>
     </p>
     <p>Un petit pari pour mettre du piquant ?<br/>
       <textarea name="libellePari" rows="5" cols="30" <?php

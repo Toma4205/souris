@@ -12,6 +12,13 @@ class ConstantesAppli {
     const DEFENSEUR_IHM = 'Défenseur';
     const MILIEU_IHM = 'Milieu';
     const ATTAQUANT_IHM = 'Attaquant';
+
+    const BONUS_MALUS_AUCUN = 'A';
+    const BONUS_MALUS_CLASSIQUE = 'C';
+    const BONUS_MALUS_FOLIE = 'F';
+
+    const MERCATO_ENCHERE = 'E';
+    const MERCATO_DRAFT = 'D';
 }
 
  ?>

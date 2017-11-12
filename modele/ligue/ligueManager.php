@@ -12,13 +12,14 @@ class LigueManager extends ManagerBase
   public function creerLigue($idCoach, Ligue $ligue)
   {
     // création de la ligue
-    $q = $this->_bdd->prepare('INSERT INTO ligue(nom, etat, libelle_pari, mode_expert, nb_equipe, date_creation)
-      VALUES(:nom, :etat, :libellePari, :modeExpert, :nbEquipe, NOW())');
+    $q = $this->_bdd->prepare('INSERT INTO ligue(nom, etat, libelle_pari, mode_expert, bonus_malus, date_creation)
+      VALUES(:nom, :etat, :libellePari, :modeExpert, :bonusMalus, :modeMercato, NOW())');
     $q->bindValue(':nom', $ligue->nom());
     $q->bindValue(':etat', EtatLigue::CREATION);
     $q->bindValue(':libellePari', $ligue->libellePari());
     $q->bindValue(':modeExpert', $ligue->modeExpert());
-    $q->bindValue(':nbEquipe', $ligue->nbEquipe());
+    $q->bindValue(':bonusMalus', $ligue->bonusMalus());
+    $q->bindValue(':modeMercato', $ligue->modeMercato());
 
     $q->execute();
 

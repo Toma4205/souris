@@ -12,7 +12,8 @@ $joueurReelManager = new JoueurReelManager($bdd);
 if (isset($_POST['creationLigue']))
 {
   $creaLigue = new Ligue(['nom' => $_POST['nom'],
-                      'nb_equipe' => $_POST['nbEquipe'],
+                      'bonus_malus' => $_POST['bonusMalus'],
+                      'mode_mercato' => $_POST['modeMercato'],
                       'libelle_pari' => $_POST['libellePari']]);
 
   if(isset($_POST['modeExpert']))
@@ -55,23 +56,15 @@ if (isset($_POST['inviter']))
 // Validation finale des coachs ayant accepté l'invitation
 elseif (isset($_POST['validationFinale']))
 {
-  $nbCoachAttendu = $creaLigue->nbEquipe() - 1;
   if (isset($_POST['coachInvite']))
   {
-    if (count($_POST['coachInvite']) == $nbCoachAttendu)
-    {
-      $ligueManager->validerParticipants($creaLigue->id(), $_POST['coachInvite']);
-      $creaLigue->setEtat(EtatLigue::MERCATO);
-      $_SESSION[ConstantesSession::LIGUE_CREA] = $creaLigue;
-    }
-    else
-    {
-      $message = 'Vous devez sélectionner ' . $nbCoachAttendu . ' coach(s).';
-    }
+    $ligueManager->validerParticipants($creaLigue->id(), $_POST['coachInvite']);
+    $creaLigue->setEtat(EtatLigue::MERCATO);
+    $_SESSION[ConstantesSession::LIGUE_CREA] = $creaLigue;
   }
   else
   {
-    $message = 'Vous devez sélectionner ' . $nbCoachAttendu . ' coach(s).';
+    $message = 'Vous devez sélectionner au moins un coach !';
   }
 }
 
