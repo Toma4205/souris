@@ -12,7 +12,7 @@
 		</p>
 	
 	<h2 id="titreImportCSV">Importer les statistiques des joueurs à partir du CSV</h2>
-	<form method="post" id="importCSV" action="admin/importJourneeCSV.php" enctype="multipart/form-data">
+	<form method="post" id="importCSV" action="admin/importJourneeBDD.php" enctype="multipart/form-data">
 		 <label for="mon_fichier">Fichier Stat à Importer (format csv | max. 1 Mo) :</label><br />
 		 <label for="mon_fichier">(fichier brut Rotowire nommé AAAAJJ (exemple 201714 pour la saison 2017/2018 et la journée 14)</label><br />
 		 <input type="file" name="mon_fichier" id="mon_fichier" /><br />

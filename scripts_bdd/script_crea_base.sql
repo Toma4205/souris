@@ -39,7 +39,7 @@ CREATE TABLE `joueur_reel` (
 PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
---LOAD DATA LOCAL INFILE 'C:\\Bitnami\\ListeJoueursReelsNouvelleTable.csv' INTO TABLE joueur_reel_temp FIELDS TERMINATED BY ';' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
+--LOAD DATA LOCAL INFILE 'C:\\Bitnami\\ListeJoueursReelsNouvelleTable.csv' INTO TABLE joueur_reel FIELDS TERMINATED BY ';' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
 
 CREATE TABLE `resultatsL1_reel` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -70,7 +70,7 @@ ALTER TABLE `prepa_mercato` ADD FOREIGN KEY (`id_coach`) REFERENCES `coach`(`id`
 ALTER TABLE `prepa_mercato` ADD FOREIGN KEY (`id_joueur_reel`) REFERENCES `joueur_reel`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 
-CREATE TABLE `joueur_temp` (
+CREATE TABLE `joueur_stats` (
 `id` VARCHAR(100) NOT NULL ,
 `journee` CHAR(6) NOT NULL,
 `a_joue` SMALLINT UNSIGNED NOT NULL,
@@ -178,7 +178,8 @@ CREATE TABLE `joueur_temp` (
 `100_ballons_touches` SMALLINT UNSIGNED NOT NULL,
 `bonus_victoire` SMALLINT UNSIGNED NOT NULL,
 `coup_franc_rate` SMALLINT UNSIGNED NOT NULL,
-PRIMARY KEY (`id`)
+`note` SMALLINT UNSIGNED NOT NULL,
+PRIMARY KEY (`id`,`journee`)
 ) ENGINE = InnoDB;
 
 --LOAD DATA LOCAL INFILE 'C:\\Bitnami\\fichierJ9.csv' INTO TABLE joueur_temp FIELDS TERMINATED BY ';' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
