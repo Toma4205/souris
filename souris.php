@@ -26,30 +26,45 @@ elseif (isset($_SESSION[ConstantesSession::COACH]))
     {
         unset($_SESSION[ConstantesSession::LIGUE]);
         unset($_SESSION[ConstantesSession::LIGUE_CREA]);
+        unset($_SESSION[ConstantesSession::EQUIPE_CREA]);
         require_once('controleur/compteCoach/ctr_compteCoach.php');
     }
     elseif ($_GET['section'] == 'gestionCompteCoach')
     {
         unset($_SESSION[ConstantesSession::LIGUE_CREA]);
+        unset($_SESSION[ConstantesSession::EQUIPE_CREA]);
         require_once('controleur/gestionCompteCoach/ctr_gestionCompteCoach.php');
     }
     elseif ($_GET['section'] == 'gestionConfrere')
     {
         unset($_SESSION[ConstantesSession::LIGUE_CREA]);
+        unset($_SESSION[ConstantesSession::EQUIPE_CREA]);
         require_once('controleur/gestionConfrere/ctr_gestionConfrere.php');
     }
-    elseif ($_GET['section'] == 'creationLigue')
+    elseif ($_GET['section'] == 'creationLigue' || $_GET['section'] == 'ligueEquipe')
     {
         require_once('controleur/creationLigue/ctr_creationLigue.php');
+    }
+    elseif ($_GET['section'] == 'mercatoEquipe')
+    {
+        require_once('controleur/creationLigue/ctr_mercatoEquipe.php');
+    }
+    elseif ($_GET['section'] == 'mercatoLigue')
+    {
+        require_once('controleur/creationLigue/ctr_mercatoLigue.php');
     }
     elseif ($_GET['section'] == 'prepaMercato')
     {
         unset($_SESSION[ConstantesSession::LIGUE_CREA]);
+        unset($_SESSION[ConstantesSession::EQUIPE_CREA]);
         require_once('controleur/prepaMercato/ctr_prepaMercato.php');
     }
 
     if (isset($_SESSION[ConstantesSession::LIGUE]))
     {
+      unset($_SESSION[ConstantesSession::LIGUE_CREA]);
+      unset($_SESSION[ConstantesSession::EQUIPE_CREA]);
+
       $ligue = $_SESSION[ConstantesSession::LIGUE];
       if ($_GET['section'] == 'equipe')
       {

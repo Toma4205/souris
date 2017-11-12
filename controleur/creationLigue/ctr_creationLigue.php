@@ -12,7 +12,8 @@ $joueurReelManager = new JoueurReelManager($bdd);
 if (isset($_POST['creationLigue']))
 {
   $creaLigue = new Ligue(['nom' => $_POST['nom'],
-                      'nb_equipe' => $_POST['nbEquipe'],
+                      'bonus_malus' => $_POST['bonusMalus'],
+                      'mode_mercato' => $_POST['modeMercato'],
                       'libelle_pari' => $_POST['libellePari']]);
 
   if(isset($_POST['modeExpert']))
@@ -55,23 +56,15 @@ if (isset($_POST['inviter']))
 // Validation finale des coachs ayant accepté l'invitation
 elseif (isset($_POST['validationFinale']))
 {
-  $nbCoachAttendu = $creaLigue->nbEquipe() - 1;
   if (isset($_POST['coachInvite']))
   {
-    if (count($_POST['coachInvite']) == $nbCoachAttendu)
-    {
-      $ligueManager->validerParticipants($creaLigue->id(), $_POST['coachInvite']);
-      $creaLigue->setEtat(EtatLigue::MERCATO);
-      $_SESSION[ConstantesSession::LIGUE_CREA] = $creaLigue;
-    }
-    else
-    {
-      $message = 'Vous devez sélectionner ' . $nbCoachAttendu . ' coach(s).';
-    }
+    $ligueManager->validerParticipants($creaLigue->id(), $_POST['coachInvite']);
+    $creaLigue->setEtat(EtatLigue::MERCATO);
+    $_SESSION[ConstantesSession::LIGUE_CREA] = $creaLigue;
   }
   else
   {
-    $message = 'Vous devez sélectionner ' . $nbCoachAttendu . ' coach(s).';
+    $message = 'Vous devez sélectionner au moins un coach !';
   }
 }
 
@@ -104,22 +97,19 @@ if (isset($_POST['creationEquipe']))
   }
 }
 
-// ********************************
-// ***** DEBUT PARTIE MERCATO *****
-// ********************************
-
-// Si la ligue est validée, on recherche l'équipe et les joueurs achetés
+// Si la ligue est validée
 if (isset($creaLigue) && $creaLigue->etat() == EtatLigue::MERCATO)
 {
   $equipe = $equipeManager->findEquipeByCoachEtLigue($coach->id(), $creaLigue->id());
-  // TODO MPL rechercher les joueur_fictif
-  $joueursReelsGB = $joueurReelManager->findByPosition(ConstantesAppli::GARDIEN);
+  $_SESSION[ConstantesSession::EQUIPE_CREA] = $equipe;
 }
 
-if (isset($_POST['validationMercato']))
+if (isset($creaLigue) && $creaLigue->etat() == EtatLigue::MERCATO)
 {
-  // TODO MPL enregistrer joueurs achetés
+  include_once('vue/creationEquipe.php');
 }
-
-include_once('vue/creationLigue.php');
+else
+{
+  include_once('vue/creationLigue.php');
+}
 ?>

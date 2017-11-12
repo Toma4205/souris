@@ -21,7 +21,25 @@
         </div>
       </div>
 <?php
-if (isset($coach) && !isset($ligue))
+if (isset($creaLigue) && $creaLigue->etat() == EtatLigue::MERCATO)
+{
+?>
+      <div id="bandeau_compte">
+        <div id="bandeau_compte_col1"><?php
+        echo 'Je suis ' . $coach->nom() . ' (id=' . $coach->id() . ')'; ?></div>
+        <div id="bandeau_compte_centre">
+          <div class="colonnes">
+            <p class="colonne<?php if($_GET['section'] == 'compteCoach') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'compteCoach') { ?><a href="souris.php?section=compteCoach"><?php } ?>Mon bureau<?php if($_GET['section'] != 'compteCoach') { ?></a><?php } ?></p>
+            <p class="colonne<?php if($_GET['section'] == 'creationLigue') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'creationLigue') { ?><a href="souris.php?section=creationLigue"><?php } ?>Ligue/Equipe<?php if($_GET['section'] != 'creationLigue') { ?></a><?php } ?></p>
+            <p class="colonne<?php if($_GET['section'] == 'mercatoEquipe') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'mercatoEquipe') { ?><a href="souris.php?section=mercatoEquipe"><?php } ?>Mon mercato<?php if($_GET['section'] != 'mercatoEquipe') { ?></a><?php } ?></p>
+            <p class="colonne<?php if($_GET['section'] == 'mercatoLigue') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'mercatoLigue') { ?><a href="souris.php?section=mercatoLigue"><?php } ?>Mercato ligue<?php if($_GET['section'] != 'mercatoLigue') { ?></a><?php } ?></p>
+            <p class="colonne"><a href="souris.php?deconnexion=true">Déconnexion</a></p>
+          </div>
+        </div>
+</div>
+<?php
+}
+elseif (isset($coach) && !isset($ligue))
 {
 ?>
 <div id="bandeau_compte">

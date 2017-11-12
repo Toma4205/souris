@@ -10,7 +10,8 @@ class Ligue extends ClasseBase
   private $_etat;
   private $_libellePari;
   private $_modeExpert;
-  private $_nbEquipe;
+  private $_bonusMalus;
+  private $_modeMercato;
   private $_dateCreation;
 
   // Champs de coach_ligue
@@ -27,7 +28,8 @@ class Ligue extends ClasseBase
   public function etat() { return $this->_etat; }
   public function libellePari() { return $this->_libellePari; }
   public function modeExpert() { return $this->_modeExpert; }
-  public function nbEquipe() { return $this->_nbEquipe; }
+  public function bonusMalus() { return $this->_bonusMalus; }
+  public function modeMercato() { return $this->_modeMercato; }
   public function dateCreation() { return $this->_dateCreation; }
   public function createur() { return $this->_createur; }
   public function dateValidation() { return $this->_dateValidation; }
@@ -57,9 +59,14 @@ class Ligue extends ClasseBase
       $this->_modeExpert = $modeExpert;
   }
 
-  public function setNb_equipe($nbEquipe)
+  public function setBonus_malus($bonusMalus)
   {
-      $this->_nbEquipe = $nbEquipe;
+      $this->_bonusMalus = $bonusMalus;
+  }
+
+  public function setMode_mercato($modeMercato)
+  {
+      $this->_modeMercato = $modeMercato;
   }
 
   public function setDate_creation($dateCreation)

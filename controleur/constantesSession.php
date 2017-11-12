@@ -11,6 +11,8 @@ class ConstantesSession {
     const LISTE_LIGUES = 'listeLigues';
     const LIGUE_CREA = 'ligueCreation';
     const LIGUE = 'ligue';
+
+    const EQUIPE_CREA = 'equipeCreation';
 }
 
  ?>

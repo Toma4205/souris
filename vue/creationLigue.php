@@ -16,8 +16,8 @@ require_once("vue/commun/entete.php");
           echo htmlspecialchars($creaLigue->nom());
         }
         echo '"', (isset($creaLigue) && null != $creaLigue->id() ? ' disabled' : ' enabled');?>/></p>
-    <p>Nombre d'équipes <br/>
-      <select name="nbEquipe" <?php
+    <p>Pack Bonus/Malus <br/>
+      <select name="bonusMalus" <?php
             if (isset($creaLigue) && null != $creaLigue->id())
             {
               echo ' disabled>';
@@ -26,29 +26,62 @@ require_once("vue/commun/entete.php");
             {
               echo '>';
             }
-            $arrayNbEquipe = [2,3,4,5,6,7,8,9,10];
-            foreach ($arrayNbEquipe as $value)
+
+            $arrayBonusMalus = [];
+            $arrayBonusMalus[ConstantesAppli::BONUS_MALUS_AUCUN] = 'Aucun';
+            $arrayBonusMalus[ConstantesAppli::BONUS_MALUS_CLASSIQUE] = 'Classique';
+            $arrayBonusMalus[ConstantesAppli::BONUS_MALUS_FOLIE] = 'Folie';
+            foreach ($arrayBonusMalus as $cle => $value)
             {
-              if((isset($creaLigue) && $creaLigue->nbEquipe() == $value)
-                || (!isset($creaLigue) && $value == 2))
+              if((isset($creaLigue) && $creaLigue->bonusMalus() == $cle)
+                || (!isset($creaLigue) && $cle == ConstantesAppli::BONUS_MALUS_AUCUN))
               {
-                  echo '<option value="' . $value . '" selected="selected">' . $value . '</option>';
+                  echo '<option value="' . $cle . '" selected="selected">' . $value . '</option>';
               }
               else
               {
-                  echo '<option value="' . $value . '">' . $value . '</option>';
+                  echo '<option value="' . $cle . '">' . $value . '</option>';
               }
             }
          ?>
       </select>
     </p>
-    <p>Mode expert <span class="italic">(cf réglement)</span> <br/>
+    <p>Mode expert <br/>
       <input type="checkbox" name="modeExpert" <?php
           if (isset($creaLigue) && $creaLigue->modeExpert() == 1)
           {
             echo 'checked';
           }
           echo ' ', (isset($creaLigue) && null != $creaLigue->id() ? ' disabled' : ' enabled');?>/>
+    </p>
+    <p>Mode mercato <br/>
+      <select name="modeMercato" <?php
+            if (isset($creaLigue) && null != $creaLigue->id())
+            {
+              echo ' disabled>';
+            }
+            else
+            {
+              echo '>';
+            }
+
+            $arrayModeMercato = [];
+            $arrayModeMercato[ConstantesAppli::MERCATO_ENCHERE] = 'Enchères';
+            $arrayModeMercato[ConstantesAppli::MERCATO_DRAFT] = 'Draft';
+            foreach ($arrayModeMercato as $cle => $value)
+            {
+              if((isset($creaLigue) && $creaLigue->modeMercato() == $cle)
+                || (!isset($creaLigue) && $cle == ConstantesAppli::MERCATO_ENCHERE))
+              {
+                  echo '<option value="' . $cle . '" selected="selected">' . $value . '</option>';
+              }
+              else
+              {
+                  echo '<option value="' . $cle . '">' . $value . '</option>';
+              }
+            }
+         ?>
+      </select>
     </p>
     <p>Un petit pari pour mettre du piquant ?<br/>
       <textarea name="libellePari" rows="5" cols="30" <?php
@@ -62,6 +95,7 @@ require_once("vue/commun/entete.php");
       // Création ligue non validée
       if (!isset($creaLigue) || null == $creaLigue->id())
       {
+        echo '<p class="italic">Le détail des paramètres est expliqué dans le réglement.</p>';
         echo '<input type="submit" value="Créer" name="creationLigue" />';
       }
     ?>
@@ -172,22 +206,8 @@ require_once("vue/commun/entete.php");
           $index++;
         }
         echo '</tbody></table>';
-
-        // On enlève 1 car le coach créateur est forcément un participant
-        $nbCoachManquant = $creaLigue->nbEquipe() - 1 - $nbOK;
-        if ($nbCoachManquant < 1)
-        {
-          echo '<br/>';
-          echo '<input type="submit" value="Valider les participants" name="validationFinale" />';
-        }
-        elseif ($nbCoachManquant == 1)
-        {
-          echo '<p class="italic">' . $nbCoachManquant . ' coach doit encore accepter l\'invitation.</p>';
-        }
-        else
-        {
-          echo '<p class="italic">' . $nbCoachManquant . ' coachs doivent encore accepter l\'invitation.</p>';
-        }
+        echo '<br/>';
+        echo '<input type="submit" value="Valider les participants" name="validationFinale" />';
       }
       else
       {
@@ -197,71 +217,8 @@ require_once("vue/commun/entete.php");
         ?>
   </fieldset>
 </div>
-<!-- ****************************************
-//   ***** DEBUT PARTIE CREATION EQUIPE *****
-//   **************************************** -->
 <?php
-  }
-  // Particpants validés => création équipe + mercato
-  elseif (isset($creaLigue) && $creaLigue->etat() == EtatLigue::MERCATO)
-  {
-?>
-<fieldset>
-    <legend>Mon équipe</legend>
-    <p>Nom *<br/>
-      <input type="text" class="width_200px" name="nomEquipe" size="30" value=<?php
-        echo '"';
-        if(isset($equipe))
-        {
-          echo htmlspecialchars($equipe->nom());
-        }
-        echo '"', (isset($equipe) && null != $equipe->id() ? ' disabled' : ' enabled');?>/></p>
-    <p>Ville *<br/>
-      <input type="text" class="width_200px" name="villeEquipe" size="30" value=<?php
-        echo '"';
-        if(isset($equipe))
-        {
-          echo htmlspecialchars($equipe->ville());
-        }
-        echo '"', (isset($equipe) && null != $equipe->id() ? ' disabled' : ' enabled');?>/></p>
-    <p>Stade *<br/>
-      <input type="text" class="width_200px" name="stadeEquipe" size="30" value=<?php
-        echo '"';
-        if(isset($equipe))
-        {
-          echo htmlspecialchars($equipe->stade());
-        }
-        echo '"', (isset($equipe) && null != $equipe->id() ? ' disabled' : ' enabled');?>/></p>
-    <?php
-      // Création équipe non validée
-      if (!isset($equipe) || null == $equipe->id())
-      {
-        echo '<input type="submit" value="Créer" name="creationEquipe" />';
-      }
-    ?>
-</fieldset>
-<!-- ****************************************
-//   ***** DEBUT PARTIE GESTION MERCATO *****
-//   **************************************** -->
-<?php
-      if (isset($equipe) && null != $equipe->id())
-      {
-?>
-<fieldset>
-    <legend>Mercato</legend>
-    <p>Budget restant : <output id="budgetRestant" name="budgetRestant"><?php echo $equipe->budgetRestant(); ?></output>
-      <img id="imageBudget" src="./web/img/validation.jpg" alt="Logo du site" width="20px" height="20px" />
-      <input type="submit" id="validationMercato" value="Valider mes offres" name="validationMercato" />
-    </p>
-    <br/>
-    <fieldset>
-      <legend>Joueurs</legend>
-      <p>A venir...</p>
-    </fieldset>
-</fieldset>
-<?php
-      } // Fin du IF affichant la partie mercato
-  } // Fin du IF affichant la partie équipe
+    }
 ?>
 </form>
 <?php
