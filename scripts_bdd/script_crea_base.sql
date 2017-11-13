@@ -2,8 +2,8 @@
 CREATE DATABASE souris CHARACTER SET 'utf8';
 GRANT ALL PRIVILEGES ON souris.* TO 'souris'@'localhost' IDENTIFIED BY 'souris';
 
-CREATE TABLE nomenclature_scoretonote (`ScoreObtenu` DECIMAL(5,3) NOT NULL , `NoteGardien` DECIMAL(3,1), `NoteDefenseur` DECIMAL(3,1), `NoteMilieu` DECIMAL(3,1), `NoteAttaquant` DECIMAL(3,1), PRIMARY KEY (`ScoreObtenu`)) ENGINE = InnoDB;
-CREATE TABLE nomenclature_reglescalculnote (`StatName` VARCHAR(100) NOT NULL , `Gardien` DECIMAL(5,3), `Defenseur` DECIMAL(5,3), `Milieu` DECIMAL(5,3), `Attaquant` DECIMAL(5,3), PRIMARY KEY (`StatName`)) ENGINE = InnoDB;
+CREATE TABLE nomenclature_scoretonote (`ScoreObtenu` DECIMAL(5,3) NOT NULL , `Position` VARCHAR(100) NOT NULL, `Note` DECIMAL(3,1), PRIMARY KEY (`ScoreObtenu`,`Position`)) ENGINE = InnoDB;
+CREATE TABLE nomenclature_reglescalculnote (`StatName` VARCHAR(100) NOT NULL , `Position` VARCHAR(100) NOT NULL, `Ponderation` DECIMAL(5,3), PRIMARY KEY (`StatName`,`Position`)) ENGINE = InnoDB;
 CREATE TABLE nomenclature_equipe (`code` VARCHAR(3) NOT NULL , `libelle` VARCHAR(255) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
 CREATE TABLE nomenclature_tactique (`code` VARCHAR(10) NOT NULL , `libelle` VARCHAR(255) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
 CREATE TABLE nomenclature_position (`code` VARCHAR(10) NOT NULL , `libelle` VARCHAR(100) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
