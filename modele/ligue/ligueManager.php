@@ -13,8 +13,8 @@ class LigueManager extends ManagerBase
   {
     // création de la ligue
     $q = $this->_bdd->prepare('INSERT INTO ligue(nom, etat, libelle_pari, mode_expert,
-      bonus_malus, mode_mercato, date_creation)
-      VALUES(:nom, :etat, :libellePari, :modeExpert, :bonusMalus, :modeMercato, NOW())');
+      bonus_malus, mode_mercato, tour_mercato, date_creation)
+      VALUES(:nom, :etat, :libellePari, :modeExpert, :bonusMalus, :modeMercato, 1, NOW())');
     $q->bindValue(':nom', $ligue->nom());
     $q->bindValue(':etat', EtatLigue::CREATION);
     $q->bindValue(':libellePari', $ligue->libellePari());
@@ -122,5 +122,13 @@ class LigueManager extends ManagerBase
     $q->closeCursor();
 
     return new Ligue($donnees);
+	}
+
+  public function findTourMercato($idLigue)
+	{
+    $q = $this->_bdd->prepare('SELECT tour_mercato FROM ligue WHERE id = :id');
+    $q->execute([':id' => $idLigue]);
+
+    return (int) $q->fetchColumn();
 	}
 }

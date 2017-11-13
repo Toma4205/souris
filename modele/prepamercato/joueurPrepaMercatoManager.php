@@ -36,7 +36,7 @@ class JoueurPrepaMercatoManager extends ManagerBase
         FROM prepa_mercato p
         JOIN joueur_reel j ON p.id_joueur_reel = j.id
         JOIN nomenclature_equipe n ON j.equipe = n.code
-        WHERE p.id_coach = :id oRDER BY j.nom, j.prenom');
+        WHERE p.id_coach = :id ORDER BY j.nom, j.prenom');
     $q->execute([':id' => $idCoach]);
 
 		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))

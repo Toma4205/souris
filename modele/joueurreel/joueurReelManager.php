@@ -45,4 +45,26 @@ class JoueurReelManager extends ManagerBase
 
 		return $joueurs;
 	}
+
+  public function findJoueurRestantByLigue($idLigue)
+  {
+    $joueurs = [];
+
+		$q = $this->_bdd->prepare('SELECT j.*, n.libelle as libelleEquipe
+        FROM joueur_reel j
+        JOIN nomenclature_equipe n ON j.equipe = n.code
+        WHERE id NOT IN (SELECT DISTINCT(id_joueur_reel)
+          FROM joueur_equipe je
+          WHERE id_ligue = :id)');
+    $q->execute([':id' => $idLigue]);
+
+		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+		{
+			$joueurs[] = new JoueurReel($donnees);
+		}
+
+		$q->closeCursor();
+
+		return $joueurs;
+  }
 }

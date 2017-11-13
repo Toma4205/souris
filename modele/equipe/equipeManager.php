@@ -21,6 +21,8 @@ class EquipeManager extends ManagerBase
     $q->bindValue(':stade', $equipe->stade());
     $q->bindValue(':budget', ConstantesAppli::BUDGET_INIT);
 
+    //TODO MPL créer les bonusMalus si besoin
+
     $q->execute();
 	}
 

@@ -276,7 +276,7 @@ function appliquerTousLesFiltresSurLigne(tr)
 // Attention, si changement => effectuer aussi dans prepaMercato.php
 function getHTMLLigneDivAchat(tr)
 {
-  return '<p id="Achat_' + tr.attr('id') + '" class="joueurAchete"><b>'
+  return '<p id="Achat_' + tr.attr('id') + '" class="joueurEnCours"><b>'
   + tr.find('td:first').html() + '</b> - ' + tr.find('td:nth-child(3)').html() + ' (prix = ' + tr.find('td:last').html() + ')'
   + '<span class="floatRight">'
   + '<input type="text" class="inputPrix" name="name_' + tr.attr('id') + '" value="' + tr.find('td:last').html() + '" onchange="javascript:recalculerBudgetRestant();"/>'

@@ -31,12 +31,11 @@ $budgetRestant = ConstantesAppli::BUDGET_INIT;
 $joueursPrepaMercato = $joueurPrepaMercatoManager->findByCoach($coach->id());
 // Rech joueurs réels
 $joueursReels = $joueurReelManager->findAll();
-$joueursReelsDEF = $joueurReelManager->findByPosition(ConstantesAppli::DEFENSEUR);
-$joueursReelsMIL = $joueurReelManager->findByPosition(ConstantesAppli::MILIEU);
-$joueursReelsATT = $joueurReelManager->findByPosition(ConstantesAppli::ATTAQUANT);
 
 // TODO MPL voir s'il est possible de stocker qqpart cette nomenclature
 $equipes = $nomenclEquipeManager->findNomenclatureEquipe();
+// Utilisé dans la vue tableAchatJoueur.php
+$tourValide = FALSE;
 
 include_once('vue/prepaMercato.php');
 ?>

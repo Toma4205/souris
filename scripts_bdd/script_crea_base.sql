@@ -10,11 +10,9 @@ CREATE TABLE nomenclature_position (`code` VARCHAR(10) NOT NULL , `libelle` VARC
 CREATE TABLE nomenclature_caricature (`code` VARCHAR(30) NOT NULL , `libelle` VARCHAR(255) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
 CREATE TABLE nomenclature_bonus_malus (`code` VARCHAR(30) NOT NULL , `libelle` VARCHAR(255) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
 
-
-
 CREATE TABLE `coach` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT , `nom` VARCHAR(40) NOT NULL , `mot_de_passe` CHAR(32) NOT NULL , `mail` VARCHAR(50) NULL , `code_postal` CHAR(5) NULL , `date_creation` DATE NOT NULL , `date_maj` DATETIME NOT NULL , PRIMARY KEY (`id`), UNIQUE INDEX `ind_uni_nom` (`nom`(10)), UNIQUE `ind_uni_mail` (`mail`)) ENGINE = InnoDB;
 
-CREATE TABLE `ligue` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT , `nom` VARCHAR(40) NOT NULL , `etat` INT UNSIGNED NOT NULL , `date_creation` DATETIME NOT NULL , `libelle_pari` TEXT NULL, `mode_expert` BOOLEAN NOT NULL , `bonus_malus` CHAR(1) NOT NULL, `mode_mercato` CHAR(1) NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+CREATE TABLE `ligue` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT , `nom` VARCHAR(40) NOT NULL , `etat` INT UNSIGNED NOT NULL , `date_creation` DATETIME NOT NULL , `libelle_pari` TEXT NULL, `mode_expert` BOOLEAN NOT NULL , `bonus_malus` CHAR(1) NOT NULL, `mode_mercato` CHAR(1) NOT NULL, `tour_mercato` TINYINT UNSIGNED NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
 CREATE TABLE `coach_ligue` (`id_coach` MEDIUMINT UNSIGNED NOT NULL , `id_ligue` INT UNSIGNED NOT NULL , `createur` BOOLEAN NOT NULL , `date_validation` DATETIME NULL , PRIMARY KEY (`id_coach`, `id_ligue`)) ENGINE = InnoDB;
 ALTER TABLE `coach_ligue` ADD FOREIGN KEY (`id_coach`) REFERENCES `coach`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -24,8 +22,24 @@ CREATE TABLE `confrere` (`id_coach` MEDIUMINT UNSIGNED NOT NULL , `id_coach_conf
 ALTER TABLE `confrere` ADD FOREIGN KEY (`id_coach`) REFERENCES `coach`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `confrere` ADD FOREIGN KEY (`id_coach_confrere`) REFERENCES `coach`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-CREATE TABLE `equipe` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT , `id_ligue` INT UNSIGNED NOT NULL , `id_coach` MEDIUMINT UNSIGNED NOT NULL , `nom` VARCHAR(30) NOT NULL , `ville` VARCHAR(30) NOT NULL , `stade` VARCHAR(30) NOT NULL , `budget_restant` SMALLINT NOT NULL , `fin_mercato` BOOLEAN NOT NULL , `nb_match` TINYINT UNSIGNED NOT NULL , `nb_victoire` TINYINT UNSIGNED NOT NULL , `nb_nul` TINYINT UNSIGNED NOT NULL , `nb_defaite` TINYINT UNSIGNED NOT NULL ,
-`nb_but_pour` TINYINT UNSIGNED NOT NULL , `nb_but_contre` TINYINT UNSIGNED NOT NULL , `code_caricature` VARCHAR(30) NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+CREATE TABLE `equipe` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `id_ligue` INT UNSIGNED NOT NULL ,
+  `id_coach` MEDIUMINT UNSIGNED NOT NULL ,
+  `nom` VARCHAR(30) NOT NULL ,
+  `ville` VARCHAR(30) NOT NULL ,
+  `stade` VARCHAR(30) NOT NULL ,
+  `budget_restant` SMALLINT NOT NULL ,
+  `fin_mercato` BOOLEAN NOT NULL ,
+  `nb_match` TINYINT UNSIGNED NOT NULL ,
+  `nb_victoire` TINYINT UNSIGNED NOT NULL ,
+  `nb_nul` TINYINT UNSIGNED NOT NULL ,
+  `nb_defaite` TINYINT UNSIGNED NOT NULL ,
+  `nb_but_pour` TINYINT UNSIGNED NOT NULL ,
+  `nb_but_contre` TINYINT UNSIGNED NOT NULL ,
+  `code_caricature` VARCHAR(30) NULL ,
+  PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
 ALTER TABLE `equipe` ADD UNIQUE(`id_ligue`, `id_coach`);
 ALTER TABLE `equipe` ADD FOREIGN KEY (`id_coach`) REFERENCES `coach`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `equipe` ADD FOREIGN KEY (`id_ligue`) REFERENCES `ligue`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -44,6 +58,20 @@ PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
 --LOAD DATA LOCAL INFILE 'C:\\Bitnami\\ListeJoueursReelsNouvelleTable.csv' INTO TABLE joueur_reel FIELDS TERMINATED BY ';' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
+
+CREATE TABLE `joueur_equipe` (
+`id_ligue` INT UNSIGNED NOT NULL,
+`id_equipe` INT UNSIGNED NOT NULL ,
+`id_joueur_reel` MEDIUMINT UNSIGNED NOT NULL,
+`prix` MEDIUMINT UNSIGNED NOT NULL,
+`tour_mercato`  TINYINT UNSIGNED NOT NULL,
+`date_offre` DATETIME NOT NULL,
+`date_validation` DATETIME,
+PRIMARY KEY (`id_equipe`, `id_joueur_reel`)
+) ENGINE = InnoDB;
+ALTER TABLE `joueur_equipe` ADD FOREIGN KEY (`id_ligue`) REFERENCES `ligue`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `joueur_equipe` ADD FOREIGN KEY (`id_equipe`) REFERENCES `equipe`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `joueur_equipe` ADD FOREIGN KEY (`id_joueur_reel`) REFERENCES `joueur_reel`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 CREATE TABLE `resultatsL1_reel` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
