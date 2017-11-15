@@ -66,8 +66,13 @@ class LigueManager extends ManagerBase
     $q->execute();
 
     // Maj état ligue
+    mettreAJourEtatLigue(EtatLigue::MERCATO, $idLigue);
+  }
+
+  public function mettreAJourEtatLigue($etat, $idLigue)
+  {
     $q = $this->_bdd->prepare('UPDATE ligue SET etat = :etat WHERE id = :idLigue');
-    $q->bindValue(':etat', EtatLigue::MERCATO);
+    $q->bindValue(':etat', $etat);
     $q->bindValue(':idLigue', $idLigue);
 
     $q->execute();

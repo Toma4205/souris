@@ -26,6 +26,33 @@ class EquipeManager extends ManagerBase
     $q->execute();
 	}
 
+  public function fermerMercato($id)
+  {
+    $q = $this->_bdd->prepare('UPDATE equipe SET fin_mercato = TRUE WHERE id = :id');
+    $q->bindValue(':id', $id);
+
+    $q->execute();
+  }
+
+  public function isTousMercatoFerme($idLigue)
+  {
+    $q = $this->_bdd->prepare('SELECT * FROM equipe WHERE id_ligue = :idLigue AND fin_mercato = FALSE');
+    $q->execute([':idLigue' => $idLigue]);
+
+    $donnees = $q->fetch(PDO::FETCH_ASSOC);
+    $q->closeCursor();
+
+    // Si toutes les équipes ont fermé leur mercato
+    if (is_bool($donnees))
+    {
+      return TRUE;
+    }
+    else
+    {
+      return FALSE;
+    }
+  }
+
   public function findEquipeByCoachEtLigue($idCoach, $idLigue)
   {
     $q = $this->_bdd->prepare('SELECT * FROM equipe WHERE id_coach = :idCoach AND id_ligue = :idLigue');

@@ -1,5 +1,15 @@
 <?php
 
+function traiterFinTourMercato(LigueManager $ligueManager, JoueurEquipeManager $joueurEquipeManager,
+  $idLigue, $tourMercato)
+{
+  $joueurEquipeManager->affecterJoueurAEquipe($idLigue, $tourMercato);
+  $_SESSION[ConstantesSession::LIGUE_CREA] = $ligueManager->findLigueById($idLigue);
+
+  // Redirection du visiteur vers la page d'accueil
+  header('Location: souris.php?section=mercatoLigue');
+}
+
 $ligueManager = new LigueManager($bdd);
 $equipeManager = new EquipeManager($bdd);
 $joueurEquipeManager = new JoueurEquipeManager($bdd);
@@ -8,6 +18,7 @@ $creaLigue = $_SESSION[ConstantesSession::LIGUE_CREA];
 // Pour rafraichir les données
 $_SESSION[ConstantesSession::LIGUE_CREA] = $ligueManager->findLigueById($creaLigue->id());
 $creaLigue = $_SESSION[ConstantesSession::LIGUE_CREA];
+$tourMercato = $creaLigue->tourMercato();
 
 // Permet de vérifier si le mercato peut se dérouler
 $equipe = $equipeManager->findEquipeByCoachEtLigue($coach->id(), $creaLigue->id());
@@ -17,8 +28,6 @@ $equipe = $equipeManager->findEquipeByCoachEtLigue($coach->id(), $creaLigue->id(
 // Validation du tour du Mercato
 if (isset($_POST['validationMercato']))
 {
-  $tourMercato = $ligueManager->findTourMercato($creaLigue->id());
-
   foreach ($_POST as $cle => $prixAchat)
   {
     if (substr($cle, 0, 5) === "name_")
@@ -30,24 +39,40 @@ if (isset($_POST['validationMercato']))
 
   if ($joueurEquipeManager->isTourMercatoTermine($creaLigue->id(), $tourMercato))
   {
-    $joueurEquipeManager->affecterJoueurAEquipe($creaLigue->id(), $tourMercato);
-    $_SESSION[ConstantesSession::LIGUE_CREA] = $ligueManager->findLigueById($creaLigue->id());
-
-    // Redirection du visiteur vers la page d'accueil
-    header('Location: souris.php?section=mercatoLigue');
+    traiterFinTourMercato($ligueManager, $joueurEquipeManager, $creaLigue->id(), $tourMercato);
   }
 }
 elseif (isset($_POST['clotureMercato']))
 {
-  // TODO MPL fermerMercato + afficher effectif complet
+  $equipeManager->fermerMercato($equipe->id());
+  if ($equipeManager->isTousMercatoFerme($creaLigue->id()))
+  {
+    $ligueManager->mettreAJourEtatLigue(EtatLigue::EN_COURS, $creaLigue->id());
+
+    $_SESSION[ConstantesSession::LIGUE] = $ligueManager->findLigueById($creaLigue->id());
+    // Redirection du visiteur vers la page d'accueil
+    header('Location: souris.php?section=equipe');
+  }
+  elseif ($joueurEquipeManager->isTourMercatoTermine($creaLigue->id(), $tourMercato))
+  {
+    traiterFinTourMercato($ligueManager, $joueurEquipeManager, $creaLigue->id(), $tourMercato);
+  }
+  else
+  {
+    $equipe->Fin_mercato(TRUE);
+  }
 }
 
 if ($equipe)
 {
-  $tourMercato = $ligueManager->findTourMercato($creaLigue->id());
   $tourValide = $joueurEquipeManager->isTourMercatoValide($equipe->id(), $tourMercato);
 
-  if ($tourValide == FALSE)
+  if ($equipe->finMercato() == TRUE)
+  {
+    $tourValide = TRUE;
+    $joueursAchetes = $joueurEquipeManager->findByEquipe($equipe->id());
+  }
+  elseif ($tourValide == FALSE)
   {
     $joueurReelManager = new JoueurReelManager($bdd);
     $nomenclEquipeManager = new NomenclatureManager($bdd);
