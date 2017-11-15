@@ -5,6 +5,10 @@ $equipeManager = new EquipeManager($bdd);
 $joueurEquipeManager = new JoueurEquipeManager($bdd);
 
 $creaLigue = $_SESSION[ConstantesSession::LIGUE_CREA];
+// Pour rafraichir les données
+$_SESSION[ConstantesSession::LIGUE_CREA] = $ligueManager->findLigueById($creaLigue->id());
+$creaLigue = $_SESSION[ConstantesSession::LIGUE_CREA];
+
 // Permet de vérifier si le mercato peut se dérouler
 $equipe = $equipeManager->findEquipeByCoachEtLigue($coach->id(), $creaLigue->id());
 
@@ -27,10 +31,15 @@ if (isset($_POST['validationMercato']))
   if ($joueurEquipeManager->isTourMercatoTermine($creaLigue->id(), $tourMercato))
   {
     $joueurEquipeManager->affecterJoueurAEquipe($creaLigue->id(), $tourMercato);
+    $_SESSION[ConstantesSession::LIGUE_CREA] = $ligueManager->findLigueById($creaLigue->id());
 
     // Redirection du visiteur vers la page d'accueil
     header('Location: souris.php?section=mercatoLigue');
   }
+}
+elseif (isset($_POST['clotureMercato']))
+{
+  // TODO MPL fermerMercato + afficher effectif complet
 }
 
 if ($equipe)
@@ -54,7 +63,7 @@ if ($equipe)
       $joueursReels = $joueurReelManager->findAll();
     }
     else {
-      $joueursReels = $joueurReelManager->findJoueurRestantByLigue($creaLigue->id());
+      $joueursReels = $joueurReelManager->findJoueurRestantByLigue($creaLigue->id(), $tourMercato);
     }
   } else {
     $joueursAchetes = $joueurEquipeManager->findMercatoEnCoursByEquipe($equipe->id(), $tourMercato);

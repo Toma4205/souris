@@ -12,9 +12,14 @@ class JoueurEquipe extends ClasseBase
   private $_position;
   private $_prixOrigine;
   private $_prixAchat;
+  private $_dateOffre;
+  private $_dateValidation;
 
-  // Libelle Equipe
+  // Libelle Equipe réelle
   private $_libelleEquipe;
+  // nom Equipe fictive
+  private $_nomEquipe;
+  private $_tourMercato;
 
   public function __construct(array $donnees)
   {
@@ -29,6 +34,10 @@ class JoueurEquipe extends ClasseBase
   public function prixOrigine() { return $this->_prixOrigine; }
   public function prixAchat() { return $this->_prixAchat; }
   public function libelleEquipe() { return $this->_libelleEquipe; }
+  public function nomEquipe() { return $this->_nomEquipe; }
+  public function dateOffre() { return $this->_dateOffre; }
+  public function dateValidation() { return $this->_dateValidation; }
+  public function tourMercato() { return $this->_tourMercato; }
 
   public function setId($id)
   {
@@ -68,6 +77,26 @@ class JoueurEquipe extends ClasseBase
   public function setLibelleEquipe($libelleEquipe)
   {
       $this->_libelleEquipe = $libelleEquipe;
+  }
+
+  public function setNomEquipe($nomEquipe)
+  {
+      $this->_nomEquipe = $nomEquipe;
+  }
+
+  public function setDate_offre($dateOffre)
+  {
+    $this->_dateOffre = $dateOffre;
+  }
+
+  public function setDate_validation($dateValidation)
+  {
+    $this->_dateValidation = $dateValidation;
+  }
+
+  public function setTour_mercato($tourMercato)
+  {
+    $this->_tourMercato = $tourMercato;
   }
 }
 ?>

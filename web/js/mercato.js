@@ -64,7 +64,6 @@ function gererTableMercato()
 
     // Mises à jour des éléments de la page (bouton, images)
     effectuerControlesSuiteModif();
-
   });
 
   // Suppression dans la table de base des joueurs déjà achetés
@@ -77,7 +76,7 @@ function gererTableMercato()
 
 function supprimerDansListeJoueurDejaAchete(idDiv)
 {
-  $('#listeAchat' + idDiv + ' p').each(function() {
+  $('#listeAchat' + idDiv + ' p.joueurEnCours').each(function() {
     var tr = $('tr[id=\'' + $(this).attr('id').substring(6) + '\']');
     tabMercato[tr.attr('id')] = tr;
     tabPrixBase[tr.attr('id')] = parseInt(tr.find('td:last').text());
@@ -103,7 +102,7 @@ function supprimerAchatJoueur(id)
   // Impact sur table de base
   appliquerTousLesFiltresSurLigne(tabMercato[id]);
   $("#tableMercato").DataTable().rows.add(tabMercato[id]).draw();
-  // TODO MPL vides tableaux
+  delete tabMercato[id];
 
   // Calcul du budget
   $('#budgetRestant').text(parseInt($('#budgetRestant').val()) + parseInt(p.find('input').val()));
@@ -159,7 +158,13 @@ function verifierBoutonValiderMercato()
   var nbMIL = $('#listeAchatMIL p').length;
   var nbATT = $('#listeAchatATT p').length;
 
-  if (parseInt($('#budgetRestant').text()) >= 0 && nbGB >= 2 && nbDEF >= 6 && nbMIL >= 6 && nbATT >= 3) {
+  var nbAjout = 0;
+  for (joueur in tabMercato) {
+    nbAjout++;
+  }
+
+  if (parseInt($('#budgetRestant').text()) >= 0
+    && nbGB >= 2 && nbDEF >= 6 && nbMIL >= 6 && nbATT >= 3 && nbAjout > 0) {
     $('#validationMercato').removeAttr("disabled");
   } else {
     $('#validationMercato').attr("disabled", "disabled");

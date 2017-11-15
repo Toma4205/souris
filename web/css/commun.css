@@ -111,6 +111,21 @@ p.colonne {
    border: 1px solid black;
 }
 
+.tableMercatoLigue {
+  width: 100%;
+}
+.tableMercatoLigue tr td:first-child {
+  width: 30%;
+}
+.tableMercatoLigue tr td:nth-child(2),
+.tableMercatoLigue tr td:nth-child(3) {
+  width: 15%;
+}
+.tableMercatoLigue tr td:nth-child(4),
+.tableMercatoLigue tr td:nth-child(5) {
+  width: 20%;
+}
+
 /* DataTable */
 .filtreMercato {
   float: left;
@@ -126,6 +141,9 @@ p.colonne {
   width: 400px !important;
   margin-right: 0px !important;
   background-color: #98FB98;
+}
+tr.joueurAchete {
+  font-weight: bold;
 }
 
 .joueurEnCours {

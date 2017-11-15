@@ -46,7 +46,7 @@ class JoueurReelManager extends ManagerBase
 		return $joueurs;
 	}
 
-  public function findJoueurRestantByLigue($idLigue)
+  public function findJoueurRestantByLigue($idLigue, $tourMercato)
   {
     $joueurs = [];
 
@@ -55,8 +55,9 @@ class JoueurReelManager extends ManagerBase
         JOIN nomenclature_equipe n ON j.equipe = n.code
         WHERE id NOT IN (SELECT DISTINCT(id_joueur_reel)
           FROM joueur_equipe je
-          WHERE id_ligue = :id)');
-    $q->execute([':id' => $idLigue]);
+          WHERE id_ligue = :id
+          AND tour_mercato < :tour)');
+    $q->execute([':id' => $idLigue, ':tour' => $tourMercato]);
 
 		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
 		{

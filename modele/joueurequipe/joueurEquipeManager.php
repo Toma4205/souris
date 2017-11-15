@@ -157,4 +157,30 @@ class JoueurEquipeManager extends ManagerBase
 
     $q->execute();
   }
+
+  public function findJoueurTourMercatoTermine($idLigue, $tourMercato)
+  {
+    $joueurs = [];
+
+		$q = $this->_bdd->prepare('SELECT je.prix as prixAchat, je.tour_mercato,
+        je.date_offre, je.date_validation, j.id, j.nom, j.prenom, j.position,
+        n.libelle as libelleEquipe, e.nom as nomEquipe
+        FROM joueur_equipe je
+        JOIN equipe e ON je.id_equipe = e.id
+        JOIN joueur_reel j ON je.id_joueur_reel = j.id
+        JOIN nomenclature_equipe n ON j.equipe = n.code
+        WHERE je.id_ligue = :id
+        AND je.tour_mercato < :tour
+        ORDER BY je.prix DESC');
+    $q->execute([':id' => $idLigue, ':tour' => $tourMercato]);
+
+		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+		{
+			$joueurs[] = new JoueurEquipe($donnees);
+		}
+
+		$q->closeCursor();
+
+		return $joueurs;
+  }
 }
