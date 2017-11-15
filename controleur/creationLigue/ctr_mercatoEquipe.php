@@ -59,11 +59,11 @@ elseif (isset($_POST['clotureMercato']))
   }
   else
   {
-    $equipe->Fin_mercato(TRUE);
+    $equipe->setFin_mercato(TRUE);
   }
 }
 
-if ($equipe)
+if (isset($equipe))
 {
   $tourValide = $joueurEquipeManager->isTourMercatoValide($equipe->id(), $tourMercato);
 

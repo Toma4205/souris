@@ -89,9 +89,10 @@ class JoueurEquipeManager extends ManagerBase
 
   public function isTourMercatoTermine($idLigue, $tourMercato)
   {
-    $q = $this->_bdd->prepare('SELECT cl.id_coach FROM coach_ligue cl
+    $q = $this->_bdd->prepare('SELECT cl.* FROM coach_ligue cl
       WHERE cl.id_ligue = :id
-      AND NOT EXISTS (SELECT e.id FROM equipe e WHERE e.id_coach = cl.id_coach)');
+      AND NOT EXISTS (
+        SELECT e.id FROM equipe e WHERE e.id_coach = cl.id_coach AND e.id_ligue = :id)');
     $q->execute([':id' => $idLigue]);
 
     $donnees = $q->fetch(PDO::FETCH_ASSOC);
@@ -99,7 +100,7 @@ class JoueurEquipeManager extends ManagerBase
 
     // Si tous les coachs ont créé leur équipe
     if (is_bool($donnees)) {
-      $q = $this->_bdd->prepare('SELECT DISTINCT(e.id) FROM equipe e
+      $q = $this->_bdd->prepare('SELECT e.* FROM equipe e
         JOIN joueur_equipe j ON e.id_ligue = j.id_ligue
         WHERE e.id_ligue = :id
         AND e.fin_mercato = FALSE

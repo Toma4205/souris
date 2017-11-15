@@ -66,7 +66,7 @@ class LigueManager extends ManagerBase
     $q->execute();
 
     // Maj état ligue
-    mettreAJourEtatLigue(EtatLigue::MERCATO, $idLigue);
+    $this->mettreAJourEtatLigue(EtatLigue::MERCATO, $idLigue);
   }
 
   public function mettreAJourEtatLigue($etat, $idLigue)

@@ -10,7 +10,7 @@ require_once("vue/commun/entete.php");
     <legend>Paramètres de ligue</legend>
     <p>Nom <br/>
       <input type="text" class="width_200px" name="nom" size="40"
-        value=<?php echo htmlspecialchars($creaLigue->nom());?> disabled/></p>
+        value="<?php echo htmlspecialchars($creaLigue->nom());?>" disabled/></p>
     <p>Pack Bonus/Malus <br/>
       <select name="bonusMalus" disabled><?php
             $arrayBonusMalus = [];
