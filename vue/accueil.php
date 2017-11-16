@@ -4,7 +4,7 @@ require_once("vue/commun/entete.php");
 ?>
 <form action="" method="post">
   <div class="colonnes">
-      <div class="colonne">
+      <div class="colonne" style="border-right:thick double #808080;">
         <h2>Déjà inscrit ?</h2>
         <p>Nom coach <br/>
           <input type="text" class="width_200px" name="nom" size="40" value="<?php

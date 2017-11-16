@@ -4,8 +4,7 @@ $vueJs = 'mercato.js';
 require_once("vue/commun/entete.php");
 ?>
 <form action="" method="post">
-<fieldset>
-  <legend>Mercato</legend>
+<div class="sousTitre"><h3>Mercato</h3></div>
     <?php
     if (!isset($_SESSION[ConstantesSession::EQUIPE_CREA])) {
       echo '<p>Merci de créer votre équipe afin de pouvoir effectuer votre mercato.</p>';
@@ -31,7 +30,6 @@ require_once("vue/commun/entete.php");
     require_once("vue/commun/tableMercato.php");
     }
     ?>
-</fieldset>
 </form>
 <?php
 // Le pied de page

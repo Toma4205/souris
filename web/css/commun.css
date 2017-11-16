@@ -3,6 +3,11 @@ h3
     color: #808080;
 }
 
+a:-webkit-any-link {
+  text-decoration: none;
+  color: black;
+}
+
 div.sousTitre {
   border-bottom:thick double #808080;
   margin-bottom: 5px;
@@ -95,7 +100,7 @@ p.colonne, p.contenu, div.colonne, div.contenu {
 p.colonne {
     text-align: center; /* Centrage horizontal */
     vertical-align: middle; /* Centrage vertical */
-    border: solid #808080 1px;
+    border: solid black 1px;
 }
 
 .centre {

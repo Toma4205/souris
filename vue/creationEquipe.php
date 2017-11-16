@@ -84,7 +84,7 @@ require_once("vue/commun/entete.php");
       // Création équipe non validée
       if (!isset($equipe) || null == $equipe->id())
       {
-        echo '<input type="submit" value="Créer" name="creationEquipe" />';
+        echo '<input type="submit" value="Créer" name="creationEquipe" class="marginBottom" />';
       }
     ?>
 </form>
