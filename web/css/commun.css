@@ -1,4 +1,4 @@
-h2, h3
+h3
 {
     color: #808080;
 }
@@ -143,6 +143,12 @@ p.colonne {
 .tableMercatoLigue tr td:nth-child(4),
 .tableMercatoLigue tr td:nth-child(5) {
   width: 20%;
+}
+
+.categorie {
+  border-radius:10px;
+  background-color: #C0C0C0;
+  width: 400px !important;
 }
 
 /* DataTable */

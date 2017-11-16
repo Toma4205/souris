@@ -44,7 +44,7 @@ function ajouterMinEtImage($id, $nbMini, $tourValide)
 ?>
 
 <div id="divAchatGB">
-  <p><h2>Gardiens <?php ajouterMinEtImage('imageGB', 2, $tourValide); ?></h2></p>
+  <p><h2 class="categorie">Gardiens <?php ajouterMinEtImage('imageGB', 2, $tourValide); ?></h2></p>
   <div id="listeAchatGB">
     <?php
     if (isset($joueursAchetes)){afficherJoueurDejaAchete($joueursAchetes, ConstantesAppli::GARDIEN);}
@@ -53,7 +53,7 @@ function ajouterMinEtImage($id, $nbMini, $tourValide)
   </div>
 </div>
 <div id="divAchatDEF">
-  <p><h2>Défenseurs <?php ajouterMinEtImage('imageDEF', 6, $tourValide); ?></h2></p>
+  <p><h2 class="categorie">Défenseurs <?php ajouterMinEtImage('imageDEF', 6, $tourValide); ?></h2></p>
   <div id="listeAchatDEF">
     <?php
     if (isset($joueursAchetes)){afficherJoueurDejaAchete($joueursAchetes, ConstantesAppli::DEFENSEUR);}
@@ -62,7 +62,7 @@ function ajouterMinEtImage($id, $nbMini, $tourValide)
   </div>
 </div>
 <div id="divAchatMIL">
-  <p><h2>Milieux <?php ajouterMinEtImage('imageMIL', 6, $tourValide); ?></h2></p>
+  <p><h2 class="categorie">Milieux <?php ajouterMinEtImage('imageMIL', 6, $tourValide); ?></h2></p>
   <div id="listeAchatMIL">
     <?php
     if (isset($joueursAchetes)){afficherJoueurDejaAchete($joueursAchetes, ConstantesAppli::MILIEU);}
@@ -71,7 +71,7 @@ function ajouterMinEtImage($id, $nbMini, $tourValide)
   </div>
 </div>
 <div id="divAchatATT">
-  <p><h2>Attaquants <?php ajouterMinEtImage('imageATT', 3, $tourValide); ?></h2></p>
+  <p><h2 class="categorie">Attaquants <?php ajouterMinEtImage('imageATT', 3, $tourValide); ?></h2></p>
   <div id="listeAchatATT">
     <?php
     if (isset($joueursAchetes)){afficherJoueurDejaAchete($joueursAchetes, ConstantesAppli::ATTAQUANT);}
