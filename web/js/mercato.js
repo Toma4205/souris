@@ -88,7 +88,6 @@ function supprimerDansListeJoueurDejaAchete(idDiv)
 function effectuerControlesSuiteModif()
 {
   verifierBoutonValiderMercato();
-  controlerImageBudget();
   controlerImageTableMercato('GB', 2);
   controlerImageTableMercato('DEF', 6);
   controlerImageTableMercato('MIL', 6);
@@ -178,15 +177,6 @@ function controlerImageTableMercato(position, nbMin)
     $('#image' + position).attr("src","./web/img/validation.jpg");
   } else {
     $('#image' + position).attr("src","./web/img/erreur.jpg");
-  }
-}
-
-function controlerImageBudget()
-{
-  if (parseInt($('#budgetRestant').text()) >= 0) {
-    $('#imageBudget').attr("src","./web/img/validation.jpg");
-  } else {
-    $('#imageBudget').attr("src","./web/img/erreur.jpg");
   }
 }
 

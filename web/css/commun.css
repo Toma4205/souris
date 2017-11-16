@@ -3,7 +3,7 @@ h3
     color: #808080;
 }
 
-a:-webkit-any-link {
+p.colonne a {
   text-decoration: none;
   color: black;
 }
@@ -149,6 +149,24 @@ p.colonne {
   border-radius:10px;
   background-color: #C0C0C0;
   width: 400px !important;
+}
+
+.libBudgetRestant {
+  font-size: 1.5em;
+  vertical-align:middle;
+}
+.budgetRestant {
+  display: inline-block;
+  height: 40px;
+  width: 100px;
+  font-size: 1.5em;
+  border-radius:10px;
+  background-color: #C0C0C0;
+  vertical-align:middle;
+}
+.budgetRestant output {
+  margin-left:35px;
+  vertical-align:middle;
 }
 
 /* DataTable */

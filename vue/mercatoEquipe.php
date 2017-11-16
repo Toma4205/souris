@@ -20,10 +20,14 @@ require_once("vue/commun/entete.php");
       echo '</div>';
     } else {
     ?>
-    <p>Budget restant : <output id="budgetRestant" name="budgetRestant"><?php echo $budgetRestant; ?></output> M€
-        <img id="imageBudget" src="./web/img/validation.jpg" width="20px" height="20px" />
+    <p><span class="libBudgetRestant">Budget restant (M€) : </span><span class="budgetRestant"><output id="budgetRestant" name="budgetRestant"><?php echo $budgetRestant; ?></output></span>
         <input type="submit" id="validationMercato" value="Valider mes offres" name="validationMercato" />
-        <input type="submit" id="clotureMercato" value="Fermer mon mercato" name="clotureMercato" />
+        <?php
+          if ($tourMercato > 1)
+          {
+            echo '<input type="submit" id="clotureMercato" value="Fermer mon mercato" name="clotureMercato" />';
+          }
+         ?>
     </p>
     <br/>
     <?php
