@@ -31,6 +31,7 @@ CREATE TABLE `equipe` (
   `stade` VARCHAR(30) NOT NULL ,
   `budget_restant` SMALLINT NOT NULL ,
   `fin_mercato` BOOLEAN NOT NULL ,
+  `classement` TINYINT UNSIGNED ,
   `nb_match` TINYINT UNSIGNED NOT NULL ,
   `nb_victoire` TINYINT UNSIGNED NOT NULL ,
   `nb_nul` TINYINT UNSIGNED NOT NULL ,

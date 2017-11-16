@@ -46,11 +46,18 @@ elseif (isset($_SESSION[ConstantesSession::LIGUE_CREA]))
 // *********************************************
 
 // Invitation d'un confrère dans la liste
-if (isset($_POST['inviter']))
+if (isset($_POST['invitationConfrere']))
 {
-  foreach($_POST['inviter'] as $cle => $value)
+  if (isset($_POST['coachEnvoiInvit']))
   {
-    $ligueManager->inviterCoachDansLigue($cle, $creaLigue->id());
+    foreach($_POST['coachEnvoiInvit'] as $cle => $value)
+    {
+      $ligueManager->inviterCoachDansLigue($value, $creaLigue->id());
+    }
+  }
+  else
+  {
+    $message = 'Vous devez sélectionner au moins un confrère !';
   }
 }
 // Validation finale des coachs ayant accepté l'invitation

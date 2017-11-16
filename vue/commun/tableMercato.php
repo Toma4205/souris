@@ -1,5 +1,5 @@
-<div class="colonnes">
-  <div class="colonne" style="width:50%;">
+<div class="colonnes sousTitre">
+  <div class="colonne" style="width:50%;border-right:thick double #808080;">
   <?php
   if (isset($joueursReels))
   {

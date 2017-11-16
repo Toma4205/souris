@@ -8,7 +8,12 @@
         <link rel="stylesheet" href="web/css/jquery.dataTables.min.css" type="text/css">
         <script src="web/js/jquery-1.12.4.js"></script>
         <script src="web/js/jquery.dataTables.min.js"></script>
-        <script src="web/js/mercato.js"></script>
+        <?php
+          if (isset($vueJs))
+          {
+            echo '<script src="web/js/' . $vueJs . '"></script>';
+          }
+         ?>
     </head>
     <body>
 

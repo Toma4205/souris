@@ -19,6 +19,9 @@ class Ligue extends ClasseBase
   private $_createur;
   private $_dateValidation;
 
+  // Champs de equipe
+  private $_classement;
+
   public function __construct(array $donnees)
   {
     parent::hydrate($donnees);
@@ -35,6 +38,7 @@ class Ligue extends ClasseBase
   public function dateCreation() { return $this->_dateCreation; }
   public function createur() { return $this->_createur; }
   public function dateValidation() { return $this->_dateValidation; }
+  public function classement() { return $this->_classement; }
 
   public function setId($id)
   {
@@ -89,5 +93,10 @@ class Ligue extends ClasseBase
   public function setDate_validation($dateValidation)
   {
       $this->_dateValidation = $dateValidation;
+  }
+
+  public function setClassement($classement)
+  {
+    $this->_classement = (int) $classement;
   }
 }

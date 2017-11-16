@@ -11,6 +11,7 @@ class Equipe extends ClasseBase
   private $_stade;
   private $_budgetRestant;
   private $_finMercato;
+  private $_classement;
   private $_nbMatch;
   private $_nbVictoire;
   private $_nbNul;
@@ -29,6 +30,7 @@ class Equipe extends ClasseBase
   public function stade() { return $this->_stade; }
   public function budgetRestant() { return $this->_budgetRestant; }
   public function finMercato() { return $this->_finMercato; }
+  public function classement() { return $this->_classement; }
   public function nbMatch() { return $this->_nbMatch; }
   public function nbVictoire() { return $this->_nbVictoire; }
   public function nbNul() { return $this->_nbNul; }
@@ -64,6 +66,11 @@ class Equipe extends ClasseBase
   public function setFin_mercato($finMercato)
   {
       $this->_finMercato = $finMercato;
+  }
+
+  public function setClassement($classement)
+  {
+    $this->_classement = (int) $classement;
   }
 
   public function setNb_match($nbMatch)

@@ -4,16 +4,15 @@ require_once("vue/commun/entete.php");
 ?>
 
 <form action="" method="post">
-  <fieldset>
-    <legend>Liste confrères</legend>
+  <div class="sousTitre"><h3>Liste confrères</h3></div>
       <?php
       if (sizeof($confreres) > 0)
       {
       ?>
+    <div style="width:50%;">
       <table class="tableBase">
         <thead>
           <tr>
-            <th>Id</th>
             <th>Nom</th>
             <th>Code postal</th>
             <th>Depuis</th>
@@ -24,13 +23,13 @@ require_once("vue/commun/entete.php");
           <?php
           foreach($confreres as $value)
           {
-            echo '<tr><td>' . $value->coachConfrere()->id() . '</td>';
-            echo '<td>' . $value->coachConfrere()->nom() . '</td>';
+            $dateDebut = date_create($value->dateDebut());
+            echo '<tr><td>' . $value->coachConfrere()->nom() . '</td>';
             echo '<td>' . $value->coachConfrere()->codePostal() . '</td>';
-            echo '<td>' . $value->dateDebut() . '</td>';
+            echo '<td>' . date_format($dateDebut, 'd/m/Y') . '</td>';
             echo '<td><input type="submit" value="Supprimer" name="supprimer[' . $value->coachConfrere()->id() . ']" /></td></tr>';
           }
-          echo '</tbody></table>';
+          echo '</tbody></table></div>';
         }
         else
         {
@@ -38,9 +37,8 @@ require_once("vue/commun/entete.php");
           echo 'Aucun confrere.';
         }
           ?>
-  </fieldset>
-  <fieldset>
-    <legend>Ajouter un confrère</legend>
+  <div class="sousTitre"><h3>Ajouter un confrère</h3></div>
+    <div style="width:50%;">
       <p>Nom : <input type="text" size="40" name="nomCoach" value="<?php
               if(isset($_POST['nomCoach']))
               {
@@ -58,7 +56,6 @@ require_once("vue/commun/entete.php");
       <table class="tableBase">
         <thead>
           <tr>
-            <th>Id</th>
             <th>Nom</th>
             <th>Code postal</th>
             <th>Ajouter</th>
@@ -68,8 +65,7 @@ require_once("vue/commun/entete.php");
         <?php
         foreach($coachsRech as $value)
         {
-          echo '<tr><td>' . $value->id() . '</td>';
-          echo '<td>' . $value->nom() . '</td>';
+          echo '<tr><td>' . $value->nom() . '</td>';
           echo '<td>' . $value->codePostal() . '</td>';
           echo '<td><input type="submit" value="Ajouter" name="ajouter[' . $value->id() . ']" /></td></tr>';
         }
@@ -82,7 +78,7 @@ require_once("vue/commun/entete.php");
       }
     }
     ?>
-    </fieldset>
+  </div>
 </form>
 
 <?php

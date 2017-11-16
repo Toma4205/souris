@@ -10,7 +10,7 @@ if (isset($joueursEquipeTries))
 <?php
   for($i = ($creaLigue->tourMercato() - 1) ; $i > 0 ; $i--)
   {
-    echo '<fieldset><legend>Tour ' . $i . '</legend>';
+    echo '<div class="sousTitre"><h3>Tour ' . $i . '</h3></div>';
     echo '<table class="tableMercatoLigue"><tbody>';
     foreach($joueursEquipeTries as $cle => $joueur)
     {
@@ -40,7 +40,6 @@ if (isset($joueursEquipeTries))
       }
     }
     echo '</tbody></table>';
-    echo '</fieldset>';
   }
   foreach($joueursEquipeTries as $cle => $joueur)
   {

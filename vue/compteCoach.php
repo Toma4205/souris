@@ -4,21 +4,14 @@ require_once("vue/commun/entete.php");
 ?>
 <form action="" method="post">
 <div class="colonnes">
-  <div class="colonne">
-    <fieldset>
-      <legend>Mes actions en attente</legend>
-        A venir...
-    </fieldset>
-    <fieldset>
-      <legend>Actualités</legend>
-      <p>
-        A venir...
-      </p>
-    </fieldset>
+  <div class="colonne" style="width:50%;">
+    <div class="sousTitre"><h3>Mes actions en attente</h3></div>
+        <p>A venir...</p>
+    <div class="sousTitre"><h3>Actualités</h3></div>
+        <p>A venir...</p>
   </div>
-  <div class="colonne">
-    <fieldset>
-      <legend>Mes ligues</legend>
+  <div class="colonne" style="width:50%;">
+      <div class="sousTitre"><h3>Mes ligues</h3></div>
       <?php
       if (sizeof($ligues) > 0)
       {
@@ -26,9 +19,7 @@ require_once("vue/commun/entete.php");
       <table class="tableBase">
         <thead>
           <tr>
-            <th>Id</th>
             <th>Nom</th>
-            <th>Equipe</th>
             <th>Classement</th>
             <th>Action</th>
           </tr>
@@ -37,10 +28,16 @@ require_once("vue/commun/entete.php");
           <?php
           foreach($ligues as $value)
           {
-            echo '<tr><td>' . $value->id() . '</td>';
-            echo '<td>' . $value->nom() . '</td>';
-            echo '<td>A venir...</td>';
-            echo '<td>A venir...</td>';
+            echo '<tr><td>' . $value->nom() . '</td>';
+            if ($value->classement() != null)
+            {
+              echo '<td>' . $value->classement() . '</td>';
+            }
+            else
+            {
+              echo '<td>Aucun</td>';
+            }
+
             if ($value->etat() == EtatLigue::CREATION)
             {
               if ($value->createur())
@@ -82,7 +79,6 @@ require_once("vue/commun/entete.php");
           echo 'Aucune ligue. Faut se mettre au boulot jeune padawan !';
         }
           ?>
-    </fieldset>
   </div>
 </div>
 </form>

@@ -6,8 +6,7 @@ require_once("vue/commun/entete.php");
   <!-- ***************************************
   //   ***** DEBUT PARTIE CREATION LIGUE *****
   //   *************************************** -->
-<fieldset>
-    <legend>Paramètres de ligue</legend>
+<div class="sousTitre"><h3>Paramètres de ligue</h3></div>
     <p>Nom *<br/>
       <input type="text" class="width_200px" name="nom" size="40" value=<?php
         echo '"';
@@ -96,10 +95,9 @@ require_once("vue/commun/entete.php");
       if (!isset($creaLigue) || null == $creaLigue->id())
       {
         echo '<p class="italic">Le détail des paramètres est expliqué dans le réglement.</p>';
-        echo '<input type="submit" value="Créer" name="creationLigue" />';
+        echo '<input type="submit" value="Créer" name="creationLigue" class="marginBottom" />';
       }
     ?>
-</fieldset>
 <!-- *********************************************
 //   ***** DEBUT PARTIE GESTION PARTICIPANTS *****
 //   ********************************************* -->
@@ -109,9 +107,8 @@ require_once("vue/commun/entete.php");
   {
 ?>
 <div class="colonnes">
-  <div class="colonne">
-    <fieldset>
-    <legend>Inviter des confrères</legend>
+  <div class="colonne" style="width:50%;border-right:thick double #808080;">
+    <div class="sousTitre"><h3>Inviter des confrères</h3></div>
     <?php
     if (sizeof($confreres) > 0)
     {
@@ -119,21 +116,18 @@ require_once("vue/commun/entete.php");
     <table class="tableBase">
       <thead>
         <tr>
-          <th>Id</th>
           <th>Nom</th>
           <th>Code postal</th>
-          <th>Depuis</th>
           <th>Inviter</th>
         </tr>
       </thead>
       <tbody>
         <?php
+        $index=1;
         foreach($confreres as $value)
         {
-          echo '<tr><td>' . $value->coachConfrere()->id() . '</td>';
-          echo '<td>' . $value->coachConfrere()->nom() . '</td>';
+          echo '<tr><td>' . $value->coachConfrere()->nom() . '</td>';
           echo '<td>' . $value->coachConfrere()->codePostal() . '</td>';
-          echo '<td>' . $value->dateDebut() . '</td>';
           if (sizeof($coachsInvites) > 0)
           {
             $dejaInvite = FALSE;
@@ -150,15 +144,18 @@ require_once("vue/commun/entete.php");
             }
             else
             {
-              echo '<td><input type="submit" value="Inviter" name="inviter[' . $value->coachConfrere()->id() . ']" /></td></tr>';
+              echo '<td><input type="checkbox" name="coachEnvoiInvit[' . $index .']" value="' . $value->coachConfrere()->id() . '" /></td></tr>';
             }
           }
           else
           {
-            echo '<td><input type="submit" value="Inviter" name="inviter[' . $value->coachConfrere()->id() . ']" /></td></tr>';
+            echo '<td><input type="checkbox" name="coachEnvoiInvit[' . $index .']" value="' . $value->coachConfrere()->id() . '" /></td></tr>';
           }
+          $index++;
         }
         echo '</tbody></table>';
+        echo '<br/>';
+        echo '<input type="submit" value="Inviter des confrères" name="invitationConfrere" />';
       }
       else
       {
@@ -166,11 +163,9 @@ require_once("vue/commun/entete.php");
         echo 'Tu dois dans un premier temps ajouter des confrères (onglet Mes confrères) avant de pouvoir les inviter ! C\'est logique.';
       }
         ?>
-  </fieldset>
 </div>
-<div class="colonne">
-  <fieldset>
-    <legend>Confrères invités</legend>
+<div class="colonne" style="width:50%;">
+  <div class="sousTitre"><h3>Confrères invités</h3></div>
     <?php
     if (sizeof($coachsInvites) > 0)
     {
@@ -178,7 +173,6 @@ require_once("vue/commun/entete.php");
     <table class="tableBase">
       <thead>
         <tr>
-          <th>Id</th>
           <th>Nom</th>
           <th>Code postal</th>
           <th>Statut</th>
@@ -190,8 +184,7 @@ require_once("vue/commun/entete.php");
         $index=1;
         foreach($coachsInvites as $value)
         {
-          echo '<tr><td>' . $value->id() . '</td>';
-          echo '<td>' . $value->nom() . '</td>';
+          echo '<tr><td>' . $value->nom() . '</td>';
           echo '<td>' . $value->codePostal() . '</td>';
           if (null != $value->dateValidationLigue())
           {
@@ -215,7 +208,6 @@ require_once("vue/commun/entete.php");
         echo 'Aucun coach invité pour le moment ! Ca va être compliqué de jouer.';
       }
         ?>
-  </fieldset>
 </div>
 <?php
     }

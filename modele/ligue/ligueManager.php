@@ -103,9 +103,10 @@ class LigueManager extends ManagerBase
 		$ligues = [];
 
 		// Ligues du coach
-		$q = $this->_bdd->prepare('SELECT l.*, c.createur, c.date_validation
+		$q = $this->_bdd->prepare('SELECT l.*, c.createur, c.date_validation, e.classement
 						FROM ligue l
 						INNER JOIN coach_ligue c ON c.id_ligue = l.id
+            LEFT JOIN equipe e ON e.id_ligue = l.id AND e.id_coach = :id
 						WHERE c.id_coach = :id');
 		$q->execute([':id' => $idCoach]);
 

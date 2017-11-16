@@ -2,8 +2,6 @@
 // entete
 require_once("vue/commun/entete.php");
 ?>
-<p>Nombre de coachs : <?= $manager->count() ?></p>
-
 <form action="" method="post">
   <div class="colonnes">
       <div class="colonne">

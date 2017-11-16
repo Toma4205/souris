@@ -1,5 +1,6 @@
 <?php
 // entete
+$vueJs = 'mercato.js';
 require_once("vue/commun/entete.php");
 ?>
 <form action="" method="post">

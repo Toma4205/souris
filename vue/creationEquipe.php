@@ -6,8 +6,7 @@ require_once("vue/commun/entete.php");
   <!-- ***************************************
   //   ***** DEBUT PARTIE CREATION LIGUE *****
   //   *************************************** -->
-<fieldset>
-    <legend>Paramètres de ligue</legend>
+<div class="sousTitre"><h3>Paramètres de ligue</h3></div>
     <p>Nom <br/>
       <input type="text" class="width_200px" name="nom" size="40"
         value="<?php echo htmlspecialchars($creaLigue->nom());?>" disabled/></p>
@@ -53,12 +52,10 @@ require_once("vue/commun/entete.php");
       <textarea name="libellePari" rows="5" cols="30" disabled><?php
            echo htmlspecialchars($creaLigue->libellePari());?></textarea>
     </p>
-</fieldset>
 <!-- ****************************************
 //   ***** DEBUT PARTIE CREATION EQUIPE *****
 //   **************************************** -->
-<fieldset>
-    <legend>Mon équipe</legend>
+<div class="sousTitre"><h3>Mon équipe</h3></div>
     <p>Nom *<br/>
       <input type="text" class="width_200px" name="nomEquipe" size="30" value=<?php
         echo '"';
@@ -90,7 +87,6 @@ require_once("vue/commun/entete.php");
         echo '<input type="submit" value="Créer" name="creationEquipe" />';
       }
     ?>
-</fieldset>
 </form>
 <?php
 // Le pied de page
