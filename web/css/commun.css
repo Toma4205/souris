@@ -1,3 +1,11 @@
+/** POUR LES TESTS */
+.rouge {
+  background-color: red;
+}
+.vert {
+  background-color: green;
+}
+/** FIN */
 h3
 {
     color: #808080;
@@ -111,7 +119,7 @@ p.colonne {
   font-style: italic;
 }
 .cache {
-  display: none;
+  display: none !important;
 }
 .floatRight {
   float: right;

@@ -71,4 +71,20 @@ class EquipeManager extends ManagerBase
       return new Equipe($donnees);
     }
 	}
+
+  public function findEquipeByLigue($idLigue)
+  {
+      $equipes = [];
+      $q = $this->_bdd->prepare('SELECT id FROM equipe WHERE id_ligue = :idLigue');
+      $q->execute([':idLigue' => $idLigue]);
+
+      while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+  		{
+  			$equipes[] = $donnees['id'];
+  		}
+
+  		$q->closeCursor();
+
+      return $equipes;
+  }
 }

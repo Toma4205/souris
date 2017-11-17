@@ -74,6 +74,20 @@ ALTER TABLE `joueur_equipe` ADD FOREIGN KEY (`id_ligue`) REFERENCES `ligue`(`id`
 ALTER TABLE `joueur_equipe` ADD FOREIGN KEY (`id_equipe`) REFERENCES `equipe`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `joueur_equipe` ADD FOREIGN KEY (`id_joueur_reel`) REFERENCES `joueur_reel`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+CREATE TABLE `calendrier_ligue` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id_ligue` INT UNSIGNED NOT NULL,
+  `id_equipe_dom` INT UNSIGNED NOT NULL ,
+  `id_equipe_ext` INT UNSIGNED NOT NULL ,
+  `num_journee` TINYINT UNSIGNED NOT NULL ,
+  `score_dom` TINYINT UNSIGNED ,
+  `score_ext` TINYINT UNSIGNED ,
+PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
+ALTER TABLE `calendrier_ligue` ADD FOREIGN KEY (`id_ligue`) REFERENCES `ligue`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `calendrier_ligue` ADD FOREIGN KEY (`id_equipe_dom`) REFERENCES `equipe`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `calendrier_ligue` ADD FOREIGN KEY (`id_equipe_ext`) REFERENCES `equipe`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 CREATE TABLE `resultatsL1_reel` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 `journee` INT UNSIGNED NOT NULL,

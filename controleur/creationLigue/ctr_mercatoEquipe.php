@@ -47,6 +47,12 @@ elseif (isset($_POST['clotureMercato']))
   $equipeManager->fermerMercato($equipe->id());
   if ($equipeManager->isTousMercatoFerme($creaLigue->id()))
   {
+    // Création calendrier
+    $tabIdEquipe = $equipeManager->findEquipeByLigue($creaLigue->id());
+    $calLigueManager = new CalendrierLigueManager($bdd);
+    $calLigueManager->calculerCalendrier($creaLigue->id(), $tabIdEquipe);
+
+    // Maj état ligue MERCATO => EN_COURS
     $ligueManager->mettreAJourEtatLigue(EtatLigue::EN_COURS, $creaLigue->id());
 
     $_SESSION[ConstantesSession::LIGUE] = $ligueManager->findLigueById($creaLigue->id());
