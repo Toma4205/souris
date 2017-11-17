@@ -6,6 +6,66 @@
   background-color: green;
 }
 /** FIN */
+
+.font_bandeau_appli {
+  font-size: 30px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-variant: small-caps;
+  color: #696969;
+}
+div#bandeau_appli {
+  display: table;
+  border-collapse: collapse;
+  border-spacing: 0px;
+  height: 45px;
+	background-color:#FFC0CB;
+  width: 100%;
+}
+div#bandeau_appli_col1 {
+  display: table-cell;
+	width: 100px;
+}
+div#bandeau_appli_centre {
+  display: table-cell;
+  vertical-align:middle;
+  text-align:center;
+}
+
+div.bandeau_menu {
+  display: table;
+  border-collapse: collapse;
+  border-spacing: 0px;
+  height: 50px;
+  width: 100%;
+}
+div.bandeau_menu_col1 {
+  display: table-cell;
+	width: 100px;
+}
+div.bandeau_menu_centre {
+  display: table-cell;
+  vertical-align:middle;
+  text-align:center;
+  font-size: 18px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-variant: small-caps;
+}
+
+.fond {
+  background-color: #696969/*#E6E6FA*/;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+div#contenu {
+  margin: 0 auto;
+  max-width: 900px;
+  background-color: white;
+}
+
 h3
 {
     color: #808080;
@@ -13,7 +73,7 @@ h3
 
 p.colonne a {
   text-decoration: none;
-  color: black;
+  color: #696969;
 }
 
 div.sousTitre {
@@ -29,58 +89,7 @@ div.avecBordure {
   border: solid black 1px;
 }
 
-div#bandeau_appli {
-  text-align:center;
-	height:50px;
-  width:100%;
-	background-color:pink;
-}
-div#bandeau_appli_col1 {
-	float: left;
-	width: 100px;
-	margin-right: 10px;
-}
-div#bandeau_appli_centre {
-  margin-left: 110px;
-  height: inherit;
-  vertical-align: middle;
-}
 
-
-div#bandeau_compte {
-  display: inline-block;
-	height:50px;
-  width:100%;
-	background-color:#C0C0C0;
-}
-div#bandeau_compte_col1 {
-	float: left;
-	width: 100px;
-	margin-right: 10px;
-}
-div#bandeau_compte_centre {
-  margin-left: 110px;
-}
-
-
-div#bandeau_ligue {
-  display: inline-block;
-	height:50px;
-  width:100%;
-	background-color:#C0C0C0;
-}
-div#bandeau_ligue_col1 {
-	float: left;
-	width: 100px;
-	margin-right: 10px;
-}
-div#bandeau_ligue_centre {
-  margin-left: 110px;
-}
-
-div#contenu {
-  /*height:400px;*/
-}
 
 footer#pied_de_page {
 	height:50px;
@@ -91,6 +100,7 @@ footer#pied_de_page {
 
 p.menuEnCours {
   background-color: beige;
+  border-bottom:thick double #808080;
 }
 
 div.colonnes {
@@ -108,7 +118,6 @@ p.colonne, p.contenu, div.colonne, div.contenu {
 p.colonne {
     text-align: center; /* Centrage horizontal */
     vertical-align: middle; /* Centrage vertical */
-    border: solid black 1px;
 }
 
 .centre {
