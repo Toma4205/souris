@@ -8,12 +8,19 @@ require_once("vue/commun/entete.php");
   if (isset($calendriers))
   {
 ?>
+<!-- TODO MPL Centrer select -->
 <div>
   <select name="journees" onchange="javascript:afficherDivJournee(this)">
     <?php
-        $index = 1;
+        $numJourneeMax = 2;
         foreach ($calendriers as $cle => $value)
         {
+          if($value->numJournee() > $numJourneeMax)
+          {
+              $numJourneeMax = $value->numJournee();
+          }
+        }
+        for ($index = 1; $index <= $numJourneeMax; $index++) {
           if($index == 1)
           {
               echo '<option value="divJournee' . $index . '" selected="selected">Journée ' . $index . '</option>';
@@ -22,17 +29,34 @@ require_once("vue/commun/entete.php");
           {
               echo '<option value="divJournee' . $index . '">Journée ' . $index . '</option>';
           }
-          $index++;
         }
      ?>
   </select>
 </div>
 <?php
-    $index = 1;
+    $numJournee = 0;
+    $changementJournee = false;
     foreach ($calendriers as $cle => $value)
     {
+      if ($numJournee < $value->numJournee())
+      {
+        $numJournee = $value->numJournee();
+        $changementJournee = true;
+
+        if ($numJournee > 1)
+        {
+          echo '</div>';
+        }
 ?>
-<div id="divJournee<?php echo $index; ?>" class="colonnes <?php if ($index != 1) echo 'cache'; ?>" style="height:50px;">
+<div id="divJournee<?php echo $numJournee; ?>" class="colonnes <?php if ($numJournee != 1) echo 'cache'; ?>" style="height:50px;">
+<?php
+      }
+      else
+      {
+        $changementJournee = false;
+      }
+ ?>
+ <div>
   <div class="colonne" style="width:47%;vertical-align:middle;">
     <div style="float:right;"><?php echo $value->nomEquipeDom(); ?></div>
   </div>
@@ -53,8 +77,8 @@ require_once("vue/commun/entete.php");
   </div>
 </div>
 <?php
-      $index++;
     } // Fin foreach
+    echo '</div>';
   }
   else {
     $message = 'Calendrier indisponible ! Veuillez nous contacter en indiquant le nom de votre ligue.';

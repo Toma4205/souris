@@ -16,7 +16,8 @@ class CalendrierLigueManager extends ManagerBase
         FROM calendrier_ligue c
         JOIN equipe dom ON dom.id = c.id_equipe_dom
         JOIN equipe ext ON ext.id = c.id_equipe_ext
-        WHERE c.id_ligue = :idLigue');
+        WHERE c.id_ligue = :idLigue
+        ORDER BY c.num_journee ASC');
       $q->execute([':idLigue' => $idLigue]);
 
       while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
@@ -49,6 +50,7 @@ class CalendrierLigueManager extends ManagerBase
           $tabFinal[$i] = array();
       }
 
+      //echo '$ghost=' . $ghost . ', $totalJournees=' . $totalJournees . ', $nbMatchParJournee=' . $nbMatchParJournee . '<br/>';
       for ($journee = 0; $journee < $totalJournees; $journee++) {
           for ($match = 0; $match < $nbMatchParJournee; $match++) {
               $home = ($journee + $match) % ($nbEquipe - 1);
@@ -59,6 +61,7 @@ class CalendrierLigueManager extends ManagerBase
               }
               $tabJournees[$journee][$match] = $this->getIdEquipe($home + 1, $tabIdEquipe)
                   . "v" . $this->getIdEquipe($away + 1, $tabIdEquipe);
+              //echo 'journee ' . $journee . ', match ' . $match . ' => ' . $tabJournees[$journee][$match] . '<br/>';
           }
       }
 
@@ -100,7 +103,7 @@ class CalendrierLigueManager extends ManagerBase
               $q->bindValue(':idLigue', $idLigue);
               $q->bindValue(':idEquipeDom', $equipes[0]);
               $q->bindValue(':idEquipeExt', $equipes[1]);
-              $q->bindValue(':journee', $i + 1);
+              $q->bindValue(':journee', ($i + 1));
 
               $q->execute();
 
@@ -109,7 +112,7 @@ class CalendrierLigueManager extends ManagerBase
               $q->bindValue(':idLigue', $idLigue);
               $q->bindValue(':idEquipeDom', $equipes[1]);
               $q->bindValue(':idEquipeExt', $equipes[0]);
-              $q->bindValue(':journeeRetour', $i + $nbEquipe);
+              $q->bindValue(':journeeRetour', ($i + $nbEquipe));
 
               $q->execute();
           }

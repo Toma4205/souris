@@ -54,6 +54,10 @@ div.bandeau_menu_centre {
   font-weight: bold;
   font-variant: small-caps;
 }
+p.menuEnCours {
+  background-color: beige;
+  border-bottom:thick double #808080;
+}
 
 .fond {
   background-color: #696969/*#E6E6FA*/;
@@ -65,6 +69,13 @@ div#contenu {
   max-width: 900px;
   background-color: white;
 }
+footer#pied_de_page {
+	height:50px;
+  width:100%;
+	background-color:#C0C0C0;
+  border: solid black 1px;
+}
+
 
 h3
 {
@@ -87,20 +98,6 @@ input.marginBottom {
 
 div.avecBordure {
   border: solid black 1px;
-}
-
-
-
-footer#pied_de_page {
-	height:50px;
-  width:100%;
-	background-color:#C0C0C0;
-  border: solid black 1px;
-}
-
-p.menuEnCours {
-  background-color: beige;
-  border-bottom:thick double #808080;
 }
 
 div.colonnes {
