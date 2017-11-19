@@ -4,6 +4,9 @@
 .height_30px {
   height: 30px;
 }
+.height_50px {
+  height: 50px;
+}
 
 .width_50px {
   width: 50px !important;
@@ -19,4 +22,18 @@
 }
 .width_300px {
   width: 300px !important;
+}
+
+.width_6pc {
+  width: 6% !important;
+}
+.width_47pc {
+  width: 47% !important;
+}
+
+.font_size_17px {
+  font-size: 17px;
+}
+.font_size_20px {
+  font-size: 20px;
 }

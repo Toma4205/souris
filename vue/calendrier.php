@@ -2,15 +2,13 @@
 // entete
 $vueJs = 'calendrier.js';
 require_once("vue/commun/entete.php");
-?>
-<div class="sousTitre"><h3>Calendrier</h3></div>
-<?php
-  if (isset($calendriers))
-  {
+
+if (isset($calendriers))
+{
 ?>
 <!-- TODO MPL Centrer select -->
-<div>
-  <select name="journees" onchange="javascript:afficherDivJournee(this)">
+<div class="calendrier_journee">
+  <select name="journees" class="font_size_20px" onchange="javascript:afficherDivJournee(this)">
     <?php
         $numJourneeMax = 2;
         foreach ($calendriers as $cle => $value)
@@ -48,7 +46,8 @@ require_once("vue/commun/entete.php");
           echo '</div>';
         }
 ?>
-<div id="divJournee<?php echo $numJournee; ?>" class="colonnes <?php if ($numJournee != 1) echo 'cache'; ?>" style="height:50px;">
+<div id="divJournee<?php echo $numJournee; ?>"
+  class="calendrier_matchs colonnes <?php if ($numJournee != 1) echo 'cache'; ?>">
 <?php
       }
       else
@@ -56,15 +55,15 @@ require_once("vue/commun/entete.php");
         $changementJournee = false;
       }
  ?>
- <div>
-  <div class="colonne" style="width:47%;vertical-align:middle;">
-    <div style="float:right;"><?php echo $value->nomEquipeDom(); ?></div>
+ <div class="colonnes border_bottom_single <?php if ($changementJournee) echo 'border_top_single'; ?>">
+  <div class="colonne width_47pc vertical_align_middle">
+    <div class="float_right"><?php echo $value->nomEquipeDom(); ?></div>
   </div>
-  <div class="colonne" style="width:6%;vertical-align:middle;">
+  <div class="colonne width_6pc vertical_align_middle">
     <?php
         if ($value->scoreDom() != null)
         {
-          echo '<div class="centre" style="text-align:center;">' . $value->scoreDom() . '-' . $value->scoreExt() . '</div>';
+          echo '<div class="centre" style="text-align:center;">' . $value->scoreDom() . ' - ' . $value->scoreExt() . '</div>';
         }
         else
         {
@@ -72,8 +71,8 @@ require_once("vue/commun/entete.php");
         }
     ?>
   </div>
-  <div class="colonne" style="width:47%;vertical-align:middle;">
-    <div style="float:left;"><?php echo $value->nomEquipeExt(); ?></div>
+  <div class="colonne width_47pc vertical_align_middle">
+    <div class="float_left"><?php echo $value->nomEquipeExt(); ?></div>
   </div>
 </div>
 <?php

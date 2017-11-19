@@ -10,7 +10,7 @@ function afficherJoueurPrepaMercato($joueursAchetes, $position)
     {
       echo '<p id="Achat_' . $value->id() . '" class="joueurEnCours">';
       echo '<b>' . $value->nom() . ' ' . $value->prenom() . '</b> - ' . $value->libelleEquipe() . ' (prix = ' . $value->prixOrigine() . ')';
-      echo '<span class="floatRight">';
+      echo '<span class="float_right fond_blanc">';
       echo '<input type="text" class="inputPrix" name="name_' . $value->id() . '" value="' . $value->prixAchat() . '" onchange="javascript:recalculerBudgetRestant();"/>';
       echo ' <img src="./web/img/croix.jpg" alt="Supprimer" width="15px" height="15px" onclick="javascript:supprimerAchatJoueur(\'' . $value->id() . '\');" />';
       echo '</span></p>';
@@ -28,7 +28,7 @@ function afficherJoueurDejaAchete($joueursAchetes, $position)
     {
       echo '<p id="Achat_' . $value->id() . '" class="joueurAchete">';
       echo '<b>' . $value->nom() . ' ' . $value->prenom() . '</b> - ' . $value->libelleEquipe() . ' (prix = ' . $value->prixOrigine() . ')';
-      echo '<span class="floatRight">';
+      echo '<span class="float_right fond_blanc">';
       echo '<input type="text" class="inputPrix" value="' . $value->prixAchat() . '" disabled/>';
       echo '</span></p>';
     }

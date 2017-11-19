@@ -6,10 +6,13 @@
   background-color: green;
 }
 /** FIN */
+body
+{
+  font-family: Arial, Helvetica, sans-serif;
+}
 
 .font_bandeau_appli {
   font-size: 30px;
-  font-family: Arial, Helvetica, sans-serif;
   font-style: normal;
   font-weight: bold;
   font-variant: small-caps;
@@ -63,9 +66,12 @@ p.menuEnCours {
   background-color: #696969/*#E6E6FA*/;
   padding-top: 20px;
   padding-bottom: 20px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 div#contenu {
   margin: 0 auto;
+  border-radius:10px;
   max-width: 900px;
   background-color: white;
 }
@@ -117,6 +123,12 @@ p.colonne {
     vertical-align: middle; /* Centrage vertical */
 }
 
+.text_align_center {
+  text-align:center;
+}
+.vertical_align_middle {
+  vertical-align:middle;
+}
 .centre {
   margin-left: auto;
   margin-right: auto;
@@ -127,9 +139,31 @@ p.colonne {
 .cache {
   display: none !important;
 }
-.floatRight {
+.float_right {
   float: right;
+}
+.float_left {
+  float: left;
+}
+.fond_blanc {
   background-color: white !important;
+}
+
+.border_top_single {
+  border-top: solid #808080;
+}
+.border_bottom_single {
+  border-bottom: solid #808080;
+}
+
+/* CALENDRIER */
+.calendrier_journee {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+.calendrier_matchs {
+  font-weight: bold;
 }
 
 /* Tableaux */
