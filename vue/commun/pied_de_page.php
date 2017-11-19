@@ -1,7 +1,8 @@
-  </div>
-</div>
-<footer id="pied_de_page">
-    <p>Copyright moi, tous droits réservés</p>
-</footer>
-</body>
+        </div>
+      </div>
+      <footer id="pied_de_page">
+        <p>Copyright moi, tous droits réservés</p>
+      </footer>
+    </div>
+  </body>
 </html>

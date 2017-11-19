@@ -9,7 +9,7 @@ require_once("vue/commun/entete.php");
       echo $coach->nom();
     ?>" /></p>
   <p>Mail <br/>
-    <input type="text" class="width_200px" name="mail" size="50" value="<?php
+    <input type="email" class="width_200px" name="mail" size="50" value="<?php
       echo $coach->mail();
     ?>" /></p>
   <p>Code Postal <br/>

@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Mon super site</title>
+        <title>CDD ou RDS</title>
         <link rel="stylesheet" href="web/css/commun.css" type="text/css">
         <link rel="stylesheet" href="web/css/taille.css" type="text/css">
         <link rel="stylesheet" href="web/css/jquery.dataTables.min.css" type="text/css">
@@ -16,27 +16,20 @@
          ?>
     </head>
     <body>
+      <div id="contenu_body">
+        <header id="bandeau_appli">
+            <div id="bandeau_appli_image">
+              <img src="./web/img/logo.jpg" alt="Logo du site" width="100px" height="inherit" />
+            </div>
+            <p>T'es un homme ou une souris ?</p>
+        </header>
 
-    <div id="bandeau_appli">
-      <div id="bandeau_appli_col1">
-        <img src="./web/img/logo.jpg" alt="Logo du site" width="100px" height="inherit" />
-      </div>
-      <div id="bandeau_appli_centre">
-        <span class="font_bandeau_appli">T'es un homme ou une souris ?</span>
-      </div>
-    </div>
 <?php
-if ((isset($creaLigue) && $creaLigue->etat() == EtatLigue::MERCATO)
-|| (isset($coach) && !isset($ligue))
-|| (isset($ligue)))
+// Si authentification
+if (isset($coach))
 {
 ?>
-    <div class="bandeau_menu">
-      <div class="bandeau_menu_col1"><?php
-        echo 'Je suis ' . $coach->nom() . ' (id=' . $coach->id() . ')'; ?>
-      </div>
-      <div class="bandeau_menu_centre">
-        <div class="colonnes">
+    <nav>
 <?php
   if (isset($creaLigue) && $creaLigue->etat() == EtatLigue::MERCATO)
   {
@@ -53,7 +46,7 @@ elseif (isset($coach) && !isset($ligue))
       <p class="colonne<?php if($_GET['section'] == 'compteCoach') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'compteCoach') { ?><a href="souris.php?section=compteCoach"><?php } ?>Mon bureau<?php if($_GET['section'] != 'compteCoach') { ?></a><?php } ?></p>
       <p class="colonne<?php if($_GET['section'] == 'gestionConfrere') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'gestionConfrere') { ?><a href="souris.php?section=gestionConfrere"><?php } ?>Mes confrères<?php if($_GET['section'] != 'gestionConfrere') { ?></a><?php } ?></p>
       <p class="colonne<?php if($_GET['section'] == 'creationLigue') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'creationLigue') { ?><a href="souris.php?section=creationLigue"><?php } ?>Créer une ligue<?php if($_GET['section'] != 'creationLigue') { ?></a><?php } ?></p>
-      <p class="colonne<?php if($_GET['section'] == 'prepaMercato') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'prepaMercato') { ?><a href="souris.php?section=prepaMercato"><?php } ?>Préparer mon mercato<?php if($_GET['section'] != 'prepaMercato') { ?></a><?php } ?></p>
+      <p class="colonne<?php if($_GET['section'] == 'prepaMercato') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'prepaMercato') { ?><a href="souris.php?section=prepaMercato"><?php } ?>Préparer<br/> mon mercato<?php if($_GET['section'] != 'prepaMercato') { ?></a><?php } ?></p>
       <p class="colonne<?php if($_GET['section'] == 'gestionCompteCoach') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'gestionCompteCoach') { ?><a href="souris.php?section=gestionCompteCoach"><?php } ?>Mon compte<?php if($_GET['section'] != 'gestionCompteCoach') { ?></a><?php } ?></p>
 <?php
 }
@@ -69,9 +62,7 @@ elseif (isset($ligue))
        }
       ?>
       <p class="colonne"><a href="souris.php?deconnexion=true">Déconnexion</a></p>
-    </div>
-  </div>
-</div>
+</nav>
 <?php
  }
 ?>
