@@ -28,45 +28,53 @@
 // Si authentification
 if (isset($coach))
 {
-?>
-    <nav>
-<?php
+  // Affichage des menus
+  function afficherMenu($section, $libMenu, $nav1Ligne)
+  {
+    echo '<p';
+    if($_GET['section'] == $section || $nav1Ligne) {
+      echo ' class="';
+      if ($_GET['section'] == $section) echo 'menuEnCours';
+      if ($nav1Ligne) echo ' nav1ligne';
+      echo '"';
+    }
+    echo '>';
+    if($_GET['section'] != $section) echo '<a href="souris.php?section=' . $section . '">';
+    echo $libMenu;
+    if($_GET['section'] != $section) echo '</a>';
+    echo '</p>';
+  }
+
+  echo '<nav>';
+  
   if (isset($creaLigue) && $creaLigue->etat() == EtatLigue::MERCATO)
   {
-?>
-      <p class="colonne<?php if($_GET['section'] == 'compteCoach') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'compteCoach') { ?><a href="souris.php?section=compteCoach"><?php } ?>Mon bureau<?php if($_GET['section'] != 'compteCoach') { ?></a><?php } ?></p>
-      <p class="colonne<?php if($_GET['section'] == 'creationLigue') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'creationLigue') { ?><a href="souris.php?section=creationLigue"><?php } ?>Ligue/Equipe<?php if($_GET['section'] != 'creationLigue') { ?></a><?php } ?></p>
-      <p class="colonne<?php if($_GET['section'] == 'mercatoEquipe') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'mercatoEquipe') { ?><a href="souris.php?section=mercatoEquipe"><?php } ?>Mon mercato<?php if($_GET['section'] != 'mercatoEquipe') { ?></a><?php } ?></p>
-      <p class="colonne<?php if($_GET['section'] == 'mercatoLigue') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'mercatoLigue') { ?><a href="souris.php?section=mercatoLigue"><?php } ?>Mercato ligue<?php if($_GET['section'] != 'mercatoLigue') { ?></a><?php } ?></p>
-<?php
-}
-elseif (isset($coach) && !isset($ligue))
-{
-?>
-      <p class="colonne<?php if($_GET['section'] == 'compteCoach') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'compteCoach') { ?><a href="souris.php?section=compteCoach"><?php } ?>Mon bureau<?php if($_GET['section'] != 'compteCoach') { ?></a><?php } ?></p>
-      <p class="colonne<?php if($_GET['section'] == 'gestionConfrere') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'gestionConfrere') { ?><a href="souris.php?section=gestionConfrere"><?php } ?>Mes confrères<?php if($_GET['section'] != 'gestionConfrere') { ?></a><?php } ?></p>
-      <p class="colonne<?php if($_GET['section'] == 'creationLigue') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'creationLigue') { ?><a href="souris.php?section=creationLigue"><?php } ?>Créer une ligue<?php if($_GET['section'] != 'creationLigue') { ?></a><?php } ?></p>
-      <p class="colonne<?php if($_GET['section'] == 'prepaMercato') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'prepaMercato') { ?><a href="souris.php?section=prepaMercato"><?php } ?>Préparer<br/> mon mercato<?php if($_GET['section'] != 'prepaMercato') { ?></a><?php } ?></p>
-      <p class="colonne<?php if($_GET['section'] == 'gestionCompteCoach') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'gestionCompteCoach') { ?><a href="souris.php?section=gestionCompteCoach"><?php } ?>Mon compte<?php if($_GET['section'] != 'gestionCompteCoach') { ?></a><?php } ?></p>
-<?php
-}
-elseif (isset($ligue))
-{
-?>
-      <p class="colonne<?php if($_GET['section'] == 'compteCoach') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'compteCoach') { ?><a href="souris.php?section=compteCoach"><?php } ?>Mon bureau<?php if($_GET['section'] != 'compteCoach') { ?></a><?php } ?></p>
-      <p class="colonne<?php if($_GET['section'] == 'equipe') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'equipe') { ?><a href="souris.php?section=equipe"><?php } ?>Mon équipe<?php if($_GET['section'] != 'equipe') { ?></a><?php } ?></p>
-      <p class="colonne<?php if($_GET['section'] == 'classementLigue') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'classementLigue') { ?><a href="souris.php?section=classementLigue"><?php } ?>Classement<?php if($_GET['section'] != 'classementLigue') { ?></a><?php } ?></p>
-      <p class="colonne<?php if($_GET['section'] == 'calendrier') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'calendrier') { ?><a href="souris.php?section=calendrier"><?php } ?>Calendrier<?php if($_GET['section'] != 'calendrier') { ?></a><?php } ?></p>
-      <p class="colonne<?php if($_GET['section'] == 'forum') echo ' menuEnCours'; ?>"><?php if($_GET['section'] != 'forum') { ?><a href="souris.php?section=forum"><?php } ?>Conférence de presse<?php if($_GET['section'] != 'forum') { ?></a><?php } ?></p>
-      <?php
-       }
-      ?>
-      <p class="colonne"><a href="souris.php?deconnexion=true">Déconnexion</a></p>
-</nav>
-<?php
- }
-?>
+    afficherMenu('compteCoach', 'Mon bureau', true);
+    afficherMenu('creationLigue', 'Ligue/Equipe', true);
+    afficherMenu('mercatoEquipe', 'Mon mercato', true);
+    afficherMenu('mercatoLigue', 'Mercato ligue', true);
+  }
+  elseif (isset($coach) && !isset($ligue))
+  {
+    afficherMenu('compteCoach', 'Mon bureau', false);
+    afficherMenu('gestionConfrere', 'Mes confrères', false);
+    afficherMenu('creationLigue', 'Créer une ligue', false);
+    afficherMenu('prepaMercato', 'Préparer mon mercato', false);
+    afficherMenu('gestionCompteCoach', 'Mon compte', false);
+  }
+  elseif (isset($ligue))
+  {
+    afficherMenu('compteCoach', 'Mon bureau', true);
+    afficherMenu('equipe', 'Mon équipe', true);
+    afficherMenu('classementLigue', 'Classement', true);
+    afficherMenu('calendrier', 'Calendrier', true);
+    afficherMenu('forum', 'Conf. de presse', true);
+  }
 
+  echo '<p class="nav1ligne"><a href="souris.php?deconnexion=true">Déconnexion</a></p>';
+  echo '</nav>';
+}
+?>
 
 <?php
 if (isset($message)) // On a un message à afficher ?
@@ -74,5 +82,6 @@ if (isset($message)) // On a un message à afficher ?
   echo '<p><b>', $message, '</b></p>'; // Si oui, on l'affiche.
 }
  ?>
+
 <div class="fond">
   <div id="contenu" class="colonnes">

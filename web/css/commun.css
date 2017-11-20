@@ -38,9 +38,10 @@ div#bandeau_appli_image {
 }
 
 nav {
-  display: table;
-  border-collapse: collapse;
-  border-spacing: 0px;
+  display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: stretch;
   height: 50px;
   max-width: 900px;
   margin: auto;
@@ -49,18 +50,23 @@ nav {
   font-variant: small-caps;
   text-align:center;
 }
-nav p.colonne {
-    display: table-cell;
+nav p {
     padding-left: 10px;
     padding-right: 10px;
+    height: auto;
+    margin: 0;
 }
-p.menuEnCours {
+nav p.menuEnCours {
   background-color: beige;
   border-bottom:thick double #808080;
 }
-p.colonne a {
+nav p.nav1ligne {
+  padding-top:10px;
+}
+nav p a {
   text-decoration: none;
   color: #696969;
+  vertical-align: middle;
 }
 
 footer#pied_de_page {
