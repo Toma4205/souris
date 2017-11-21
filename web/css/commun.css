@@ -130,6 +130,9 @@ p.colonne {
     vertical-align: middle; /* Centrage vertical */
 }
 
+.bold {
+  font-weight: bold;
+}
 .italic {
   font-style: italic;
 }
@@ -144,6 +147,33 @@ p.colonne {
 }
 .fond_blanc {
   background-color: white !important;
+}
+
+/* CLASSEMENTS */
+header.menuClassement {
+  display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: stretch;
+  height: 50px;
+  font-size: 16px;
+  font-variant: small-caps;
+  color: #696969;
+}
+header.menuClassement p {
+  padding-left: 10px;
+  padding-right: 10px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+#sectionClassement {
+  text-align: center;
+  width: 90%;
+  margin: auto;
+}
+
+#sectionClassement div table tbody tr td:nth-child(2) {
+  text-align: left;
 }
 
 /* CALENDRIER */

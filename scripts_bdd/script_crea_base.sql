@@ -38,6 +38,8 @@ CREATE TABLE `equipe` (
   `nb_defaite` TINYINT UNSIGNED NOT NULL ,
   `nb_but_pour` TINYINT UNSIGNED NOT NULL ,
   `nb_but_contre` TINYINT UNSIGNED NOT NULL ,
+  `nb_bonus` TINYINT UNSIGNED NOT NULL ,
+  `nb_malus` TINYINT UNSIGNED NOT NULL ,
   `code_caricature` VARCHAR(30) NULL ,
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;

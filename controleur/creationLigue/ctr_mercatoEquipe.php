@@ -48,7 +48,7 @@ elseif (isset($_POST['clotureMercato']))
   if ($equipeManager->isTousMercatoFerme($creaLigue->id()))
   {
     // Création calendrier
-    $tabIdEquipe = $equipeManager->findEquipeByLigue($creaLigue->id());
+    $tabIdEquipe = $equipeManager->findIdEquipeByLigue($creaLigue->id());
     $calLigueManager = new CalendrierLigueManager($bdd);
     $calLigueManager->calculerCalendrier($creaLigue->id(), $tabIdEquipe);
 

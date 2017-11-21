@@ -16,6 +16,7 @@ class ConstantesAppli {
     const BONUS_MALUS_AUCUN = 'A';
     const BONUS_MALUS_CLASSIQUE = 'C';
     const BONUS_MALUS_FOLIE = 'F';
+    const BONUS_MALUS_MIX = 'M';
 
     const MERCATO_ENCHERE = 'E';
     const MERCATO_DRAFT = 'D';

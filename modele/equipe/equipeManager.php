@@ -72,7 +72,7 @@ class EquipeManager extends ManagerBase
     }
 	}
 
-  public function findEquipeByLigue($idLigue)
+  public function findIdEquipeByLigue($idLigue)
   {
       $equipes = [];
       $q = $this->_bdd->prepare('SELECT id FROM equipe WHERE id_ligue = :idLigue');
@@ -84,6 +84,22 @@ class EquipeManager extends ManagerBase
   		}
 
   		$q->closeCursor();
+
+      return $equipes;
+  }
+
+  public function findEquipeByLigue($idLigue)
+  {
+      $equipes = [];
+      $q = $this->_bdd->prepare('SELECT * FROM equipe WHERE id_ligue = :idLigue ORDER BY classement ASC');
+      $q->execute([':idLigue' => $idLigue]);
+
+      while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+    	{
+    		$equipes[] = new Equipe($donnees);
+    	}
+
+    	$q->closeCursor();
 
       return $equipes;
   }

@@ -18,6 +18,8 @@ class Equipe extends ClasseBase
   private $_nbDefaite;
   private $_nbButPour;
   private $_nbButContre;
+  private $_nbBonus;
+  private $_nbMalus;
 
   public function __construct(array $donnees)
   {
@@ -37,6 +39,8 @@ class Equipe extends ClasseBase
   public function nbDefaite() { return $this->_nbDefaite; }
   public function nbButPour() { return $this->_nbButPour; }
   public function nbButContre() { return $this->_nbButContre; }
+  public function nbBonus() { return $this->_nbBonus; }
+  public function nbMalus() { return $this->_nbMalus; }
 
   public function setId($id)
   {
@@ -101,6 +105,16 @@ class Equipe extends ClasseBase
   public function setNb_but_contre($nbButContre)
   {
       $this->_nbButContre = $nbButContre;
+  }
+
+  public function setNb_bonus($nbBonus)
+  {
+      $this->_nbBonus = $nbBonus;
+  }
+
+  public function setNb_malus($nbMalus)
+  {
+      $this->_nbMalus = $nbMalus;
   }
 }
 ?>
