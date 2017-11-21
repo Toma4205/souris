@@ -6,7 +6,7 @@ require_once("vue/commun/entete.php");
 if (isset($calendriers))
 {
 ?>
-<!-- TODO MPL Centrer select -->
+
 <div class="calendrier_journee">
   <select name="journees" class="font_size_20px" onchange="javascript:afficherDivJournee(this)">
     <?php
@@ -63,11 +63,11 @@ if (isset($calendriers))
     <?php
         if ($value->scoreDom() != null)
         {
-          echo '<div class="centre" style="text-align:center;">' . $value->scoreDom() . ' - ' . $value->scoreExt() . '</div>';
+          echo '<div style="text-align:center;">' . $value->scoreDom() . ' - ' . $value->scoreExt() . '</div>';
         }
         else
         {
-          echo '<div class="centre" style="text-align:center;">-</div>';
+          echo '<div style="text-align:center;">-</div>';
         }
     ?>
   </div>
