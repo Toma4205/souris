@@ -184,4 +184,30 @@ class JoueurEquipeManager extends ManagerBase
 
 		return $joueurs;
   }
+
+  public function findButeurByLigue($idLigue)
+  {
+    $joueurs = [];
+
+		$q = $this->_bdd->prepare('SELECT je.prix as prixAchat, je.tour_mercato,
+        (je.nb_but_reel + je.nb_but_virtuel) as totalBut,
+        je.nb_but_reel, je.nb_but_virtuel, je.nb_match, j.nom, j.prenom,
+        e.nom as nomEquipe
+        FROM joueur_equipe je
+        JOIN equipe e ON je.id_equipe = e.id
+        JOIN joueur_reel j ON je.id_joueur_reel = j.id
+        WHERE je.id_ligue = :id
+        AND (je.nb_but_reel > 0 OR je.nb_but_virtuel > 0)
+        ORDER BY totalBut DESC, je.nb_but_reel DESC, je.nb_but_virtuel DESC');
+    $q->execute([':id' => $idLigue]);
+
+		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+		{
+			$joueurs[] = new JoueurEquipe($donnees);
+		}
+
+		$q->closeCursor();
+
+		return $joueurs;
+  }
 }

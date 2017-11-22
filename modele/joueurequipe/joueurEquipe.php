@@ -14,6 +14,10 @@ class JoueurEquipe extends ClasseBase
   private $_prixAchat;
   private $_dateOffre;
   private $_dateValidation;
+  private $_nbButReel;
+  private $_nbButVirtuel;
+  private $_nbMatch;
+  private $_totalBut;
 
   // Libelle Equipe réelle
   private $_libelleEquipe;
@@ -37,6 +41,10 @@ class JoueurEquipe extends ClasseBase
   public function nomEquipe() { return $this->_nomEquipe; }
   public function dateOffre() { return $this->_dateOffre; }
   public function dateValidation() { return $this->_dateValidation; }
+  public function nbButReel() { return $this->_nbButReel; }
+  public function nbButVirtuel() { return $this->_nbButVirtuel; }
+  public function nbMatch() { return $this->_nbMatch; }
+  public function totalBut() { return $this->_totalBut; }
   public function tourMercato() { return $this->_tourMercato; }
 
   public function setId($id)
@@ -92,6 +100,26 @@ class JoueurEquipe extends ClasseBase
   public function setDate_validation($dateValidation)
   {
     $this->_dateValidation = $dateValidation;
+  }
+
+  public function setNb_but_reel($nbButReel)
+  {
+    $this->_nbButReel = $nbButReel;
+  }
+
+  public function setNb_but_virtuel($nbButVirtuel)
+  {
+    $this->_nbButVirtuel = $nbButVirtuel;
+  }
+
+  public function setNb_match($nbMatch)
+  {
+    $this->_nbMatch = $nbMatch;
+  }
+
+  public function setTotalBut($totalBut)
+  {
+    $this->_totalBut = $totalBut;
   }
 
   public function setTour_mercato($tourMercato)

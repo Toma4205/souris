@@ -13,7 +13,6 @@ require_once("vue/commun/entete.php");
     <table class="tableBase">
       <thead>
         <tr>
-          <th></th>
           <th>Equipe</th>
           <th>Pts</th>
           <th>J.</th>
@@ -32,8 +31,7 @@ require_once("vue/commun/entete.php");
         $index = 1;
         foreach($equipes as $value)
         {
-          echo '<tr><td>' . $index . '</td>';
-          echo '<td>' . $value->nom() . '</td>';
+          echo '<tr><td>' . $index . ' . ' . $value->nom() . '</td>';
           echo '<td>' . ((3 * $value->nbVictoire()) + $value->nbNul()) . '</td>';
           echo '<td>' . $value->nbMatch() . '</td>';
           echo '<td>' . $value->nbVictoire() . '</td>';
@@ -53,10 +51,54 @@ require_once("vue/commun/entete.php");
   </div>
 </section>
 <section id="sectionButeurs" class="cache">
-  A venir Buteurs ...
+  <div>
+    <?php
+    if (isset($buteurs) && count($buteurs) > 0)
+    {
+    ?>
+    <table class="tableBase">
+      <thead>
+        <tr>
+          <th>Joueur</th>
+          <th>Equipe</th>
+          <th>Total (réel + fictif)</th>
+          <th>Prix</th>
+          <th>€ / B.</th>
+          <th>Match</th>
+          <th>B. / Match</th>
+          <th>Tour mercato</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+        $index = 1;
+        foreach($buteurs as $value)
+        {
+          echo '<tr><td>' . $index . ' . ' . $value->nom() . ' ' . $value->prenom() . '</td>';
+          echo '<td>' . $value->nomEquipe() . '</td>';
+          echo '<td>' . $value->totalBut() . ' (' . $value->nbButReel() . '+' . $value->nbButVirtuel() . ')</td>';
+          echo '<td>' . $value->prixAchat() . '</td>';
+          echo '<td>' . round(($value->prixAchat() / $value->totalBut()), 2) . '</td>';
+          echo '<td>' . $value->nbMatch() . '</td>';
+          echo '<td>' . round(($value->totalBut() / $value->nbMatch()), 2) . '</td>';
+          echo '<td>' . $value->tourMercato() . '</td></tr>';
+
+          $index++;
+        }
+      ?>
+      </tbody>
+    </table>
+    <?php
+    } else {
+      echo '<p>Aucun buteur pour le moment.</p>';
+    }
+    ?>
+  </div>
 </section>
 <section id="sectionJoueurs" class="cache">
-  A venir Joueurs ...
+  <div>
+    <p>A venir Joueurs ...</p>
+  </div>
 </section>
 <?php
 // Le pied de page

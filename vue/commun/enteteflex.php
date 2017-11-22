@@ -84,4 +84,5 @@ if (isset($message)) // On a un message à afficher ?
  ?>
 
 <div class="fond">
-  <div id="contenu" class="colonnes">
+  <form action="" method="post">
+    <div id="contenu" class="conteneurRow">

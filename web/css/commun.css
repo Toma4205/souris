@@ -18,6 +18,12 @@ body
   font-family: Arial, Helvetica, sans-serif;
   font-style: normal;
 }
+h2
+{
+  font-weight: bold;
+  font-variant: small-caps;
+  color: #696969;
+}
 h3
 {
     color: #808080;
@@ -96,7 +102,6 @@ div#contenu {
   max-width: 900px;
   background-color: white;
 }
-
 /*******************************************/
 /***************** CONTENU *****************/
 /*******************************************/
@@ -104,6 +109,30 @@ div#contenu {
 /*******************************************/
 /****************** COMMUN *****************/
 /*******************************************/
+.conteneurRow {
+  display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: stretch;
+  margin: auto;
+  text-align:center;
+}
+.doubleBordureDroite {
+  border-right: thick double #808080;
+}
+.sectionAccueil {
+  font-weight: bold;
+  font-variant: small-caps;
+  background-color: lightgrey;
+  width:50%;
+}
+.borderRadiusGauche {
+  border-radius:10px 0 0 10px;
+}
+.borderRadiusDroit {
+  border-radius:0 10px 10px 0;
+}
+
 div.sousTitre {
   border-bottom:thick double #808080;
   margin-bottom: 5px;
@@ -171,9 +200,22 @@ header.menuClassement p {
   width: 90%;
   margin: auto;
 }
-
-#sectionClassement div table tbody tr td:nth-child(2) {
+#sectionClassement div table tbody tr td:nth-child(1) {
   text-align: left;
+}
+#sectionButeurs {
+  text-align: center;
+  width: 90%;
+  margin: auto;
+}
+#sectionButeurs div table tbody tr td:nth-child(1),
+#sectionButeurs div table tbody tr td:nth-child(2) {
+  text-align: left;
+}
+#sectionJoueurs {
+  text-align: center;
+  width: 90%;
+  margin: auto;
 }
 
 /* CALENDRIER */
@@ -205,6 +247,10 @@ header.menuClassement p {
 }
 .tableBase tr {
   border-bottom: 1px solid #808080;
+}
+.tableBase tr td {
+  border-bottom: 1px solid #808080;
+  padding: 3px 0;
 }
 
 .tableMercatoLigue {
