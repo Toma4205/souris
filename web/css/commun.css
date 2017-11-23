@@ -189,6 +189,17 @@ p.colonne {
   text-align: left;
 }
 
+/* GESTION CONFRERES */
+#sectionRechConfrere {
+  padding-bottom: 10px;
+}
+#sectionRechConfrere table tbody tr td:nth-child(1) {
+  text-align: left;
+}
+#sectionMesConfrere table tbody tr td:nth-child(1) {
+  text-align: left;
+}
+
 /* CLASSEMENTS */
 header.menuClassement {
   display: flex;

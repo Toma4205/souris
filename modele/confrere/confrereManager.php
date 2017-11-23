@@ -49,7 +49,8 @@ class ConfrereManager extends ManagerBase {
 		$q = $this->_bdd->prepare('SELECT cf.date_debut, c.id, c.nom, c.code_postal
 						FROM confrere cf
 						INNER JOIN coach c ON cf.id_coach_confrere = c.id
-						WHERE cf.id_coach = :id');
+						WHERE cf.id_coach = :id
+            ORDER BY c.nom');
 		$q->execute([':id' => $idCoach]);
 
 		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
