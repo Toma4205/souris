@@ -20,7 +20,7 @@ if (isset($_POST['inscription']) && isset($_POST['nomCrea']) && isset($_POST['mo
 
   if ($manager->existeByNom($coach->nom()))
   {
-    $message = 'Le nom choisi est déjà pris.';
+    $messageInscr = 'Le nom choisi est déjà pris.';
     unset($coach);
   }
   elseif ($_POST['motDePasseCrea'] == $_POST['confirmMotDePasseCrea'])
@@ -30,7 +30,7 @@ if (isset($_POST['inscription']) && isset($_POST['nomCrea']) && isset($_POST['mo
   }
   else
   {
-    $message = 'Les mots de passe sont différents !';
+    $messageInscr = 'Les mots de passe sont différents !';
     unset($coach);
   }
 }
@@ -47,17 +47,17 @@ elseif (isset($_POST['connexion']) && isset($_POST['nom']) && isset($_POST['motD
   $coach = $manager->findByNomMotDePasse($coach);
   if (null == $coach->id())
   {
-    $message = 'Couple nom/mot de passe invalide !';
+    $messageConn = 'Couple nom/mot de passe invalide !';
     unset($coach);
   }
 }
 elseif(isset($_POST['inscription']))
 {
-  $message = 'Pour s\'inscrire, veuillez saisir les 3 champs.';
+  $messageInscr = 'Pour s\'inscrire, veuillez saisir les 3 champs.';
 }
 elseif(isset($_POST['connexion']))
 {
-  $message = 'Couple nom/mot de passe invalide !';
+  $messageConn = 'Couple nom/mot de passe invalide !';
 }
 
 if (isset($coach)) // Si on utilise un coach (nouveau ou pas).

@@ -9,6 +9,22 @@ CREATE TABLE nomenclature_tactique (`code` VARCHAR(10) NOT NULL , `libelle` VARC
 CREATE TABLE nomenclature_position (`code` VARCHAR(10) NOT NULL , `libelle` VARCHAR(100) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
 CREATE TABLE nomenclature_caricature (`code` VARCHAR(30) NOT NULL , `libelle` VARCHAR(255) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
 CREATE TABLE nomenclature_bonus_malus (`code` VARCHAR(30) NOT NULL , `libelle` VARCHAR(255) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
+CREATE TABLE quantite_bonus_malus (`code` VARCHAR(30) NOT NULL , `nb_joueur` TINYINT UNSIGNED NOT NULL , `nb_pack_classique` TINYINT UNSIGNED NOT NULL , `nb_pack_folie` TINYINT UNSIGNED NOT NULL , PRIMARY KEY (`code`, `nb_joueur`)) ENGINE = InnoDB;
+ALTER TABLE `quantite_bonus_malus` ADD FOREIGN KEY (`code`) REFERENCES `nomenclature_bonus_malus`(`code`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+CREATE TABLE `joueur_reel` (
+`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
+`cle_roto_primaire` VARCHAR(100) NOT NULL,
+`prenom` VARCHAR(100),
+`nom` VARCHAR(100),
+`equipe` CHAR(3),
+`position` VARCHAR(20),
+`prix` TINYINT(3) UNSIGNED NOT NULL,
+`cle_roto_secondaire` VARCHAR(100),
+PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
+
+--LOAD DATA LOCAL INFILE 'C:\\Bitnami\\ListeJoueursReelsNouvelleTable.csv' INTO TABLE joueur_reel FIELDS TERMINATED BY ';' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
 
 CREATE TABLE `coach` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT , `nom` VARCHAR(40) NOT NULL , `mot_de_passe` CHAR(32) NOT NULL , `mail` VARCHAR(50) NULL , `code_postal` CHAR(5) NULL , `date_creation` DATE NOT NULL , `date_maj` DATETIME NOT NULL , PRIMARY KEY (`id`), UNIQUE INDEX `ind_uni_nom` (`nom`(10)), UNIQUE `ind_uni_mail` (`mail`)) ENGINE = InnoDB;
 
@@ -48,20 +64,6 @@ ALTER TABLE `equipe` ADD FOREIGN KEY (`id_coach`) REFERENCES `coach`(`id`) ON DE
 ALTER TABLE `equipe` ADD FOREIGN KEY (`id_ligue`) REFERENCES `ligue`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `equipe` ADD FOREIGN KEY (`code_caricature`) REFERENCES `nomenclature_caricature`(`code`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
-CREATE TABLE `joueur_reel` (
-`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
-`cle_roto_primaire` VARCHAR(100) NOT NULL,
-`prenom` VARCHAR(100),
-`nom` VARCHAR(100),
-`equipe` CHAR(3),
-`position` VARCHAR(20),
-`prix` TINYINT(3) UNSIGNED NOT NULL,
-`cle_roto_secondaire` VARCHAR(100),
-PRIMARY KEY (`id`)
-) ENGINE = InnoDB;
-
---LOAD DATA LOCAL INFILE 'C:\\Bitnami\\ListeJoueursReelsNouvelleTable.csv' INTO TABLE joueur_reel FIELDS TERMINATED BY ';' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
-
 CREATE TABLE `joueur_equipe` (
 `id_ligue` INT UNSIGNED NOT NULL,
 `id_equipe` INT UNSIGNED NOT NULL ,
@@ -91,6 +93,22 @@ PRIMARY KEY (`id`)
 ALTER TABLE `calendrier_ligue` ADD FOREIGN KEY (`id_ligue`) REFERENCES `ligue`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `calendrier_ligue` ADD FOREIGN KEY (`id_equipe_dom`) REFERENCES `equipe`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `calendrier_ligue` ADD FOREIGN KEY (`id_equipe_ext`) REFERENCES `equipe`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+CREATE TABLE `bonus_malus` (
+`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+`code` VARCHAR(30) NOT NULL,
+`id_equipe` INT UNSIGNED NOT NULL,
+`id_cal_ligue` INT UNSIGNED,
+`id_joueur_reel_equipe` MEDIUMINT UNSIGNED,
+`id_joueur_reel_adverse` MEDIUMINT UNSIGNED,
+`mi_temps` TINYINT UNSIGNED,
+PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
+ALTER TABLE `bonus_malus` ADD FOREIGN KEY (`code`) REFERENCES `nomenclature_bonus_malus`(`code`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `bonus_malus` ADD FOREIGN KEY (`id_equipe`) REFERENCES `equipe`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `bonus_malus` ADD FOREIGN KEY (`id_cal_ligue`) REFERENCES `calendrier_ligue`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `bonus_malus` ADD FOREIGN KEY (`id_joueur_reel_equipe`) REFERENCES `joueur_reel`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `bonus_malus` ADD FOREIGN KEY (`id_joueur_reel_adverse`) REFERENCES `joueur_reel`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 CREATE TABLE `resultatsL1_reel` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,

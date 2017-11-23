@@ -109,6 +109,10 @@ div#contenu {
 /*******************************************/
 /****************** COMMUN *****************/
 /*******************************************/
+.erreur {
+  color:red;
+  font-weight: bold;
+}
 .conteneurRow {
   display: flex;
 	flex-direction: row;

@@ -76,13 +76,6 @@ if (isset($coach))
 }
 ?>
 
-<?php
-if (isset($message)) // On a un message à afficher ?
-{
-  echo '<p><b>', $message, '</b></p>'; // Si oui, on l'affiche.
-}
- ?>
-
 <div class="fond">
   <form action="" method="post">
     <div id="contenu" class="conteneurRow">

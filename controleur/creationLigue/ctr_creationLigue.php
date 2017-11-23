@@ -96,7 +96,8 @@ if (isset($_POST['creationEquipe']))
       && isset($_POST['villeEquipe']) && !empty($_POST['villeEquipe'])
       && isset($_POST['stadeEquipe']) && !empty($_POST['stadeEquipe']))
   {
-    $equipeManager->creerEquipe($equipe, $coach->id(), $creaLigue->id());
+    $nbEquipe = $coachManager->compterCoachByLigue($creaLigue->id());
+    $equipeManager->creerEquipe($equipe, $coach->id(), $creaLigue->id(), $creaLigue->bonusMalus(), $nbEquipe);
   }
   else
   {

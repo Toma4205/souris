@@ -5,7 +5,7 @@ function autoload($classname)
     "modele/equipe/$classname.php ", "modele/ligue/$classname.php ",
     "modele/joueurreel/$classname.php ", "modele/prepamercato/$classname.php ",
     "modele/nomenclature/$classname.php ", "modele/joueurequipe/$classname.php ",
-    "modele/calendrierligue/$classname.php ");
+    "modele/calendrierligue/$classname.php ", "modele/bonusmalus/$classname.php ");
 
     foreach ($sources as $source) {
           if (file_exists($source)) {

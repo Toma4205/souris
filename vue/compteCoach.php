@@ -53,8 +53,8 @@ require_once("vue/commun/entete.php");
                 else
                 {
                   echo '<td>';
-                  echo '<input type="submit" value="Accepter invitation" name="accepterInvitation[' . $value->id() . ']" /> ';
-                  echo ' <input type="submit" value="Refuser invitation" name="refuserInvitation[' . $value->id() . ']" />';
+                  echo '<input type="submit" value="Ok" name="accepterInvitation[' . $value->id() . ']" /> ';
+                  echo ' <input type="submit" value="No, thanks" name="refuserInvitation[' . $value->id() . ']" />';
                   echo '</td>';
                 }
               }

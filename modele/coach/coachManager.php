@@ -103,6 +103,14 @@ class CoachManager extends ManagerBase
     return $coachsInvites;
   }
 
+  public function compterCoachByLigue($idLigue)
+  {
+    $q = $this->_bdd->prepare('SELECT COUNT(*) FROM coach_ligue WHERE id_ligue = :id');
+    $q->execute([':id' => $idLigue]);
+
+    return $q->fetchColumn();
+  }
+
   public function count()
   {
     return $this->_bdd->query('SELECT COUNT(*) FROM coach')->fetchColumn();
