@@ -74,6 +74,7 @@ CREATE TABLE `joueur_equipe` (
 `date_validation` DATETIME,
 `nb_but_reel` TINYINT UNSIGNED NOT NULL ,
 `nb_but_virtuel` TINYINT UNSIGNED NOT NULL ,
+`nb_match` TINYINT UNSIGNED NOT NULL ,
 PRIMARY KEY (`id_equipe`, `id_joueur_reel`)
 ) ENGINE = InnoDB;
 ALTER TABLE `joueur_equipe` ADD FOREIGN KEY (`id_ligue`) REFERENCES `ligue`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

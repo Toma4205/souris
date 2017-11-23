@@ -56,6 +56,8 @@ if (isset($joueursEquipeTries))
   </div>
 </div>
 <?php
+} else {
+  echo '<p>Aucun tour terminé pour le moment.</p>';
 }
 
 // Le pied de page

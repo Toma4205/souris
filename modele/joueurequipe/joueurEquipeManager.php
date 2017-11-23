@@ -28,8 +28,9 @@ class JoueurEquipeManager extends ManagerBase
 
   public function creerJoueurEquipe($idLigue, $idEquipe, $idJoueur, int $prix, int $tourMercato)
   {
-    $q = $this->_bdd->prepare('INSERT INTO joueur_equipe(id_ligue, id_equipe, id_joueur_reel, prix, tour_mercato, date_offre)
-      VALUES(:idLigue, :idEquipe, :idJoueur, :prix, :tour, NOW())');
+    $q = $this->_bdd->prepare('INSERT INTO joueur_equipe(id_ligue, id_equipe, id_joueur_reel, prix,
+      tour_mercato, date_offre, nb_but_reel, nb_but_virtuel, nb_match)
+      VALUES(:idLigue, :idEquipe, :idJoueur, :prix, :tour, NOW(), 0, 0, 0)');
     $q->bindValue(':idLigue', $idLigue);
     $q->bindValue(':idEquipe', $idEquipe);
     $q->bindValue(':idJoueur', $idJoueur);
