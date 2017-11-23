@@ -18,15 +18,11 @@ body
   font-family: Arial, Helvetica, sans-serif;
   font-style: normal;
 }
-h2
+h2, h3
 {
   font-weight: bold;
   font-variant: small-caps;
   color: #696969;
-}
-h3
-{
-    color: #808080;
 }
 
 header#bandeau_appli {
@@ -121,31 +117,30 @@ div#contenu {
   margin: auto;
   text-align:center;
 }
+.conteneurColumn {
+  display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: stretch;
+  margin: auto;
+  text-align:center;
+}
 .doubleBordureDroite {
   border-right: thick double #808080;
 }
-.sectionAccueil {
-  font-weight: bold;
-  font-variant: small-caps;
-  background-color: lightgrey;
-  width:50%;
-}
 .borderRadiusGauche {
-  border-radius:10px 0 0 10px;
+  border-radius: 10px 0 0 10px;
 }
 .borderRadiusDroit {
-  border-radius:0 10px 10px 0;
+  border-radius: 0 10px 10px 0;
 }
-
-div.sousTitre {
-  border-bottom:thick double #808080;
+section.avecBordureInf {
+  border-bottom: solid #808080;
   margin-bottom: 5px;
 }
-
 input.marginBottom {
   margin-bottom: 10px;
 }
-
 div.colonnes {
     display: table;
     margin-left: auto;
@@ -162,7 +157,6 @@ p.colonne {
     text-align: center; /* Centrage horizontal */
     vertical-align: middle; /* Centrage vertical */
 }
-
 .bold {
   font-weight: bold;
 }
@@ -180,6 +174,19 @@ p.colonne {
 }
 .fond_blanc {
   background-color: white !important;
+}
+
+/* ACCUEIL */
+.sectionAccueil {
+  font-weight: bold;
+  font-variant: small-caps;
+  background-color: lightgrey;
+  width:50%;
+}
+
+/* COMPTE COACH */
+#sectionMesLigues table tbody tr td:nth-child(1) {
+  text-align: left;
 }
 
 /* CLASSEMENTS */

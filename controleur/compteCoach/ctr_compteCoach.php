@@ -32,8 +32,6 @@ elseif (isset($_POST['accepterInvitation']))
   foreach($_POST['accepterInvitation'] as $cle => $value)
   {
     $managerLigue->accepterInvitationLigue($coach->id(), $cle);
-
-    $message = 'Vous avez rejoint la ligue ' . $cle . '.';
   }
 }
 elseif (isset($_POST['refuserInvitation']))
@@ -41,8 +39,6 @@ elseif (isset($_POST['refuserInvitation']))
   foreach($_POST['refuserInvitation'] as $cle => $value)
   {
     $managerLigue->refuserInvitationLigue($coach->id(), $cle);
-
-    $message = 'Vous avez décliné l\'invitation de la ligue ' . $cle . '.';
   }
 }
 elseif (isset($_POST['rejoindre']))

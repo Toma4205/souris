@@ -1,17 +1,18 @@
 <?php
 // entete
-require_once("vue/commun/entete.php");
+require_once("vue/commun/enteteflex.php");
 ?>
-<form action="" method="post">
-<div class="colonnes">
-  <div class="colonne" style="width:50%;">
-    <div class="sousTitre"><h3>Mes actions en attente</h3></div>
-        <p>A venir...</p>
-    <div class="sousTitre"><h3>Actualités</h3></div>
-        <p>A venir...</p>
-  </div>
-  <div class="colonne" style="width:50%;">
-      <div class="sousTitre"><h3>Mes ligues</h3></div>
+<div class="conteneurColumn width_90pc">
+  <section class="avecBordureInf">
+    <header><h3>Mes actions en attente</h3></header>
+    <p>A venir...</p>
+  </section>
+  <section class="avecBordureInf">
+    <header><h3>Actualités</h3></header>
+    <p>A venir...</p>
+  </section>
+  <section id="sectionMesLigues">
+      <header><h3>Mes ligues</h3></header>
       <?php
       if (sizeof($ligues) > 0)
       {
@@ -79,10 +80,9 @@ require_once("vue/commun/entete.php");
           echo 'Aucune ligue. Faut se mettre au boulot jeune padawan !';
         }
           ?>
-  </div>
+  </section>
 </div>
-</form>
 <?php
 // Le pied de page
-require_once("vue/commun/pied_de_page.php");
+require_once("vue/commun/pied_de_pageflex.php");
 ?>

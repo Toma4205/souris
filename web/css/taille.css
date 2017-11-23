@@ -36,6 +36,9 @@
 .width_50pc {
   width: 50% !important;
 }
+.width_90pc {
+  width: 90% !important;
+}
 
 .font_size_17px {
   font-size: 17px;
