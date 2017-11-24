@@ -273,7 +273,7 @@ function getHTMLLigneDivAchat(tr)
 {
   return '<p id="Achat_' + tr.attr('id') + '" class="joueurEnCours"><b>'
   + tr.find('td:first').html() + '</b> - ' + tr.find('td:nth-child(3)').html() + ' (prix = ' + tr.find('td:last').html() + ')'
-  + '<span class="floatRight">'
+  + '<span class="float_right fond_blanc">'
   + '<input type="text" class="inputPrix" name="name_' + tr.attr('id') + '" value="' + tr.find('td:last').html() + '" onchange="javascript:recalculerBudgetRestant();"/>'
   + ' <img src="./web/img/croix.jpg" alt="Supprimer" width="15px" height="15px" onclick="javascript:supprimerAchatJoueur(\'' + tr.attr('id') + '\');" />'
   + '</span></p>';

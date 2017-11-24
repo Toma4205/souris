@@ -293,7 +293,9 @@ header.menuClassement p {
   border-bottom: 1px solid #808080;
   padding: 3px 0;
 }
-
+#tableMercato tr td:first-child {
+  text-align: left;
+}
 .tableMercatoLigue {
   width: 100%;
 }
@@ -350,6 +352,7 @@ header.menuClassement p {
   width: 400px !important;
   margin-right: 0px !important;
   background-color: #98FB98;
+  text-align: left;
 }
 tr.joueurAchete {
   font-weight: bold;
@@ -359,6 +362,7 @@ tr.joueurAchete {
   width: 400px !important;
   margin-right: 0px !important;
   background-color: #EEE8AA;
+  text-align: left;
 }
 
 .inputPrix {

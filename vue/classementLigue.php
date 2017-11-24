@@ -1,7 +1,7 @@
 <?php
 // entete
 $vueJs = 'classement.js';
-require_once("vue/commun/entete.php");
+require_once("vue/commun/enteteflex.php");
 ?>
 <header class="menuClassement">
   <p id="choixClassement" class="bold" onclick="javascript:afficherSection(this, 'sectionClassement');">Classement</p>
@@ -102,5 +102,5 @@ require_once("vue/commun/entete.php");
 </section>
 <?php
 // Le pied de page
-require_once("vue/commun/pied_de_page.php");
+require_once("vue/commun/pied_de_pageflex.php");
 ?>

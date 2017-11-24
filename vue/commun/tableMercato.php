@@ -1,5 +1,5 @@
-<div class="colonnes sousTitre" style="border-top:thick double #808080;">
-  <div class="colonne" style="width:50%;border-right:thick double #808080;">
+<section class="conteneurRow width_100pc">
+  <div style="width:50%;border-right:thick double #808080;">
   <?php
   if (isset($joueursReels))
   {
@@ -35,35 +35,35 @@
        class="width_80px" onchange="javascript:filtrerSurPrixMax(this);"/>
     </div>
   </div>
-<table class="display" id="tableMercato">
-<thead>
-  <tr>
-    <th>Joueur</th>
-    <th>Poste</th>
-    <th>Equipe</th>
-    <th>Prix</th>
-  </tr>
-</thead>
-<tbody>
+  <table class="display" id="tableMercato">
+    <thead>
+      <tr>
+        <th>Joueur</th>
+        <th>Poste</th>
+        <th>Equipe</th>
+        <th>Prix</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php
+      foreach($joueursReels as $value)
+      {
+        echo '<tr id="' . $value->id() . '"><td>' . $value->nom() . ' ' . $value->prenom() . '</td>';
+        echo '<td>' . $value->positionIHM() . '</td>';
+        echo '<td>' . $value->libelleEquipe() . '</td>';
+        echo '<td>' . $value->prix() . '</td>';
+        echo '</tr>';
+      }
+      ?>
+    </tbody>
+  </table>
   <?php
-  foreach($joueursReels as $value)
-  {
-    echo '<tr id="' . $value->id() . '"><td>' . $value->nom() . ' ' . $value->prenom() . '</td>';
-    echo '<td>' . $value->positionIHM() . '</td>';
-    echo '<td>' . $value->libelleEquipe() . '</td>';
-    echo '<td>' . $value->prix() . '</td>';
-    echo '</tr>';
+  } else {
+    echo 'Aucun joueur en base !!!';
   }
   ?>
-  </tbody>
-</table>
-<?php
-} else {
-  echo 'Aucun joueur en base !!!';
-}
-?>
-</div>
-<div class="colonne" style="width:50%;">
-  <?php require_once("vue/commun/tableAchatJoueur.php");?>
-</div>
-</div>
+  </div>
+  <div style="width:50%;">
+    <?php require_once("vue/commun/tableAchatJoueur.php");?>
+  </div>
+</section>

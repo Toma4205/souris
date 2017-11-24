@@ -1,13 +1,12 @@
 <?php
 // entete
 $vueJs = 'calendrier.js';
-require_once("vue/commun/entete.php");
+require_once("vue/commun/enteteflex.php");
 
 if (isset($calendriers))
 {
 ?>
-
-<div class="calendrier_journee">
+<section class="calendrier_journee">
   <select name="journees" class="font_size_20px" onchange="javascript:afficherDivJournee(this)">
     <?php
         $numJourneeMax = 2;
@@ -30,7 +29,6 @@ if (isset($calendriers))
         }
      ?>
   </select>
-</div>
 <?php
     $numJournee = 0;
     $changementJournee = false;
@@ -46,8 +44,8 @@ if (isset($calendriers))
           echo '</div>';
         }
 ?>
-<div id="divJournee<?php echo $numJournee; ?>"
-  class="calendrier_matchs colonnes <?php if ($numJournee != 1) echo 'cache'; ?>">
+  <div id="divJournee<?php echo $numJournee; ?>"
+    class="calendrier_matchs colonnes <?php if ($numJournee != 1) echo 'cache'; ?>">
 <?php
       }
       else
@@ -55,11 +53,11 @@ if (isset($calendriers))
         $changementJournee = false;
       }
  ?>
- <div class="colonnes border_bottom_single <?php if ($changementJournee) echo 'border_top_single'; ?>">
-  <div class="colonne width_47pc vertical_align_middle">
-    <div class="float_right"><?php echo $value->nomEquipeDom(); ?></div>
-  </div>
-  <div class="colonne width_6pc vertical_align_middle">
+  <div class="colonnes border_bottom_single <?php if ($changementJournee) echo 'border_top_single'; ?>">
+    <div class="colonne width_47pc vertical_align_middle">
+      <div class="float_right"><?php echo $value->nomEquipeDom(); ?></div>
+    </div>
+    <div class="colonne width_6pc vertical_align_middle">
     <?php
         if ($value->scoreDom() != null)
         {
@@ -70,19 +68,19 @@ if (isset($calendriers))
           echo '<div style="text-align:center;">-</div>';
         }
     ?>
+    </div>
+    <div class="colonne width_47pc vertical_align_middle">
+      <div class="float_left"><?php echo $value->nomEquipeExt(); ?></div>
+    </div>
   </div>
-  <div class="colonne width_47pc vertical_align_middle">
-    <div class="float_left"><?php echo $value->nomEquipeExt(); ?></div>
-  </div>
-</div>
 <?php
     } // Fin foreach
-    echo '</div>';
-  }
-  else {
+    echo '</section>';
+}
+else {
     $message = 'Calendrier indisponible ! Veuillez nous contacter en indiquant le nom de votre ligue.';
-  }
+}
 
 // Le pied de page
-require_once("vue/commun/pied_de_page.php");
+require_once("vue/commun/pied_de_pageflex.php");
 ?>

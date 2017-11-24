@@ -31,8 +31,5 @@ if ($creaLigue->tourMercato() > 1)
     }
   }
 }
-else {
-  $message = 'Aucun tour mercato de validé pour le moment.';
-}
 include_once('vue/mercatoLigue.php');
 ?>

@@ -7,8 +7,6 @@ $nomenclEquipeManager = new NomenclatureManager($bdd);
 if (isset($_POST['reinitialisation']))
 {
   $joueurPrepaMercatoManager->purgerMercatoCoach($coach->id());
-
-  $message = 'Votre mercato a bien été réinitialisé.';
 }
 elseif (isset($_POST['validationMercato']))
 {
@@ -21,8 +19,6 @@ elseif (isset($_POST['validationMercato']))
       $joueurPrepaMercatoManager->creerJoueurPrepaMercato($coach->id(), $idJoueur, $prixAchat);
     }
   }
-
-  $message = 'Votre mercato a bien été sauvegardé.';
 }
 
 $budgetRestant = ConstantesAppli::BUDGET_INIT;

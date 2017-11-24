@@ -2,10 +2,6 @@
 // entete
 require_once("vue/commun/enteteflex.php");
 
-if (isset($message))
-{
-  echo '<p>' . $message . '</p>';
-}
 if (isset($joueursEquipeTries))
 {
   for($i = ($creaLigue->tourMercato() - 1) ; $i > 0 ; $i--)
