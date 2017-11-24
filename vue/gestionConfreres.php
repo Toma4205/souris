@@ -28,7 +28,6 @@ require_once("vue/commun/enteteflex.php");
         <thead>
           <tr>
             <th>Nom</th>
-            <th>Code postal</th>
             <th>Ajouter</th>
           </tr>
         </thead>
@@ -37,7 +36,6 @@ require_once("vue/commun/enteteflex.php");
         foreach($coachsRech as $value)
         {
           echo '<tr><td>' . $value->nom() . '</td>';
-          echo '<td>' . $value->codePostal() . '</td>';
           echo '<td><input type="submit" value="Ajouter" name="ajouter[' . $value->id() . ']" /></td></tr>';
         }
         echo '</tbody></table>';
@@ -60,7 +58,6 @@ require_once("vue/commun/enteteflex.php");
         <thead>
           <tr>
             <th>Nom</th>
-            <th>Code postal</th>
             <th>Depuis</th>
             <th>Supprimer</th>
           </tr>
@@ -71,7 +68,6 @@ require_once("vue/commun/enteteflex.php");
           {
             $dateDebut = date_create($value->dateDebut());
             echo '<tr><td>' . $value->coachConfrere()->nom() . '</td>';
-            echo '<td>' . $value->coachConfrere()->codePostal() . '</td>';
             echo '<td>' . date_format($dateDebut, 'd/m/Y') . '</td>';
             echo '<td><input type="submit" value="Supprimer" name="supprimer[' . $value->coachConfrere()->id() . ']" /></td></tr>';
           }

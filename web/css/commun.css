@@ -23,6 +23,7 @@ h2
   font-weight: bold;
   font-variant: small-caps;
   color: #696969;
+  text-decoration: underline;
 }
 section {
   padding-bottom: 10px;
@@ -33,6 +34,27 @@ section header {
   font-variant: small-caps;
   color: #696969;
   margin: 1em 0;
+}
+input[type="submit"] {
+  background: #919699;
+  background-image: -webkit-linear-gradient(top, #919699, #bec7cc);
+  background-image: -moz-linear-gradient(top, #919699, #bec7cc);
+  background-image: -ms-linear-gradient(top, #919699, #bec7cc);
+  background-image: -o-linear-gradient(top, #919699, #bec7cc);
+  background-image: linear-gradient(to bottom, #919699, #bec7cc);
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  color: #514a52;
+  font-size: 15px;
+  font-weight: bold;
+  font-variant: small-caps;
+  padding: 5px;
+}
+input[type="submit"]:hover {
+  background: #949799;
+  text-decoration: none;
+  cursor: pointer;
 }
 header#bandeau_appli {
   display: table;
@@ -114,9 +136,6 @@ div#contenu {
 /*******************************************/
 /****************** COMMUN *****************/
 /*******************************************/
-.bouton {
-  background:url('web/img/bouton.jpg');
-}
 .erreur {
   color:red;
   font-weight: bold;

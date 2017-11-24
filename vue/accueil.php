@@ -22,7 +22,7 @@ require_once("vue/commun/enteteflex.php");
     <p>Mot de passe<br/>
         <input type="password" class="width_200px" name="motDePasse" />
     </p>
-    <input type="submit" class="bouton" value="J'ai mon diplôme" name="connexion" />
+    <input type="submit" value="J'ai mon diplôme" name="connexion" />
     <!--<input type="image" title="Essai" value="J'ai mon diplôme" style="background: transparent none; width=200px; height=20px;"
       src="./web/img/bouton.jpg" alt="Se connecter" />-->
   </section>
