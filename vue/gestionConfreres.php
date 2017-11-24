@@ -2,16 +2,15 @@
 // entete
 require_once("vue/commun/enteteflex.php");
 ?>
-<div class="conteneurColumn width_90pc">
-  <section id="sectionRechConfrere" class="avecBordureInf">
-    <header><h3>Ajouter un confrère</h3></header>
+<section id="sectionRechConfrere" class="avecBordureInf">
+    <header>Ajouter un confrère</header>
     <?php
       if (isset($message))
       {
         echo '<span class="erreur">' . $message . '</span>';
       }
      ?>
-    <p>Nom : <input type="text" size="40" name="nomCoach" value="<?php
+    <p>Nom <input type="text" size="40" name="nomCoach" value="<?php
               if(isset($_POST['nomCoach']))
               {
                 echo htmlspecialchars($_POST['nomCoach']);
@@ -50,9 +49,9 @@ require_once("vue/commun/enteteflex.php");
       }
     }
     ?>
-  </section>
-  <section id="sectionMesConfrere">
-    <header><h3>Liste confrères</h3></header>
+</section>
+<section id="sectionMesConfrere">
+    <header>Liste confrères</header>
       <?php
       if (sizeof($confreres) > 0)
       {
@@ -84,8 +83,7 @@ require_once("vue/commun/enteteflex.php");
           echo 'Aucun confrere.';
         }
       ?>
-  </section>
-</div>
+</section>
 <?php
 // Le pied de page
 require_once("vue/commun/pied_de_pageflex.php");

@@ -2,17 +2,16 @@
 // entete
 require_once("vue/commun/enteteflex.php");
 ?>
-<div class="conteneurColumn width_90pc">
-  <section class="avecBordureInf">
-    <header><h3>Mes actions en attente</h3></header>
+<section class="avecBordureInf">
+    <header>Mes actions en attente</header>
     <p>A venir...</p>
-  </section>
-  <section class="avecBordureInf">
-    <header><h3>Actualités</h3></header>
+</section>
+<section class="avecBordureInf">
+    <header>Actualités</header>
     <p>A venir...</p>
-  </section>
-  <section id="sectionMesLigues">
-      <header><h3>Mes ligues</h3></header>
+</section>
+<section id="sectionMesLigues">
+      <header>Mes ligues</header>
       <?php
       if (sizeof($ligues) > 0)
       {
@@ -80,8 +79,7 @@ require_once("vue/commun/enteteflex.php");
           echo 'Aucune ligue. Faut se mettre au boulot jeune padawan !';
         }
           ?>
-  </section>
-</div>
+</section>
 <?php
 // Le pied de page
 require_once("vue/commun/pied_de_pageflex.php");

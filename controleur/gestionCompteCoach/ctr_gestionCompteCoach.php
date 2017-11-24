@@ -23,7 +23,6 @@ if (isset($_POST['majCompte']) && isset($_POST['nom']) && !empty($_POST['nom']))
     $manager->majCoach($coach);
 
     $_SESSION[ConstantesSession::COACH] = $coach;
-    $message = 'Mise à jour réussie.';
   }
 }
 elseif (isset($_POST['majCompte']))

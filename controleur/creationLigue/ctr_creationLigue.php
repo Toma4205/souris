@@ -33,7 +33,7 @@ if (isset($_POST['creationLigue']))
   }
   else
   {
-    $message = 'Le nom de la ligue est obligatoire.';
+    $messageLigue = 'Le nom de la ligue est obligatoire.';
   }
 }
 elseif (isset($_SESSION[ConstantesSession::LIGUE_CREA]))
@@ -57,7 +57,7 @@ if (isset($_POST['invitationConfrere']))
   }
   else
   {
-    $message = 'Vous devez sélectionner au moins un confrère !';
+    $messageInvit = 'Vous devez sélectionner au moins un confrère !';
   }
 }
 // Validation finale des coachs ayant accepté l'invitation
@@ -71,7 +71,7 @@ elseif (isset($_POST['validationFinale']))
   }
   else
   {
-    $message = 'Vous devez sélectionner au moins un coach !';
+    $messageValid = 'Vous devez sélectionner au moins un coach !';
   }
 }
 
@@ -101,7 +101,7 @@ if (isset($_POST['creationEquipe']))
   }
   else
   {
-      $message = 'Le nom, la ville et le stade doivent être renseignés.';
+      $messageEquipe = 'Le nom, la ville et le stade doivent être renseignés.';
   }
 }
 

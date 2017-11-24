@@ -1,12 +1,19 @@
 <?php
 // entete
-require_once("vue/commun/entete.php");
+require_once("vue/commun/enteteflex.php");
 ?>
-<form action="" method="post">
   <!-- ***************************************
   //   ***** DEBUT PARTIE CREATION LIGUE *****
   //   *************************************** -->
-<div class="sousTitre"><h3>Paramètres de ligue</h3></div>
+<section class="conteneurRow avecBordureInf">
+  <div class="formulaire">
+    <header>Paramètres de ligue</header>
+    <?php
+      if (isset($messageEquipe))
+      {
+        echo '<span class="erreur">' . $messageEquipe . '</span>';
+      }
+    ?>
     <p>Nom <br/>
       <input type="text" class="width_200px" name="nom" size="40"
         value="<?php echo htmlspecialchars($creaLigue->nom());?>" disabled/></p>
@@ -52,10 +59,14 @@ require_once("vue/commun/entete.php");
       <textarea name="libellePari" rows="5" cols="30" disabled><?php
            echo htmlspecialchars($creaLigue->libellePari());?></textarea>
     </p>
+  </div>
+</section>
 <!-- ****************************************
 //   ***** DEBUT PARTIE CREATION EQUIPE *****
 //   **************************************** -->
-<div class="sousTitre"><h3>Mon équipe</h3></div>
+<section class="conteneurRow">
+  <div class="formulaire">
+    <header>Mon équipe</header>
     <p>Nom *<br/>
       <input type="text" class="width_200px" name="nomEquipe" size="30" value=<?php
         echo '"';
@@ -87,8 +98,9 @@ require_once("vue/commun/entete.php");
         echo '<input type="submit" value="Créer" name="creationEquipe" class="marginBottom" />';
       }
     ?>
-</form>
+  </div>
+</section>
 <?php
 // Le pied de page
-require_once("vue/commun/pied_de_page.php");
+require_once("vue/commun/pied_de_pageflex.php");
 ?>

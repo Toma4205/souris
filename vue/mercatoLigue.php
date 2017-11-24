@@ -1,16 +1,16 @@
 <?php
 // entete
-require_once("vue/commun/entete.php");
+require_once("vue/commun/enteteflex.php");
 
+if (isset($message))
+{
+  echo '<p>' . $message . '</p>';
+}
 if (isset($joueursEquipeTries))
 {
-?>
-<div class="colonnes">
-  <div class="colonne" style="width:50%;">
-<?php
   for($i = ($creaLigue->tourMercato() - 1) ; $i > 0 ; $i--)
   {
-    echo '<div class="sousTitre"><h3>Tour ' . $i . '</h3></div>';
+    echo '<section><header>Tour ' . $i . '</header>';
     echo '<table class="tableMercatoLigue"><tbody>';
     foreach($joueursEquipeTries as $cle => $joueur)
     {
@@ -39,9 +39,9 @@ if (isset($joueursEquipeTries))
         unset($joueursEquipeTries[$cle]);
       }
     }
-    echo '</tbody></table>';
+    echo '</tbody></table></section>';
   }
-  foreach($joueursEquipeTries as $cle => $joueur)
+  /*foreach($joueursEquipeTries as $cle => $joueur)
   {
     $classeCss = 'joueurEnCours';
     if ($joueur->dateValidation() != null)
@@ -51,15 +51,11 @@ if (isset($joueursEquipeTries))
 
     echo '<div class="' . $classeCss . '">' . $joueur->nom() . ' ' . $joueur->prenom() . ' - ' . $joueur->libelleEquipe()
       . ' - ' . $joueur->prixAchat() . ' M€ (' . $joueur->nomEquipe() . ')</div><br/>';
-  }
-?>
-  </div>
-</div>
-<?php
+  }*/
 } else {
   echo '<p>Aucun tour terminé pour le moment.</p>';
 }
 
 // Le pied de page
-require_once("vue/commun/pied_de_page.php");
+require_once("vue/commun/pied_de_pageflex.php");
 ?>

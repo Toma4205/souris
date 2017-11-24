@@ -18,13 +18,22 @@ body
   font-family: Arial, Helvetica, sans-serif;
   font-style: normal;
 }
-h2, h3
+h2
 {
   font-weight: bold;
   font-variant: small-caps;
   color: #696969;
 }
-
+section {
+  padding-bottom: 10px;
+}
+section header {
+  font-size: 1.5em;
+  font-weight: bold;
+  font-variant: small-caps;
+  color: #696969;
+  margin: 1em 0;
+}
 header#bandeau_appli {
   display: table;
   border-collapse: collapse;
@@ -105,6 +114,9 @@ div#contenu {
 /*******************************************/
 /****************** COMMUN *****************/
 /*******************************************/
+.bouton {
+  background:url('web/img/bouton.jpg');
+}
 .erreur {
   color:red;
   font-weight: bold;
@@ -141,6 +153,10 @@ section.avecBordureInf {
 input.marginBottom {
   margin-bottom: 10px;
 }
+div.formulaire p {
+  text-align: left;
+}
+
 div.colonnes {
     display: table;
     margin-left: auto;
@@ -180,7 +196,6 @@ p.colonne {
 .sectionAccueil {
   font-weight: bold;
   font-variant: small-caps;
-  background-color: lightgrey;
   width:50%;
 }
 
@@ -199,6 +214,10 @@ p.colonne {
 #sectionMesConfrere table tbody tr td:nth-child(1) {
   text-align: left;
 }
+
+/* CREATION LIGUE */
+
+/* MERCATO LIGUE */
 
 /* CLASSEMENTS */
 header.menuClassement {
@@ -280,6 +299,7 @@ header.menuClassement p {
 }
 .tableMercatoLigue tr td:first-child {
   width: 30%;
+  text-align: left;
 }
 .tableMercatoLigue tr td:nth-child(2),
 .tableMercatoLigue tr td:nth-child(3) {
@@ -310,8 +330,9 @@ header.menuClassement p {
   vertical-align:middle;
 }
 .budgetRestant output {
-  margin-left:35px;
-  vertical-align:middle;
+  display: block;
+  text-align: center;
+  margin-top:5px;
 }
 
 /* DataTable */

@@ -1,12 +1,19 @@
 <?php
 // entete
-require_once("vue/commun/entete.php");
+require_once("vue/commun/enteteflex.php");
 ?>
-<form action="" method="post">
   <!-- ***************************************
   //   ***** DEBUT PARTIE CREATION LIGUE *****
   //   *************************************** -->
-<div class="sousTitre"><h3>Paramètres de ligue</h3></div>
+<section class="conteneurRow<?php if (isset($creaLigue) && null != $creaLigue->id() && $creaLigue->etat() == EtatLigue::CREATION) { echo ' avecBordureInf';} ?>">
+  <div class="formulaire">
+    <header>Paramètres de ligue</header>
+    <?php
+      if (isset($messageLigue))
+      {
+        echo '<span class="erreur">' . $messageLigue . '</span>';
+      }
+     ?>
     <p>Nom *<br/>
       <input type="text" class="width_200px" name="nom" size="40" value=<?php
         echo '"';
@@ -98,6 +105,8 @@ require_once("vue/commun/entete.php");
         echo '<input type="submit" value="Créer" name="creationLigue" class="marginBottom" />';
       }
     ?>
+  </div>
+</section>
 <!-- *********************************************
 //   ***** DEBUT PARTIE GESTION PARTICIPANTS *****
 //   ********************************************* -->
@@ -106,18 +115,20 @@ require_once("vue/commun/entete.php");
   if (isset($creaLigue) && null != $creaLigue->id() && $creaLigue->etat() == EtatLigue::CREATION)
   {
 ?>
-<div class="colonnes">
-  <div class="colonne" style="width:50%;border-right:thick double #808080;">
-    <div class="sousTitre"><h3>Inviter des confrères</h3></div>
+<section<?php if (sizeof($coachsInvites) > 0) { echo ' class="avecBordureInf"';} ?>>
+  <header>Inviter des confrères</header>
     <?php
     if (sizeof($confreres) > 0)
     {
+      if (isset($messageInvit))
+      {
+        echo '<span class="erreur">' . $messageInvit . ' (TODO MPL Js)</span>';
+      }
     ?>
     <table class="tableBase">
       <thead>
         <tr>
           <th>Nom</th>
-          <th>Code postal</th>
           <th>Inviter</th>
         </tr>
       </thead>
@@ -127,7 +138,6 @@ require_once("vue/commun/entete.php");
         foreach($confreres as $value)
         {
           echo '<tr><td>' . $value->coachConfrere()->nom() . '</td>';
-          echo '<td>' . $value->coachConfrere()->codePostal() . '</td>';
           if (sizeof($coachsInvites) > 0)
           {
             $dejaInvite = FALSE;
@@ -162,19 +172,23 @@ require_once("vue/commun/entete.php");
         echo '<br/>';
         echo 'Tu dois dans un premier temps ajouter des confrères (onglet Mes confrères) avant de pouvoir les inviter ! C\'est logique.';
       }
+
+      if (sizeof($coachsInvites) > 0)
+      {
         ?>
-</div>
-<div class="colonne" style="width:50%;">
-  <div class="sousTitre"><h3>Confrères invités</h3></div>
+</section>
+<section>
+  <header>Confrères invités</header>
     <?php
-    if (sizeof($coachsInvites) > 0)
-    {
+      if (isset($messageValid))
+      {
+        echo '<span class="erreur">' . $messageValid . ' (TODO MPL Js)</span>';
+      }
     ?>
     <table class="tableBase">
       <thead>
         <tr>
           <th>Nom</th>
-          <th>Code postal</th>
           <th>Statut</th>
         </tr>
       </thead>
@@ -185,7 +199,6 @@ require_once("vue/commun/entete.php");
         foreach($coachsInvites as $value)
         {
           echo '<tr><td>' . $value->nom() . '</td>';
-          echo '<td>' . $value->codePostal() . '</td>';
           if (null != $value->dateValidationLigue())
           {
             $nbOK++;
@@ -202,18 +215,10 @@ require_once("vue/commun/entete.php");
         echo '<br/>';
         echo '<input type="submit" value="Valider les participants" name="validationFinale" />';
       }
-      else
-      {
-        echo '<br/>';
-        echo 'Aucun coach invité pour le moment ! Ca va être compliqué de jouer.';
-      }
         ?>
-</div>
+</section>
 <?php
     }
-?>
-</form>
-<?php
 // Le pied de page
-require_once("vue/commun/pied_de_page.php");
+require_once("vue/commun/pied_de_pageflex.php");
 ?>

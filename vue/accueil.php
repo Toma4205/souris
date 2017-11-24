@@ -2,7 +2,8 @@
 // entete
 require_once("vue/commun/enteteflex.php");
 ?>
-<section class="sectionAccueil borderRadiusGauche doubleBordureDroite">
+<div class="conteneurRow width_100pc">
+  <section class="sectionAccueil borderRadiusGauche doubleBordureDroite">
     <h2>Déjà inscrit ?</h2>
     <?php
       if (isset($messageConn))
@@ -21,9 +22,11 @@ require_once("vue/commun/enteteflex.php");
     <p>Mot de passe<br/>
         <input type="password" class="width_200px" name="motDePasse" />
     </p>
-    <input type="submit" value="Se connecter" name="connexion" />
-</section>
-<section class="sectionAccueil borderRadiusDroit">
+    <input type="submit" class="bouton" value="J'ai mon diplôme" name="connexion" />
+    <!--<input type="image" title="Essai" value="J'ai mon diplôme" style="background: transparent none; width=200px; height=20px;"
+      src="./web/img/bouton.jpg" alt="Se connecter" />-->
+  </section>
+  <section class="sectionAccueil borderRadiusDroit">
     <h2>Nouveau coach ?</h2>
     <?php
       if (isset($messageInscr))
@@ -46,7 +49,8 @@ require_once("vue/commun/enteteflex.php");
         <input type="password" class="width_200px" name="confirmMotDePasseCrea" />
     </p>
     <input type="submit" value="S'inscrire" name="inscription" class="marginBottom" />
-</section>
+  </section>
+</div>
 <?php
 // Le pied de page
 require_once("vue/commun/pied_de_pageflex.php");

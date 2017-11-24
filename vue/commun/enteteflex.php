@@ -78,4 +78,5 @@ if (isset($coach))
 
 <div class="fond">
   <form action="" method="post">
-    <div id="contenu" class="conteneurRow">
+    <div id="contenu">
+      <div class="conteneurColumn width_90pc">
