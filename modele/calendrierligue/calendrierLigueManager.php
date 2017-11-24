@@ -9,6 +9,22 @@ class CalendrierLigueManager extends ManagerBase
     $this->setDb($bdd);
   }
 
+  public function findProchaineJourneeByEquipe($idEquipe)
+  {
+      $q = $this->_bdd->prepare('SELECT c.*, dom.nom as nomEquipeDom, ext.nom as nomEquipeExt
+        FROM calendrier_ligue c
+        JOIN equipe dom ON dom.id = c.id_equipe_dom
+        JOIN equipe ext ON ext.id = c.id_equipe_ext
+        WHERE (c.id_equipe_dom = :idEquipe OR c.id_equipe_ext = :idEquipe)
+        AND c.score_dom IS NULL
+        ORDER BY c.num_journee ASC LIMIT 1');
+      $q->execute([':idEquipe' => $idEquipe]);
+      $donnees = $q->fetch(PDO::FETCH_ASSOC);
+      $q->closeCursor();
+
+      return new CalendrierLigue($donnees);
+  }
+
   public function findCalendrierByLigue($idLigue)
   {
       $equipes = [];

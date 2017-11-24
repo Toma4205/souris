@@ -238,6 +238,16 @@ p.colonne {
 
 /* MERCATO LIGUE */
 
+/* EQUIPE */
+.enteteEquipe {
+  border-bottom: solid #808080;
+  padding-bottom: 5px;
+}
+.heureProchaineJournee {
+  font-size: 25px;
+  font-weight: bold;
+}
+
 /* CLASSEMENTS */
 header.menuClassement {
   display: flex;
