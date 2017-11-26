@@ -1,14 +1,14 @@
 INSERT INTO `nomenclature_bonus_malus`(`code`, `libelle`, `date_debut`) VALUES
-('SEL_TRI','La Dech\' est dans les tribunes (+0.5 aux français)' ,'2018-01-01'),
-('FUMIGENE','Les stadiers étaient au café. Résultat, des fumigènes viennent gêner le gardien adverse (-1 GB)' ,'2018-01-01'),
-('DIN_ARB','Un petit dîner avec l\'arbitre la veille et il oubliera de compter le premier but adverse (-1 but)' ,'2018-01-01'),
-('FAM_STA','Quand sa famille est au stade, on se donne à fond (note de +1 pour un joueur)' ,'2018-01-01'),
-('BUS','Le FCN de Claudio t\'inspire ! (pas de but virtuel)' ,'2018-01-01'),
-('MAU_CRA','Tu vires discrètement les crampons d\'un adversaire (note de -1 pour un joueur)' ,'2018-01-01'),
-('BOUCHER','Réincarnation de Canto sur le terrain ! Ton joueur prend un rouge et tu blesses un adversaire (les 2 joueurs ont 0)' ,'2018-01-01'),
-('CHA_GB','Parce que ton gardien a passé plus de temps avec Ahamada que Neuer (remplacement tactique possible sur ton GB)' ,'2018-01-01'),
-('PAR_TRU','Pari truqué (buts doublés pour un joueur sur une mi-temps)' ,'2018-01-01'),
-('CON_ZZ','Les conseils de Zizou profitent à tout footballeur (+0.5 équipe)' ,'2018-01-01');
+('SEL_TRI','La Dech\' est dans les tribunes (+0.5 aux français)' ,'2017-01-01'),
+('FUMIGENE','Les stadiers étaient au café. Résultat, des fumigènes viennent gêner le gardien adverse (-1 GB)' ,'2017-01-01'),
+('DIN_ARB','Un petit dîner avec l\'arbitre la veille et il oubliera de compter le premier but adverse (-1 but)' ,'2017-01-01'),
+('FAM_STA','Quand sa famille est au stade, on se donne à fond (note de +1 pour un joueur)' ,'2017-01-01'),
+('BUS','Le FCN de Claudio t\'inspire ! (pas de but virtuel)' ,'2017-01-01'),
+('MAU_CRA','Tu vires discrètement les crampons d\'un adversaire (note de -1 pour un joueur)' ,'2017-01-01'),
+('BOUCHER','Réincarnation de Canto sur le terrain ! Ton joueur prend un rouge et tu blesses un adversaire (les 2 joueurs ont 0)' ,'2017-01-01'),
+('CHA_GB','Parce que ton gardien a passé plus de temps avec Ahamada que Neuer (remplacement tactique possible sur ton GB)' ,'2017-01-01'),
+('PAR_TRU','Pari truqué (buts doublés pour un joueur sur une mi-temps)' ,'2017-01-01'),
+('CON_ZZ','Les conseils de Zizou profitent à tout footballeur (+0.5 équipe)' ,'2017-01-01');
 
 INSERT INTO `quantite_bonus_malus`(`code`, `nb_joueur`, `nb_pack_classique`, `nb_pack_folie`) VALUES
 ('FAM_STA','2' ,'1', '1'),('FAM_STA','3' ,'1', '1'),('FAM_STA','4' ,'1', '1'),('FAM_STA','5' ,'1', '1'),('FAM_STA','6' ,'1', '1'),

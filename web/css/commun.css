@@ -148,6 +148,14 @@ div#contenu {
   margin: auto;
   text-align:center;
 }
+.conteneurRowGauche {
+  display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: stretch;
+  margin: auto;
+  text-align:center;
+}
 .conteneurColumn {
   display: flex;
 	flex-direction: column;
@@ -155,6 +163,13 @@ div#contenu {
 	align-items: stretch;
   margin: auto;
   text-align:center;
+}
+.conteneurColumnGauche {
+  display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: stretch;
+  margin-left: 5px;
 }
 .doubleBordureDroite {
   border-right: thick double #808080;
@@ -239,13 +254,36 @@ p.colonne {
 /* MERCATO LIGUE */
 
 /* EQUIPE */
-.enteteEquipe {
-  border-bottom: solid #808080;
-  padding-bottom: 5px;
-}
-.heureProchaineJournee {
+.journeeEquipe {
   font-size: 25px;
   font-weight: bold;
+  font-variant: small-caps;
+}
+.enteteJournee p {
+  margin: auto;
+  padding-top: 10px;
+}
+.enteteEquipe {
+  border-bottom: solid #808080;
+  padding: 5px;
+}
+.heureProchaineJournee {
+  font-size: 20px;
+  font-weight: bold;
+}
+.selectChoixTactique {
+  width: 100px;
+  margin: auto;
+  margin-bottom: 10px;
+}
+#rowCompoEquipe {
+  height: 400px;
+  padding-bottom: 15px;
+}
+#contenuCompoEquipe p {
+  margin: 0;
+  padding-bottom: 5px;
+  text-align: left;
 }
 
 /* CLASSEMENTS */

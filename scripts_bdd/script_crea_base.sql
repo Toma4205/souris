@@ -5,7 +5,8 @@ GRANT ALL PRIVILEGES ON souris.* TO 'souris'@'localhost' IDENTIFIED BY 'souris';
 CREATE TABLE nomenclature_scoretonote (`ScoreObtenu` DECIMAL(5,3) NOT NULL , `Position` VARCHAR(100) NOT NULL, `Note` DECIMAL(3,1), PRIMARY KEY (`ScoreObtenu`,`Position`)) ENGINE = InnoDB;
 CREATE TABLE nomenclature_reglescalculnote (`StatName` VARCHAR(100) NOT NULL , `Position` VARCHAR(100) NOT NULL, `Ponderation` DECIMAL(5,3), PRIMARY KEY (`StatName`,`Position`)) ENGINE = InnoDB;
 CREATE TABLE nomenclature_equipe (`code` VARCHAR(3) NOT NULL , `libelle` VARCHAR(255) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
-CREATE TABLE nomenclature_tactique (`code` VARCHAR(10) NOT NULL , `libelle` VARCHAR(255) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
+CREATE TABLE nomenclature_tactique (`code` VARCHAR(10) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , `nb_def` TINYINT NOT NULL , `nb_mil` TINYINT NOT NULL , `nb_att` TINYINT NOT NULL , `nb_dc` TINYINT , `nb_dlg` TINYINT , `nb_dld` TINYINT ,
+`nb_mdef` TINYINT , `nb_mc` TINYINT , `nb_mg` TINYINT , `nb_md` TINYINT , `nb_mo` TINYINT , `nb_ailg` TINYINT , `nb_aild` TINYINT , `nb_but` TINYINT , PRIMARY KEY (`code`)) ENGINE = InnoDB;
 CREATE TABLE nomenclature_position (`code` VARCHAR(10) NOT NULL , `libelle` VARCHAR(100) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
 CREATE TABLE nomenclature_caricature (`code` VARCHAR(30) NOT NULL , `libelle` VARCHAR(255) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
 CREATE TABLE nomenclature_bonus_malus (`code` VARCHAR(30) NOT NULL , `libelle` VARCHAR(255) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
@@ -116,6 +117,19 @@ ALTER TABLE `bonus_malus` ADD FOREIGN KEY (`id_equipe`) REFERENCES `equipe`(`id`
 ALTER TABLE `bonus_malus` ADD FOREIGN KEY (`id_cal_ligue`) REFERENCES `calendrier_ligue`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `bonus_malus` ADD FOREIGN KEY (`id_joueur_reel_equipe`) REFERENCES `joueur_reel`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `bonus_malus` ADD FOREIGN KEY (`id_joueur_reel_adverse`) REFERENCES `joueur_reel`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+CREATE TABLE `compo_equipe` (
+`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+`id_cal_ligue` INT UNSIGNED NOT NULL,
+`id_equipe` INT UNSIGNED NOT NULL,
+`code_tactique` VARCHAR(10) NOT NULL,
+`code_bonus_malus` VARCHAR(30),
+PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
+ALTER TABLE `compo_equipe` ADD FOREIGN KEY (`code_bonus_malus`) REFERENCES `nomenclature_bonus_malus`(`code`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `compo_equipe` ADD FOREIGN KEY (`code_tactique`) REFERENCES `nomenclature_tactique`(`code`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `compo_equipe` ADD FOREIGN KEY (`id_equipe`) REFERENCES `equipe`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `compo_equipe` ADD FOREIGN KEY (`id_cal_ligue`) REFERENCES `calendrier_ligue`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 CREATE TABLE `resultatsL1_reel` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,

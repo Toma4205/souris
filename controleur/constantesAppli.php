@@ -17,7 +17,7 @@ class ConstantesAppli {
     const BONUS_MALUS_CLASSIQUE = 'C';
     const BONUS_MALUS_FOLIE = 'F';
     const BONUS_MALUS_MIX = 'M';
-    
+
     const BONUS_MALUS_SEL_TRI = 'SEL_TRI';
     const BONUS_MALUS_FUMIGENE = 'FUMIGENE';
     const BONUS_MALUS_DIN_ARB = 'DIN_ARB';
@@ -31,6 +31,8 @@ class ConstantesAppli {
 
     const MERCATO_ENCHERE = 'E';
     const MERCATO_DRAFT = 'D';
+
+    const TACTIQUE_DEFAUT = '4-4-2';
 }
 
  ?>

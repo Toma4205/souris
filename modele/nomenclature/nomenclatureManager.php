@@ -11,19 +11,56 @@ class NomenclatureManager extends ManagerBase
 
   public function findNomenclatureEquipe()
   {
-    $equipes = [];
-
+    $nomencls = [];
     $q = $this->_bdd->prepare('SELECT * FROM nomenclature_equipe
-      WHERE date_debut > NOW() AND (date_fin IS NULL OR date_fin < NOW())');
+      WHERE date_debut < NOW() AND (date_fin IS NULL OR date_fin > NOW())');
     $q->execute();
 
     while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
 		{
-			$equipes[] = new NomenclatureEquipe($donnees);
+			$nomencls[] = new NomenclatureEquipe($donnees);
 		}
-
 		$q->closeCursor();
 
-		return $equipes;
+    return $nomencls;
 	}
+
+  public function findNomenclatureTactiqueSelonMode($modeExpert)
+  {
+    $nomencls = [];
+
+    if ($modeExpert == TRUE)
+    {
+      $q = $this->_bdd->prepare('SELECT * FROM nomenclature_tactique
+        WHERE date_debut < NOW() AND (date_fin IS NULL OR date_fin > NOW())
+        ORDER BY code');
+    }
+    else
+    {
+      $q = $this->_bdd->prepare('SELECT * FROM nomenclature_tactique
+        WHERE date_debut < NOW() AND (date_fin IS NULL OR date_fin > NOW())
+        ORDER BY nb_def, nb_mil, nb_att');
+    }
+
+    $q->execute();
+    while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+		{
+			$nomencls[] = new NomenclatureTactique($donnees);
+		}
+		$q->closeCursor();
+
+		return $nomencls;
+  }
+
+  public function findNomenclatureTactiqueByCode($code)
+  {
+    $q = $this->_bdd->prepare('SELECT * FROM nomenclature_tactique
+      WHERE code = :code');
+    $q->execute([':code' => $code]);
+
+    $donnees = $q->fetch(PDO::FETCH_ASSOC);
+    $q->closeCursor();
+
+    return new NomenclatureTactique($donnees);
+  }
 }
