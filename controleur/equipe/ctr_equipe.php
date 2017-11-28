@@ -12,11 +12,13 @@ $calLigue = $calLigueManager->findProchaineJourneeByEquipe($equipe->id());
 
 $compoEquipe = $compoEquipe = new CompoEquipe([]);
 $tabCompo = [];
+$capitaine = -1;
 if (isset($_POST['changerTactique']))
 {
   $compoEquipe->setCode_tactique($_POST['choixTactique']);
   $compoEquipe->setCode_bonus_malus($_POST['choixBonus']);
   $tabCompo = $_POST;
+  $capitaine = $_POST["choixCapitaine"];
 }
 elseif (isset($_POST['enregistrer']))
 {
@@ -34,11 +36,16 @@ elseif (isset($_POST['enregistrer']))
   {
     if (is_numeric($numero) && $joueur != -1)
     {
-      $compoEquipeManager->creerJoueurCompoEquipe($compoEquipe->id(), $numero, $joueur, 0, null);
+      $isCapitaine = 0;
+      if ($_POST["choixCapitaine"] == $numero)
+      {
+        $isCapitaine = 1;
+      }
+      $compoEquipeManager->creerJoueurCompoEquipe($compoEquipe->id(), $numero, $joueur, $isCapitaine, null);
     }
   }
-
   $tabCompo = $_POST;
+  $capitaine = $_POST["choixCapitaine"];
 }
 else
 {
@@ -49,14 +56,16 @@ else
   }
   else
   {
-    echo $compoEquipe->id();
     $joueursCompo = $compoEquipeManager->findJoueurCompoByCompo($compoEquipe->id());
     if (isset($joueursCompo))
     {
       foreach($joueursCompo as $joueur)
       {
-        echo $joueur->numero() . "-" . $joueur->idJoueurReel() . '<br/>';
         $tabCompo[$joueur->numero()] = $joueur->idJoueurReel();
+        if ($joueur->capitaine() == 1)
+        {
+          $capitaine = $joueur->numero();
+        }
       }
     }
   }

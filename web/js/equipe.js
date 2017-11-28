@@ -1,5 +1,6 @@
 var modeExpert;
 var tabCompo = [];
+var tabRempl = [];
 var tabPosition = [];
 
 $(document).ready(function() {
@@ -11,6 +12,13 @@ function initTabCompo() {
     var val = $(this).find(":selected").val();
     if (val != -1) {
       tabCompo[$(this).attr('name')] = val;
+    }
+  });
+
+  $('#divRemplacant select').each(function() {
+    var val = $(this).find(":selected").val();
+    if (val != -1) {
+      tabRempl[$(this).attr('name')] = val;
     }
   });
 }
@@ -25,14 +33,26 @@ function onChoixJoueur(selectName, classeCss) {
 
   // Si un joueur est sélectionné, on le "cache" dans les autres select
   if (val != -1) {
-    $('select[class="' + classeCss + '"][name!="' + selectName + '"] option[value="' + val + '"]').each(function() {
+    $('#divTitulaire select[class="' + classeCss + '"][name!="' + selectName + '"] option[value="' + val + '"]').each(function() {
+      $(this).addClass('cache');
+    });
+    $('#divRemplacant select').each(function() {
+      if ($(this).find(":selected").val() == val) {
+        $('#divRemplacant select[name="' + $(this).attr("name") + '"] option[value="-1"]').prop('selected', true);
+        delete tabRempl[$(this).attr("name")];
+      };
+    });
+    $('#divRemplacant select option[value="' + val + '"]').each(function() {
       $(this).addClass('cache');
     });
   }
 
   // Si un joueur était déjà sélectionné, on le rend visible dans les autres select
   if (tabCompo[selectName] != undefined) {
-    $('select[class="' + classeCss + '"][name!="' + selectName + '"] option[value="' + tabCompo[selectName] + '"]').each(function() {
+    $('#divTitulaire select[class="' + classeCss + '"][name!="' + selectName + '"] option[value="' + tabCompo[selectName] + '"]').each(function() {
+      $(this).removeClass('cache');
+    });
+    $('#divRemplacant select option[value="' + tabCompo[selectName] + '"]').each(function() {
       $(this).removeClass('cache');
     });
   }
@@ -42,6 +62,31 @@ function onChoixJoueur(selectName, classeCss) {
     tabCompo[selectName] = val;
   } else if (tabCompo[selectName] != undefined) {
     delete tabCompo[selectName];
+  }
+}
+
+function onChoixRempl(selectName) {
+  var val = $('select[name="' + selectName + '"]').find(":selected").val();
+
+  // Si un joueur est sélectionné, on le "cache" dans les autres select
+  if (val != -1) {
+    $('#divRemplacant select[name!="' + selectName + '"] option[value="' + val + '"]').each(function() {
+      $(this).addClass('cache');
+    });
+  }
+
+  // Si un joueur était déjà sélectionné, on le rend visible dans les autres select
+  if (tabRempl[selectName] != undefined) {
+    $('#divRemplacant select[name!="' + selectName + '"] option[value="' + tabRempl[selectName] + '"]').each(function() {
+      $(this).removeClass('cache');
+    });
+  }
+
+  // Si un joueur est sélectionné, on stocke sa valeur
+  if (val != -1) {
+    tabRempl[selectName] = val;
+  } else if (tabRempl[selectName] != undefined) {
+    delete tabRempl[selectName];
   }
 }
 

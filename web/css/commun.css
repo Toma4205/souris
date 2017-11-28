@@ -278,10 +278,17 @@ p.colonne {
 }
 .selectChoixJoueurGB, .selectChoixJoueurDEF, .selectChoixJoueurMIL,
 .selectChoixJoueurATT, .selectChoixCapitaine {
-  width: 180px;
+  width: 220px;
+}
+.selectChoixJoueurREMPL {
+  width: 250px;
 }
 .spanChoixJoueur {
   width: 60px;
+  display: inline-block;
+}
+.spanChoixRempl {
+  width: 85px;
   display: inline-block;
 }
 #rowCompoEquipe {

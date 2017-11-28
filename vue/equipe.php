@@ -13,19 +13,63 @@ function afficherContenuSelect($libSelect, $nameSelect, $joueurs, $classeCss, $t
     $contenu .= '<option value="-1">...</option>';
   }
 
-  foreach ($joueurs as $joueur)
-  {
-    if (isset($tabCompo[$nameSelect]) && $tabCompo[$nameSelect] == $joueur->id()) {
-      $contenu .= '<option value="' . $joueur->id() . '" selected="selected">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
-    } elseif (in_array($joueur->id(), $tabCompo)) {
-      $contenu .= '<option class="cache" value="' . $joueur->id() . '">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
-    } else {
-      $contenu .= '<option value="' . $joueur->id() . '">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
-    }
-  }
+  $contenu .= ajouterOptionJoueur($nameSelect, $joueurs, $tabCompo);
   $contenu .= '</select></p>';
 
   echo $contenu;
+}
+
+function afficherContenuSelectRempl($numPosition, $gb, $def, $mil, $att, $tabCompo)
+{
+  $contenu = '<p><span class="spanChoixRempl">' . $numPosition . '. REMPL';
+  $contenu .= '</span><select name="' . $numPosition . '" class="selectChoixJoueurREMPL" onchange="javascript:onChoixRempl(\''. $numPosition . '\');">';
+  if (isset($tabCompo[$numPosition]) && $tabCompo[$numPosition] == -1) {
+    $contenu .= '<option value="-1" selected="selected">...</option>';
+  } else {
+    $contenu .= '<option value="-1">...</option>';
+  }
+
+  $contenu .= ajouterOptionRempl($numPosition, 'GB ', $gb, $tabCompo);
+  $contenu .= ajouterOptionRempl($numPosition, 'DEF', $def, $tabCompo);
+  $contenu .= ajouterOptionRempl($numPosition, 'MIL', $mil, $tabCompo);
+  $contenu .= ajouterOptionRempl($numPosition, 'ATT', $att, $tabCompo);
+  $contenu .= '</select></p>';
+
+  echo $contenu;
+}
+
+function ajouterOptionJoueur($numPosition, $joueurs, $tabCompo)
+{
+  $contenu = '';
+  foreach ($joueurs as $joueur)
+  {
+    if (isset($tabCompo[$numPosition]) && $tabCompo[$numPosition] == $joueur->id()) {
+      $contenu .= '<option value="' . $joueur->id() . '" selected="selected">' . $joueur->nom() . ' ' . $joueur->prenom() . ' - ' . $joueur->libelleEquipe() . '</option>';
+    } elseif (in_array($joueur->id(), $tabCompo)) {
+      $contenu .= '<option class="cache" value="' . $joueur->id() . '">' . $joueur->nom() . ' ' . $joueur->prenom() . ' - ' . $joueur->libelleEquipe() . '</option>';
+    } else {
+      $contenu .= '<option value="' . $joueur->id() . '">' . $joueur->nom() . ' ' . $joueur->prenom() . ' - ' . $joueur->libelleEquipe() . '</option>';
+    }
+  }
+
+  return $contenu;
+}
+
+function ajouterOptionRempl($numPosition, $preLib, $joueurs, $tabCompo)
+{
+  $contenu = '';
+  foreach ($joueurs as $joueur)
+  {
+    if (isset($tabCompo[$numPosition]) && $tabCompo[$numPosition] == $joueur->id()) {
+      $contenu .= '<option value="' . $joueur->id() . '" selected="selected">' . $preLib . ') ' . $joueur->nom() . ' ' . $joueur->prenom() . ' - ' . $joueur->libelleEquipe() . '</option>';
+    } elseif (in_array($joueur->id(), $tabCompo)) {
+      $contenu .= '<option class="cache" value="' . $joueur->id() . '">' . $preLib . ') ' . $joueur->nom() . ' ' . $joueur->prenom() . ' - ' . $joueur->libelleEquipe() . '</option>';
+    } else {
+      $contenu .= '<option value="' . $joueur->id() . '">' . $preLib . ') ' . $joueur->nom() . ' ' . $joueur->prenom() . ' - ' . $joueur->libelleEquipe() . '</option>';
+    }
+  }
+
+  return $contenu;
 }
 
 if (isset($calReel))
@@ -125,9 +169,6 @@ if (isset($calReel))
   <div id="rowCompoEquipe" class="conteneurRow">
     <div>
       <img src="./web/img/terrain_442.jpg" alt="Tactique" width="300px" height="400px" />
-      <div>
-        <input type="submit" value="Valider la compo" name="enregistrer" />
-      </div>
     </div>
     <div id="contenuCompoEquipe" class="conteneurColumnGauche">
       <div id="divTitulaire">
@@ -181,14 +222,44 @@ if (isset($calReel))
       ?>
       </div>
       <div>
-        <p id="remplacant">Remplaçants</p>
-        <div>A venir...</div>
-      </div>
-      <div>
         <p id="capitaine">Capitaine</p>
-        <div>A venir...</div>
+        <div>
+          <select name="choixCapitaine">
+            <option value="-1">...</option>
+            <?php
+              for ($i = 1; $i <= 11; $i++)
+              {
+                if ($capitaine == $i) {
+                  echo '<option value="' . $i . '" selected="selected">N° ' . $i . '</option>';
+                } else {
+                  echo '<option value="' . $i . '">N° ' . $i . '</option>';
+                }
+              }
+             ?>
+          </select>
+        </div>
       </div>
     </div>
+  </div>
+  <div class="conteneurColumn">
+      <p id="remplacant">Remplaçants</p>
+      <div id="divRemplacant">
+        <?php
+          $numPosition = 12;
+          if (isset($def))
+          {
+            echo '<div>';
+            for ($numPosition = 12; $numPosition <= 18; $numPosition++)
+            {
+              afficherContenuSelectRempl($numPosition, $gb, $def, $mil, $att, $tabCompo);
+            }
+            echo '</div>';
+          }
+        ?>
+      </div>
+  </div>
+  <div>
+    <input type="submit" value="Valider la compo" name="enregistrer" class="marginBottom width_200px" />
   </div>
 </section>
 <?php
