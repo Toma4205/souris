@@ -45,6 +45,15 @@ CREATE TABLE `confrere` (`id_coach` MEDIUMINT UNSIGNED NOT NULL , `id_coach_conf
 ALTER TABLE `confrere` ADD FOREIGN KEY (`id_coach`) REFERENCES `coach`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `confrere` ADD FOREIGN KEY (`id_coach_confrere`) REFERENCES `coach`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+CREATE TABLE `prepa_mercato` (
+`id_coach` MEDIUMINT UNSIGNED NOT NULL ,
+`id_joueur_reel` MEDIUMINT UNSIGNED NOT NULL,
+`prix` MEDIUMINT UNSIGNED NOT NULL,
+PRIMARY KEY (`id_coach`, `id_joueur_reel`)
+) ENGINE = InnoDB;
+ALTER TABLE `prepa_mercato` ADD FOREIGN KEY (`id_coach`) REFERENCES `coach`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `prepa_mercato` ADD FOREIGN KEY (`id_joueur_reel`) REFERENCES `joueur_reel`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 CREATE TABLE `equipe` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
   `id_ligue` INT UNSIGNED NOT NULL ,
@@ -131,6 +140,21 @@ ALTER TABLE `compo_equipe` ADD FOREIGN KEY (`code_tactique`) REFERENCES `nomencl
 ALTER TABLE `compo_equipe` ADD FOREIGN KEY (`id_equipe`) REFERENCES `equipe`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `compo_equipe` ADD FOREIGN KEY (`id_cal_ligue`) REFERENCES `calendrier_ligue`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+CREATE TABLE `joueur_compo_equipe` (
+`id_compo` INT UNSIGNED NOT NULL,
+`id_joueur_reel` MEDIUMINT UNSIGNED NOT NULL,
+`numero` TINYINT UNSIGNED NOT NULL,
+`capitaine` BOOLEAN NOT NULL,
+`code_bonus_malus` VARCHAR(30),
+`note` DECIMAL(3,1),
+`numero_remplacant` TINYINT UNSIGNED,
+`note_min` DECIMAL(3,1),
+PRIMARY KEY (`id_compo`, `id_joueur_reel`)
+) ENGINE = InnoDB;
+ALTER TABLE `joueur_compo_equipe` ADD FOREIGN KEY (`code_bonus_malus`) REFERENCES `nomenclature_bonus_malus`(`code`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `joueur_compo_equipe` ADD FOREIGN KEY (`id_compo`) REFERENCES `compo_equipe`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `joueur_compo_equipe` ADD FOREIGN KEY (`id_joueur_reel`) REFERENCES `joueur_reel`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 CREATE TABLE `resultatsL1_reel` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 `journee` INT UNSIGNED NOT NULL,
@@ -148,17 +172,6 @@ PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
 --LOAD DATA LOCAL INFILE 'C:\\Bitnami\\resultatsL1.csv' INTO TABLE resultatsL1_reel FIELDS TERMINATED BY ';' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
-
-
-CREATE TABLE `prepa_mercato` (
-`id_coach` MEDIUMINT UNSIGNED NOT NULL ,
-`id_joueur_reel` MEDIUMINT UNSIGNED NOT NULL,
-`prix` MEDIUMINT UNSIGNED NOT NULL,
-PRIMARY KEY (`id_coach`, `id_joueur_reel`)
-) ENGINE = InnoDB;
-ALTER TABLE `prepa_mercato` ADD FOREIGN KEY (`id_coach`) REFERENCES `coach`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE `prepa_mercato` ADD FOREIGN KEY (`id_joueur_reel`) REFERENCES `joueur_reel`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
 
 CREATE TABLE `joueur_stats` (
 `id` VARCHAR(100) NOT NULL ,

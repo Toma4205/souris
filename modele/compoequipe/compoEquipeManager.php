@@ -28,22 +28,55 @@ class CompoEquipeManager extends ManagerBase
     }
 	}
 
+  public function findJoueurCompoByCompo($idCompo)
+  {
+    $joueurs = [];
+
+    $q = $this->_bdd->prepare('SELECT * FROM joueur_compo_equipe WHERE id_compo = :id');
+    $q->execute([':id' => $idCompo]);
+
+    while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+		{
+			$joueurs[] = new JoueurCompoEquipe($donnees);
+		}
+		$q->closeCursor();
+
+		return $joueurs;
+  }
+
   public function creerOuMajCompoEquipe(CompoEquipe $compo, $idEquipe, $idCalLigue)
   {
-    if ($compo->id() != null) {
-      $q = $this->_bdd->prepare('UPDATE compo_equipe SET code_tactique = :tactique, code_bonus_malus = :bonus
-          WHERE id = :id');
-      $q->bindValue(':tactique', $compo->codeTactique());
-      $q->bindValue(':bonus', $compo->codeBonusMalus());
-      $q->bindValue(':id', $compo->id());
-    } else {
-      $q = $this->_bdd->prepare('INSERT INTO compo_equipe(id_cal_ligue, id_equipe, code_tactique, code_bonus_malus)
-          VALUES(:calLigue, :equipe, :tactique, :bonus)');
-      $q->bindValue(':calLigue', $idCalLigue);
-      $q->bindValue(':equipe', $idEquipe);
-      $q->bindValue(':tactique', $compo->codeTactique());
-      $q->bindValue(':bonus', $compo->codeBonusMalus());
-    }
+    $q = $this->_bdd->prepare('DELETE FROM compo_equipe WHERE id_cal_ligue = :calLigue AND id_equipe = :equipe');
+    $q->bindValue(':calLigue', $idCalLigue);
+    $q->bindValue(':equipe', $idEquipe);
+    $q->execute();
+
+    $q = $this->_bdd->prepare('INSERT INTO compo_equipe(id_cal_ligue, id_equipe, code_tactique, code_bonus_malus)
+        VALUES(:calLigue, :equipe, :tactique, :bonus)');
+    $q->bindValue(':calLigue', $idCalLigue);
+    $q->bindValue(':equipe', $idEquipe);
+    $q->bindValue(':tactique', $compo->codeTactique());
+    $q->bindValue(':bonus', $compo->codeBonusMalus());
+    $q->execute();
+	}
+
+  public function purgerJoueurCompoEquipe($idCompo)
+  {
+    $q = $this->_bdd->prepare('DELETE FROM joueur_compo_equipe WHERE id_compo = :id');
+    $q->bindValue(':id', $idCompo);
+
+    $q->execute();
+	}
+
+  public function creerJoueurCompoEquipe($idCompo, $numero, $idJoueur, $capitaine, $bonus)
+  {
+    $q = $this->_bdd->prepare('INSERT INTO joueur_compo_equipe(id_compo, id_joueur_reel, numero, capitaine, code_bonus_malus)
+        VALUES(:idCompo, :idJoueur, :num, :cap, :bonus)');
+    $q->bindValue(':idCompo', $idCompo);
+    $q->bindValue(':idJoueur', $idJoueur);
+    $q->bindValue(':num', $numero);
+    $q->bindValue(':cap', $capitaine);
+    $q->bindValue(':bonus', $bonus);
 
     $q->execute();
 	}

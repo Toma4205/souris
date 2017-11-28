@@ -17,6 +17,8 @@ function afficherContenuSelect($libSelect, $nameSelect, $joueurs, $classeCss, $t
   {
     if (isset($tabCompo[$nameSelect]) && $tabCompo[$nameSelect] == $joueur->id()) {
       $contenu .= '<option value="' . $joueur->id() . '" selected="selected">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
+    } elseif (in_array($joueur->id(), $tabCompo)) {
+      $contenu .= '<option class="cache" value="' . $joueur->id() . '">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
     } else {
       $contenu .= '<option value="' . $joueur->id() . '">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
     }
@@ -128,7 +130,7 @@ if (isset($calReel))
       </div>
     </div>
     <div id="contenuCompoEquipe" class="conteneurColumnGauche">
-      <div>
+      <div id="divTitulaire">
         <p id="titulaire">Titulaires</p>
       <?php
         if ($ligue->modeExpert() != TRUE)
@@ -136,7 +138,7 @@ if (isset($calReel))
           if (isset($gb))
           {
             echo '<div>';
-            afficherContenuSelect('1. GB ', 'choixGB', $gb, 'selectChoixJoueurGB', $tabCompo);
+            afficherContenuSelect('1. GB ', 1, $gb, 'selectChoixJoueurGB', $tabCompo);
             echo '</div>';
           }
 
@@ -146,7 +148,7 @@ if (isset($calReel))
             echo '<div>';
             for ($index = 1; $index <= $choixTactique->nbDef(); $index++)
             {
-              afficherContenuSelect($numPosition . '. DEF ', 'choixDEF' . $index, $def, 'selectChoixJoueurDEF', $tabCompo);
+              afficherContenuSelect($numPosition . '. DEF ', $numPosition, $def, 'selectChoixJoueurDEF', $tabCompo);
               $numPosition++;
             }
             echo '</div>';
@@ -156,7 +158,7 @@ if (isset($calReel))
             echo '<div>';
             for ($index = 1; $index <= $choixTactique->nbMil(); $index++)
             {
-              afficherContenuSelect($numPosition . '. MIL ', 'choixMIL' . $index, $mil, 'selectChoixJoueurMIL', $tabCompo);
+              afficherContenuSelect($numPosition . '. MIL ', $numPosition, $mil, 'selectChoixJoueurMIL', $tabCompo);
               $numPosition++;
             }
             echo '</div>';
@@ -166,7 +168,7 @@ if (isset($calReel))
             echo '<div>';
             for ($index = 1; $index <= $choixTactique->nbAtt(); $index++)
             {
-              afficherContenuSelect($numPosition . '. ATT ', 'choixATT' . $index, $att, 'selectChoixJoueurATT', $tabCompo);
+              afficherContenuSelect($numPosition . '. ATT ', $numPosition, $att, 'selectChoixJoueurATT', $tabCompo);
               $numPosition++;
             }
             echo '</div>';

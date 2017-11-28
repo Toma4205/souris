@@ -8,8 +8,62 @@ $joueurEquipeManager = new JoueurEquipeManager($bdd);
 $compoEquipeManager = new CompoEquipeManager($bdd);
 
 $equipe = $equipeManager->findEquipeByCoachEtLigue($coach->id(), $ligue->id());
-$calReel = $calReelManager->findProchaineJournee();
 $calLigue = $calLigueManager->findProchaineJourneeByEquipe($equipe->id());
+
+$compoEquipe = $compoEquipe = new CompoEquipe([]);
+$tabCompo = [];
+if (isset($_POST['changerTactique']))
+{
+  $compoEquipe->setCode_tactique($_POST['choixTactique']);
+  $compoEquipe->setCode_bonus_malus($_POST['choixBonus']);
+  $tabCompo = $_POST;
+}
+elseif (isset($_POST['enregistrer']))
+{
+  $compoEquipe->setCode_tactique($_POST['choixTactique']);
+  if ($_POST['choixBonus'] != -1)
+  {
+    $compoEquipe->setCode_bonus_malus($_POST['choixBonus']);
+  }
+  $compoEquipeManager->creerOuMajCompoEquipe($compoEquipe, $equipe->id(), $calLigue->id());
+
+  $compoEquipe = $compoEquipeManager->findCompoByEquipeEtCalLigue($equipe->id(), $calLigue->id());
+  $compoEquipeManager->purgerJoueurCompoEquipe($compoEquipe->id());
+
+  foreach($_POST as $numero => $joueur)
+  {
+    if (is_numeric($numero) && $joueur != -1)
+    {
+      $compoEquipeManager->creerJoueurCompoEquipe($compoEquipe->id(), $numero, $joueur, 0, null);
+    }
+  }
+
+  $tabCompo = $_POST;
+}
+else
+{
+  $compoEquipe = $compoEquipeManager->findCompoByEquipeEtCalLigue($equipe->id(), $calLigue->id());
+  if ($compoEquipe == null)
+  {
+    $compoEquipe = new CompoEquipe(['code_tactique' => ConstantesAppli::TACTIQUE_DEFAUT]);
+  }
+  else
+  {
+    echo $compoEquipe->id();
+    $joueursCompo = $compoEquipeManager->findJoueurCompoByCompo($compoEquipe->id());
+    if (isset($joueursCompo))
+    {
+      foreach($joueursCompo as $joueur)
+      {
+        echo $joueur->numero() . "-" . $joueur->idJoueurReel() . '<br/>';
+        $tabCompo[$joueur->numero()] = $joueur->idJoueurReel();
+      }
+    }
+  }
+}
+
+
+$calReel = $calReelManager->findProchaineJournee();
 $nomenclTactique = $nomenclManager->findNomenclatureTactiqueSelonMode($ligue->modeExpert());
 $joueurs = $joueurEquipeManager->findByEquipe($equipe->id());
 if (isset($joueurs))
@@ -35,27 +89,6 @@ if (isset($joueurs))
       $att[] = $joueur;
     }
   }
-}
-
-//foreach($_POST as $key => $val) echo '$_POST["'.$key.'"]='.$val.'<br />';
-
-$compoEquipe = $compoEquipeManager->findCompoByEquipeEtCalLigue($equipe->id(), $calLigue->id());
-if ($compoEquipe == null)
-{
-  $compoEquipe = new CompoEquipe(['code_tactique' => ConstantesAppli::TACTIQUE_DEFAUT]);
-}
-
-$tabCompo = [];
-if (isset($_POST['changerTactique']))
-{
-  $compoEquipe->setCode_tactique($_POST['choixTactique']);
-  $tabCompo = $_POST;
-}
-elseif (isset($_POST['enregistrer']))
-{
-  $compoEquipe->setCode_tactique($_POST['choixTactique']);
-  $compoEquipe->setCode_bonus_malus(null);
-  $compoEquipeManager->creerOuMajCompoEquipe($compoEquipe, $equipe->id(), $calLigue->id());
 }
 
 $choixTactique = $nomenclManager->findNomenclatureTactiqueByCode($compoEquipe->codeTactique());

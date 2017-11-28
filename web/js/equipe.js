@@ -3,8 +3,17 @@ var tabCompo = [];
 var tabPosition = [];
 
 $(document).ready(function() {
-    modeExpert = $('#cache_mode_expert').val();
+  initTabCompo();
 });
+
+function initTabCompo() {
+  $('#divTitulaire select').each(function() {
+    var val = $(this).find(":selected").val();
+    if (val != -1) {
+      tabCompo[$(this).attr('name')] = val;
+    }
+  });
+}
 
 function submitForm() {
   var input = $("<input>").attr("type", "hidden").attr("name", "changerTactique");
@@ -13,7 +22,7 @@ function submitForm() {
 
 function onChoixJoueur(selectName, classeCss) {
   var val = $('select[name="' + selectName + '"]').find(":selected").val();
-  
+
   // Si un joueur est sélectionné, on le "cache" dans les autres select
   if (val != -1) {
     $('select[class="' + classeCss + '"][name!="' + selectName + '"] option[value="' + val + '"]').each(function() {

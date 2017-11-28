@@ -276,7 +276,8 @@ p.colonne {
   margin: auto;
   margin-bottom: 10px;
 }
-.selectChoixJoueurGB, .selectChoixJoueurDEF, .selectChoixJoueurMIL, .selectChoixJoueurATT {
+.selectChoixJoueurGB, .selectChoixJoueurDEF, .selectChoixJoueurMIL,
+.selectChoixJoueurATT, .selectChoixCapitaine {
   width: 180px;
 }
 .spanChoixJoueur {
