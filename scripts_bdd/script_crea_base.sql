@@ -268,7 +268,7 @@ CREATE TABLE `joueur_stats` (
 `100_ballons_touches` SMALLINT UNSIGNED NOT NULL,
 `bonus_victoire` SMALLINT UNSIGNED NOT NULL,
 `coup_franc_rate` SMALLINT UNSIGNED NOT NULL,
-`note` SMALLINT UNSIGNED NOT NULL,
+`note` FLOAT UNSIGNED DEFAULT NULL,
 PRIMARY KEY (`id`,`journee`)
 ) ENGINE = InnoDB;
 
