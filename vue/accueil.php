@@ -48,7 +48,7 @@ require_once("vue/commun/enteteflex.php");
     <p>Confirmation mot de passe<br/>
         <input type="password" class="width_200px" name="confirmMotDePasseCrea" />
     </p>
-    <input type="submit" value="S'inscrire" name="inscription" class="marginBottom" />
+    <input type="submit" value="Je m'inscris" name="inscription" class="marginBottom" />
   </section>
 </div>
 <?php

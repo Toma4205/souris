@@ -3,12 +3,46 @@ var tabCompo = [];
 var tabPosition = [];
 
 $(document).ready(function() {
-    modeExpert = $('#cache_mode_expert').val();
+  initTabCompo();
 });
+
+function initTabCompo() {
+  $('#divTitulaire select').each(function() {
+    var val = $(this).find(":selected").val();
+    if (val != -1) {
+      tabCompo[$(this).attr('name')] = val;
+    }
+  });
+}
 
 function submitForm() {
   var input = $("<input>").attr("type", "hidden").attr("name", "changerTactique");
   $('#formPrincipal').append($(input)).submit();
+}
+
+function onChoixJoueur(selectName, classeCss) {
+  var val = $('select[name="' + selectName + '"]').find(":selected").val();
+
+  // Si un joueur est sélectionné, on le "cache" dans les autres select
+  if (val != -1) {
+    $('select[class="' + classeCss + '"][name!="' + selectName + '"] option[value="' + val + '"]').each(function() {
+      $(this).addClass('cache');
+    });
+  }
+
+  // Si un joueur était déjà sélectionné, on le rend visible dans les autres select
+  if (tabCompo[selectName] != undefined) {
+    $('select[class="' + classeCss + '"][name!="' + selectName + '"] option[value="' + tabCompo[selectName] + '"]').each(function() {
+      $(this).removeClass('cache');
+    });
+  }
+
+  // Si un joueur est sélectionné, on stocke sa valeur
+  if (val != -1) {
+    tabCompo[selectName] = val;
+  } else if (tabCompo[selectName] != undefined) {
+    delete tabCompo[selectName];
+  }
 }
 
 function changerTactique(nouvelle) {

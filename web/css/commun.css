@@ -271,19 +271,34 @@ p.colonne {
   font-size: 20px;
   font-weight: bold;
 }
-.selectChoixTactique {
+.selectChoixTactiqueBonus {
   width: 100px;
   margin: auto;
   margin-bottom: 10px;
 }
+.selectChoixJoueurGB, .selectChoixJoueurDEF, .selectChoixJoueurMIL,
+.selectChoixJoueurATT, .selectChoixCapitaine {
+  width: 180px;
+}
+.spanChoixJoueur {
+  width: 60px;
+  display: inline-block;
+}
 #rowCompoEquipe {
-  height: 400px;
   padding-bottom: 15px;
 }
 #contenuCompoEquipe p {
   margin: 0;
-  padding-bottom: 5px;
+  padding-top: 5px;
   text-align: left;
+}
+#contenuCompoEquipe div {
+  padding: 5px 5px 5px 5px;
+}
+#titulaire, #remplacant, #capitaine {
+  border-bottom: solid #808080;
+  font-weight: bold;
+  font-variant: small-caps;
 }
 
 /* CLASSEMENTS */
@@ -343,6 +358,9 @@ header.menuClassement p {
 }
 .vertical_align_middle {
   vertical-align:middle;
+}
+.padding_bottom_5px {
+  padding-bottom: 5px;
 }
 
 /* Tableaux */

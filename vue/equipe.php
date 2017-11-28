@@ -3,10 +3,10 @@
 $vueJs = 'equipe.js';
 require_once("vue/commun/enteteflex.php");
 
-function afficherContenuSelect($libSelect, $nameSelect, $joueurs, $tabCompo)
+function afficherContenuSelect($libSelect, $nameSelect, $joueurs, $classeCss, $tabCompo)
 {
-  $contenu = '<p>' . $libSelect;
-  $contenu .= '<select name="' . $nameSelect . '">';
+  $contenu = '<p><span class="spanChoixJoueur">' . $libSelect;
+  $contenu .= '</span><select name="' . $nameSelect . '" class="' . $classeCss . '" onchange="javascript:onChoixJoueur(\''. $nameSelect . '\',\'' . $classeCss . '\');">';
   if (isset($tabCompo[$nameSelect]) && $tabCompo[$nameSelect] == -1) {
     $contenu .= '<option value="-1" selected="selected">...</option>';
   } else {
@@ -17,6 +17,8 @@ function afficherContenuSelect($libSelect, $nameSelect, $joueurs, $tabCompo)
   {
     if (isset($tabCompo[$nameSelect]) && $tabCompo[$nameSelect] == $joueur->id()) {
       $contenu .= '<option value="' . $joueur->id() . '" selected="selected">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
+    } elseif (in_array($joueur->id(), $tabCompo)) {
+      $contenu .= '<option class="cache" value="' . $joueur->id() . '">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
     } else {
       $contenu .= '<option value="' . $joueur->id() . '">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
     }
@@ -30,27 +32,17 @@ if (isset($calReel))
 {
 ?>
 <section>
-  <div id="divTactiqueCache" class="cache">
-    <?php
-      echo '<input id="cache_mode_expert" value="' . $ligue->modeExpert() . '" />';
-      foreach ($nomenclTactique as $tactique)
-      {
-        echo '<input id="cache_classique_' . $tactique->code() . '" value="' .
-          $tactique->nbDef() . ',' . $tactique->nbMil() . ',' . $tactique->nbAtt() . '"/>';
-        // TODO MPL continuer cache expert
-        echo '<input id="cache_expert_' . $tactique->code() . '" value="' . $tactique->nbDc() . '"/>';
-      }
-     ?>
-  </div>
   <div class="conteneurRow enteteJournee">
     <p class="width_25pc">
       <?php
         echo $calLigue->nomEquipeDom();
        ?>
     </p>
-    <p class="width_50pc journeeEquipe">
+    <p class="width_50pc">
       <?php
-        echo 'Journée ' . $calLigue->numJournee();
+        echo '<span class="journeeEquipe">Journée ' . $calLigue->numJournee() . '</span>';
+        echo '<br/>';
+        echo 'Stade : ' . $equipe->stade();
       ?>
     </p>
     <p class="width_25pc">
@@ -68,14 +60,13 @@ if (isset($calReel))
       ?>
     </p>
   </div>
-  <div class="conteneurColumn">
-    <p>
-      Choix tactique
-    </p>
-    <?php
+  <div class="conteneurRow">
+    <div class="conteneurColumn">
+      <p>Choix tactique</p>
+      <?php
         if (isset($nomenclTactique))
         {
-          echo '<select name="choixTactique" class="selectChoixTactique" onchange="javascript:submitForm();">';
+          echo '<select name="choixTactique" class="selectChoixTactiqueBonus" onchange="javascript:submitForm();">';
 
           if ($ligue->modeExpert() == TRUE)
           {
@@ -122,55 +113,83 @@ if (isset($calReel))
         {
           echo '<p>Aucune nomenclature ! Veuillez contacter l\'assistance.';
         }
-    ?>
+        ?>
+    </div>
+    <div class="conteneurColumn">
+      <p>Bonus/Malus</p>
+      <select name="choixBonus" class="selectChoixTactiqueBonus">
+        <option value="-1">A venir...</option>
+      </select>
+    </div>
   </div>
   <div id="rowCompoEquipe" class="conteneurRow">
     <div>
       <img src="./web/img/terrain_442.jpg" alt="Tactique" width="300px" height="400px" />
+      <div>
+        <input type="submit" value="Valider la compo" name="enregistrer" />
+      </div>
     </div>
     <div id="contenuCompoEquipe" class="conteneurColumnGauche">
+      <div id="divTitulaire">
+        <p id="titulaire">Titulaires</p>
       <?php
         if ($ligue->modeExpert() != TRUE)
         {
           if (isset($gb))
           {
-            afficherContenuSelect('1. GB ', 'choixGB', $gb, $tabCompo);
+            echo '<div>';
+            afficherContenuSelect('1. GB ', 1, $gb, 'selectChoixJoueurGB', $tabCompo);
+            echo '</div>';
           }
 
           $numPosition = 2;
           if (isset($def))
           {
+            echo '<div>';
             for ($index = 1; $index <= $choixTactique->nbDef(); $index++)
             {
-              afficherContenuSelect($numPosition . '. DEF ', 'choixDEF' . $index, $def, $tabCompo);
+              afficherContenuSelect($numPosition . '. DEF ', $numPosition, $def, 'selectChoixJoueurDEF', $tabCompo);
               $numPosition++;
             }
+            echo '</div>';
           }
           if (isset($mil))
           {
+            echo '<div>';
             for ($index = 1; $index <= $choixTactique->nbMil(); $index++)
             {
-              afficherContenuSelect($numPosition . '. MIL ', 'choixMIL' . $index, $mil, $tabCompo);
+              afficherContenuSelect($numPosition . '. MIL ', $numPosition, $mil, 'selectChoixJoueurMIL', $tabCompo);
               $numPosition++;
             }
+            echo '</div>';
           }
           if (isset($att))
           {
+            echo '<div>';
             for ($index = 1; $index <= $choixTactique->nbAtt(); $index++)
             {
-              afficherContenuSelect($numPosition . '. ATT ', 'choixATT' . $index, $att, $tabCompo);
+              afficherContenuSelect($numPosition . '. ATT ', $numPosition, $att, 'selectChoixJoueurATT', $tabCompo);
               $numPosition++;
             }
+            echo '</div>';
           }
         }
         else
         {
-          echo '<p>Mode expert à venir...</p>';
+          echo '<div>Mode expert à venir...</div>';
         }
       ?>
+      </div>
+      <div>
+        <p id="remplacant">Remplaçants</p>
+        <div>A venir...</div>
+      </div>
+      <div>
+        <p id="capitaine">Capitaine</p>
+        <div>A venir...</div>
+      </div>
     </div>
   </div>
-  <input type="submit" value="Valider la compo" name="enregistrer" class="marginBottom" />
 </section>
 <?php
 }
