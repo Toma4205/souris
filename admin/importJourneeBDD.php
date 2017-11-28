@@ -74,6 +74,8 @@ function isCleanSheetNul($ligne,$team,$tableauScore,$dataJoueur) {
 //Fonction de collecte des résultats de la journéé
 //A partir du CSV resultatsL1.csv
 function buildTableauJournee($idJournee) {
+	$resultatsJourneeTab = null;
+	echo 'ici2';
 	require_once(__DIR__ . '/../modele/connexionSQL.php');
 	try
 	{
