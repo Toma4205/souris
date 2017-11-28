@@ -266,41 +266,20 @@
 	</tbody>
 	</table>
 	
-	<h2 id="titreCalculDesNotes">Calcul des notes pour une journée</h2>
-	<form method="post" id="calculNote" action="admin/calculNoteJoueur.php" enctype="multipart/form-data">
-		 <select name="idJourneeCalculNote" size="4" style="height:200px">
-				<option>201709
-				<option>201710
-				<option>201711
-				<option>201712
-				<option>201713
-				<option>201714
-				<option>201715
-				<option>201716
-				<option>201717
-				<option>201718
-				<option>201719
-				<option>201720
-				<option>201721
-				<option>201722
-				<option>201723
-				<option>201724
-				<option>201725
-				<option>201726
-				<option>201727
-				<option>201728
-				<option>201729
-				<option>201730
-				<option>201731
-				<option>201732
-				<option>201733
-				<option>201734
-				<option>201735
-				<option>201736
-				<option>201737
-				<option>201738
-			  </select>
-		 <input type="submit" name="submit" value="Lancer le calcul des notes des joueurs" /><br />
+	<h2 id="titreCalculDesNotes">Calcul des notes des joueurs</h2>
+	<?php 
+		$req1 = $bdd->query('SELECT COUNT(*) FROM joueur_stats WHERE note IS NULL');
+		$nbJoueurSansNote=$req1->fetch(PDO::FETCH_ASSOC);
+		echo 'Actuellement, '.$nbJoueurSansNote['COUNT(*)'].' joueurs ne sont pas notés dans la base de données';
+		echo "<br />\n";
+		$req1->closeCursor();		
+	?>
+	<form method="post" id="afficheNonNotes" action="admin/afficherJoueursNonNotes.php" enctype="multipart/form-data">
+		 <input type="submit" name="submit" value="Qui sont les joueurs non notés ?" /><br />
+	</form>
+	
+	<form method="post" id="calculNote" action="admin/calculNoteJoueurBDD.php" enctype="multipart/form-data">
+		 <input type="submit" name="submit" value="Lancer le calcul des notes des joueurs non notés" /><br />
 	</form>
 
 </body>
