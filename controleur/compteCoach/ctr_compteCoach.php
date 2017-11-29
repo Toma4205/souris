@@ -18,12 +18,12 @@ if (isset($_POST['continuerCreaLigue']))
     {
       $_SESSION[ConstantesSession::EQUIPE_CREA] = $equipe;
       // Redirection du coach vers le mercato
-      header('Location: souris.php?section=mercatoEquipe');
+      header('Location: index.php?section=mercatoEquipe');
     }
     else
     {
       // Redirection du coach vers la ligue
-      header('Location: souris.php?section=creationLigue');
+      header('Location: index.php?section=creationLigue');
     }
   }
 }
@@ -48,7 +48,7 @@ elseif (isset($_POST['rejoindre']))
     $_SESSION[ConstantesSession::LIGUE] = $managerLigue->findLigueById($cle);
 
     // Redirection du coach vers la ligue
-    header('Location: souris.php?section=classementLigue');
+    header('Location: index.php?section=classementLigue');
   }
 }
 elseif (isset($_POST['masquer']))

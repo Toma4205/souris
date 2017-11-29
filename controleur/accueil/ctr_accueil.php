@@ -5,7 +5,7 @@ if (isset($_GET['deconnexion']))
   $_SESSION = array();
   session_destroy();
   // Redirection du visiteur vers la page d'accueil
-  header('Location: souris.php');
+  header('Location: index.php');
   exit();
 }
 
@@ -64,7 +64,7 @@ if (isset($coach)) // Si on utilise un coach (nouveau ou pas).
 {
   $_SESSION[ConstantesSession::COACH] = $coach;
   // Redirection du visiteur vers la page d'accueil
-  header('Location: souris.php?section=compteCoach');
+  header('Location: index.php?section=compteCoach');
 }
 
 include_once('vue/accueil.php');

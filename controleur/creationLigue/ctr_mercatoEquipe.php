@@ -7,7 +7,7 @@ function traiterFinTourMercato(LigueManager $ligueManager, JoueurEquipeManager $
   $_SESSION[ConstantesSession::LIGUE_CREA] = $ligueManager->findLigueById($idLigue);
 
   // Redirection du visiteur vers la page d'accueil
-  header('Location: souris.php?section=mercatoLigue');
+  header('Location: index.php?section=mercatoLigue');
 }
 
 $ligueManager = new LigueManager($bdd);
@@ -57,7 +57,7 @@ elseif (isset($_POST['clotureMercato']))
 
     $_SESSION[ConstantesSession::LIGUE] = $ligueManager->findLigueById($creaLigue->id());
     // Redirection du visiteur vers la page d'accueil
-    header('Location: souris.php?section=equipe');
+    header('Location: index.php?section=equipe');
   }
   elseif ($joueurEquipeManager->isTourMercatoTermine($creaLigue->id(), $tourMercato))
   {

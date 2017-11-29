@@ -87,6 +87,6 @@ elseif (isset($_SESSION[ConstantesSession::COACH]))
 // Sinon, on redirige l'utilisateur vers l'accueil
 else
 {
-    header('Location: souris.php');
+    header('Location: index.php');
     exit();
 }

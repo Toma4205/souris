@@ -39,7 +39,7 @@ if (isset($coach))
       echo '"';
     }
     echo '>';
-    if($_GET['section'] != $section) echo '<a href="souris.php?section=' . $section . '">';
+    if($_GET['section'] != $section) echo '<a href="index.php?section=' . $section . '">';
     echo $libMenu;
     if($_GET['section'] != $section) echo '</a>';
     echo '</p>';
@@ -71,7 +71,7 @@ if (isset($coach))
     afficherMenu('forum', 'Conf. de presse', true);
   }
 
-  echo '<p class="nav1ligne"><a href="souris.php?deconnexion=true">Déconnexion</a></p>';
+  echo '<p class="nav1ligne"><a href="index.php?deconnexion=true">Déconnexion</a></p>';
   echo '</nav>';
 }
 ?>
