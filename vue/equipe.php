@@ -43,9 +43,10 @@ function ajouterOptionJoueur($numPosition, $joueurs, $tabCompo)
   $contenu = '';
   foreach ($joueurs as $joueur)
   {
+    $cleTabCompo = array_search($joueur->id(), $tabCompo);
     if (isset($tabCompo[$numPosition]) && $tabCompo[$numPosition] == $joueur->id()) {
       $contenu .= '<option value="' . $joueur->id() . '" selected="selected">' . $joueur->nom() . ' ' . $joueur->prenom() . ' - ' . $joueur->libelleEquipe() . '</option>';
-    } elseif (in_array($joueur->id(), $tabCompo)) {
+    } elseif ($cleTabCompo > 0 && $cleTabCompo <= 11) {
       $contenu .= '<option class="cache" value="' . $joueur->id() . '">' . $joueur->nom() . ' ' . $joueur->prenom() . ' - ' . $joueur->libelleEquipe() . '</option>';
     } else {
       $contenu .= '<option value="' . $joueur->id() . '">' . $joueur->nom() . ' ' . $joueur->prenom() . ' - ' . $joueur->libelleEquipe() . '</option>';
