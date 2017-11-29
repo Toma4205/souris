@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="web/css/commun.css" type="text/css">
         <link rel="stylesheet" href="web/css/taille.css" type="text/css">
         <link rel="stylesheet" href="web/css/jquery.dataTables.min.css" type="text/css">
+        <link rel="icon" type="image/png" href="web/img/favicone.png" />
         <script src="web/js/jquery-1.12.4.js"></script>
         <script src="web/js/jquery.dataTables.min.js"></script>
         <?php
