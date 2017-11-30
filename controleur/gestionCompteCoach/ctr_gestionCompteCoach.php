@@ -1,10 +1,10 @@
 <?php
 
+$manager = new CoachManager($bdd);
+
 if (isset($_POST['majCompte']) && isset($_POST['nom']) && !empty($_POST['nom']))
 {
-  $manager = new CoachManager($bdd);
   $maj = true;
-
   if ($_POST['nom'] != $coach->nom())
   {
     if ($manager->existeByNom($_POST['nom']))
@@ -28,6 +28,34 @@ if (isset($_POST['majCompte']) && isset($_POST['nom']) && !empty($_POST['nom']))
 elseif (isset($_POST['majCompte']))
 {
   $message = 'Le nom est obligatoire !';
+}
+elseif (isset($_POST['majMotDePasse']))
+{
+  if (isset($_POST['motDePasseActuel']) && !empty($_POST['motDePasseActuel'])
+    && isset($_POST['motDePasseCrea']) && !empty($_POST['motDePasseCrea'])
+    && isset($_POST['confirmMotDePasseCrea']) && !empty($_POST['confirmMotDePasseCrea']))
+  {
+    if ($_POST['motDePasseCrea'] == $_POST['confirmMotDePasseCrea'])
+    {
+      $coachAMaj = new Coach(['nom' => $coach->nom(),
+                          'mot_de_passe' => $_POST['motDePasseActuel']]);
+
+      $coachAMaj = $manager->findByNomMotDePasse($coachAMaj);
+      if (null == $coachAMaj->id())
+      {
+        $messageMdp = 'Mot de passe actuel invalide !';
+      }
+      else {
+        $manager->majMdpCoach($coach->id(), $_POST['motDePasseCrea']);
+      }
+    }
+    else {
+      $messageMdp = 'Les nouveaux mots de passe sont différents !';
+    }
+  }
+  else {
+    $messageMdp = 'Les 3 champs sont obligatoires !';
+  }
 }
 
 include_once('vue/gestionCompteCoach.php');

@@ -2,7 +2,7 @@
 // entete
 require_once("vue/commun/enteteflex.php");
 ?>
-<section class="conteneurRow">
+<section class="conteneurRow avecBordureInf">
   <div class="formulaire">
     <header>Mes informations</header>
     <?php
@@ -11,7 +11,7 @@ require_once("vue/commun/enteteflex.php");
         echo '<span class="erreur">' . $message . '</span>';
       }
     ?>
-    <p>Nom <br/>
+    <p>Nom Coach<br/>
       <input type="text" class="width_200px" name="nom" size="40" value="<?php
         echo $coach->nom();
         ?>" /></p>
@@ -20,11 +20,31 @@ require_once("vue/commun/enteteflex.php");
         echo $coach->mail();
         ?>" /></p>
     <p>Code Postal <br/>
-      <input type="text" name="codePostal" size="5" value="<?php
+      <input type="text" class="width_200px" name="codePostal" size="5" value="<?php
         echo $coach->codePostal();
         ?>" /></p>
-    <br/>
     <input type="submit" value="Mettre à jour" name="majCompte" class="marginBottom" />
+  </div>
+</section>
+<section class="conteneurRow">
+  <div class="formulaire">
+    <header>Nouveau mot de passe ?</header>
+    <?php
+      if (isset($messageMdp))
+      {
+        echo '<span class="erreur">' . $messageMdp . '</span>';
+      }
+    ?>
+    <p>Mot de passe actuel<br/>
+      <input type="password" class="width_200px" name="motDePasseActuel" />
+    </p>
+    <p>Nouveau mot de passe<br/>
+      <input type="password" class="width_200px" name="motDePasseCrea" />
+    </p>
+    <p>Confirmation mot de passe<br/>
+      <input type="password" class="width_200px" name="confirmMotDePasseCrea" />
+    </p>
+    <input type="submit" value="Je suis ou ouf !" name="majMotDePasse" class="marginBottom" />
   </div>
 </section>
 <?php
