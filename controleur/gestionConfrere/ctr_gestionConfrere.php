@@ -13,7 +13,7 @@ $confreres = $_SESSION[ConstantesSession::LISTE_CONFRERES];
 // Recherche des coachs par nom
 if (isset($_POST['rechercher']))
 {
-  if (isset($_POST['nomCoach']) && !empty($_POST['nomCoach']))
+  if (isset($_POST['nomCoach']) && strlen(trim($_POST['nomCoach'])) > 0)
   {
     if (!isset($_SESSION[ConstantesSession::RECH_CONFRERE]) || $_SESSION[ConstantesSession::RECH_CONFRERE] != $_POST['nomCoach'])
     {
