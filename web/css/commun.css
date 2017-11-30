@@ -61,12 +61,12 @@ header#bandeau_appli {
   border-collapse: collapse;
   border-spacing: 0px;
   height: 45px;
-	background-color:#FFC0CB;
+  background: #141b4D;
   width: 100%;
   font-size: 30px;
   font-weight: bold;
   font-variant: small-caps;
-  color: #696969;
+  color: white;
   text-align:center;
 }
 header#bandeau_appli div, header#bandeau_appli p {
@@ -97,8 +97,8 @@ nav p {
     margin: 0;
 }
 nav p.menuEnCours {
-  background-color: beige;
-  border-bottom:thick double #808080;
+  /*background-color: beige;*/
+  border-bottom:thick double #0000CD;
 }
 nav p.nav1ligne {
   padding-top:10px;
@@ -112,12 +112,13 @@ nav p a {
 footer#pied_de_page {
 	height:50px;
   width:100%;
-	background-color:#C0C0C0;
+  background: #141b4D;
   border: solid black 1px;
+  color: white;
 }
 
 .fond {
-  background-color: #696969;
+  background-color: #C0C0C0;
   padding-top: 20px;
   padding-bottom: 20px;
   padding-left: 5px;
