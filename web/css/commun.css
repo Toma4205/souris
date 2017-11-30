@@ -59,7 +59,7 @@ input[type="submit"]:hover {
 header#bandeau_appli {
   display: table;
   border-collapse: collapse;
-  border-spacing: 0px;
+  border-spacing: 0;
   height: 45px;
   background: #141b4D;
   width: 100%;
@@ -76,6 +76,16 @@ header#bandeau_appli div, header#bandeau_appli p {
 div#bandeau_appli_image {
 	width: 100px;
 }
+.deconnexion {
+  font-size: 15px;
+}
+.deconnexion a {
+  text-decoration: none;
+  color: white;
+}
+.deconnexion a:hover {
+  color: #0000CD;
+}
 
 nav {
   display: flex;
@@ -85,28 +95,29 @@ nav {
   height: 50px;
   max-width: 900px;
   margin: auto;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: bold;
   font-variant: small-caps;
   text-align:center;
 }
 nav p {
-    padding-left: 10px;
-    padding-right: 10px;
-    height: auto;
-    margin: 0;
+  padding-left: 15px;
+  padding-right: 15px;
+  line-height: 50px;
+  white-space: nowrap;
+  margin: 0;
 }
 nav p.menuEnCours {
-  /*background-color: beige;*/
+  color: #0000CD;
   border-bottom:thick double #0000CD;
-}
-nav p.nav1ligne {
-  padding-top:10px;
 }
 nav p a {
   text-decoration: none;
   color: #696969;
   vertical-align: middle;
+}
+nav p a:hover {
+  color: #0000CD;
 }
 
 footer#pied_de_page {
@@ -443,7 +454,7 @@ header.menuClassement p {
 
 .joueurAchete {
   width: 400px !important;
-  margin-right: 0px !important;
+  margin-right: 0 !important;
   background-color: #98FB98;
   text-align: left;
 }
@@ -453,7 +464,7 @@ tr.joueurAchete {
 
 .joueurEnCours {
   width: 400px !important;
-  margin-right: 0px !important;
+  margin-right: 0 !important;
   background-color: #EEE8AA;
   text-align: left;
 }

@@ -22,7 +22,14 @@
             <div id="bandeau_appli_image">
               <img src="./web/img/logo.jpg" alt="Logo du site" width="100px" height="inherit" />
             </div>
-            <p>T'es un homme ou une souris ?</p>
+            <p class="bandeau_appli_titre">T'es un homme ou une souris ?</p>
+            <?php
+            // Si authentification
+            if (isset($coach))
+            {
+              echo '<p class="deconnexion"><a href="index.php?deconnexion=true">Déconnexion</a></p>';
+            }
+            ?>
         </header>
 
 <?php
@@ -30,14 +37,11 @@
 if (isset($coach))
 {
   // Affichage des menus
-  function afficherMenu($section, $libMenu, $nav1Ligne)
+  function afficherMenu($section, $libMenu)
   {
     echo '<p';
-    if($_GET['section'] == $section || $nav1Ligne) {
-      echo ' class="';
-      if ($_GET['section'] == $section) echo 'menuEnCours';
-      if ($nav1Ligne) echo ' nav1ligne';
-      echo '"';
+    if($_GET['section'] == $section) {
+      echo ' class="menuEnCours"';
     }
     echo '>';
     if($_GET['section'] != $section) echo '<a href="index.php?section=' . $section . '">';
@@ -50,29 +54,28 @@ if (isset($coach))
 
   if (isset($creaLigue) && $creaLigue->etat() == EtatLigue::MERCATO)
   {
-    afficherMenu('compteCoach', 'Mon bureau', true);
-    afficherMenu('creationLigue', 'Ligue/Equipe', true);
-    afficherMenu('mercatoEquipe', 'Mon mercato', true);
-    afficherMenu('mercatoLigue', 'Mercato ligue', true);
+    afficherMenu('compteCoach', 'Mon bureau');
+    afficherMenu('creationLigue', 'Ligue/Equipe');
+    afficherMenu('mercatoEquipe', 'Mon mercato');
+    afficherMenu('mercatoLigue', 'Mercato ligue');
   }
   elseif (isset($coach) && !isset($ligue))
   {
-    afficherMenu('compteCoach', 'Mon bureau', false);
-    afficherMenu('gestionConfrere', 'Mes confrères', false);
-    afficherMenu('creationLigue', 'Créer une ligue', false);
-    afficherMenu('prepaMercato', 'Préparer mon mercato', false);
-    afficherMenu('gestionCompteCoach', 'Mon compte', false);
+    afficherMenu('compteCoach', 'Mon bureau');
+    afficherMenu('gestionConfrere', 'Mes confrères');
+    afficherMenu('creationLigue', 'Créer une ligue');
+    afficherMenu('prepaMercato', 'Préparer mon mercato');
+    afficherMenu('gestionCompteCoach', 'Mon compte');
   }
   elseif (isset($ligue))
   {
-    afficherMenu('compteCoach', 'Mon bureau', true);
-    afficherMenu('equipe', 'Mon équipe', true);
-    afficherMenu('classementLigue', 'Classement', true);
-    afficherMenu('calendrier', 'Calendrier', true);
-    afficherMenu('forum', 'Conf. de presse', true);
+    afficherMenu('compteCoach', 'Mon bureau');
+    afficherMenu('equipe', 'Mon équipe');
+    afficherMenu('classementLigue', 'Classement');
+    afficherMenu('calendrier', 'Calendrier');
+    afficherMenu('forum', 'Conf. de presse');
   }
 
-  echo '<p class="nav1ligne"><a href="index.php?deconnexion=true">Déconnexion</a></p>';
   echo '</nav>';
 }
 ?>
