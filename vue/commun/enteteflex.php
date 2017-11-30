@@ -22,12 +22,26 @@
             <div id="bandeau_appli_image">
               <img src="./web/img/logo.jpg" alt="Logo du site" width="100px" height="inherit" />
             </div>
-            <p class="bandeau_appli_titre">T'es un homme ou une souris ?</p>
+            <p class="bandeau_appli_titre">
+              <?php
+              // Si ligue en cours
+              if (isset($ligue))
+              {
+                echo '<p class="lienBandeau"><a href="index.php?section=compteCoach">Bureau</a> > <span class="nomLigueBandeau">' . $ligue->nom() . '</span></p>';
+              }
+              elseif (isset($creaLigue) && $creaLigue->etat() == EtatLigue::MERCATO)
+              {
+                echo '<p class="lienBandeau"><a href="index.php?section=compteCoach">Bureau</a> > <span class="nomLigueBandeau">' . $creaLigue->nom() . '</span></p>';
+              } else {
+                echo 'T\'es un homme ou une souris ?';
+              }
+              ?>
+            </p>
             <?php
             // Si authentification
             if (isset($coach))
             {
-              echo '<p class="deconnexion"><a href="index.php?deconnexion=true">Déconnexion</a></p>';
+              echo '<p class="deconnexion width_110px"><a href="index.php?deconnexion=true">Déconnexion</a></p>';
             }
             ?>
         </header>
