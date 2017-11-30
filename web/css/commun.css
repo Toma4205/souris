@@ -84,6 +84,9 @@ div#bandeau_appli_image {
   text-decoration: none;
   color: white;
 }
+.lienBandeau a:hover {
+  color: #0000CD;
+}
 .nomLigueBandeau {
   font-size: 25px;
 }
