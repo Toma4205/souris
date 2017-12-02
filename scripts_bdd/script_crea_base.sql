@@ -100,6 +100,7 @@ ALTER TABLE `joueur_equipe` ADD FOREIGN KEY (`id_joueur_reel`) REFERENCES `joueu
 CREATE TABLE `calendrier_ligue` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `id_ligue` INT UNSIGNED NOT NULL,
+  `num_journee_cal_reel` TINYINT UNSIGNED NOT NULL,
   `id_equipe_dom` INT UNSIGNED NOT NULL ,
   `id_equipe_ext` INT UNSIGNED NOT NULL ,
   `num_journee` TINYINT UNSIGNED NOT NULL ,
@@ -110,6 +111,7 @@ PRIMARY KEY (`id`)
 ALTER TABLE `calendrier_ligue` ADD FOREIGN KEY (`id_ligue`) REFERENCES `ligue`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `calendrier_ligue` ADD FOREIGN KEY (`id_equipe_dom`) REFERENCES `equipe`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `calendrier_ligue` ADD FOREIGN KEY (`id_equipe_ext`) REFERENCES `equipe`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `calendrier_ligue` ADD FOREIGN KEY (`num_journee_cal_reel`) REFERENCES `calendrier_reel`(`num_journee`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 CREATE TABLE `bonus_malus` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -147,8 +149,11 @@ CREATE TABLE `joueur_compo_equipe` (
 `capitaine` BOOLEAN NOT NULL,
 `code_bonus_malus` VARCHAR(30),
 `note` DECIMAL(3,1),
-`numero_remplacant` TINYINT UNSIGNED,
-`note_min` DECIMAL(3,1),
+`nb_but_reel` TINYINT UNSIGNED NOT NULL ,
+`nb_but_virtuel` TINYINT UNSIGNED NOT NULL ,
+`numero_remplacement` TINYINT UNSIGNED,
+`id_joueur_reel_remplacant` TINYINT UNSIGNED,
+`note_min_remplacement` DECIMAL(3,1),
 PRIMARY KEY (`id_compo`, `id_joueur_reel`)
 ) ENGINE = InnoDB;
 ALTER TABLE `joueur_compo_equipe` ADD FOREIGN KEY (`code_bonus_malus`) REFERENCES `nomenclature_bonus_malus`(`code`) ON DELETE CASCADE ON UPDATE CASCADE;
