@@ -916,7 +916,7 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 				:100_ballons_touches,
 				:bonus_victoire,
 				:coup_franc_rate,
-				0)');
+				NULL)');
 				$colonne=0;
 				$req->execute(array(
 					'id' => $ligneDeStats[$colonne++],
