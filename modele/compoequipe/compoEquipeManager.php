@@ -80,4 +80,21 @@ class CompoEquipeManager extends ManagerBase
 
     $q->execute();
 	}
+
+  public function creerJoueurCompoEquipeAvecRempl($idCompo, $numero, $idJoueur, $capitaine, $bonus, $numRempl, $idRempl, $note)
+  {
+    $q = $this->_bdd->prepare('INSERT INTO joueur_compo_equipe(id_compo, id_joueur_reel, numero, capitaine,
+        code_bonus_malus, numero_remplacement, id_joueur_reel_remplacant, note_min_remplacement)
+        VALUES(:idCompo, :idJoueur, :num, :cap, :bonus, :rempl, :idRempl, :note)');
+    $q->bindValue(':idCompo', $idCompo);
+    $q->bindValue(':idJoueur', $idJoueur);
+    $q->bindValue(':num', $numero);
+    $q->bindValue(':cap', $capitaine);
+    $q->bindValue(':bonus', $bonus);
+    $q->bindValue(':rempl', $numRempl);
+    $q->bindValue(':idRempl', $idRempl);
+    $q->bindValue(':note', $note);
+
+    $q->execute();
+  }
 }

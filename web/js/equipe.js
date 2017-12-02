@@ -1,85 +1,82 @@
-var modeExpert;
-var tabCompo = [];
+var tabJoueurDEF = [];
+var tabJoueurMIL = [];
+var tabJoueurATT = [];
+var tabCompoDEF = [];
+var tabCompoMIL = [];
+var tabCompoATT = [];
 var tabRempl = [];
-var tabPosition = [];
+var tabRentrant = [];
+var tabSortant = [];
+var DIV_TIT_DEF = 'divTitulaireDEF';
+var DIV_TIT_MIL = 'divTitulaireMIL';
+var DIV_TIT_ATT = 'divTitulaireATT';
+var DIV_REMPLACANT = 'divRemplacant';
+var DIV_REMPLACEMENT = 'divRemplacement';
+var NAME_RENTRANT = 'rentrant_';
+var NAME_SORTANT = 'sortant_';
+var NAME_NOTE = 'note_';
 
 $(document).ready(function() {
+  initTabJoueurSelonPoste(DIV_TIT_DEF, tabJoueurDEF);
+  initTabJoueurSelonPoste(DIV_TIT_MIL, tabJoueurMIL);
+  initTabJoueurSelonPoste(DIV_TIT_ATT, tabJoueurATT);
   initTabCompo();
+  initTabRemplacement();
 });
 
-function initTabCompo() {
-  $('#divTitulaire select').each(function() {
-    var val = $(this).find(":selected").val();
-    if (val != -1) {
-      tabCompo[$(this).attr('name')] = val;
-    }
-  });
-
-  $('#divRemplacant select').each(function() {
-    var val = $(this).find(":selected").val();
-    if (val != -1) {
-      tabRempl[$(this).attr('name')] = val;
-    }
-  });
-}
-
+// Appelée lors du changement de tactique
 function submitForm() {
   var input = $("<input>").attr("type", "hidden").attr("name", "changerTactique");
   $('#formPrincipal').append($(input)).submit();
 }
 
-function onChoixJoueur(selectName, classeCss) {
+// Appelée lors d'un changement de sélection de titulaire
+function onSelectionTitulaire(selectName) {
   var val = $('select[name="' + selectName + '"]').find(":selected").val();
+  var idDiv = $('select[name="' + selectName + '"]').closest('div').attr('id');
 
-  // Si un joueur est sélectionné, on le "cache" dans les autres select
-  if (val != -1) {
-    $('#divTitulaire select[class="' + classeCss + '"][name!="' + selectName + '"] option[value="' + val + '"]').each(function() {
-      $(this).addClass('cache');
-    });
-    $('#divRemplacant select').each(function() {
-      if ($(this).find(":selected").val() == val) {
-        $('#divRemplacant select[name="' + $(this).attr("name") + '"] option[value="-1"]').prop('selected', true);
-        delete tabRempl[$(this).attr("name")];
-      };
-    });
-    $('#divRemplacant select option[value="' + val + '"]').each(function() {
-      $(this).addClass('cache');
-    });
-  }
+  // Si un joueur est sélectionné, on le "cache" dans les autres select titu
+  // + on le cache des remplaçants et des entrants
+  // + on l'affiche dans les sortants
+  ajouterTituBlocRemplacement(val);
+  cacherJoueurDansAutresSelect(idDiv, val, selectName);
 
-  // Si un joueur était déjà sélectionné, on le rend visible dans les autres select
-  if (tabCompo[selectName] != undefined) {
-    $('#divTitulaire select[class="' + classeCss + '"][name!="' + selectName + '"] option[value="' + tabCompo[selectName] + '"]').each(function() {
-      $(this).removeClass('cache');
-    });
-    $('#divRemplacant select option[value="' + tabCompo[selectName] + '"]').each(function() {
-      $(this).removeClass('cache');
-    });
-  }
+  // Si un joueur était déjà sélectionné, on le rend visible dans les autres select titu
+  // + on l'affiche dans les remplaçants
+  // + on le cache dans les sortants
+  afficherJoueurPrecDansAutresSelect(idDiv, tabCompoDEF, selectName);
+  afficherJoueurPrecDansAutresSelect(idDiv, tabCompoMIL, selectName);
+  afficherJoueurPrecDansAutresSelect(idDiv, tabCompoATT, selectName);
+  supprimerTituBlocRemplacement(selectName);
 
   // Si un joueur est sélectionné, on stocke sa valeur
-  if (val != -1) {
-    tabCompo[selectName] = val;
-  } else if (tabCompo[selectName] != undefined) {
-    delete tabCompo[selectName];
-  }
+  stockerJoueurDansTabCompo(idDiv, val, selectName, DIV_TIT_DEF, tabCompoDEF);
+  stockerJoueurDansTabCompo(idDiv, val, selectName, DIV_TIT_MIL, tabCompoMIL);
+  stockerJoueurDansTabCompo(idDiv, val, selectName, DIV_TIT_ATT, tabCompoATT);
 }
 
-function onChoixRempl(selectName) {
+// Appelée lors d'un changement de sélection de remplaçant
+function onSelectionRempl(selectName) {
   var val = $('select[name="' + selectName + '"]').find(":selected").val();
 
   // Si un joueur est sélectionné, on le "cache" dans les autres select
+  // + on l'ajoute dans les rentrants
   if (val != -1) {
-    $('#divRemplacant select[name!="' + selectName + '"] option[value="' + val + '"]').each(function() {
+    $('#' + DIV_REMPLACANT + ' select[name!="' + selectName + '"] option[value="' + val + '"]').each(function() {
       $(this).addClass('cache');
+    });
+    $('#' + DIV_REMPLACEMENT + ' select[name^="' + NAME_RENTRANT + '"] option[value="' + val + '"]').each(function() {
+      $(this).removeClass('cache');
     });
   }
 
   // Si un joueur était déjà sélectionné, on le rend visible dans les autres select
+  // + on le supprime dans les rentrants
   if (tabRempl[selectName] != undefined) {
-    $('#divRemplacant select[name!="' + selectName + '"] option[value="' + tabRempl[selectName] + '"]').each(function() {
+    $('#' + DIV_REMPLACANT + ' select[name!="' + selectName + '"] option[value="' + tabRempl[selectName] + '"]').each(function() {
       $(this).removeClass('cache');
     });
+    supprimerRemplacantBlocRemplacement(tabRempl[selectName]);
   }
 
   // Si un joueur est sélectionné, on stocke sa valeur
@@ -90,39 +87,318 @@ function onChoixRempl(selectName) {
   }
 }
 
-function changerTactique(nouvelle) {
-  tabCompo = [];
-  $('#contenuCompoEquipe p select').each(function() {
-    if ($(this).find(":selected").val() != -1) {
-      tabCompo[$(this).attr('name')] = $(this).find(":selected").val();
-    }
-  });
+// Appelée lors d'un changement de sélection de rentrant
+function onSelectionRentrant(numRentrant) {
+  var selectName = NAME_RENTRANT + numRentrant;
+  var val = $('#' + DIV_REMPLACEMENT + ' select[name="' + selectName + '"]').find(":selected").val();
+  var numRemplacement = selectName.substr(selectName.length - 1)
+  var nameSortant = NAME_SORTANT + numRemplacement;
 
-  for (joueur in tabCompo) {
-    // alert(joueur + '=' + tabCompo[joueur]);
+  // Si un joueur était déjà sélectionné
+  if (tabRentrant[selectName] != undefined) {
+    // On cache les sortants
+    $('#' + DIV_REMPLACEMENT + ' select[name="' + nameSortant + '"] option[value="-1"]').prop('selected', true);
+    $('#' + DIV_REMPLACEMENT + ' select[name="' + nameSortant + '"] option[value!="-1"]').each(function() {
+      $(this).addClass('cache');
+    });
+
+    // On affiche l'ancien rentrant dans les autres select
+    $('#' + DIV_REMPLACEMENT + ' select[name!="' + selectName + '"][name^="' + NAME_RENTRANT + '"] option[value="' + tabRentrant[selectName] + '"]').each(function() {
+      $(this).removeClass('cache');
+    });
+
+    if (tabSortant[nameSortant] != undefined) {
+      delete tabSortant[nameSortant];
+    }
   }
 
-  if (modeExpert == 1) {
-    alert('Expert à venir...');
-  } else {
-    var tabNbParPosition = $('#cache_classique_' + nouvelle.value).val().split(',');
-    tabPosition = [];
+  // Si un joueur est sélectionné, on le "cache" dans les autres select
+  if (val != -1) {
+    $('#' + DIV_REMPLACEMENT + ' select[name!="' + selectName + '"][name^="' + NAME_RENTRANT + '"] option[value="' + val + '"]').each(function() {
+      $(this).addClass('cache');
+    });
 
-    completerTabPosition('choixDEF', tabNbParPosition[0]);
-    completerTabPosition('choixMIL', tabNbParPosition[1]);
-    completerTabPosition('choixATT', tabNbParPosition[2]);
+    // On affiche les sortants possibles selon le poste
+    if (!afficherSortantSelonRentrant(val, selectName, tabJoueurDEF, tabCompoDEF)) {
+      if (!afficherSortantSelonRentrant(val, selectName, tabJoueurMIL, tabCompoMIL)) {
+        afficherSortantSelonRentrant(val, selectName, tabJoueurATT, tabCompoATT);
+      }
+    }
+  }
 
-    $('#contenuCompoEquipe');
+  // Si un joueur est sélectionné, on stocke sa valeur
+  if (val != -1) {
+    tabRentrant[selectName] = val;
+  } else if (tabRentrant[selectName] != undefined) {
+    $('#' + DIV_REMPLACEMENT + ' input[name="' + NAME_NOTE + numRemplacement + '"]').val('');
+    delete tabRentrant[selectName];
   }
 }
 
-function completerTabPosition(lib, nbMax) {
-  for (i = 1; i <= nbMax; i++) {
-    var name = lib + i;
-    if (tabCompo[name] != undefined) {
-      tabPosition[name] = tabCompo[name];
-    } else {
-      tabPosition[name] = -1;
+// Appelée lors d'un changement de sélection de sortant
+function onSelectionSortant(numSortant) {
+  var selectName = NAME_SORTANT + numSortant;
+  var val = $('#' + DIV_REMPLACEMENT + ' select[name="' + selectName + '"]').val();
+
+  // Si un joueur est sélectionné, on stocke sa valeur
+  // + on le cache dans les autres sortans
+  if (val != -1) {
+    $('#' + DIV_REMPLACEMENT + ' select[name!="' + selectName + '"][name^="' + NAME_SORTANT + '"] option[value="' + val + '"]').each(function() {
+      if (!$(this).hasClass('cache')) {
+        $(this).addClass('cache')
+      }
+    });
+    tabSortant[selectName] = val;
+  } else if (tabSortant[selectName] != undefined) {
+    $('#' + DIV_REMPLACEMENT + ' select[name!="' + selectName + '"][name^="' + NAME_SORTANT + '"] option[value="' + tabSortant[selectName] + '"]').each(function() {
+      if ($(this).hasClass('cache')) {
+        $(this).removeClass('cache')
+      }
+    });
+    delete tabSortant[selectName];
+  }
+}
+
+function verifierNote(numRemplacement) {
+  var input = $('#' + DIV_REMPLACEMENT + ' input[name="' + NAME_NOTE + numRemplacement + '"]');
+  var note = parseFloat(input.val().replace(',', '.')) || 0;
+
+  if (note == 0) {
+    if (!input.hasClass('erreurNote')) {
+      input.addClass('erreurNote')
+    }
+  } else if (input.hasClass('erreurNote')) {
+    input.removeClass('erreurNote')
+  }
+
+  input.val(note);
+}
+
+function initTabJoueurSelonPoste(idDiv, tabJoueur) {
+  $('#' + idDiv + ' select:first option').each(function() {
+    if ($(this).val() != -1) {
+      tabJoueur[$(this).val()] = $(this).text();
+    }
+  });
+}
+
+function initTabCompo() {
+  initTabCompoSelonPoste(DIV_TIT_DEF, tabCompoDEF);
+  initTabCompoSelonPoste(DIV_TIT_MIL, tabCompoMIL);
+  initTabCompoSelonPoste(DIV_TIT_ATT, tabCompoATT);
+
+  $('#' + DIV_REMPLACANT + ' select').each(function() {
+    var val = $(this).find(":selected").val();
+    if (val != -1) {
+      tabRempl[$(this).attr('name')] = val;
+    }
+  });
+}
+
+function initTabCompoSelonPoste(idDiv, tabCompo) {
+  $('#' + idDiv + ' select').each(function() {
+    var val = $(this).find(":selected").val();
+    if (val != -1) {
+      tabCompo[$(this).attr('name')] = val;
+    }
+  });
+}
+
+function initTabRemplacement() {
+  $('#' + DIV_REMPLACEMENT + ' select').each(function() {
+    var val = $(this).find(":selected").val();
+    var name = $(this).attr('name');
+
+    if (val != -1) {
+      var numRemplacement = name.substr(name.length - 1);
+      if (name.startsWith(NAME_RENTRANT)) {
+        tabRentrant[name] = val;
+      } else if (jQuery.inArray(val, tabCompoDEF) != -1
+        || jQuery.inArray(val, tabCompoMIL) != -1
+        || jQuery.inArray(val, tabCompoATT) != -1) {
+        tabSortant[name] = val;
+      } else {
+        // Suite à un changement tactique, un titulaire peut être supprimé
+        $('#' + DIV_REMPLACEMENT + ' select[name="' + name + '"] option[value="-1"]').prop('selected', true);
+        $('#' + DIV_REMPLACEMENT + ' select[name="' + name + '"] option[value="' + val + '"]').addClass('cache');
+      }
+    }
+
+    if (name.startsWith(NAME_SORTANT)) {
+      $('#' + DIV_REMPLACEMENT + ' select[name="' + name + '"] option').each(function() {
+        var val = $(this).attr('value');
+        if (!$(this).hasClass('cache') && val != -1
+          && jQuery.inArray(val, tabCompoDEF) == -1
+          && jQuery.inArray(val, tabCompoMIL) == -1
+          && jQuery.inArray(val, tabCompoATT) == -1) {
+            $(this).addClass('cache');
+        }
+      });
+    }
+  });
+}
+
+function cacherJoueurDansAutresSelect(idDiv, val, selectName) {
+  if (val != -1) {
+    // Bloc titulaire du même poste
+    $('#' + idDiv + ' select[name!="' + selectName + '"] option[value="' + val + '"]').each(function() {
+      $(this).addClass('cache');
+    });
+
+    // Bloc remplaçant
+    $('#' + DIV_REMPLACANT + ' select').each(function() {
+      if ($(this).find(":selected").val() == val) {
+        // Si le joueur était sélectionné comme remplaçant
+        $('#' + DIV_REMPLACANT + ' select[name="' + $(this).attr("name") + '"] option[value="-1"]').prop('selected', true);
+        delete tabRempl[$(this).attr("name")];
+
+        // Bloc remplacement
+        supprimerRemplacantBlocRemplacement(val);
+      };
+    });
+    $('#' + DIV_REMPLACANT + ' select option[value="' + val + '"]').each(function() {
+      $(this).addClass('cache');
+    });
+  }
+}
+
+function afficherJoueurPrecDansAutresSelect(idDiv, tabCompo, selectName) {
+  if (tabCompo[selectName] != undefined) {
+
+    // Si un joueur était déjà sélectionné
+    $('#' + idDiv + ' select[name!="' + selectName + '"] option[value="' + tabCompo[selectName] + '"]').each(function() {
+      $(this).removeClass('cache');
+    });
+    $('#' + DIV_REMPLACANT + ' select option[value="' + tabCompo[selectName] + '"]').each(function() {
+      $(this).removeClass('cache');
+    });
+    $('#' + DIV_REMPLACEMENT + ' select[name^="' + NAME_SORTANT + '"] option[value="' + tabCompo[selectName] + '"]').each(function() {
+      $(this).addClass('cache');
+    });
+  }
+}
+
+function stockerJoueurDansTabCompo(idDiv, val, selectName, idDivPoste, tabCompo) {
+  if (val != -1) {
+    if (idDiv == idDivPoste) {
+      tabCompo[selectName] = val;
+    }
+  } else if (tabCompo[selectName] != undefined) {
+    delete tabCompo[selectName];
+  }
+}
+
+function supprimerRemplacantBlocRemplacement(val) {
+  $('#' + DIV_REMPLACEMENT + ' select[name^="' + NAME_RENTRANT + '"]').each(function() {
+    if ($(this).find(":selected").val() == val) {
+
+      // Si le joueur était sélectionné comme rentrant
+
+      // On remet le rentrant à -1
+      var numRemplacement = $(this).attr("name").substr(name.length - 1);
+      $('#' + DIV_REMPLACEMENT + ' select[name="' + $(this).attr("name") + '"] option[value="-1"]').prop('selected', true);
+      delete tabRentrant[$(this).attr("name")];
+
+      // Si le sortant était sélectionné, on le remet à -1
+      var nameSortant = NAME_SORTANT + numRemplacement;
+      if (tabSortant[nameSortant] != undefined) {
+        $('#' + DIV_REMPLACEMENT + ' select[name="' + nameSortant + '"] option[value="-1"]').prop('selected', true);
+        delete tabSortant[nameSortant];
+      }
+
+      // On cache tous les sortants
+      $('#' + DIV_REMPLACEMENT + ' select[name="' + nameSortant + '"] option[value!="-1"]').each(function() {
+        if (!$(this).hasClass('cache')) {
+          $(this).addClass('cache');
+        }
+      });
+
+      // On supprime la note
+      $('#' + DIV_REMPLACEMENT + ' input[name="' + NAME_NOTE + numRemplacement + '"]').val('');
+    }
+
+    // On cache le rentrant
+    $('#' + DIV_REMPLACEMENT + ' select[name="' + $(this).attr("name") + '"] option[value="' + val + '"]').addClass('cache');
+  });
+}
+
+function ajouterTituBlocRemplacement(valTitu) {
+  $('#' + DIV_REMPLACEMENT + ' select[name^="' + NAME_RENTRANT + '"]').each(function() {
+    var valRentrant = $(this).find(":selected").val();
+    if (valRentrant != -1) {
+      if (!ajouterTituBlocSortant(valTitu, valRentrant, $(this).attr('name'), tabJoueurDEF)) {
+        if (!ajouterTituBlocSortant(valTitu, valRentrant, $(this).attr('name'), tabJoueurMIL)) {
+          ajouterTituBlocSortant(valTitu, valRentrant, $(this).attr('name'), tabJoueurATT);
+        }
+      }
+    }
+  });
+}
+
+function supprimerTituBlocRemplacement(selectName) {
+  var valTitu;
+  if (tabCompoDEF[selectName] != undefined) {
+    valTitu = tabCompoDEF[selectName]
+  } else if (tabCompoMIL[selectName] != undefined) {
+    valTitu = tabCompoMIL[selectName]
+  } else if (tabCompoATT[selectName] != undefined) {
+    valTitu = tabCompoATT[selectName]
+  }
+
+  if (valTitu != undefined) {
+    $('#' + DIV_REMPLACEMENT + ' select[name^="' + NAME_SORTANT + '"]').each(function() {
+      var valSortant = $(this).find(":selected").val();
+      var nameSortant = $(this).attr('name');
+
+      if (valSortant == valTitu) {
+        $('#' + DIV_REMPLACEMENT + ' select[name="' + nameSortant + '"] option[value="-1"]').prop('selected', true);
+        delete tabSortant[nameSortant];
+      }
+    });
+
+    $('#' + DIV_REMPLACEMENT + ' select[name^="' + NAME_SORTANT + '"] option[value="' + valTitu + '"]').each(function() {
+      if (!$(this).hasClass('cache')) {
+        $(this).addClass('cache');
+      }
+    });
+  }
+}
+
+function ajouterTituBlocSortant(valTitu, valRentrant, nameRentrant, tabJoueur) {
+  var poste = false;
+  if (valTitu in tabJoueur && valRentrant in tabJoueur) {
+    poste = true;
+    var nameSortant = NAME_SORTANT + nameRentrant.substr(nameRentrant.length - 1);
+
+    $('#' + DIV_REMPLACEMENT + ' select[name="' + nameSortant + '"] option[value="' + valTitu + '"]').removeClass('cache');
+  }
+
+  return poste;
+}
+
+function afficherSortantSelonRentrant(val, selectName, tabJoueur, tabCompo) {
+  var poste = false;
+
+  if(val in tabJoueur) {
+    poste = true;
+    var nameSortant = NAME_SORTANT + selectName.substr(selectName.length - 1);
+
+    for (indexTitu in tabCompo) {
+      if(tabCompo[indexTitu] != undefined) {
+        var dejaSortant = false;
+        for (indexSortant in tabSortant) {
+          if (tabSortant[indexSortant] == tabCompo[indexTitu]) {
+            dejaSortant = true;
+            break;
+          }
+        }
+        if (!dejaSortant) {
+          // Si le titu n'est pas déjà sortant
+          $('#' + DIV_REMPLACEMENT + ' select[name="' + nameSortant + '"] option[value="' + tabCompo[indexTitu] + '"]').removeClass('cache');
+        }
+      }
     }
   }
+
+  return poste;
 }
