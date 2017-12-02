@@ -103,11 +103,12 @@ class LigueManager extends ManagerBase
 		$ligues = [];
 
 		// Ligues du coach
-		$q = $this->_bdd->prepare('SELECT l.*, c.createur, c.date_validation, e.classement
+		$q = $this->_bdd->prepare('SELECT l.*, cl.createur, cl.date_validation, e.classement, c.nom as nomCoachCreateur
 						FROM ligue l
-						INNER JOIN coach_ligue c ON c.id_ligue = l.id
+						INNER JOIN coach_ligue cl ON cl.id_ligue = l.id
+            LEFT JOIN coach c ON c.id = (SELECT cl2.id_coach FROM coach_ligue cl2 WHERE cl2.id_ligue = cl.id_ligue AND cl2.createur = TRUE)
             LEFT JOIN equipe e ON e.id_ligue = l.id AND e.id_coach = :id
-						WHERE c.id_coach = :id');
+						WHERE cl.id_coach = :id');
 		$q->execute([':id' => $idCoach]);
 
 		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))

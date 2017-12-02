@@ -15,7 +15,7 @@ require_once("vue/commun/enteteflex.php");
       }
     ?>
     <p>Nom <br/>
-      <input type="text" class="width_200px" name="nom" size="40"
+      <input type="text" class="width_200px" name="nom" maxlength="40"
         value="<?php echo htmlspecialchars($creaLigue->nom());?>" disabled/></p>
     <p>Pack Bonus/Malus <br/>
       <select name="bonusMalus" disabled><?php
@@ -68,7 +68,7 @@ require_once("vue/commun/enteteflex.php");
   <div class="formulaire">
     <header>Mon équipe</header>
     <p>Nom *<br/>
-      <input type="text" class="width_200px" name="nomEquipe" size="30" value=<?php
+      <input type="text" class="width_200px" name="nomEquipe" maxlength="30" value=<?php
         echo '"';
         if(isset($equipe))
         {
@@ -76,7 +76,7 @@ require_once("vue/commun/enteteflex.php");
         }
         echo '"', (isset($equipe) && null != $equipe->id() ? ' disabled' : ' enabled');?>/></p>
     <p>Ville *<br/>
-      <input type="text" class="width_200px" name="villeEquipe" size="30" value=<?php
+      <input type="text" class="width_200px" name="villeEquipe" maxlength="30" value=<?php
         echo '"';
         if(isset($equipe))
         {
@@ -84,7 +84,7 @@ require_once("vue/commun/enteteflex.php");
         }
         echo '"', (isset($equipe) && null != $equipe->id() ? ' disabled' : ' enabled');?>/></p>
     <p>Stade *<br/>
-      <input type="text" class="width_200px" name="stadeEquipe" size="30" value=<?php
+      <input type="text" class="width_200px" name="stadeEquipe" maxlength="30" value=<?php
         echo '"';
         if(isset($equipe))
         {

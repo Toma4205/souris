@@ -19,6 +19,9 @@ class Ligue extends ClasseBase
   private $_createur;
   private $_dateValidation;
 
+  // Champs de coach
+  private $_nomCoachCreateur;
+
   // Champs de equipe
   private $_classement;
 
@@ -38,6 +41,7 @@ class Ligue extends ClasseBase
   public function dateCreation() { return $this->_dateCreation; }
   public function createur() { return $this->_createur; }
   public function dateValidation() { return $this->_dateValidation; }
+  public function nomCoachCreateur() { return $this->_nomCoachCreateur; }
   public function classement() { return $this->_classement; }
 
   public function setId($id)
@@ -93,6 +97,11 @@ class Ligue extends ClasseBase
   public function setDate_validation($dateValidation)
   {
       $this->_dateValidation = $dateValidation;
+  }
+
+  public function setNomCoachCreateur($nomCoachCreateur)
+  {
+    $this->_nomCoachCreateur = $nomCoachCreateur;
   }
 
   public function setClassement($classement)

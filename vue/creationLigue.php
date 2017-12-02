@@ -15,7 +15,7 @@ require_once("vue/commun/enteteflex.php");
       }
      ?>
     <p>Nom *<br/>
-      <input type="text" class="width_200px" name="nom" size="40" value=<?php
+      <input type="text" class="width_200px" name="nom" maxlength="40" value=<?php
         echo '"';
         if(isset($creaLigue))
         {

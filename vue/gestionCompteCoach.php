@@ -12,15 +12,15 @@ require_once("vue/commun/enteteflex.php");
       }
     ?>
     <p>Nom Coach<br/>
-      <input type="text" class="width_200px" name="nom" size="40" value="<?php
+      <input type="text" class="width_200px" name="nom" maxlength="40" value="<?php
         echo $coach->nom();
         ?>" /></p>
     <p>Mail <br/>
-      <input type="email" class="width_200px" name="mail" size="50" value="<?php
+      <input type="email" class="width_200px" name="mail" maxlength="50" value="<?php
         echo $coach->mail();
         ?>" /></p>
     <p>Code Postal <br/>
-      <input type="text" class="width_200px" name="codePostal" size="5" value="<?php
+      <input type="text" class="width_200px" name="codePostal" maxlength="5" value="<?php
         echo $coach->codePostal();
         ?>" /></p>
     <input type="submit" value="Mettre à jour" name="majCompte" class="marginBottom" />

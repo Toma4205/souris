@@ -25,6 +25,21 @@ class CalendrierLigueManager extends ManagerBase
       return new CalendrierLigue($donnees);
   }
 
+  public function findProchaineJourneeByCalReel($idEquipe, $numJournee)
+  {
+      $q = $this->_bdd->prepare('SELECT c.*, dom.nom as nomEquipeDom, ext.nom as nomEquipeExt
+        FROM calendrier_ligue c
+        JOIN equipe dom ON dom.id = c.id_equipe_dom
+        JOIN equipe ext ON ext.id = c.id_equipe_ext
+        WHERE (c.id_equipe_dom = :idEquipe OR c.id_equipe_ext = :idEquipe)
+        AND c.num_journee_cal_reel = :cal');
+      $q->execute([':idEquipe' => $idEquipe, ':cal' => $numJournee]);
+      $donnees = $q->fetch(PDO::FETCH_ASSOC);
+      $q->closeCursor();
+
+      return new CalendrierLigue($donnees);
+  }
+
   public function findCalendrierByLigue($idLigue)
   {
       $equipes = [];
@@ -46,7 +61,7 @@ class CalendrierLigueManager extends ManagerBase
       return $equipes;
   }
 
-  public function calculerCalendrier($idLigue, $tabIdEquipe) {
+  public function calculerCalendrier($idLigue, $tabIdEquipe, $numJourneeCalReel) {
       $nbEquipe = sizeof($tabIdEquipe);
 
       // Si impair, on ajoute un ghost
@@ -114,24 +129,29 @@ class CalendrierLigueManager extends ManagerBase
           foreach ($tabJournees[$i] as $match) {
               $equipes = explode('v', $match);
 
-              $q = $this->_bdd->prepare('INSERT INTO calendrier_ligue(id_ligue, id_equipe_dom, id_equipe_ext, num_journee)
-                VALUES(:idLigue, :idEquipeDom, :idEquipeExt, :journee)');
+              $q = $this->_bdd->prepare('INSERT INTO calendrier_ligue(id_ligue, id_equipe_dom, id_equipe_ext,
+                num_journee, num_journee_cal_reel)
+                VALUES(:idLigue, :idEquipeDom, :idEquipeExt, :journee, :calReel)');
               $q->bindValue(':idLigue', $idLigue);
               $q->bindValue(':idEquipeDom', $equipes[0]);
               $q->bindValue(':idEquipeExt', $equipes[1]);
               $q->bindValue(':journee', ($i + 1));
+              $q->bindValue(':calReel', $numJourneeCalReel);
 
               $q->execute();
 
-              $q = $this->_bdd->prepare('INSERT INTO calendrier_ligue(id_ligue, id_equipe_dom, id_equipe_ext, num_journee)
-                VALUES(:idLigue, :idEquipeDom, :idEquipeExt, :journeeRetour)');
+              $q = $this->_bdd->prepare('INSERT INTO calendrier_ligue(id_ligue, id_equipe_dom, id_equipe_ext,
+                num_journee, num_journee_cal_reel)
+                VALUES(:idLigue, :idEquipeDom, :idEquipeExt, :journeeRetour, :calReel)');
               $q->bindValue(':idLigue', $idLigue);
               $q->bindValue(':idEquipeDom', $equipes[1]);
               $q->bindValue(':idEquipeExt', $equipes[0]);
               $q->bindValue(':journeeRetour', ($i + $nbEquipe));
+              $q->bindValue(':calReel', ($numJourneeCalReel + ($nbEquipe - 1)));
 
               $q->execute();
           }
+          $numJourneeCalReel++;
       }
   }
 

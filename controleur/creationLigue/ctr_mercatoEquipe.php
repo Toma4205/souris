@@ -49,15 +49,26 @@ elseif (isset($_POST['clotureMercato']))
   {
     // Création calendrier
     $tabIdEquipe = $equipeManager->findIdEquipeByLigue($creaLigue->id());
-    $calLigueManager = new CalendrierLigueManager($bdd);
-    $calLigueManager->calculerCalendrier($creaLigue->id(), $tabIdEquipe);
 
-    // Maj état ligue MERCATO => EN_COURS
-    $ligueManager->mettreAJourEtatLigue(EtatLigue::EN_COURS, $creaLigue->id());
+    $calReelManager = new CalendrierReelManager($bdd);
+    $calReel = $calReelManager->findProchaineJournee();
 
-    $_SESSION[ConstantesSession::LIGUE] = $ligueManager->findLigueById($creaLigue->id());
-    // Redirection du visiteur vers la page d'accueil
-    header('Location: index.php?section=equipe');
+    // TODO Voir comment gérer ce cas
+    if ($calReel->numJournee() != null && ($calReel->numJournee() + (sizeof($tabIdEquipe) - 1) * 2))
+    {
+      $calLigueManager = new CalendrierLigueManager($bdd);
+      $calLigueManager->calculerCalendrier($creaLigue->id(), $tabIdEquipe, $calReel->numJournee());
+
+      // Maj état ligue MERCATO => EN_COURS
+      $ligueManager->mettreAJourEtatLigue(EtatLigue::EN_COURS, $creaLigue->id());
+
+      $_SESSION[ConstantesSession::LIGUE] = $ligueManager->findLigueById($creaLigue->id());
+      // Redirection du visiteur vers la page d'accueil
+      header('Location: index.php?section=equipe');
+    }
+    else {
+      echo 'TODO : plus assez de journées pour compléter le calendrier de la ligue !!';
+    }
   }
   elseif ($joueurEquipeManager->isTourMercatoTermine($creaLigue->id(), $tourMercato))
   {

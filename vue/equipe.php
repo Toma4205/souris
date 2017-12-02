@@ -38,7 +38,7 @@ function afficherContenuSelectRempl($numPosition, $gb, $def, $mil, $att, $tabCom
   echo $contenu;
 }
 
-function afficherContenuSelectRentrant($numRempl, $gb, $def, $mil, $att, $tabRempl, $tabRentrant)
+function afficherContenuSelectRentrant($numRempl, $def, $mil, $att, $tabRempl, $tabRentrant)
 {
   $contenu = '<select name="rentrant_' . $numRempl . '" class="selectChoixJoueur" onchange="javascript:onSelectionRentrant(\''. $numRempl . '\');">';
   if (isset($tabRentrant[$numRempl]) && $tabRentrant[$numRempl] == -1) {
@@ -47,7 +47,6 @@ function afficherContenuSelectRentrant($numRempl, $gb, $def, $mil, $att, $tabRem
     $contenu .= '<option value="-1">...</option>';
   }
 
-  $contenu .= ajouterOptionRentrant($numRempl, $gb, $tabRempl, $tabRentrant);
   $contenu .= ajouterOptionRentrant($numRempl, $def, $tabRempl, $tabRentrant);
   $contenu .= ajouterOptionRentrant($numRempl, $mil, $tabRempl, $tabRentrant);
   $contenu .= ajouterOptionRentrant($numRempl, $att, $tabRempl, $tabRentrant);
@@ -56,7 +55,7 @@ function afficherContenuSelectRentrant($numRempl, $gb, $def, $mil, $att, $tabRem
   echo $contenu;
 }
 
-function afficherContenuSelectSortant($numRempl, $gb, $def, $mil, $att, $tabTitu, $tabRrentrant, $tabSortant)
+function afficherContenuSelectSortant($numRempl, $def, $mil, $att, $tabTitu, $tabRrentrant, $tabSortant)
 {
   $contenu = '<select name="sortant_' . $numRempl . '" class="selectChoixJoueur" onchange="javascript:onSelectionSortant(\''. $numRempl . '\');">';
   if (isset($tabSortant[$numRempl]) && $tabSortant[$numRempl] == -1) {
@@ -65,7 +64,6 @@ function afficherContenuSelectSortant($numRempl, $gb, $def, $mil, $att, $tabTitu
     $contenu .= '<option value="-1">...</option>';
   }
 
-  $contenu .= ajouterOptionSortant($numRempl, $gb, $tabTitu, $tabRrentrant, $tabSortant);
   $contenu .= ajouterOptionSortant($numRempl, $def, $tabTitu, $tabRrentrant, $tabSortant);
   $contenu .= ajouterOptionSortant($numRempl, $mil, $tabTitu, $tabRrentrant, $tabSortant);
   $contenu .= ajouterOptionSortant($numRempl, $att, $tabTitu, $tabRrentrant, $tabSortant);
@@ -202,7 +200,7 @@ if (isset($calReel))
       <?php
         if (isset($nomenclTactique))
         {
-          echo '<select name="choixTactique" class="selectChoixTactiqueBonus" onchange="javascript:submitForm();">';
+          echo '<select name="choixTactique" class="selectChoixTactique" onchange="javascript:submitForm();">';
 
           if ($ligue->modeExpert() == TRUE)
           {
@@ -253,7 +251,7 @@ if (isset($calReel))
     </div>
     <div class="conteneurColumn">
       <p>Capitaine</p>
-      <select name="choixCapitaine">
+      <select name="choixCapitaine" class="selectChoixCapitaine">
           <option value="-1">...</option>
           <?php
             for ($i = 1; $i <= 11; $i++)
@@ -269,8 +267,48 @@ if (isset($calReel))
     </div>
     <div class="conteneurColumn">
       <p>Bonus/Malus</p>
-      <select name="choixBonus" class="selectChoixTactiqueBonus">
+      <select name="choixBonus" class="selectChoixBonus" onchange="javascript:onSelectionBonusMalus('choixBonus')">
         <option value="-1">A venir...</option>
+        <?php
+          if (isset($bonusMalus))
+          {
+            foreach($bonusMalus as $value)
+            {
+              if ($compoEquipe->codeBonusMalus() == $value->code()) {
+                echo '<option value="' . $value->code() . '" selected="selected">' . $value->libelle() . '</option>';
+              }
+              else {
+                echo '<option value="' . $value->code() . '">' . $value->libelle() . '</option>';
+              }
+            }
+          }
+         ?>
+      </select>
+      <select name="choixJoueurBonus" class="selectChoixJoueurBonus">
+          <option value="-1">...</option>
+          <?php
+            for ($i = 1; $i <= 11; $i++)
+            {
+              if ($joueurBonus == $i) {
+                echo '<option value="' . $i . '" selected="selected">N° ' . $i . '</option>';
+              } else {
+                echo '<option value="' . $i . '">N° ' . $i . '</option>';
+              }
+            }
+           ?>
+      </select>
+      <select name="choixMiTempsBonus" class="selectChoixMiTempsBonus">
+          <option value="-1">...</option>
+          <?php
+            for ($i = 1; $i <= 2; $i++)
+            {
+              if ($miTempsBonus == $i) {
+                echo '<option value="' . $i . '" selected="selected">Mi-Temps ' . $i . '</option>';
+              } else {
+                echo '<option value="' . $i . '">Mi-Temps ' . $i . '</option>';
+              }
+            }
+           ?>
       </select>
     </div>
   </div>
@@ -373,18 +411,18 @@ if (isset($calReel))
           echo '<div class="conteneurRow padding_bottom_15px">';
 
           echo '<div>';
-          afficherContenuSelectRentrant($numRemplacement, $gb, $def, $mil, $att, $tabRempl, $tabRentrant);
+          afficherContenuSelectRentrant($numRemplacement, $def, $mil, $att, $tabRempl, $tabRentrant);
           echo '</div>';
           echo '<p class="signeRemplacement"> > </p>';
           echo '<div>';
-          afficherContenuSelectSortant($numRemplacement, $gb, $def, $mil, $att, $tabTitu, $tabRentrant, $tabSortant);
+          afficherContenuSelectSortant($numRemplacement, $def, $mil, $att, $tabTitu, $tabRentrant, $tabSortant);
 
           $value = '';
           if (isset($tabNote[$numRemplacement])) {
             $value = 'value="' . $tabNote[$numRemplacement] . '" ';
           }
           echo '<input class="width_20px margin_left_5px" type="text" name="note_' . $numRemplacement . '"
-            onchange="javascript:verifierNote(' . $numRemplacement . ');" size="3" ' . $value . '/>';
+            onchange="javascript:verifierNote(' . $numRemplacement . ');" maxlength="3" ' . $value . '/>';
           echo '</div>';
           echo '</div>';
         }

@@ -10,7 +10,7 @@ require_once("vue/commun/enteteflex.php");
         echo '<span class="erreur">' . $message . '</span>';
       }
      ?>
-    <p>Nom <input type="text" size="40" name="nomCoach" value="<?php
+    <p>Nom <input type="text" maxlength="40" name="nomCoach" value="<?php
               if(isset($_POST['nomCoach']))
               {
                 echo htmlspecialchars($_POST['nomCoach']);

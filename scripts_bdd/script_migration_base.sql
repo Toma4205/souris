@@ -7,3 +7,4 @@ ALTER TABLE `joueur_compo_equipe` CHANGE `numero_remplacant` `id_joueur_reel_rem
 ALTER TABLE `joueur_compo_equipe` ADD FOREIGN KEY (`id_joueur_reel_remplacant`) REFERENCES `joueur_reel`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `joueur_compo_equipe` ADD `nb_but_reel` TINYINT(3) UNSIGNED AFTER `note`;
 ALTER TABLE `joueur_compo_equipe` ADD `nb_but_virtuel` TINYINT(3) UNSIGNED AFTER `nb_but_reel`;
+ALTER TABLE `joueur_compo_equipe` ADD `numero_remplacement` TINYINT(3) UNSIGNED AFTER `id_joueur_reel_remplacant`;

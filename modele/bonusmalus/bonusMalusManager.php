@@ -9,6 +9,27 @@ class BonusMalusManager extends ManagerBase
     $this->setDb($bdd);
   }
 
+  public function findBonusMalusByEquipe($idEquipe)
+  {
+    $bonusMalus = [];
+    $q = $this->_bdd->prepare('SELECT DISTINCT(b.code), n.libelle as libelle
+      FROM bonus_malus b
+      JOIN nomenclature_bonus_malus n ON n.code = b.code
+      WHERE b.id_equipe = :idEquipe
+      AND b.id_cal_ligue IS NULL
+      ORDER BY libelle DESC');
+    $q->execute([':idEquipe' => $idEquipe]);
+
+    while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+    {
+      $bonusMalus[] = new BonusMalus($donnees);
+    }
+
+    $q->closeCursor();
+
+    return $bonusMalus;
+  }
+
   public function creerBonusMalusEquipe($idEquipe, $bonusMalus, int $nbEquipe)
   {
     $bonus = [];

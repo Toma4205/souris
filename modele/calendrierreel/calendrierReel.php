@@ -18,7 +18,7 @@ class CalendrierReel extends ClasseBase
 
   public function setNum_journee($numJournee)
   {
-      $this->_numJournee = $numJournee;
+      $this->_numJournee = (int) $numJournee;
   }
 
   public function setDate_heure_debut($dateHeureDebut)

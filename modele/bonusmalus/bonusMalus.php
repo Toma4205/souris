@@ -57,15 +57,5 @@ class BonusMalus extends ClasseBase
   {
       $this->_libelle = $libelle;
   }
-
-  public function setNomEquipeDom($nomEquipeDom)
-  {
-      $this->_nomEquipeDom = $nomEquipeDom;
-  }
-
-  public function setNomEquipeExt($nomEquipeExt)
-  {
-      $this->_nomEquipeExt = $nomEquipeExt;
-  }
 }
 ?>

@@ -35,9 +35,6 @@ section header {
   color: #141b4D;
   margin: 1em 0;
 }
-input[type="text"]:focus {
-  border:1px solid green;
-}
 input[type="submit"] {
   background: #919699;
   background-image: -webkit-linear-gradient(top, #919699, #bec7cc);
@@ -276,6 +273,12 @@ p.colonne {
 }
 
 /* COMPTE COACH */
+#sectionMesActions p {
+  text-align: left;
+  padding: 5px;
+  border-bottom:solid thin #141b4D;
+}
+
 #sectionMesLigues table tbody tr td:nth-child(1) {
   text-align: left;
 }
@@ -313,14 +316,23 @@ p.colonne {
   font-size: 20px;
   font-weight: bold;
 }
-.selectChoixTactiqueBonus {
+.selectChoixTactique {
   width: 100px;
   margin: auto;
   margin-bottom: 10px;
 }
-.selectChoixJoueur, .selectChoixJoueurGB, .selectChoixJoueurDEF, .selectChoixJoueurMIL,
-.selectChoixJoueurATT, .selectChoixCapitaine {
+.selectChoixBonus {
+  width: 250px;
+  margin: auto;
+  margin-bottom: 10px;
+}
+.selectChoixJoueur {
   width: 220px;
+}
+.selectChoixCapitaine, .selectChoixJoueurBonus, .selectChoixMiTempsBonus {
+  width: 65px;
+  margin: auto;
+  margin-bottom: 10px;
 }
 .selectChoixJoueurREMPL {
   width: 250px;

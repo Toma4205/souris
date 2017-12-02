@@ -30,6 +30,10 @@ function submitForm() {
   $('#formPrincipal').append($(input)).submit();
 }
 
+function onSelectionBonusMalus(selectName) {
+  
+}
+
 // Appelée lors d'un changement de sélection de titulaire
 function onSelectionTitulaire(selectName) {
   var val = $('select[name="' + selectName + '"]').find(":selected").val();
@@ -161,17 +165,19 @@ function onSelectionSortant(numSortant) {
 
 function verifierNote(numRemplacement) {
   var input = $('#' + DIV_REMPLACEMENT + ' input[name="' + NAME_NOTE + numRemplacement + '"]');
-  var note = parseFloat(input.val().replace(',', '.')) || 0;
+  if (input.val() != '') {
+    var note = parseFloat(input.val().replace(',', '.')) || 0;
 
-  if (note == 0) {
-    if (!input.hasClass('erreurNote')) {
-      input.addClass('erreurNote')
+    if (note == 0) {
+      if (!input.hasClass('erreurNote')) {
+        input.addClass('erreurNote')
+      }
+    } else if (input.hasClass('erreurNote')) {
+      input.removeClass('erreurNote')
     }
-  } else if (input.hasClass('erreurNote')) {
-    input.removeClass('erreurNote')
-  }
 
-  input.val(note);
+    input.val(note);
+  }
 }
 
 function initTabJoueurSelonPoste(idDiv, tabJoueur) {

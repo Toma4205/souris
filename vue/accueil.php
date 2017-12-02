@@ -12,7 +12,7 @@ require_once("vue/commun/enteteflex.php");
       }
      ?>
     <p>Nom coach<br/>
-        <input type="text" class="width_200px" name="nom" size="40" value="<?php
+        <input type="text" class="width_200px" name="nom" maxlength="40" value="<?php
             if(isset($_POST['nom']))
             {
               echo htmlspecialchars($_POST['nom']);
@@ -35,7 +35,7 @@ require_once("vue/commun/enteteflex.php");
       }
      ?>
     <p>Nom coach<br/>
-        <input type="text" class="width_200px" name="nomCrea" size="40" value="<?php
+        <input type="text" class="width_200px" name="nomCrea" maxlength="40" value="<?php
             if(isset($_POST['nomCrea']))
             {
               echo htmlspecialchars($_POST['nomCrea']);
