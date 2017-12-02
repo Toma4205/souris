@@ -155,7 +155,7 @@ ALTER TABLE `joueur_compo_equipe` ADD FOREIGN KEY (`code_bonus_malus`) REFERENCE
 ALTER TABLE `joueur_compo_equipe` ADD FOREIGN KEY (`id_compo`) REFERENCES `compo_equipe`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `joueur_compo_equipe` ADD FOREIGN KEY (`id_joueur_reel`) REFERENCES `joueur_reel`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-CREATE TABLE `resultatsL1_reel` (
+CREATE TABLE `resultatsl1_reel` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 `journee` INT UNSIGNED NOT NULL,
 `equipeDomicile` VARCHAR(30),
