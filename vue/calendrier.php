@@ -53,7 +53,7 @@ if (isset($calendriers))
         $changementJournee = false;
       }
  ?>
-  <div class="colonnes border_bottom_single <?php if ($changementJournee) echo 'border_top_single'; ?>">
+  <div class="colonnes">
     <div class="colonne width_47pc vertical_align_middle">
       <div class="float_right"><?php echo $value->nomEquipeDom(); ?></div>
     </div>

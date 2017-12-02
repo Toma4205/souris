@@ -10,8 +10,9 @@ class JoueurCompoEquipe extends ClasseBase
   private $_capitaine;
   private $_codeBonusMalus;
   private $_note;
-  private $_numeroRemplacant;
-  private $_noteMin;
+  private $_numeroRemplacement;
+  private $_idJoueurReelRemplacant;
+  private $_noteMinRemplacement;
 
   public function __construct(array $donnees)
   {
@@ -23,8 +24,9 @@ class JoueurCompoEquipe extends ClasseBase
   public function capitaine() { return $this->_capitaine; }
   public function codeBonusMalus() { return $this->_codeBonusMalus; }
   public function note() { return $this->_note; }
-  public function numeroRemplacant() { return $this->_numeroRemplacant; }
-  public function noteMin() { return $this->_noteMin; }
+  public function numeroRemplacement() { return $this->_numeroRemplacement; }
+  public function idJoueurReelRemplacant() { return $this->_idJoueurReelRemplacant; }
+  public function noteMinRemplacement() { return $this->_noteMinRemplacement; }
 
   public function setId_joueur_reel($idJoueurReel)
   {
@@ -51,14 +53,19 @@ class JoueurCompoEquipe extends ClasseBase
       $this->_note = $note;
   }
 
-  public function setNumero_remplacant($numeroRemplacant)
+  public function setNumero_remplacement($numeroRemplacement)
   {
-      $this->_numeroRemplacant = $numeroRemplacant;
+      $this->_numeroRemplacement = $numeroRemplacement;
   }
 
-  public function setNote_min($noteMin)
+  public function setId_joueur_reel_remplacant($idJoueurReelRemplacant)
   {
-      $this->_noteMin = $noteMin;
+      $this->_idJoueurReelRemplacant = $idJoueurReelRemplacant;
+  }
+
+  public function setNote_min_remplacement($noteMinRemplacement)
+  {
+      $this->_noteMinRemplacement = $noteMinRemplacement;
   }
 }
 ?>

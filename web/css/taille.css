@@ -11,6 +11,12 @@
   height: 400px;
 }
 
+.width_20px {
+  width: 20px !important;
+}
+.width_30px {
+  width: 30px !important;
+}
 .width_50px {
   width: 50px !important;
 }

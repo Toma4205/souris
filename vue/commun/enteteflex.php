@@ -27,11 +27,11 @@
               // Si ligue en cours
               if (isset($ligue))
               {
-                echo '<p class="lienBandeau"><a href="index.php?section=compteCoach">Bureau</a> > <span class="nomLigueBandeau">' . $ligue->nom() . '</span></p>';
+                echo '<p class="lienBandeau"><a href="index.php?section=compteCoach">Bureau</a>   >   <span class="nomLigueBandeau">' . $ligue->nom() . '</span></p>';
               }
               elseif (isset($creaLigue) && $creaLigue->etat() == EtatLigue::MERCATO)
               {
-                echo '<p class="lienBandeau"><a href="index.php?section=compteCoach">Bureau</a> > <span class="nomLigueBandeau">' . $creaLigue->nom() . '</span></p>';
+                echo '<p class="lienBandeau"><a href="index.php?section=compteCoach">Bureau</a>   >   <span class="nomLigueBandeau">' . $creaLigue->nom() . '</span></p>';
               } else {
                 echo 'T\'es un homme ou une souris ?';
               }

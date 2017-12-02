@@ -32,8 +32,11 @@ section header {
   font-size: 1.5em;
   font-weight: bold;
   font-variant: small-caps;
-  color: #696969;
+  color: #141b4D;
   margin: 1em 0;
+}
+input[type="text"]:focus {
+  border:1px solid green;
 }
 input[type="submit"] {
   background: #919699;
@@ -85,7 +88,7 @@ div#bandeau_appli_image {
   color: white;
 }
 .lienBandeau a:hover {
-  color: #0000CD;
+  color: #00cdcd;
 }
 .nomLigueBandeau {
   font-size: 25px;
@@ -98,7 +101,7 @@ div#bandeau_appli_image {
   color: white;
 }
 .deconnexion a:hover {
-  color: #0000CD;
+  color: #00cdcd;
 }
 
 nav {
@@ -122,16 +125,16 @@ nav p {
   margin: 0;
 }
 nav p.menuEnCours {
-  color: #0000CD;
-  border-bottom:thick double #0000CD;
+  color: #00cdcd;
+  border-bottom:thick double #00cdcd;
 }
 nav p a {
   text-decoration: none;
-  color: #696969;
+  color: #141b4D;
   vertical-align: middle;
 }
 nav p a:hover {
-  color: #0000CD;
+  color: #00cdcd;
 }
 
 footer#pied_de_page {
@@ -143,7 +146,7 @@ footer#pied_de_page {
 }
 
 .fond {
-  background-color: #C0C0C0;
+  background-color: #898da6;
   padding-top: 20px;
   padding-bottom: 20px;
   padding-left: 5px;
@@ -198,7 +201,7 @@ div#contenu {
   margin-left: 5px;
 }
 .doubleBordureDroite {
-  border-right: thick double #808080;
+  border-right: thick double #141b4D;
 }
 .borderRadiusGauche {
   border-radius: 10px 0 0 10px;
@@ -207,7 +210,7 @@ div#contenu {
   border-radius: 0 10px 10px 0;
 }
 section.avecBordureInf {
-  border-bottom: solid #808080;
+  border-bottom: solid #141b4D;
   margin-bottom: 5px;
 }
 input.marginBottom {
@@ -233,6 +236,10 @@ p.colonne {
     text-align: center; /* Centrage horizontal */
     vertical-align: middle; /* Centrage vertical */
 }
+.normal {
+  font-weight: normal;
+  font-variant: normal;
+}
 .bold {
   font-weight: bold;
 }
@@ -250,6 +257,15 @@ p.colonne {
 }
 .fond_blanc {
   background-color: white !important;
+}
+.sansMarge {
+  margin: 0;
+}
+.padding_bottom_15px {
+  padding-bottom: 15px;
+}
+.margin_left_5px {
+  margin-left: 5px;
 }
 
 /* ACCUEIL */
@@ -290,7 +306,7 @@ p.colonne {
   padding-top: 10px;
 }
 .enteteEquipe {
-  border-bottom: solid #808080;
+  border-bottom: solid #141b4D;
   padding: 5px;
 }
 .heureProchaineJournee {
@@ -302,7 +318,7 @@ p.colonne {
   margin: auto;
   margin-bottom: 10px;
 }
-.selectChoixJoueurGB, .selectChoixJoueurDEF, .selectChoixJoueurMIL,
+.selectChoixJoueur, .selectChoixJoueurGB, .selectChoixJoueurDEF, .selectChoixJoueurMIL,
 .selectChoixJoueurATT, .selectChoixCapitaine {
   width: 220px;
 }
@@ -317,21 +333,27 @@ p.colonne {
   width: 85px;
   display: inline-block;
 }
+.signeRemplacement {
+  margin: 0 5px;
+}
 #rowCompoEquipe {
   padding-bottom: 15px;
 }
-#contenuCompoEquipe p {
+#contenuCompoEquipe p, #remplacant, #divRemplacant p {
   margin: 0;
   padding-top: 5px;
-  text-align: left;
+  font-weight: bold;
 }
-#contenuCompoEquipe div {
-  padding: 5px 5px 5px 5px;
+#contenuCompoEquipe div, #divRemplacant {
+  padding: 5px;
 }
-#titulaire, #remplacant, #capitaine {
-  border-bottom: solid #808080;
+#titulaire, #remplacant, #remplacement, #capitaine {
+  border-bottom: solid #141b4D;
   font-weight: bold;
   font-variant: small-caps;
+}
+#titulaire p {
+  text-align: left;
 }
 
 /* CLASSEMENTS */
@@ -343,7 +365,7 @@ header.menuClassement {
   height: 50px;
   font-size: 16px;
   font-variant: small-caps;
-  color: #696969;
+  color: #141b4D;
 }
 header.menuClassement p {
   padding-left: 10px;
@@ -383,12 +405,6 @@ header.menuClassement p {
 .calendrier_matchs {
   font-weight: bold;
 }
-.border_top_single {
-  border-top: solid #808080;
-}
-.border_bottom_single {
-  border-bottom: solid #808080;
-}
 .vertical_align_middle {
   vertical-align:middle;
 }
@@ -402,13 +418,13 @@ header.menuClassement p {
   width:100%;
 }
 .tableBase th {
-  background-color: #808080;
+  background-color: #141b4D;
+  color: white;
 }
 .tableBase tr {
-  border-bottom: 1px solid #808080;
+  border-bottom: 1px solid #00cdcd;
 }
 .tableBase tr td {
-  border-bottom: 1px solid #808080;
   padding: 3px 0;
 }
 #tableMercato tr td:first-child {
@@ -462,7 +478,7 @@ header.menuClassement p {
   padding: 1px;
 }
 
-.erreurPrix {
+.erreurPrix, .erreurNote {
  border:1px solid red;
 }
 
