@@ -42,6 +42,7 @@ if (isset($_POST['changerTactique']))
 }
 elseif (isset($_POST['enregistrer']))
 {
+  // TODO MPL traiter cas bonus avec impact joueur sans sélection joueur
   $compoEquipe->setCode_tactique($_POST['choixTactique']);
   if ($_POST['choixBonus'] != -1)
   {

@@ -12,7 +12,7 @@ class BonusMalusManager extends ManagerBase
   public function findBonusMalusByEquipe($idEquipe)
   {
     $bonusMalus = [];
-    $q = $this->_bdd->prepare('SELECT DISTINCT(b.code), n.libelle as libelle
+    $q = $this->_bdd->prepare('SELECT DISTINCT(b.code), n.libelle as libelle, n.select_joueur
       FROM bonus_malus b
       JOIN nomenclature_bonus_malus n ON n.code = b.code
       WHERE b.id_equipe = :idEquipe

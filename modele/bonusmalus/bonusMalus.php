@@ -7,6 +7,7 @@ class BonusMalus extends ClasseBase
   // Champs BDD
   private $_id;
   private $_code;
+  private $_selectJoueur;
   private $_idEquipe;
   private $_idCalLigue;
   private $_idJoueurReelEquipe;
@@ -23,6 +24,7 @@ class BonusMalus extends ClasseBase
 
   public function id() { return $this->_id; }
   public function code() { return $this->_code; }
+  public function selectJoueur() { return $this->_selectJoueur; }
   public function idJoueurReelEquipe() { return $this->_idJoueurReelEquipe; }
   public function idJoueurReelAdverse() { return $this->_idJoueurReelAdverse; }
   public function miTemps() { return $this->_miTemps; }
@@ -36,6 +38,11 @@ class BonusMalus extends ClasseBase
   public function setCode($code)
   {
       $this->_code = $code;
+  }
+
+  public function setSelect_joueur($selectJoueur)
+  {
+      $this->_selectJoueur = $selectJoueur;
   }
 
   public function setId_joueur_reel_equipe($idJoueurReelEquipe)

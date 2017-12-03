@@ -284,7 +284,8 @@ if (isset($calReel))
           }
          ?>
       </select>
-      <select name="choixJoueurBonus" class="selectChoixJoueurBonus">
+      <!-- TODO MPL enlever cacher quand mode pack folie -->
+      <select name="choixJoueurBonus" class="selectChoixJoueurBonus cache">
           <option value="-1">...</option>
           <?php
             for ($i = 1; $i <= 11; $i++)
@@ -297,7 +298,8 @@ if (isset($calReel))
             }
            ?>
       </select>
-      <select name="choixMiTempsBonus" class="selectChoixMiTempsBonus">
+      <!-- TODO MPL enlever cacher quand mode pack folie -->
+      <select name="choixMiTempsBonus" class="selectChoixMiTempsBonus cache">
           <option value="-1">...</option>
           <?php
             for ($i = 1; $i <= 2; $i++)

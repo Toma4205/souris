@@ -8,3 +8,6 @@ ALTER TABLE `joueur_compo_equipe` ADD FOREIGN KEY (`id_joueur_reel_remplacant`) 
 ALTER TABLE `joueur_compo_equipe` ADD `nb_but_reel` TINYINT(3) UNSIGNED AFTER `note`;
 ALTER TABLE `joueur_compo_equipe` ADD `nb_but_virtuel` TINYINT(3) UNSIGNED AFTER `nb_but_reel`;
 ALTER TABLE `joueur_compo_equipe` ADD `numero_remplacement` TINYINT(3) UNSIGNED AFTER `id_joueur_reel_remplacant`;
+
+ALTER TABLE `nomenclature_bonus_malus` ADD `select_joueur` BOOLEAN NOT NULL AFTER `libelle`;
+UPDATE `nomenclature_bonus_malus` SET select_joueur = TRUE WHERE code IN ('MAU_CRA', 'BOUCHER', 'CHA_GB', 'PAR_TRU');
