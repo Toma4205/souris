@@ -11,3 +11,5 @@ ALTER TABLE `joueur_compo_equipe` ADD `numero_remplacement` TINYINT(3) UNSIGNED 
 
 ALTER TABLE `nomenclature_bonus_malus` ADD `select_joueur` BOOLEAN NOT NULL AFTER `libelle`;
 UPDATE `nomenclature_bonus_malus` SET select_joueur = TRUE WHERE code IN ('MAU_CRA', 'BOUCHER', 'CHA_GB', 'PAR_TRU');
+
+/* Script passée en "PROD" le 03/12/2017 */
