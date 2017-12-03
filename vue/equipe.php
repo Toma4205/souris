@@ -162,7 +162,7 @@ function ajouterOptionSortant($numPosition, $joueurs, $tabTitu, $tabRrentrant, $
   return $contenu;
 }
 
-if (isset($calReel))
+if (isset($calReel) && $calLigue->id() != null)
 {
 ?>
 <section>

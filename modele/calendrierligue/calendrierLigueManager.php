@@ -37,7 +37,15 @@ class CalendrierLigueManager extends ManagerBase
       $donnees = $q->fetch(PDO::FETCH_ASSOC);
       $q->closeCursor();
 
-      return new CalendrierLigue($donnees);
+      // Si plus de calendrier
+      if (is_bool($donnees))
+      {
+        return new CalendrierLigue([]);
+      }
+      else
+      {
+        return new CalendrierLigue($donnees);
+      }
   }
 
   public function findCalendrierByLigue($idLigue)

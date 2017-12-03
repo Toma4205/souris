@@ -10,7 +10,11 @@ $bonusManager = new BonusMalusManager($bdd);
 
 $calReel = $calReelManager->findProchaineJournee();
 $equipe = $equipeManager->findEquipeByCoachEtLigue($coach->id(), $ligue->id());
-$calLigue = $calLigueManager->findProchaineJourneeByCalReel($equipe->id(), $calReel->numJournee());
+$calLigue = new CalendrierLigue([]);
+if ($calReel->numJournee() != null)
+{
+  $calLigue = $calLigueManager->findProchaineJourneeByCalReel($equipe->id(), $calReel->numJournee());
+}
 
 $compoEquipe = new CompoEquipe([]);
 $tabCompo = [];
@@ -99,7 +103,7 @@ elseif (isset($_POST['enregistrer']))
   $joueurBonus = $_POST["choixJoueurBonus"];
   $miTempsBonus = $_POST["choixMiTempsBonus"];
 }
-else
+elseif ($calLigue->id() != null)
 {
   $compoEquipe = $compoEquipeManager->findCompoByEquipeEtCalLigue($equipe->id(), $calLigue->id());
   if ($compoEquipe == null)
@@ -129,35 +133,37 @@ else
   }
 }
 
-$bonusMalus = $bonusManager->findBonusMalusByEquipe($equipe->id());
-$nomenclTactique = $nomenclManager->findNomenclatureTactiqueSelonMode($ligue->modeExpert());
-$joueurs = $joueurEquipeManager->findByEquipe($equipe->id());
-if (isset($joueurs))
+if ($calLigue->id() != null)
 {
-  $gb = [];
-  $def = [];
-  $mil = [];
-  $att = [];
-
-  foreach($joueurs as $joueur)
+  $bonusMalus = $bonusManager->findBonusMalusByEquipe($equipe->id());
+  $nomenclTactique = $nomenclManager->findNomenclatureTactiqueSelonMode($ligue->modeExpert());
+  $joueurs = $joueurEquipeManager->findByEquipe($equipe->id());
+  if (isset($joueurs))
   {
-    if ($joueur->position() == ConstantesAppli::GARDIEN)
+    $gb = [];
+    $def = [];
+    $mil = [];
+    $att = [];
+
+    foreach($joueurs as $joueur)
     {
-      $gb[] = $joueur;
-    } elseif ($joueur->position() == ConstantesAppli::DEFENSEUR)
-    {
-      $def[] = $joueur;
-    } elseif ($joueur->position() == ConstantesAppli::MILIEU)
-    {
-      $mil[] = $joueur;
-    } elseif ($joueur->position() == ConstantesAppli::ATTAQUANT)
-    {
-      $att[] = $joueur;
+      if ($joueur->position() == ConstantesAppli::GARDIEN)
+      {
+        $gb[] = $joueur;
+      } elseif ($joueur->position() == ConstantesAppli::DEFENSEUR)
+      {
+        $def[] = $joueur;
+      } elseif ($joueur->position() == ConstantesAppli::MILIEU)
+      {
+        $mil[] = $joueur;
+      } elseif ($joueur->position() == ConstantesAppli::ATTAQUANT)
+      {
+        $att[] = $joueur;
+      }
     }
   }
+  $choixTactique = $nomenclManager->findNomenclatureTactiqueByCode($compoEquipe->codeTactique());
 }
-
-$choixTactique = $nomenclManager->findNomenclatureTactiqueByCode($compoEquipe->codeTactique());
 
 include_once('vue/equipe.php');
 ?>

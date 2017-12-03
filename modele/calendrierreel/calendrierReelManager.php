@@ -18,6 +18,14 @@ class CalendrierReelManager extends ManagerBase
       $donnees = $q->fetch(PDO::FETCH_ASSOC);
       $q->closeCursor();
 
-      return new CalendrierReel($donnees);
+      // Si plus de calendrier
+      if (is_bool($donnees))
+      {
+        return new CalendrierReel([]);
+      }
+      else
+      {
+        return new CalendrierReel($donnees);
+      }
   }
 }
