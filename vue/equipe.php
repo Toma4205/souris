@@ -219,13 +219,13 @@ if (isset($calReel) && $calLigue->id() != null)
           else
           {
             $tactiqueSelect = '';
+            $optionSelect = '';
             foreach ($nomenclTactique as $cle => $value)
             {
-              $tactique = $value->nbDef() . '-' . $value->nbMil() . '-' . $value->nbAtt();
               if($compoEquipe->codeTactique() == $value->code())
               {
-                $tactiqueSelect = $tactique;
-                echo '<option value="' . $value->code() . '" selected="selected">' . $tactique . '</option>';
+                $tactiqueSelect = $value->nbDef() . '-' . $value->nbMil() . '-' . $value->nbAtt();
+                $optionSelect = '<option value="' . $value->code() . '" selected="selected">' . $tactiqueSelect . '</option>';
               }
             }
 
@@ -233,10 +233,17 @@ if (isset($calReel) && $calLigue->id() != null)
             foreach ($nomenclTactique as $cle => $value)
             {
               $tactique = $value->nbDef() . '-' . $value->nbMil() . '-' . $value->nbAtt();
-              if ($tactique != $tactiquePrecedente && $tactique != $tactiqueSelect)
+              if ($tactique != $tactiquePrecedente)
               {
                 $tactiquePrecedente = $tactique;
-                echo '<option value="' . $value->code() . '">' . $tactique . '</option>';
+                if ($tactique != $tactiqueSelect)
+                {
+                  echo '<option value="' . $value->code() . '">' . $tactique . '</option>';
+                }
+                else
+                {
+                  echo $optionSelect;
+                }
               }
             }
           }
