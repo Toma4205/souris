@@ -160,6 +160,7 @@ ALTER TABLE `joueur_compo_equipe` ADD FOREIGN KEY (`code_bonus_malus`) REFERENCE
 ALTER TABLE `joueur_compo_equipe` ADD FOREIGN KEY (`id_compo`) REFERENCES `compo_equipe`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `joueur_compo_equipe` ADD FOREIGN KEY (`id_joueur_reel`) REFERENCES `joueur_reel`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `joueur_compo_equipe` ADD FOREIGN KEY (`id_joueur_reel_remplacant`) REFERENCES `joueur_reel`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `joueur_compo_equipe` ADD `numero_definitif` TINYINT(3) UNSIGNED NULL DEFAULT NULL AFTER `note_min_remplacement`;
 
 CREATE TABLE `resultatsl1_reel` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
