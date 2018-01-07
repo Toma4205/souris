@@ -36,11 +36,16 @@ function onSelectionBonusMalus(selectName) {
   if (val == 'MAU_CRA' || val == 'BOUCHER') {
     // Affichage joueur adv
     cacherAfficherSelectByName('choixJoueurAdvBonus', false);
-    cacherAfficherSelectByName('choixJoueurBonus', true);
     cacherAfficherSelectByName('choixMiTempsBonus', true);
 
-    $('select[name="choixJoueurBonus"]').val(-1);
     $('select[name="choixMiTempsBonus"]').val(-1);
+
+    if (val == 'BOUCHER') {
+      cacherAfficherSelectByName('choixJoueurBonus', false);
+    } else {
+      cacherAfficherSelectByName('choixJoueurBonus', true);
+      $('select[name="choixJoueurBonus"]').val(-1);
+    }
   } else if (val == 'CHA_GB' || val == 'PAR_TRU' || val == 'FAM_STA') {
     // Affichage joueur equipe
     cacherAfficherSelectByName('choixJoueurBonus', false);

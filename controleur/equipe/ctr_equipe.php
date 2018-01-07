@@ -129,12 +129,9 @@ elseif ($calLigue->id() != null)
   {
     $bonus = $bonusManager->findBonusMalusByEquipeEtCalLigue($equipe->id(), $calLigue->id());
     if ($bonus != null) {
-      echo 'bonus: ' . $bonus->idJoueurReelEquipe() . ' - ' . $bonus->idJoueurReelAdverse() . ' - ' . $bonus->miTemps();
       $joueurBonus = $bonus->idJoueurReelEquipe();
       $joueurAdvBonus = $bonus->idJoueurReelAdverse();
       $miTempsBonus = $bonus->miTemps();
-    } else {
-      echo 'bonus null !';
     }
 
     $joueursCompo = $compoEquipeManager->findJoueurCompoByCompo($compoEquipe->id());
