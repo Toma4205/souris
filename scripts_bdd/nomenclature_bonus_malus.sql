@@ -2,7 +2,7 @@ INSERT INTO `nomenclature_bonus_malus`(`code`, `libelle`, `select_joueur`, `date
 ('SEL_TRI','La Dech\' est dans les tribunes (+0.5 aux français)', FALSE ,'2017-01-01'),
 ('FUMIGENE','Les stadiers étaient au café. Résultat, des fumigènes viennent gêner le gardien adverse (-1 note GB)', FALSE ,'2017-01-01'),
 ('DIN_ARB','Un petit dîner avec l\'arbitre la veille et il oubliera de compter le premier but adverse (-1 but)', FALSE ,'2017-01-01'),
-('FAM_STA','Quand sa famille est au stade, on se donne à fond (note de +1 pour un joueur)', FALSE ,'2017-01-01'),
+('FAM_STA','Quand sa famille est au stade, on se donne à fond (note de +1 pour un joueur)', TRUE ,'2017-01-01'),
 ('BUS','Le FCN de Claudio t\'inspire ! (pas de but virtuel)', FALSE ,'2017-01-01'),
 ('MAU_CRA','Tu vires discrètement les crampons d\'un adversaire (note de -1 pour un joueur)', TRUE ,'2017-01-01'),
 ('BOUCHER','Réincarnation de Canto sur le terrain ! Ton joueur prend un rouge et tu blesses un adversaire (les 2 joueurs ont 0)', TRUE ,'2017-01-01'),

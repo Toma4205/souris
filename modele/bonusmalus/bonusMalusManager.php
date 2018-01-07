@@ -9,16 +9,16 @@ class BonusMalusManager extends ManagerBase
     $this->setDb($bdd);
   }
 
-  public function findBonusMalusByEquipe($idEquipe)
+  public function findBonusMalusByEquipe($idEquipe, $idCalLigue)
   {
     $bonusMalus = [];
     $q = $this->_bdd->prepare('SELECT DISTINCT(b.code), n.libelle as libelle, n.select_joueur
       FROM bonus_malus b
       JOIN nomenclature_bonus_malus n ON n.code = b.code
       WHERE b.id_equipe = :idEquipe
-      AND b.id_cal_ligue IS NULL
+      AND (b.id_cal_ligue IS NULL OR b.id_cal_ligue = :idCalLigue)
       ORDER BY libelle DESC');
-    $q->execute([':idEquipe' => $idEquipe]);
+    $q->execute([':idEquipe' => $idEquipe, 'idCalLigue' => $idCalLigue]);
 
     while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
     {
@@ -28,6 +28,28 @@ class BonusMalusManager extends ManagerBase
     $q->closeCursor();
 
     return $bonusMalus;
+  }
+
+  public function findBonusMalusByEquipeEtCalLigue($idEquipe, $idCalLigue)
+  {
+    $q = $this->_bdd->prepare('SELECT b.*, n.libelle as libelle, n.select_joueur
+      FROM bonus_malus b
+      JOIN nomenclature_bonus_malus n ON n.code = b.code
+      WHERE b.id_equipe = :idEquipe
+      AND b.id_cal_ligue = :idCalLigue');
+    $q->execute([':idEquipe' => $idEquipe, ':idCalLigue' => $idCalLigue]);
+    $donnees = $q->fetch(PDO::FETCH_ASSOC);
+    $q->closeCursor();
+
+    // Si le bonusMalus n'est pas trouvé
+    if (is_bool($donnees))
+    {
+      return null;
+    }
+    else
+    {
+      return new BonusMalus($donnees);
+    }
   }
 
   public function creerBonusMalusEquipe($idEquipe, $bonusMalus, int $nbEquipe)
@@ -66,4 +88,36 @@ class BonusMalusManager extends ManagerBase
       }
     }
   }
+
+  public function creerOuMajBonusMalusCompoEquipe(BonusMalus $bonus, $idEquipe, $idCalLigue)
+  {
+    // Réinitialisation éventuelle d'un bonusMalus déjà enregistré
+    $q = $this->_bdd->prepare('UPDATE bonus_malus SET id_cal_ligue = NULL,
+      id_joueur_reel_equipe = NULL, id_joueur_reel_adverse = NULL, mi_temps = NULL
+      WHERE id_cal_ligue = :calLigue AND id_equipe = :equipe');
+    $q->bindValue(':calLigue', $idCalLigue);
+    $q->bindValue(':equipe', $idEquipe);
+    $q->execute();
+
+    // Sélection de l'id du bonusMalus à mettre à jour
+    $q = $this->_bdd->prepare('SELECT * FROM bonus_malus
+      WHERE code = :code AND id_equipe = :equipe AND id_cal_ligue IS NULL LIMIT 1');
+    $q->execute([':code' => $bonus->code(), ':equipe' => $idEquipe]);
+    $donnees = $q->fetch(PDO::FETCH_ASSOC);
+    $q->closeCursor();
+
+    $bonusBase = new BonusMalus($donnees);
+
+    // Mise à jour du bonusMalus en BDD
+    $q = $this->_bdd->prepare('UPDATE bonus_malus SET id_cal_ligue = :calLigue,
+      id_joueur_reel_equipe = :idJoueurEquipe, id_joueur_reel_adverse = :idJoueurAdv,
+      mi_temps = :miTemps
+      WHERE id = :id');
+    $q->bindValue(':calLigue', $idCalLigue);
+    $q->bindValue(':idJoueurEquipe', $bonus->idJoueurReelEquipe());
+    $q->bindValue(':idJoueurAdv', $bonus->idJoueurReelAdverse());
+    $q->bindValue(':miTemps', $bonus->miTemps());
+    $q->bindValue(':id', $bonusBase->id());
+    $q->execute();
+	}
 }
