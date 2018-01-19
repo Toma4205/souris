@@ -354,7 +354,7 @@
 		while ($donneesEffectifNonRemplace = $req_effectif_nonRemplace->fetch())
 		{
 			$estRemplace = 0;
-			$req_remplacant->execute(array('num_journee_cal_reel' => 17, 'id_ligue' => $constanteConfrontationLigue, 'id_equipe' => $donneesEffectifNonRemplace['id_equipe']));
+			$req_remplacant->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue, 'id_equipe' => $donneesEffectifNonRemplace['id_equipe']));
 			$lignesRemplacant = $req_remplacant->fetchAll();
 			if (count($lignesRemplacant) == 0) {
 				//Aucun remplaçant, le joueur reste dans la compo
@@ -423,7 +423,7 @@
 		while ($donneesAttaquantNonRemplace = $req_attaquant_nonRemplace->fetch())
 		{
 			$estRemplace = 0;
-			$req_remplacant->execute(array('num_journee_cal_reel' => 17, 'id_ligue' => $constanteConfrontationLigue, 'id_equipe' => $donneesAttaquantNonRemplace['id_equipe']));
+			$req_remplacant->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue, 'id_equipe' => $donneesAttaquantNonRemplace['id_equipe']));
 			$lignesRemplacant = $req_remplacant->fetchAll();
 			if (count($lignesRemplacant) == 0) {
 				//Aucun remplaçant, le joueur reste dans la compo
