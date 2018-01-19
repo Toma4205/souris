@@ -2,13 +2,13 @@
 <body>
 	<h1>Page Administrateur</h1>
 		<p>
-			<a class="bouton" href="#titreImportCSV">Importer les statistiques des joueurs à partir du CSV</a>
+			<a class="bouton" href="#titreScrapValeur">Vérification Prix des Joueurs</a>
 		</p>
 		<p>
-			<a class="bouton" href="#titreScrapValeur">Scrap des valeurs des joueurs</a>
+			<a class="bouton" href="#titreMAJResultatsEquipe">Mettre à jour les résultats des équipes</a>
 		</p> 
 		<p>
-			<a class="bouton" href="#titreMAJResultatsEquipe">Mettre à jour les résultats des équipes</a>
+			<a class="bouton" href="#titreImportCSV">Importer les statistiques des joueurs à partir du CSV</a>
 		</p> 
 		<p>
 			<a class="bouton" href="#titreCalculDesNotes">Calcul des notes</a>
@@ -17,15 +17,8 @@
 			<a class="bouton" href="#titreCalculerLesConfrontations">Calculer les Confrontations</a>
 		</p>
 	
-	<h2 id="titreImportCSV">Importer les statistiques des joueurs à partir du CSV</h2>
-	<form method="post" id="importCSV" action="admin/importJourneeBDD.php" enctype="multipart/form-data">
-		 <label for="mon_fichier">Fichier Stat à Importer (format csv | max. 1 Mo) :</label><br />
-		 <label for="mon_fichier">(fichier brut Rotowire nommé AAAAJJ (exemple 201714 pour la saison 2017/2018 et la journée 14)</label><br />
-		 <input type="file" name="mon_fichier" id="mon_fichier" /><br />
-		 <input type="submit" name="submit" value="Importer" />
-	</form>
 	
-	<h2 id="titreScrapValeur">Scrap des valeurs des joueurs</h2>
+	<h2 id="titreScrapValeur">Vérification Prix des Joueurs</h2>
 	<form method="post" id="scrapValeur" action="admin/valeursJoueurs.php" enctype="multipart/form-data">
 		 <input type="submit" name="submit" value="Etudier les valeurs" />
 	</form>
@@ -276,6 +269,14 @@
 		?>
 	</tbody>
 	</table>
+	
+	<h2 id="titreImportCSV">Importer les statistiques des joueurs à partir du CSV</h2>
+	<form method="post" id="importCSV" action="admin/importJourneeBDD.php" enctype="multipart/form-data">
+		 <label for="mon_fichier">Fichier Stat à Importer (format csv | max. 1 Mo) :</label><br />
+		 <label for="mon_fichier">(fichier brut Rotowire nommé AAAAJJ (exemple 201714 pour la saison 2017/2018 et la journée 14)</label><br />
+		 <input type="file" name="mon_fichier" id="mon_fichier" /><br />
+		 <input type="submit" name="submit" value="Importer" />
+	</form>
 	
 	<h2 id="titreCalculDesNotes">Calcul des notes des joueurs</h2>
 	<?php 
