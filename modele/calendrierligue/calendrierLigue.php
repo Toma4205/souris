@@ -6,6 +6,8 @@ class CalendrierLigue extends ClasseBase
 {
   // Champs BDD
   private $_id;
+  private $_idEquipeDom;
+  private $_idEquipeExt;
   private $_numJournee;
   private $_scoreDom;
   private $_scoreExt;
@@ -20,6 +22,8 @@ class CalendrierLigue extends ClasseBase
   }
 
   public function id() { return $this->_id; }
+  public function idEquipeDom() { return $this->_idEquipeDom; }
+  public function idEquipeExt() { return $this->_idEquipeExt; }
   public function numJournee() { return $this->_numJournee; }
   public function scoreDom() { return $this->_scoreDom; }
   public function scoreExt() { return $this->_scoreExt; }
@@ -29,6 +33,16 @@ class CalendrierLigue extends ClasseBase
   public function setId($id)
   {
     $this->_id = $id;
+  }
+
+  public function setId_equipe_dom($id)
+  {
+    $this->_idEquipeDom = $id;
+  }
+
+  public function setId_equipe_ext($id)
+  {
+    $this->_idEquipeExt = $id;
   }
 
   public function setNum_journee($numJournee)

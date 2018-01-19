@@ -275,7 +275,7 @@ if (isset($calReel) && $calLigue->id() != null)
     <div class="conteneurColumn">
       <p>Bonus/Malus</p>
       <select name="choixBonus" class="selectChoixBonus" onchange="javascript:onSelectionBonusMalus('choixBonus')">
-        <option value="-1">A venir...</option>
+        <option value="-1">...</option>
         <?php
           if (isset($bonusMalus))
           {
@@ -291,7 +291,6 @@ if (isset($calReel) && $calLigue->id() != null)
           }
          ?>
       </select>
-      <!-- TODO MPL enlever cacher quand mode pack folie -->
       <select name="choixJoueurBonus" class="selectChoixJoueurBonus cache">
           <option value="-1">...</option>
           <?php
@@ -305,7 +304,19 @@ if (isset($calReel) && $calLigue->id() != null)
             }
            ?>
       </select>
-      <!-- TODO MPL enlever cacher quand mode pack folie -->
+      <select name="choixJoueurAdvBonus" class="selectChoixJoueur cache">
+          <option value="-1">...</option>
+          <?php
+            foreach ($joueursAdvBonus as $joueur)
+            {
+              if ($joueurAdvBonus == $joueur->id()) {
+                echo '<option value="' . $joueur->id() . '" selected="selected">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
+              } else {
+                echo '<option value="' . $joueur->id() . '">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
+              }
+            }
+           ?>
+      </select>
       <select name="choixMiTempsBonus" class="selectChoixMiTempsBonus cache">
           <option value="-1">...</option>
           <?php

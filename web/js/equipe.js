@@ -17,6 +17,7 @@ var NAME_SORTANT = 'sortant_';
 var NAME_NOTE = 'note_';
 
 $(document).ready(function() {
+  onSelectionBonusMalus('choixBonus');
   initTabJoueurSelonPoste(DIV_TIT_DEF, tabJoueurDEF);
   initTabJoueurSelonPoste(DIV_TIT_MIL, tabJoueurMIL);
   initTabJoueurSelonPoste(DIV_TIT_ATT, tabJoueurATT);
@@ -31,7 +32,44 @@ function submitForm() {
 }
 
 function onSelectionBonusMalus(selectName) {
-  
+  var val = $('select[name="' + selectName + '"]').find(":selected").val();
+  if (val == 'MAU_CRA' || val == 'BOUCHER') {
+    // Affichage joueur adv
+    cacherAfficherSelectByName('choixJoueurAdvBonus', false);
+    cacherAfficherSelectByName('choixJoueurBonus', true);
+    cacherAfficherSelectByName('choixMiTempsBonus', true);
+
+    $('select[name="choixJoueurBonus"]').val(-1);
+    $('select[name="choixMiTempsBonus"]').val(-1);
+  } else if (val == 'CHA_GB' || val == 'PAR_TRU' || val == 'FAM_STA') {
+    // Affichage joueur equipe
+    cacherAfficherSelectByName('choixJoueurBonus', false);
+    cacherAfficherSelectByName('choixJoueurAdvBonus', true);
+
+    $('select[name="choixJoueurAdvBonus"]').val(-1);
+    if (val == 'PAR_TRU') {
+      cacherAfficherSelectByName('choixMiTempsBonus', false);
+    } else {
+      $('select[name="choixMiTempsBonus"]').val(-1);
+      cacherAfficherSelectByName('choixMiTempsBonus', true);
+    }
+  } else {
+    $('select[name="choixJoueurBonus"]').val(-1);
+    $('select[name="choixJoueurAdvBonus"]').val(-1);
+    $('select[name="choixMiTempsBonus"]').val(-1);
+
+    cacherAfficherSelectByName('choixJoueurAdvBonus', true);
+    cacherAfficherSelectByName('choixJoueurBonus', true);
+    cacherAfficherSelectByName('choixMiTempsBonus', true);
+  }
+}
+
+function cacherAfficherSelectByName(select, cacher) {
+  if (cacher && !$('select[name="' + select + '"]').hasClass('cache')) {
+    $('select[name="' + select + '"]').addClass('cache');
+  } else if (!cacher && $('select[name="' + select + '"]').hasClass('cache')) {
+    $('select[name="' + select + '"]').removeClass('cache');
+  }
 }
 
 // Appelée lors d'un changement de sélection de titulaire

@@ -42,6 +42,7 @@ if (isset($_POST['changerTactique']))
   }
   $capitaine = $_POST["choixCapitaine"];
   $joueurBonus = $_POST["choixJoueurBonus"];
+  $joueurAdvBonus = $_POST["choixJoueurAdvBonus"];
   $miTempsBonus = $_POST["choixMiTempsBonus"];
 }
 elseif (isset($_POST['enregistrer']))
@@ -51,6 +52,19 @@ elseif (isset($_POST['enregistrer']))
   if ($_POST['choixBonus'] != -1)
   {
     $compoEquipe->setCode_bonus_malus($_POST['choixBonus']);
+
+    $bonus = new BonusMalus(['code' => $_POST['choixBonus']]);
+    if ($_POST['choixJoueurBonus'] != -1 && $_POST[$_POST['choixJoueurBonus']] != -1) {
+      $bonus->setId_joueur_reel_equipe($_POST[$_POST['choixJoueurBonus']] );
+    }
+    if ($_POST['choixMiTempsBonus'] != -1) {
+      $bonus->setMi_temps($_POST['choixMiTempsBonus']);
+    }
+    if ($_POST['choixJoueurAdvBonus'] != -1) {
+      $bonus->setId_joueur_reel_adverse($_POST['choixJoueurAdvBonus']);
+    }
+
+    $bonusManager->creerOuMajBonusMalusCompoEquipe($bonus, $equipe->id(), $calLigue->id());
   }
   $compoEquipeManager->creerOuMajCompoEquipe($compoEquipe, $equipe->id(), $calLigue->id());
 
@@ -101,6 +115,7 @@ elseif (isset($_POST['enregistrer']))
   }
   $capitaine = $_POST["choixCapitaine"];
   $joueurBonus = $_POST["choixJoueurBonus"];
+  $joueurAdvBonus = $_POST["choixJoueurAdvBonus"];
   $miTempsBonus = $_POST["choixMiTempsBonus"];
 }
 elseif ($calLigue->id() != null)
@@ -112,12 +127,25 @@ elseif ($calLigue->id() != null)
   }
   else
   {
-    // TODO MPL init joueurBonus, miTemps
+    $bonus = $bonusManager->findBonusMalusByEquipeEtCalLigue($equipe->id(), $calLigue->id());
+    if ($bonus != null) {
+      echo 'bonus: ' . $bonus->idJoueurReelEquipe() . ' - ' . $bonus->idJoueurReelAdverse() . ' - ' . $bonus->miTemps();
+      $joueurBonus = $bonus->idJoueurReelEquipe();
+      $joueurAdvBonus = $bonus->idJoueurReelAdverse();
+      $miTempsBonus = $bonus->miTemps();
+    } else {
+      echo 'bonus null !';
+    }
+
     $joueursCompo = $compoEquipeManager->findJoueurCompoByCompo($compoEquipe->id());
     if (isset($joueursCompo))
     {
       foreach($joueursCompo as $joueur)
       {
+        if ($joueur->idJoueurReel() == $joueurBonus) {
+          $joueurBonus = $joueur->numero();
+        }
+
         $tabCompo[$joueur->numero()] = $joueur->idJoueurReel();
         if ($joueur->capitaine() == 1)
         {
@@ -135,9 +163,17 @@ elseif ($calLigue->id() != null)
 
 if ($calLigue->id() != null)
 {
-  $bonusMalus = $bonusManager->findBonusMalusByEquipe($equipe->id());
+  $bonusMalus = $bonusManager->findBonusMalusByEquipe($equipe->id(), $calLigue->id());
   $nomenclTactique = $nomenclManager->findNomenclatureTactiqueSelonMode($ligue->modeExpert());
   $joueurs = $joueurEquipeManager->findByEquipe($equipe->id());
+
+  if ($calLigue->nomEquipeDom() != $equipe->nom()) {
+    $joueursAdvBonus = $joueurEquipeManager->findByEquipe($calLigue->idEquipeDom());
+  }
+  else {
+    $joueursAdvBonus = $joueurEquipeManager->findByEquipe($calLigue->idEquipeExt());
+  }
+
   if (isset($joueurs))
   {
     $gb = [];
