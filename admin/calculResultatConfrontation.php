@@ -1,7 +1,11 @@
+<html>
+<body>
+
 <?php
+	
 	$constanteConfrontationLigue = 5;
-	$constanteJourneeReelle = '201719';
-	$constante_num_journee_cal_reel = '17';
+	$constanteJourneeReelle = isset($_POST['journeeCalculable']) ? $_POST['journeeCalculable'] : NULL;
+	$constante_num_journee_cal_reel = '21';
 	
 	function updateButReelDuJoueur($id_compo, $journee, $id_joueur_reel, $bdd){
 		//On compte le nombre de but réel d'un joueur sur une journée
@@ -673,3 +677,6 @@
 		
 		
 ?>
+
+</body>
+</html>

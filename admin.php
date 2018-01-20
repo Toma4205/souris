@@ -17,12 +17,13 @@
 			<a class="bouton" href="#titreCalculerLesConfrontations">Calculer les Confrontations</a>
 		</p>
 	
-	
+	<HR size=2 align=center width="100%">
 	<h2 id="titreScrapValeur">Vérification Prix des Joueurs</h2>
 	<form method="post" id="scrapValeur" action="admin/valeursJoueurs.php" enctype="multipart/form-data">
 		 <input type="submit" name="submit" value="Etudier les valeurs" />
 	</form>
 	
+	<HR size=2 align=center width="100%">
 	<h2 id="titreMAJResultatsEquipe">Mettre à jour les résultats des équipes</h2>
 	<form method="post" id="MAJResultatsEquipe" action="admin/MAJResultatL1.php" enctype="multipart/form-data">
 		 <label for="Ajout">Ajouter des résultats de Ligue 1 :</label><br />
@@ -196,7 +197,7 @@
 			
 	</form>
 	<table border="1">
-	<h3 id="titreResultatsEquipeEnBase">Resultats L1 presents en BDD</h3>
+	<h4 id="titreResultatsEquipeEnBase">Resultats L1 presents en BDD</h4>
 	<tbody>
 	<?php
 		echo "<br />\n";
@@ -270,6 +271,7 @@
 	</tbody>
 	</table>
 	
+	<HR size=2 align=center width="100%">
 	<h2 id="titreImportCSV">Importer les statistiques des joueurs à partir du CSV</h2>
 	<form method="post" id="importCSV" action="admin/importJourneeBDD.php" enctype="multipart/form-data">
 		 <label for="mon_fichier">Fichier Stat à Importer (format csv | max. 1 Mo) :</label><br />
@@ -278,6 +280,7 @@
 		 <input type="submit" name="submit" value="Importer" />
 	</form>
 	
+	<HR size=2 align=center width="100%">
 	<h2 id="titreCalculDesNotes">Calcul des notes des joueurs</h2>
 	<?php 
 		$req1 = $bdd->query('SELECT COUNT(*) FROM joueur_stats WHERE note IS NULL');
@@ -294,11 +297,70 @@
 		 <input type="submit" name="submit" value="Lancer le calcul des notes des joueurs non notés" /><br />
 	</form>
 	
+	<HR size=2 align=center width="100%">
 	<h2 id="titreCalculerLesConfrontations">Calculer les Confrontations</h2>
-	<form method="post" id="calculConfrontation" action="admin/calculResultatConfrontation.php" enctype="multipart/form-data">
-		 <input type="submit" name="submit" value="Lancer le calcul des confrontations" /><br />
-	</form>
+	<h4 id="titreDiagDonneesEnBase">Diagnostique des données en base : </h4>
+	<h5 id="titreVerif11Titulaires">Vérification de la présence de 11 titulaires</h5>
+	<?php
+		$req1 = $bdd->query('SELECT t1.journee, t2.equipe, count(t1.id) FROM joueur_stats t1, joueur_reel t2 WHERE t1.id IN (t2.cle_roto_primaire, t2.cle_roto_secondaire) AND t1.titulaire = 1 GROUP BY t1.journee, t2.equipe HAVING count(t1.id)<>11;');
+		$equipesErreurTitulaires=$req1->fetchAll();
+		if (count($equipesErreurTitulaires) == 0) {
+			echo "\t".'OK toutes les équipes ont bien 11 titulaires';
+			echo "<br />\n";
+		}else{
+			foreach ($equipesErreurTitulaires as $equipeErreurTitulaires) {
+				echo "\t".'Sur la journee '.$equipeErreurTitulaires['journee'].', '.$equipeErreurTitulaires['equipe'].' a '.$equipeErreurTitulaires['count(t1.id)'].' titulaires. (ERREUR NON BLOQUANTE A Vérifier en base)';
+				echo "<br />\n";
+			}
+		}
+		$req1->closeCursor();		
+	?>
+	<h5 id="titreVerifResultatsEtStats">Vérification de la saisie des résultats L1</h5>
+	<?php
+		$req1 = $bdd->query('SELECT t2.journee, count(t2.journee) FROM resultatsl1_reel t2 GROUP BY t2.journee HAVING COUNT(t2.journee) <> 10;');
+		$resultatsSaisisParJournee=$req1->fetchAll();
+		if (count($resultatsSaisisParJournee) == 0) {
+			echo "\t".'OK il y a bien 10 résultats saisis pour chaque journée';
+			echo "<br />\n";
+		}else{
+			foreach ($resultatsSaisisParJournee as $resultatSaisiParJournee) {
+				echo "\t".'Sur la journee '.$resultatSaisiParJournee['journee'].', il y a '.$resultatSaisiParJournee['count(t2.journee)'].' résultats de saisis. (ERREUR A Vérifier en base)';
+				echo "<br />\n";
+			}
+		}
+		$req1->closeCursor();		
+	?>
 	
+	
+	<?php
+		$req1 = $bdd->query('SELECT t2.journee FROM resultatsl1_reel t2 WHERE t2.journee IN (SELECT t1.journee FROM joueur_stats t1 WHERE t1.note IS NOT NULL  GROUP BY t1.journee HAVING COUNT(t1.journee) > 340) GROUP BY t2.journee HAVING COUNT(t2.journee) = 10 ORDER BY t2.journee DESC;');
+		$journeesCalculables=$req1->fetchAll();
+		if (count($journeesCalculables) == 0) {
+			//Aucune journee calculable pour confrontation : manque résultats L1 ou Import Stats ou Calcul Note
+		}else{
+			echo "<br />\n";
+			echo 'Liste des journées valides :  ';
+?>
+	<form method="post" id="calculConfrontation" action="admin/calculResultatConfrontation.php" enctype="multipart/form-data">
+		<SELECT name="journeeCalculable" size="1">
+<?php
+			foreach ($journeesCalculables as $journeeCalculable) {
+?>
+			<OPTION>
+<?php
+				echo $journeeCalculable['journee'];
+			}
+?>
+		</SELECT>
+<?php
+		echo "<br />\n";
+		echo "<br />\n";
+?>
+		<input type="submit" name="submit" value="Lancer le calcul des confrontations sur la journée sélectionnée" /><br />
+	</form>
+<?php
+		}
+?>
 
 </body>
 </html>
