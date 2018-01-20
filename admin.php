@@ -216,7 +216,7 @@
 			echo $e;
 		}
 		
-		$req = $bdd->query('SELECT * FROM resultatsL1_reel ORDER BY journee DESC');
+		$req = $bdd->query('SELECT * FROM resultatsl1_reel ORDER BY journee DESC');
 		// On affiche chaque entrée une à une
 		while ($donnees = $req->fetch())
 		{
