@@ -107,7 +107,7 @@
 		</form>	
 
 <?php
-	if(!empty($modifProbable){
+	if(!empty($modifProbable)){
 		echo "<br />\n";
 		echo "<br />\n";
 		echo '---------------- Liste des Joueurs probablement déjà dans la base de données ----------------';

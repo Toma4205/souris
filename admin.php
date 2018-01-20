@@ -120,6 +120,7 @@
 				<option>7
 				<option>8
 				<option>9
+				<option>ANNULE
 			  </select>
 			  </td>
 			<td>
@@ -172,6 +173,7 @@
 				<option>7
 				<option>8
 				<option>9
+				<option>ANNULE
 			  </select>
 			  </td>
 			<td>
