@@ -75,7 +75,6 @@ function isCleanSheetNul($ligne,$team,$tableauScore,$dataJoueur) {
 //A partir du CSV resultatsL1.csv
 function buildTableauJournee($idJournee) {
 	$resultatsJourneeTab = null;
-	echo 'ici2';
 	require_once(__DIR__ . '/../modele/connexionSQL.php');
 	try
 	{
@@ -1029,7 +1028,7 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 					));
 			}
 		}
-		echo 'INSERT des stats De la Journee en BDD => OK OK';
+		echo 'INSERT des stats De la Journee en BDD => OK';
 		$req->closeCursor();
 //print_r($tableau[1]);
 //var_dump($array);

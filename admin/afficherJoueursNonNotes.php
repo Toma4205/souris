@@ -34,8 +34,8 @@
 					\''.substr((string)$donnees['id'], strlen(substr((string)$donnees['id'], 0, 1+strcspn(substr($donnees['id'],1,strlen($donnees['id'])), 'ABCDEFGHJIJKLMNOPQRSTUVWXYZ'))), strlen($donnees['id'])-3-strlen(substr((string)$donnees['id'], 0, 1+strcspn(substr($donnees['id'],1,strlen($donnees['id'])), 'ABCDEFGHJIJKLMNOPQRSTUVWXYZ')))).'\',
 					\''.substr((string)$donnees['id'], 0, 1+strcspn(substr($donnees['id'],1,strlen($donnees['id'])), 'ABCDEFGHJIJKLMNOPQRSTUVWXYZ')).'\',
 					\''.substr((string)$donnees['id'],strlen($donnees['id'])-3,strlen($donnees['id'])).'\',
-					\'Goalkeeper/Defender/MidFielder/Forward\',
-					10,
+					\'Goalkeeper/Defender/Midfielder/Forward\',
+					1,
 					NULL);';
 		}
 		
