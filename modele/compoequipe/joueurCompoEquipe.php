@@ -14,6 +14,10 @@ class JoueurCompoEquipe extends ClasseBase
   private $_idJoueurReelRemplacant;
   private $_noteMinRemplacement;
 
+  // Champs table joueur_reel
+  private $_nom;
+  private $_prenom;
+
   public function __construct(array $donnees)
   {
     parent::hydrate($donnees);
@@ -27,6 +31,8 @@ class JoueurCompoEquipe extends ClasseBase
   public function numeroRemplacement() { return $this->_numeroRemplacement; }
   public function idJoueurReelRemplacant() { return $this->_idJoueurReelRemplacant; }
   public function noteMinRemplacement() { return $this->_noteMinRemplacement; }
+  public function nom() { return $this->_nom; }
+  public function prenom() { return $this->_prenom; }
 
   public function setId_joueur_reel($idJoueurReel)
   {
@@ -66,6 +72,16 @@ class JoueurCompoEquipe extends ClasseBase
   public function setNote_min_remplacement($noteMinRemplacement)
   {
       $this->_noteMinRemplacement = $noteMinRemplacement;
+  }
+
+  public function setNom($nom)
+  {
+      $this->_nom = $nom;
+  }
+
+  public function setPrenom($prenom)
+  {
+      $this->_prenom = $prenom;
   }
 }
 ?>

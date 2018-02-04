@@ -32,7 +32,10 @@ class CompoEquipeManager extends ManagerBase
   {
     $joueurs = [];
 
-    $q = $this->_bdd->prepare('SELECT * FROM joueur_compo_equipe WHERE id_compo = :id');
+    $q = $this->_bdd->prepare('SELECT jce.*, jr.nom, jr.prenom
+      FROM joueur_compo_equipe  jce
+      JOIN joueur_reel jr ON jr.id = jce.id_joueur_reel
+      WHERE jce.id_compo = :id ORDER BY jce.numero');
     $q->execute([':id' => $idCompo]);
 
     while ($donnees = $q->fetch(PDO::FETCH_ASSOC))

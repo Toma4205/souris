@@ -18,7 +18,7 @@ if (isset($calendriers))
           }
         }
         for ($index = 1; $index <= $numJourneeMax; $index++) {
-          if($index == 1)
+          if($index == $indexJournee)
           {
               echo '<option value="divJournee' . $index . '" selected="selected">Journée ' . $index . '</option>';
           }
@@ -29,6 +29,7 @@ if (isset($calendriers))
         }
      ?>
   </select>
+  <input type="hidden" id="idMatch" name="id_match" />
 <?php
     $numJournee = 0;
     $changementJournee = false;
@@ -45,7 +46,7 @@ if (isset($calendriers))
         }
 ?>
   <div id="divJournee<?php echo $numJournee; ?>"
-    class="calendrier_matchs colonnes <?php if ($numJournee != 1) echo 'cache'; ?>">
+    class="calendrier_matchs colonnes <?php if ($numJournee != $indexJournee) echo 'cache'; ?>">
 <?php
       }
       else
@@ -61,7 +62,8 @@ if (isset($calendriers))
     <?php
         if ($value->scoreDom() != null)
         {
-          echo '<div style="text-align:center;">' . $value->scoreDom() . ' - ' . $value->scoreExt() . '</div>';
+          echo '<div class="score_match" onclick="javascript:stockerMatch(' . $value->id() . ');">'
+          . $value->scoreDom() . ' - ' . $value->scoreExt() . '</div>';
         }
         else
         {
@@ -75,7 +77,78 @@ if (isset($calendriers))
   </div>
 <?php
     } // Fin foreach
-    echo '</section>';
+?>
+</section>
+<section id="detailMatch" class="detail_match">
+<?php
+  if (isset($_POST["id_match"]))
+  {
+    function afficherScore($nom, $score)
+    {
+      echo '<div style="width:50%">';
+      echo '<div><p>' . $nom . '</p></div>';
+      echo '<div><p>' . $score . '</p></div>';
+    }
+    function afficherEquipe($compo, $joueurs)
+    {
+      if ($compo != null) {
+        echo '<div><p>' . $compo->codeTactique() . '</p></div>';
+        if ($joueurs != null) {
+          foreach ($joueurs as $cle => $value)
+          {
+            echo '<p class="joueurMatch">';
+            echo '<b>' . $value->numero() . '</b> - ' . $value->nom() . ' ' . $value->prenom();
+            echo '<span class="float_right">';
+            echo '<input type="text" class="inputPrix" value="' . $value->note() . '" disabled/>';
+            echo '</span></p>';
+          }
+        }
+      } else {
+        echo '<div><p>-</p></div>';
+        echo '<div><p>Coach en vacances = forfait !</p></div>';
+      }
+    }
+
+    foreach ($calendriers as $cle => $value)
+    {
+      if ($_POST["id_match"] == $value->id())
+      {
+        echo '<div class="detail_equipes conteneurRow">';
+
+        // Equipe DOMICILE
+        afficherScore($value->nomEquipeDom(), $value->scoreDom());
+        if (isset($joueursDom))
+        {
+          afficherEquipe($compoDom, $joueursDom);
+        }
+        else
+        {
+          echo '<div><p>-</p></div>';
+          echo '<div><p>Coach en vacances = forfait !</p></div>';
+        }
+        echo '</div>';
+
+        // Equipe EXTERIEURE
+        afficherScore($value->nomEquipeExt(), $value->scoreExt());
+        if (isset($joueursExt))
+        {
+          afficherEquipe($value->nomEquipeExt(), $value->scoreExt(), $compoExt, $joueursExt);
+        }
+        else
+        {
+          echo '<div><p>-</p></div>';
+          echo '<div><p>Coach en vacances = forfait !</p></div>';
+        }
+        echo '</div>';
+
+        echo '</div>';
+        break;
+      }
+    }
+  }
+?>
+</section>
+<?php
 }
 else {
     $message = 'Calendrier indisponible ! Veuillez nous contacter en indiquant le nom de votre ligue.';

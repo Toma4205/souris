@@ -16,6 +16,10 @@ if ($calReel->numJournee() != null)
   $calLigue = $calLigueManager->findProchaineJourneeByCalReel($equipe->id(), $calReel->numJournee());
 }
 
+echo 'A supp : idCoach=' . $coach->id() . ', idLigue=' . $ligue->id() .
+  ', idEquipe=' . $equipe->id() . ', calReel=' . $calReel->numJournee() .
+  ', calLigue=' . $calLigue->id();
+
 $compoEquipe = new CompoEquipe([]);
 $tabCompo = [];
 $tabRentrant = [];

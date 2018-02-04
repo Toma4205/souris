@@ -11,6 +11,7 @@ $bdd = ConnexionBDD::getInstance();
 
 // Pour le DEBUG
 //foreach($_POST as $key => $val) echo '$_POST["'.$key.'"]='.$val.'<br />';
+//foreach($_GET as $key => $val) echo '$_GET["'.$key.'"]='.$val.'<br />';
 
 // URL de base pour l'application
 if (!isset($_GET['section']) OR $_GET['section'] == 'index')

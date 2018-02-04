@@ -84,7 +84,11 @@ div#bandeau_appli_image {
   text-decoration: none;
   color: white;
 }
-.lienBandeau a:hover {
+.score_match a {
+  text-decoration: none;
+  color: black;
+}
+.lienBandeau a:hover, .score_match a:hover {
   color: #00cdcd;
 }
 .nomLigueBandeau {
@@ -417,6 +421,10 @@ header.menuClassement p {
   padding-bottom: 10px;
   text-align: center;
 }
+.detail_match {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 .calendrier_matchs {
   font-weight: bold;
 }
@@ -425,6 +433,18 @@ header.menuClassement p {
 }
 .padding_bottom_5px {
   padding-bottom: 5px;
+}
+.score_match {
+  text-align:center;
+  cursor: pointer;
+}
+.detail_equipes {
+  border-top: solid #141b4D;
+}
+.joueurMatch {
+  width: 400px !important;
+  margin-right: 0 !important;
+  text-align: left;
 }
 
 /* Tableaux */
