@@ -32,9 +32,10 @@ class CompoEquipeManager extends ManagerBase
   {
     $joueurs = [];
 
-    $q = $this->_bdd->prepare('SELECT jce.*, jr.nom, jr.prenom
+    $q = $this->_bdd->prepare('SELECT jce.*, jr.nom, jr.prenom, jr2.nom as nom_remplacant, jr2.prenom as prenom_remplacant
       FROM joueur_compo_equipe  jce
       JOIN joueur_reel jr ON jr.id = jce.id_joueur_reel
+      LEFT JOIN joueur_reel jr2 ON jr2.id = jce.id_joueur_reel_remplacant
       WHERE jce.id_compo = :id ORDER BY jce.numero');
     $q->execute([':id' => $idCompo]);
 

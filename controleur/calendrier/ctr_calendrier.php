@@ -18,7 +18,7 @@ if (isset($_POST["id_match"]))
     {
       $compoDom = $compoEquipeManager->findCompoByEquipeEtCalLigue($value->idEquipeDom(), $value->id());
       $compoExt = $compoEquipeManager->findCompoByEquipeEtCalLigue($value->idEquipeExt(), $value->id());
-      echo 'IdCompoDom=' . $compoDom->id() . ', IdCompExt=' . $compoExt->id();
+      echo 'IdMatch=' . $value->id() . ', IdCompoDom=' . $compoDom->id() . ', IdCompExt=' . $compoExt->id();
       if ($compoDom != null) {
         $joueursDom = $compoEquipeManager->findJoueurCompoByCompo($compoDom->id());
       }

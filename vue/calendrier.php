@@ -94,13 +94,53 @@ if (isset($calendriers))
       if ($compo != null) {
         echo '<div><p>' . $compo->codeTactique() . '</p></div>';
         if ($joueurs != null) {
+          $affRempl = false;
+          $tabRempl;
           foreach ($joueurs as $cle => $value)
           {
-            echo '<p class="joueurMatch">';
-            echo '<b>' . $value->numero() . '</b> - ' . $value->nom() . ' ' . $value->prenom();
-            echo '<span class="float_right">';
-            echo '<input type="text" class="inputPrix" value="' . $value->note() . '" disabled/>';
-            echo '</span></p>';
+            if ($value->numero() > 11) {
+
+              // REMPLACANTS
+
+              if (!$affRempl) {
+                echo '<div><p>Remplaçants</p></div>';
+                $affRempl = true;
+              }
+              if (isset($tabRempl[$value->idJoueurReel()])) {
+                echo '<p class="joueurMatch">';
+                echo '<b>' . $value->numero() . '</b> - ' . $tabRempl[$value->idJoueurReel()];
+                echo '<span class="float_right">';
+                echo '<input type="text" class="inputPrix" value="' . $value->note() . '" disabled/>';
+                echo '</span></p>';
+              } else {
+                echo '<p class="joueurMatch">';
+                echo '<b>' . $value->numero() . '</b> - ' . $value->nom() . ' ' . $value->prenom();
+                echo '<span class="float_right">';
+                echo '<input type="text" class="inputPrix" value="' . $value->note() . '" disabled/>';
+                echo '</span></p>';
+              }
+            } else {
+
+              // TITULAIRES
+
+              echo '<p class="joueurMatch">';
+              echo '<b>' . $value->numero() . '</b> - ' . $value->nom() . ' ' . $value->prenom();
+              if ($value->capitaine() == 1) {
+                echo '<b> (C)</b>';
+              }
+              echo '<span class="float_right">';
+              echo '<input type="text" class="inputPrix" value="' . $value->note() . '" disabled/>';
+              echo '</span></p>';
+
+              if ($value->numeroRemplacement() != null) {
+                $tabRempl[$value->idJoueurReelRemplacant()] = $value->nomRemplacant() . ' ' . $value->prenomRemplacant() . ' remplace ' . $value->nom() . ' si note < ' . $value->noteMinRemplacement();
+              }
+            }
+          }
+
+          if (!$affRempl) {
+            echo '<div><p>Remplaçants</p></div>';
+            echo '<p>Aucun remplaçant</p>';
           }
         }
       } else {
@@ -132,7 +172,7 @@ if (isset($calendriers))
         afficherScore($value->nomEquipeExt(), $value->scoreExt());
         if (isset($joueursExt))
         {
-          afficherEquipe($value->nomEquipeExt(), $value->scoreExt(), $compoExt, $joueursExt);
+          afficherEquipe($compoExt, $joueursExt);
         }
         else
         {
