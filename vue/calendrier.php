@@ -114,7 +114,7 @@ if (isset($calendriers))
                 echo '</span></p>';
               } else {
                 echo '<p class="joueurMatch">';
-                echo '<b>' . $value->numero() . '</b> - ' . $value->nom() . ' ' . $value->prenom();
+                echo '<b>' . $value->numero() . '</b> - ' . $value->nom();
                 echo '<span class="float_right">';
                 echo '<input type="text" class="inputPrix" value="' . $value->note() . '" disabled/>';
                 echo '</span></p>';
@@ -124,7 +124,7 @@ if (isset($calendriers))
               // TITULAIRES
 
               echo '<p class="joueurMatch">';
-              echo '<b>' . $value->numero() . '</b> - ' . $value->nom() . ' ' . $value->prenom();
+              echo '<b>' . $value->numero() . '</b> - ' . $value->nom();
               if ($value->capitaine() == 1) {
                 echo '<b> (C)</b>';
               }
@@ -133,7 +133,7 @@ if (isset($calendriers))
               echo '</span></p>';
 
               if ($value->numeroRemplacement() != null) {
-                $tabRempl[$value->idJoueurReelRemplacant()] = $value->nomRemplacant() . ' ' . $value->prenomRemplacant() . ' remplace ' . $value->nom() . ' si note < ' . $value->noteMinRemplacement();
+                $tabRempl[$value->idJoueurReelRemplacant()] = $value->nomRemplacant() . ' remplace ' . $value->nom() . ' si note < ' . $value->noteMinRemplacement();
               }
             }
           }
