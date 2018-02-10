@@ -149,11 +149,13 @@ CREATE TABLE `joueur_compo_equipe` (
 `capitaine` BOOLEAN NOT NULL,
 `code_bonus_malus` VARCHAR(30),
 `note` DECIMAL(3,1),
+`note_bonus` DECIMAL(3,1),
 `nb_but_reel` TINYINT UNSIGNED ,
 `nb_but_virtuel` TINYINT UNSIGNED ,
 `numero_remplacement` TINYINT UNSIGNED,
 `id_joueur_reel_remplacant` MEDIUMINT UNSIGNED,
 `note_min_remplacement` DECIMAL(3,1),
+`a_joue` BOOLEAN NOT NULL,
 PRIMARY KEY (`id_compo`, `id_joueur_reel`)
 ) ENGINE = InnoDB;
 ALTER TABLE `joueur_compo_equipe` ADD FOREIGN KEY (`code_bonus_malus`) REFERENCES `nomenclature_bonus_malus`(`code`) ON DELETE CASCADE ON UPDATE CASCADE;

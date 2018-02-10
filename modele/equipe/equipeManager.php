@@ -57,6 +57,20 @@ class EquipeManager extends ManagerBase
     }
   }
 
+  public function findEquipeById($idEquipe)
+  {
+    $q = $this->_bdd->prepare('SELECT e.*, c.nom as nom_coach
+      FROM equipe e
+      JOIN coach c ON c.id = e.id_coach
+      WHERE e.id = :id');
+    $q->execute([':id' => $idEquipe]);
+
+    $donnees = $q->fetch(PDO::FETCH_ASSOC);
+    $q->closeCursor();
+
+    return new Equipe($donnees);
+	}
+
   public function findEquipeByCoachEtLigue($idCoach, $idLigue)
   {
     $q = $this->_bdd->prepare('SELECT * FROM equipe WHERE id_coach = :idCoach AND id_ligue = :idLigue');

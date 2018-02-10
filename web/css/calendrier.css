@@ -1,0 +1,145 @@
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.choix_journee {
+  font-size: 1.2rem;
+}
+.detail_journee_cal {
+  padding: 1.5rem;
+}
+.detail_journee_cal_match {
+  padding: .2rem;
+  line-height: 2rem;
+  border-bottom: 1px solid;
+}
+.detail_journee_cal_col_g {
+  width: 47%;
+  padding: 0 0.5rem;
+}
+.detail_journee_cal_col_c {
+  width: 6%;
+  font-weight: bold;
+}
+.detail_journee_cal_col_d {
+  width: 47%;
+  padding: 0 0.5rem;
+}
+.detail_match_bandeau {
+  height: 250px;
+  padding: 1.5rem;
+  background: url("../img/detail_match_entete.jpg") no-repeat;
+  background-size: cover;
+  text-align: center;
+}
+.detail_match_bandeau_col_g {
+    width: 35%;
+}
+.detail_match_bandeau_col_c {
+    width: 30%;
+    padding-top: 1.5rem;
+}
+.detail_match_bandeau_etat {
+  font-size: .625rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.detail_match_bandeau_score {
+  padding: .375rem .375rem;
+  font-size: 1.875rem;
+  color: white;
+}
+.detail_match_bandeau_score_tiret {
+  padding: 0 .625rem;
+  color: rgba(255,255,255,0.5);
+}
+.detail_match_bandeau_date {
+  font-size: .6875rem;
+  font-weight: normal;
+  color: rgba(255,255,255,0.5);
+}
+.detail_match_bandeau_ville, .detail_match_bandeau_stade {
+  padding: 0.5rem 0;
+  font-size: .8rem;
+  font-weight: normal;
+  color: rgba(255,255,255,0.5);
+}
+.detail_match_bandeau_col_d {
+    width: 35%;
+}
+.detail_match_bandeau_equipe {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  line-height: 1.2;
+}
+.detail_match_bandeau_equipe_coach {
+  margin-top: .4rem;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+}
+.detail_match_bandeau_equipe_logo {
+  margin: auto;
+  margin-top: 0.5rem;
+}
+.detail_match_bandeau_equipe_buteur {
+  margin: auto;
+  margin-top: 1rem;
+  width: 50%;
+  text-align: left;
+  font-size: 0.8rem;
+}
+.but {
+  margin-left: 5px;
+}
+.detail_match_equipe {
+  text-align: left;
+}
+.detail_match_equipe_g {
+  width: 50%;
+  padding: .5rem;
+}
+.detail_match_equipe_d {
+  width: 50%;
+  padding: .5rem;
+}
+.detail_match_equipe_bonus_malus {
+  font-size: 1rem;
+  padding: .5rem;
+}
+.detail_match_equipe_bonus_malus_liste {
+  line-height: 2.5rem;
+}
+.detail_match_equipe_titre {
+  border-bottom: 2px solid #141b4D;
+  font-style: italic;
+  color: #4a61d4;
+  margin-bottom: .5rem;
+}
+.detail_match_equipe_joueurs {
+  padding: .5rem;
+}
+.detail_match_equipe_titu {
+}
+.detail_match_equipe_joueur {
+  border-bottom: 1px dashed #141b4D;
+  margin-top: .5rem;
+  font-size: .8rem;
+}
+.detail_match_equipe_joueur_note_bonus_malus {
+  margin: 0 .5rem;
+  width: 30px;
+  font-size: .8rem;
+}
+.detail_match_equipe_joueur_note {
+  margin: 0 .5rem;
+  width: 20px;
+}
+.detail_match_equipe_rempl {
+  padding: .5rem;
+}
+.pas_joue {
+  color: grey;
+}

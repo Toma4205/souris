@@ -1,7 +1,7 @@
 var divAffiche = 'divJournee1';
 
 $(document).ready(function() {
-  $('.calendrier_matchs').each(function() {
+  $('.detail_journee_cal').each(function() {
     if (!$(this).hasClass('cache')) {
       divAffiche = $(this).attr('id');
     }

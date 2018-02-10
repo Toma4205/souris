@@ -21,6 +21,9 @@ class Equipe extends ClasseBase
   private $_nbBonus;
   private $_nbMalus;
 
+  // COACH
+  private $_nomCoach;
+
   public function __construct(array $donnees)
   {
     parent::hydrate($donnees);
@@ -41,6 +44,7 @@ class Equipe extends ClasseBase
   public function nbButContre() { return $this->_nbButContre; }
   public function nbBonus() { return $this->_nbBonus; }
   public function nbMalus() { return $this->_nbMalus; }
+  public function nomCoach() { return $this->_nomCoach; }
 
   public function setId($id)
   {
@@ -115,6 +119,11 @@ class Equipe extends ClasseBase
   public function setNb_malus($nbMalus)
   {
       $this->_nbMalus = $nbMalus;
+  }
+
+  public function setNom_coach($nom)
+  {
+      $this->_nomCoach = $nom;
   }
 }
 ?>

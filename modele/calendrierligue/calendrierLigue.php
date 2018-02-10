@@ -11,6 +11,7 @@ class CalendrierLigue extends ClasseBase
   private $_numJournee;
   private $_scoreDom;
   private $_scoreExt;
+  private $_numJourneeCalReel;
 
   // nom Equipe fictive
   private $_nomEquipeDom;
@@ -27,6 +28,7 @@ class CalendrierLigue extends ClasseBase
   public function numJournee() { return $this->_numJournee; }
   public function scoreDom() { return $this->_scoreDom; }
   public function scoreExt() { return $this->_scoreExt; }
+  public function numJourneeCalReel() { return $this->_numJourneeCalReel; }
   public function nomEquipeDom() { return $this->_nomEquipeDom; }
   public function nomEquipeExt() { return $this->_nomEquipeExt; }
 
@@ -58,6 +60,11 @@ class CalendrierLigue extends ClasseBase
   public function setScore_ext($scoreExt)
   {
       $this->_scoreExt = $scoreExt;
+  }
+
+  public function setNum_journee_cal_reel($numJournee)
+  {
+      $this->_numJourneeCalReel = $numJournee;
   }
 
   public function setNomEquipeDom($nomEquipeDom)

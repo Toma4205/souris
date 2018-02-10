@@ -10,9 +10,13 @@ class JoueurCompoEquipe extends ClasseBase
   private $_capitaine;
   private $_codeBonusMalus;
   private $_note;
+  private $_noteBonus;
   private $_numeroRemplacement;
   private $_idJoueurReelRemplacant;
   private $_noteMinRemplacement;
+  private $_nbButReel;
+  private $_nbButVirtuel;
+  private $_aJoue;
 
   // Champs table joueur_reel
   private $_nom;
@@ -30,9 +34,13 @@ class JoueurCompoEquipe extends ClasseBase
   public function capitaine() { return $this->_capitaine; }
   public function codeBonusMalus() { return $this->_codeBonusMalus; }
   public function note() { return $this->_note; }
+  public function noteBonus() { return $this->_noteBonus; }
   public function numeroRemplacement() { return $this->_numeroRemplacement; }
   public function idJoueurReelRemplacant() { return $this->_idJoueurReelRemplacant; }
+  public function nbButVirtuel() { return $this->_nbButVirtuel; }
+  public function nbButReel() { return $this->_nbButReel; }
   public function noteMinRemplacement() { return $this->_noteMinRemplacement; }
+  public function aJoue() { return $this->_aJoue; }
   public function nom() { return $this->_nom; }
   public function prenom() { return $this->_prenom; }
   public function nomRemplacant() { return $this->_nomRemplacant; }
@@ -63,6 +71,11 @@ class JoueurCompoEquipe extends ClasseBase
       $this->_note = $note;
   }
 
+  public function setNote_bonus($note)
+  {
+      $this->_noteBonus = $note;
+  }
+
   public function setNumero_remplacement($numeroRemplacement)
   {
       $this->_numeroRemplacement = $numeroRemplacement;
@@ -76,6 +89,21 @@ class JoueurCompoEquipe extends ClasseBase
   public function setNote_min_remplacement($noteMinRemplacement)
   {
       $this->_noteMinRemplacement = $noteMinRemplacement;
+  }
+
+  public function setNb_but_reel($nom)
+  {
+      $this->_nbButReel = $nom;
+  }
+
+  public function setNb_but_virtuel($nbBut)
+  {
+      $this->_nbButVirtuel = $nbBut;
+  }
+
+  public function setA_joue($aJoue)
+  {
+      $this->_aJoue = $aJoue;
   }
 
   public function setNom($nom)
