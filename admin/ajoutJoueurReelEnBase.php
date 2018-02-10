@@ -20,7 +20,7 @@
 	
     for ($i=0; $i<count($listeErreurCheckBox); $i++) {
 		$valeursAInserer = explode(",",$listeErreurCheckBox[$i]);
-		$ins_joueurReel->execute(array('cle_roto_primaire' => $valeursAInserer[1].$valeursAInserer[2].$valeursAInserer[0],'prenom' => $valeursAInserer[2], 'nom' => $valeursAInserer[1], 'equipe' => $valeursAInserer[0], 'position' => $valeursAInserer[4], 'prix' => $valeursAInserer[3]));
+		$ins_joueurReel->execute(array('cle_roto_primaire' => trim($valeursAInserer[1].$valeursAInserer[2].$valeursAInserer[0]),'prenom' => $valeursAInserer[2], 'nom' => $valeursAInserer[1], 'equipe' => $valeursAInserer[0], 'position' => $valeursAInserer[4], 'prix' => $valeursAInserer[3]));
 		echo 'INSERT de ';
 		echo $valeursAInserer[1].$valeursAInserer[2].$valeursAInserer[0].' | ';
 		echo $valeursAInserer[2].' | ';
