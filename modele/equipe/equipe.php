@@ -9,6 +9,7 @@ class Equipe extends ClasseBase
   private $_nom;
   private $_ville;
   private $_stade;
+  private $_codeStyleCoach;
   private $_budgetRestant;
   private $_finMercato;
   private $_classement;
@@ -33,6 +34,7 @@ class Equipe extends ClasseBase
   public function nom() { return $this->_nom; }
   public function ville() { return $this->_ville; }
   public function stade() { return $this->_stade; }
+  public function codeStyleCoach() { return $this->_codeStyleCoach; }
   public function budgetRestant() { return $this->_budgetRestant; }
   public function finMercato() { return $this->_finMercato; }
   public function classement() { return $this->_classement; }
@@ -64,6 +66,11 @@ class Equipe extends ClasseBase
   public function setStade($stade)
   {
       $this->_stade = $stade;
+  }
+
+  public function setCode_style_coach($codeStyleCoach)
+  {
+      $this->_codeStyleCoach = $codeStyleCoach;
   }
 
   public function setBudget_restant($budgetRestant)

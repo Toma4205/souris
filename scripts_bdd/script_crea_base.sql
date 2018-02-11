@@ -10,6 +10,7 @@ CREATE TABLE nomenclature_tactique (`code` VARCHAR(10) NOT NULL , `date_debut` D
 CREATE TABLE nomenclature_position (`code` VARCHAR(10) NOT NULL , `libelle` VARCHAR(100) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
 CREATE TABLE nomenclature_caricature (`code` VARCHAR(30) NOT NULL , `libelle` VARCHAR(255) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
 CREATE TABLE nomenclature_bonus_malus (`code` VARCHAR(30) NOT NULL , `libelle` VARCHAR(255) NOT NULL, `select_joueur` BOOLEAN NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
+CREATE TABLE nomenclature_style_coach (`code` VARCHAR(30) NOT NULL , `libelle` VARCHAR(255) NOT NULL, `description` VARCHAR(255) NOT NULL, `nom_image` VARCHAR(255) NOT NULL , `date_debut` DATE NOT NULL , `date_fin` DATE NULL , PRIMARY KEY (`code`)) ENGINE = InnoDB;
 CREATE TABLE quantite_bonus_malus (`code` VARCHAR(30) NOT NULL , `nb_joueur` TINYINT UNSIGNED NOT NULL , `nb_pack_classique` TINYINT UNSIGNED NOT NULL , `nb_pack_folie` TINYINT UNSIGNED NOT NULL , PRIMARY KEY (`code`, `nb_joueur`)) ENGINE = InnoDB;
 ALTER TABLE `quantite_bonus_malus` ADD FOREIGN KEY (`code`) REFERENCES `nomenclature_bonus_malus`(`code`) ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -61,6 +62,7 @@ CREATE TABLE `equipe` (
   `nom` VARCHAR(30) NOT NULL ,
   `ville` VARCHAR(30) NOT NULL ,
   `stade` VARCHAR(30) NOT NULL ,
+  `code_style_coach` VARCHAR(30) NOT NULL ,
   `budget_restant` SMALLINT NOT NULL ,
   `fin_mercato` BOOLEAN NOT NULL ,
   `classement` TINYINT UNSIGNED ,
@@ -79,6 +81,7 @@ ALTER TABLE `equipe` ADD UNIQUE(`id_ligue`, `id_coach`);
 ALTER TABLE `equipe` ADD FOREIGN KEY (`id_coach`) REFERENCES `coach`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `equipe` ADD FOREIGN KEY (`id_ligue`) REFERENCES `ligue`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `equipe` ADD FOREIGN KEY (`code_caricature`) REFERENCES `nomenclature_caricature`(`code`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `equipe` ADD FOREIGN KEY (`code_style_coach`) REFERENCES `nomenclature_style_coach`(`code`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 CREATE TABLE `joueur_equipe` (
 `id_ligue` INT UNSIGNED NOT NULL,

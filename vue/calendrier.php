@@ -194,8 +194,7 @@ if (isset($calendriers))
  ?>
 <div class="detail_journee_cal_match conteneurRow">
   <div class="detail_journee_cal_col_g">
-    <!-- TODO MPL Changer src image -->
-    <img class="float_left" src="web/img/coach/coach_ecole_italienne.png" alt="Logo équipe dom." width="30px" height="30px"/>
+    <img class="float_left" src="web/img/coach/<?php echo $tabNomenclStyleCoach[$equipeDom->codeStyleCoach()]; ?>" alt="Logo équipe dom." width="30px" height="30px"/>
     <div class="float_right"><?php echo $value->nomEquipeDom(); ?></div>
   </div>
   <div class="detail_journee_cal_col_c">
@@ -212,8 +211,7 @@ if (isset($calendriers))
     ?>
   </div>
   <div class="detail_journee_cal_col_d">
-    <!-- TODO MPL Changer src image -->
-    <img class="float_right" src="web/img/coach/coach_ecole_italienne.png" alt="Logo équipe ext." width="30px" height="30px"/>
+    <img class="float_right" src="web/img/coach/<?php echo $tabNomenclStyleCoach[$equipeExt->codeStyleCoach()]; ?>" alt="Logo équipe ext." width="30px" height="30px"/>
     <div class="float_left"><?php echo $value->nomEquipeExt(); ?></div>
   </div>
 </div>
@@ -223,6 +221,7 @@ if (isset($calendriers))
 echo '</div>';
 ?>
 </section>
+<?php if (isset($match)) { ?>
 <section id="detailMatch" class="detail_match">
   <div class="detail_match_bandeau conteneurRow">
     <div class="detail_match_bandeau_col_g">
@@ -230,8 +229,7 @@ echo '</div>';
         <div><?php echo $match->nomEquipeDom(); ?></div>
         <div class="detail_match_bandeau_equipe_coach">Coach : <?php echo $equipeDom->nomCoach(); ?></div>
         <div class="detail_match_bandeau_equipe_logo">
-          <!-- TODO MPL Changer src image -->
-          <img src="web/img/coach/coach_ecole_italienne.png" alt="Logo équipe dom." width="60px" height="60px"/>
+          <img src="web/img/coach/<?php echo $tabNomenclStyleCoach[$equipeDom->codeStyleCoach()]; ?>" alt="Logo équipe dom." width="60px" height="60px"/>
         </div>
         <div class="detail_match_bandeau_equipe_buteur">
           <ul>
@@ -256,8 +254,7 @@ echo '</div>';
         <div><?php echo $match->nomEquipeExt(); ?></div>
         <div class="detail_match_bandeau_equipe_coach">Coach : <?php echo $equipeExt->nomCoach(); ?></div>
         <div class="detail_match_bandeau_equipe_logo">
-          <!-- TODO MPL Changer src image -->
-          <img src="web/img/tontonpat.png" alt="Logo équipe ext." width="60px" height="60px"/>
+          <img src="web/img/coach/<?php echo $tabNomenclStyleCoach[$equipeExt->codeStyleCoach()]; ?>" alt="Logo équipe ext." width="60px" height="60px"/>
         </div>
         <div class="detail_match_bandeau_equipe_buteur">
           <ul>
@@ -281,8 +278,10 @@ echo '</div>';
   </div>
 </section>
 <?php
-}
-else {
+  } // Fin du if (isset($match))
+} // Fin du if (isset($calendriers))
+else
+{
     $message = 'Calendrier indisponible ! Veuillez nous contacter en indiquant le nom de votre ligue.';
 }
 

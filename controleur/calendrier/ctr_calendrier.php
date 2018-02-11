@@ -3,6 +3,14 @@
 $equipeManager = new EquipeManager($bdd);
 $calLigueManager = new CalendrierLigueManager($bdd);
 $compoEquipeManager = new CompoEquipeManager($bdd);
+$nomenclManager = new NomenclatureManager($bdd);
+
+// TODO MPL Mettre en cache application
+$nomenclStyleCoach = $nomenclManager->findNomenclatureStyleCoach();
+$tabNomenclStyleCoach;
+foreach ($nomenclStyleCoach as $key => $value) {
+  $tabNomenclStyleCoach[$value->code()] = $value->nomImage();
+}
 
 $equipe = $equipeManager->findEquipeByCoachEtLigue($coach->id(), $ligue->id());
 $calendriers = $calLigueManager->findCalendrierByLigue($ligue->id());
@@ -29,28 +37,35 @@ else {
   }
 }
 
-foreach ($calendriers as $cle => $value)
+if (isset($_POST["id_match"]))
 {
-    if ($_POST["id_match"] == $value->id())
-    {
-      $match = $value;
-      $equipeDom = $equipeManager->findEquipeById($value->idEquipeDom());
-      $equipeExt = $equipeManager->findEquipeById($value->idEquipeExt());
-      $compoDom = $compoEquipeManager->findCompoByEquipeEtCalLigue($value->idEquipeDom(), $value->id());
-      $compoExt = $compoEquipeManager->findCompoByEquipeEtCalLigue($value->idEquipeExt(), $value->id());
+  foreach ($calendriers as $cle => $value)
+  {
+      if ($_POST["id_match"] == $value->id())
+      {
+        $match = $value;
+        $equipeDom = $equipeManager->findEquipeById($value->idEquipeDom());
+        $equipeExt = $equipeManager->findEquipeById($value->idEquipeExt());
+        $compoDom = $compoEquipeManager->findCompoByEquipeEtCalLigue($value->idEquipeDom(), $value->id());
+        $compoExt = $compoEquipeManager->findCompoByEquipeEtCalLigue($value->idEquipeExt(), $value->id());
 
-      $log = 'match=' . $value->id() . ', equipeDom=' . $value->idEquipeDom() . ', equipeExt=' . $value->idEquipeExt();
-      if ($compoDom != null) {
-        $log = $log . ', compoDom=' . $compoDom->id();
-        $joueursDom = $compoEquipeManager->findJoueurCompoByCompo($compoDom->id());
+        $log = 'match=' . $value->id() . ', equipeDom=' . $value->idEquipeDom() . ', equipeExt=' . $value->idEquipeExt();
+        if ($compoDom != null) {
+          $log = $log . ', compoDom=' . $compoDom->id();
+          $joueursDom = $compoEquipeManager->findJoueurCompoByCompo($compoDom->id());
+        }
+        if ($compoExt != null) {
+          $log = $log . ', compExt=' . $compoExt->id();
+          $joueursExt = $compoEquipeManager->findJoueurCompoByCompo($compoExt->id());
+        }
+        echo $log;
+        break;
       }
-      if ($compoExt != null) {
-        $log = $log . ', compExt=' . $compoExt->id();
-        $joueursExt = $compoEquipeManager->findJoueurCompoByCompo($compoExt->id());
-      }
-      echo $log;
-      break;
-    }
+  }
+}
+else
+{
+  // Cas où aucune journée n'a été jouée
 }
 
 include_once('vue/calendrier.php');

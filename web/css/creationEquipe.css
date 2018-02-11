@@ -1,0 +1,17 @@
+.crea_equipe_coach {
+  padding: .3rem 0;
+}
+.crea_equipe_coach_style {
+  width: 5rem;
+}
+.crea_equipe_coach_style:hover {
+  cursor: pointer;
+}
+.crea_equipe_coach_titre {
+  font-size: .8rem;
+  font-style: italic;
+  color: #141b4D;
+}
+.crea_equipe_coach_select {
+  background-color: #9fa9f1;
+}

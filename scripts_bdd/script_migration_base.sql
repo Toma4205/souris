@@ -1,15 +1,6 @@
-ALTER TABLE `calendrier_ligue` ADD `num_journee_cal_reel` TINYINT(3) UNSIGNED NOT NULL AFTER `id_ligue`;
-UPDATE calendrier_ligue SET num_journee_cal_reel = (num_journee + 13);
-ALTER TABLE `calendrier_ligue` ADD FOREIGN KEY (`num_journee_cal_reel`) REFERENCES `calendrier_reel`(`num_journee`) ON DELETE CASCADE ON UPDATE CASCADE;
+/* Script passée en "PROD" le ... */
 
-ALTER TABLE `joueur_compo_equipe` CHANGE `note_min` `note_min_remplacement` DECIMAL(3,1);
-ALTER TABLE `joueur_compo_equipe` CHANGE `numero_remplacant` `id_joueur_reel_remplacant` MEDIUMINT(8) UNSIGNED NULL DEFAULT NULL;
-ALTER TABLE `joueur_compo_equipe` ADD FOREIGN KEY (`id_joueur_reel_remplacant`) REFERENCES `joueur_reel`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE `joueur_compo_equipe` ADD `nb_but_reel` TINYINT(3) UNSIGNED AFTER `note`;
-ALTER TABLE `joueur_compo_equipe` ADD `nb_but_virtuel` TINYINT(3) UNSIGNED AFTER `nb_but_reel`;
-ALTER TABLE `joueur_compo_equipe` ADD `numero_remplacement` TINYINT(3) UNSIGNED AFTER `id_joueur_reel_remplacant`;
-
-ALTER TABLE `nomenclature_bonus_malus` ADD `select_joueur` BOOLEAN NOT NULL AFTER `libelle`;
-UPDATE `nomenclature_bonus_malus` SET select_joueur = TRUE WHERE code IN ('MAU_CRA', 'BOUCHER', 'CHA_GB', 'PAR_TRU');
-
-/* Script passée en "PROD" le 03/12/2017 */
+ALTER TABLE `equipe` ADD `code_style_coach` VARCHAR(30) AFTER `stade`;
+ALTER TABLE `equipe` ADD FOREIGN KEY (`code_style_coach`) REFERENCES `nomenclature_style_coach`(`code`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+UPDATE equipe SET code_style_coach = 'CATENACCIO';
+ALTER TABLE `equipe` CHANGE `code_style_coach` `code_style_coach` VARCHAR(30) NOT NULL;

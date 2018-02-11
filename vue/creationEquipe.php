@@ -1,5 +1,8 @@
 <?php
 // entete
+$vueCss = 'creationEquipe.css';
+$vueJs = 'creationEquipe.js';
+
 require_once("vue/commun/enteteflex.php");
 ?>
   <!-- ***************************************
@@ -91,6 +94,44 @@ require_once("vue/commun/enteteflex.php");
           echo htmlspecialchars($equipe->stade());
         }
         echo '"', (isset($equipe) && null != $equipe->id() ? ' disabled' : ' enabled');?>/></p>
+    <p>Quel style de coach es-tu ? *</p>
+    <input type="hidden" id="codeStyleCoach" name="codeStyleCoach" />
+    <?php
+      if (isset($equipe) && null != $equipe->id())
+      {
+        foreach ($nomenclStyleCoach as $key => $value) {
+          if ($value->code() == $equipe->codeStyleCoach()) {
+            echo '<div>';
+            echo '<div class="crea_equipe_coach_titre">' . $value->libelle() . '</div>';
+            echo '<img src="web/img/coach/' . $value->nomImage() . '" title="' . $value->description() . '" alt="' . $value->libelle() . '" width="60px" height="60px"/>';
+            echo '</div>';
+            break;
+          }
+        }
+      }
+      else if (isset($nomenclStyleCoach))
+      {
+        $index = 0;
+        foreach ($nomenclStyleCoach as $key => $value) {
+            if ($index == 0) {
+              echo '<div class="conteneurRow crea_equipe_coach">';
+            } else if ($index % 4 == 0) {
+              echo '</div>';
+              echo '<div class="conteneurRow crea_equipe_coach">';
+            }
+            echo '<div class="crea_equipe_coach_style" id="' . $value->code() . '" onclick="javascript:selectStyleCoach(\'' . $value->code() . '\')">';
+            echo '<div class="crea_equipe_coach_titre">' . $value->libelle() . '</div>';
+            echo '<img src="web/img/coach/' . $value->nomImage() . '" title="' . $value->description() . '" alt="' . $value->libelle() . '" width="60px" height="60px"/>';
+            echo '</div>';
+            $index++;
+        }
+        echo '</div>';
+      }
+      else
+      {
+        echo '<div>Aucune nomenclature trouvée. Veuillez nous contacter.</div>';
+      }
+     ?>
     <?php
       // Création équipe non validée
       if (!isset($equipe) || null == $equipe->id())

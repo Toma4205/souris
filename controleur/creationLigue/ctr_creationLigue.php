@@ -90,18 +90,20 @@ if (isset($_POST['creationEquipe']))
 {
   $equipe = new Equipe(['nom' => $_POST['nomEquipe'],
                       'ville' => $_POST['villeEquipe'],
-                      'stade' => $_POST['stadeEquipe']]);
+                      'stade' => $_POST['stadeEquipe'],
+                      'code_style_coach' => $_POST['codeStyleCoach']]);
 
   if (isset($_POST['nomEquipe']) && !empty($_POST['nomEquipe'])
       && isset($_POST['villeEquipe']) && !empty($_POST['villeEquipe'])
-      && isset($_POST['stadeEquipe']) && !empty($_POST['stadeEquipe']))
+      && isset($_POST['stadeEquipe']) && !empty($_POST['stadeEquipe'])
+      && isset($_POST['codeStyleCoach']) && !empty($_POST['codeStyleCoach']))
   {
     $nbEquipe = $coachManager->compterCoachByLigue($creaLigue->id());
     $equipeManager->creerEquipe($equipe, $coach->id(), $creaLigue->id(), $creaLigue->bonusMalus(), $nbEquipe);
   }
   else
   {
-      $messageEquipe = 'Le nom, la ville et le stade doivent être renseignés.';
+      $messageEquipe = 'Le nom, la ville, le stade et le style de coach doivent être renseignés.';
   }
 }
 
@@ -114,6 +116,9 @@ if (isset($creaLigue) && $creaLigue->etat() == EtatLigue::MERCATO)
 
 if (isset($creaLigue) && $creaLigue->etat() == EtatLigue::MERCATO)
 {
+  $nomenclManager = new NomenclatureManager($bdd);
+  $nomenclStyleCoach = $nomenclManager->findNomenclatureStyleCoach();
+
   include_once('vue/creationEquipe.php');
 }
 else

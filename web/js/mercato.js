@@ -1,6 +1,6 @@
 var tabMercato = [];
 var tabPrixBase = [];
-var BUDGET_INITIAL = 300;
+var BUDGET_INITIAL = 400;
 var GB = 'Gardien';
 var DEF = 'Défenseur';
 var MIL = 'Milieu';
@@ -128,7 +128,7 @@ function recalculerBudgetRestant()
     total += getPrixAchat($(this));
   });
 
-  $('#budgetRestant').text(300 - total);
+  $('#budgetRestant').text(BUDGET_INITIAL - total);
 
   effectuerControlesSuiteModif();
 }

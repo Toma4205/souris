@@ -11,14 +11,15 @@ class EquipeManager extends ManagerBase
 
   public function creerEquipe(Equipe $equipe, $idCoach, $idLigue, $bonusMalus, $nbEquipe)
   {
-		$q = $this->_bdd->prepare('INSERT INTO equipe(id_coach, id_ligue, nom, ville, stade, budget_restant,
+		$q = $this->_bdd->prepare('INSERT INTO equipe(id_coach, id_ligue, nom, ville, stade, code_style_coach, budget_restant,
         fin_mercato, nb_match, nb_victoire, nb_nul, nb_defaite, nb_but_pour, nb_but_contre, nb_bonus, nb_malus)
-        VALUES(:idCoach, :idLigue, :nom, :ville, :stade, :budget, 0, 0, 0, 0, 0, 0, 0, 0, 0)');
+        VALUES(:idCoach, :idLigue, :nom, :ville, :stade, :styleCoach, :budget, 0, 0, 0, 0, 0, 0, 0, 0, 0)');
     $q->bindValue(':idCoach', $idCoach);
     $q->bindValue(':idLigue', $idLigue);
     $q->bindValue(':nom', $equipe->nom());
     $q->bindValue(':ville', $equipe->ville());
     $q->bindValue(':stade', $equipe->stade());
+    $q->bindValue(':styleCoach', $equipe->codeStyleCoach());
     $q->bindValue(':budget', ConstantesAppli::BUDGET_INIT);
 
     $q->execute();

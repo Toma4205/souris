@@ -63,4 +63,20 @@ class NomenclatureManager extends ManagerBase
 
     return new NomenclatureTactique($donnees);
   }
+
+  public function findNomenclatureStyleCoach()
+  {
+    $nomencls = [];
+    $q = $this->_bdd->prepare('SELECT * FROM nomenclature_style_coach
+      WHERE date_debut < NOW() AND (date_fin IS NULL OR date_fin > NOW())');
+    $q->execute();
+
+    while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+		{
+			$nomencls[] = new NomenclatureStyleCoach($donnees);
+		}
+		$q->closeCursor();
+
+    return $nomencls;
+	}
 }

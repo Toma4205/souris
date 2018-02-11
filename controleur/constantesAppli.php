@@ -3,7 +3,7 @@
 // Répertorie les constantes utilisées pour le fonctionnement de l'appli
 class ConstantesAppli {
 
-    const BUDGET_INIT = 300;
+    const BUDGET_INIT = 400;
     const GARDIEN = 'Goalkeeper';
     const DEFENSEUR = 'Defender';
     const MILIEU = 'Midfielder';
