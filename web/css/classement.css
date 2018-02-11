@@ -1,0 +1,47 @@
+/************/
+/** BUTEURS */
+/************/
+.tableButeur {
+  font-size: .8rem;
+}
+
+/**************/
+/** EFFECTIFS */
+/**************/
+.bloc_choix_effectif {
+  padding: 1rem 0;
+  text-align: center;
+}
+.choix_effectif {
+  font-size: 1.2rem;
+}
+.detail_effectif {
+  padding: .5rem;
+  text-align: left;
+  width: 70%;
+  margin: auto;
+}
+.detail_effectif_titre {
+  border-bottom: 2px solid #141b4D;
+  font-style: italic;
+  color: #4a61d4;
+  margin-bottom: .5rem;
+}
+.detail_effectif_joueur_caract_titre {
+  font-size: .5rem;
+}
+.detail_effectif_joueur {
+  border-bottom: 1px dashed #141b4D;
+  margin-top: .5rem;
+  font-size: .8rem;
+}
+.detail_effectif_joueur_prix {
+  margin: 0 .5rem;
+  width: 2.2rem;
+  text-align: center;
+}
+.detail_effectif_joueur_tour_m {
+  margin: 0 .5rem;
+  width: 2.8rem;
+  text-align: center;
+}

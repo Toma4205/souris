@@ -407,11 +407,6 @@ header.menuClassement p {
 }
 
 /* CALENDRIER */
-.calendrier_journee {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  text-align: center;
-}
 .detail_match {
   padding-top: 10px;
   padding-bottom: 10px;

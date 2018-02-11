@@ -1,12 +1,15 @@
 <?php
 // entete
 $vueJs = 'classement.js';
+$vueCss = 'classement.css';
+
 require_once("vue/commun/enteteflex.php");
 ?>
 <header class="menuClassement">
   <p id="choixClassement" class="bold" onclick="javascript:afficherSection(this, 'sectionClassement');">Classement</p>
   <p id="choixButeurs" onclick="javascript:afficherSection(this, 'sectionButeurs');">Buteurs</p>
   <p id="choixJoueurs" onclick="javascript:afficherSection(this, 'sectionJoueurs');">Joueurs</p>
+  <p id="choixEffectif" onclick="javascript:afficherSection(this, 'sectionEffectifs');">Effectifs</p>
 </header>
 <section id="sectionClassement">
   <div>
@@ -56,7 +59,7 @@ require_once("vue/commun/enteteflex.php");
     if (isset($buteurs) && count($buteurs) > 0)
     {
     ?>
-    <table class="tableBase">
+    <table class="tableBase tableButeur">
       <thead>
         <tr>
           <th>Joueur</th>
@@ -99,6 +102,67 @@ require_once("vue/commun/enteteflex.php");
   <div>
     <p>A venir Joueurs ...</p>
   </div>
+</section>
+<section id="sectionEffectifs" class="cache">
+  <div class="bloc_choix_effectif">
+    <select name="effectifs" class="choix_effectif" onchange="javascript:afficherDivEffectif(this)">
+      <?php
+          foreach ($equipes as $cle => $value) {
+            if($value->id() == $equipe->id())
+            {
+                echo '<option value="effectif' . $value->id() . '" selected="selected">' . $value->nom() . '</option>';
+            }
+            else
+            {
+                echo '<option value="effectif' . $value->id() . '">' . $value->nom() . '</option>';
+            }
+          }
+       ?>
+    </select>
+  </div>
+  <?php
+
+    function afficherBlocJoueur($joueurs, $poste, $libPoste)
+    {
+        echo '<div class="detail_effectif">';
+        echo '<div class="detail_effectif_titre">' . $libPoste;
+        echo '<span class="float_right detail_effectif_joueur_tour_m detail_effectif_joueur_caract_titre">Tour mercato</span>';
+        echo '<span class="float_right detail_effectif_joueur_prix detail_effectif_joueur_caract_titre">Prix Achat</span>';
+        echo '</div>';
+        echo '<div>';
+        echo '<ul>';
+
+        foreach ($joueurs as $cle => $value)
+        {
+          if ($value->position() == $poste) {
+            echo '<li class="detail_effectif_joueur">' . $value->nom() . ' ' . $value->prenom() . ' (' . $value->libelleEquipe() . ')';
+            echo '<span class="float_right detail_effectif_joueur_tour_m">' . $value->tourMercato() . '</span>';
+            echo '<span class="float_right detail_effectif_joueur_prix">' . $value->prixAchat() . '</span>';
+            echo '</li>';
+          }
+        }
+
+        echo '</ul>';
+        echo '</div>';
+        echo '</div>';
+    }
+
+    foreach ($equipes as $cle => $value)
+    {
+      echo '<div id="effectif' . $value->id(). '"';
+      if ($value->id() != $equipe->id())
+      {
+        echo ' class="cache"';
+      }
+      echo '>';
+      $joueurs = $tabEffectif[$value->id()];
+      afficherBlocJoueur($joueurs, ConstantesAppli::GARDIEN, ConstantesAppli::GARDIEN_IHM);
+      afficherBlocJoueur($joueurs, ConstantesAppli::DEFENSEUR, ConstantesAppli::DEFENSEUR_IHM);
+      afficherBlocJoueur($joueurs, ConstantesAppli::MILIEU, ConstantesAppli::MILIEU_IHM);
+      afficherBlocJoueur($joueurs, ConstantesAppli::ATTAQUANT, ConstantesAppli::ATTAQUANT_IHM);
+      echo '</div>';
+    }
+  ?>
 </section>
 <?php
 // Le pied de page

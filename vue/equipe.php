@@ -179,7 +179,7 @@ if (isset($calReel) && $calLigue->id() != null)
         <div><?php echo $calLigue->nomEquipeDom(); ?></div>
         <div class="detail_match_bandeau_equipe_coach">Coach : <?php echo $equipeDom->nomCoach(); ?></div>
         <div class="detail_match_bandeau_equipe_logo">
-          <img src="web/img/coach/<?php echo $tabNomenclStyleCoach[$equipeDom->codeStyleCoach()]; ?>" alt="Logo équipe dom." width="60px" height="60px"/>
+          <img src="web/img/coach/<?php echo $tabNomenclStyleCoach[$equipeDom->codeStyleCoach()]; ?>" alt="Logo équipe dom." width="80px" height="80px"/>
         </div>
       </div>
     </div>
@@ -200,7 +200,7 @@ if (isset($calReel) && $calLigue->id() != null)
         <div><?php echo $calLigue->nomEquipeExt(); ?></div>
         <div class="detail_match_bandeau_equipe_coach">Coach : <?php echo $equipeExt->nomCoach(); ?></div>
         <div class="detail_match_bandeau_equipe_logo">
-          <img src="web/img/coach/<?php echo $tabNomenclStyleCoach[$equipeExt->codeStyleCoach()]; ?>" alt="Logo équipe ext." width="60px" height="60px"/>
+          <img src="web/img/coach/<?php echo $tabNomenclStyleCoach[$equipeExt->codeStyleCoach()]; ?>" alt="Logo équipe ext." width="80px" height="80px"/>
         </div>
       </div>
     </div>
