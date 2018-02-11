@@ -107,13 +107,13 @@ elseif (isset($_POST['enregistrer']))
           {
             $avecRempl = TRUE;
             $compoEquipeManager->creerJoueurCompoEquipeAvecRempl($compoEquipe->id(), $name, $joueur,
-              $isCapitaine, null, $numRempl, $tabRentrant[$numRempl], $tabNote[$numRempl]);
+              $isCapitaine, $numRempl, $tabRentrant[$numRempl], $tabNote[$numRempl]);
           }
         }
       }
 
       if ($avecRempl == FALSE) {
-        $compoEquipeManager->creerJoueurCompoEquipe($compoEquipe->id(), $name, $joueur, $isCapitaine, null);
+        $compoEquipeManager->creerJoueurCompoEquipe($compoEquipe->id(), $name, $joueur, $isCapitaine);
       }
     }
   }

@@ -8,7 +8,6 @@ class JoueurCompoEquipe extends ClasseBase
   private $_idJoueurReel;
   private $_numero;
   private $_capitaine;
-  private $_codeBonusMalus;
   private $_note;
   private $_noteBonus;
   private $_numeroRemplacement;
@@ -32,7 +31,6 @@ class JoueurCompoEquipe extends ClasseBase
   public function idJoueurReel() { return $this->_idJoueurReel; }
   public function numero() { return $this->_numero; }
   public function capitaine() { return $this->_capitaine; }
-  public function codeBonusMalus() { return $this->_codeBonusMalus; }
   public function note() { return $this->_note; }
   public function noteBonus() { return $this->_noteBonus; }
   public function numeroRemplacement() { return $this->_numeroRemplacement; }
@@ -59,11 +57,6 @@ class JoueurCompoEquipe extends ClasseBase
   public function setCapitaine($capitaine)
   {
       $this->_capitaine = $capitaine;
-  }
-
-  public function setCode_bonus_malus($codeBonusMalus)
-  {
-      $this->_codeBonusMalus = $codeBonusMalus;
   }
 
   public function setNote($note)

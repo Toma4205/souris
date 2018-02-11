@@ -6,6 +6,83 @@ require_once("vue/commun/enteteflex.php");
 
 if (isset($calendriers))
 {
+?>
+<section class="calendrier_journee">
+  <select name="journees" class="choix_journee" onchange="javascript:afficherDivJournee(this)">
+    <?php
+        $numJourneeMax = 2;
+        foreach ($calendriers as $cle => $value)
+        {
+          if($value->numJournee() > $numJourneeMax)
+          {
+              $numJourneeMax = $value->numJournee();
+          }
+        }
+        for ($index = 1; $index <= $numJourneeMax; $index++) {
+          if($index == $indexJournee)
+          {
+              echo '<option value="divJournee' . $index . '" selected="selected">Journée ' . $index . '</option>';
+          }
+          else
+          {
+              echo '<option value="divJournee' . $index . '">Journée ' . $index . '</option>';
+          }
+        }
+     ?>
+  </select>
+  <input type="hidden" id="idMatch" name="id_match" />
+<?php
+    $numJournee = 0;
+    foreach ($calendriers as $cle => $value)
+    {
+      if ($numJournee < $value->numJournee())
+      {
+        // Changement de journée
+        $numJournee = $value->numJournee();
+        if ($numJournee > 1)
+        {
+          // Si ce n'est pas la première journée, on ferme le div de la journée précédente
+          echo '</div>';
+        }
+?>
+  <div id="divJournee<?php echo $numJournee; ?>"
+    class="detail_journee_cal <?php if ($numJournee != $indexJournee) echo 'cache'; ?>">
+<?php
+      }
+ ?>
+<div class="detail_journee_cal_match conteneurRow">
+  <div class="detail_journee_cal_col_g">
+    <img class="float_left" src="web/img/coach/<?php echo $tabNomenclStyleCoach[$value->codeStyleCoachDom()]; ?>" alt="Logo équipe dom." width="30px" height="30px"/>
+    <div class="float_right"><?php echo $value->nomEquipeDom(); ?></div>
+  </div>
+  <div class="detail_journee_cal_col_c">
+    <?php
+        if ($value->scoreDom() != null)
+        {
+          echo '<div class="score_match" onclick="javascript:stockerMatch(' . $value->id() . ');">'
+          . $value->scoreDom() . ' - ' . $value->scoreExt() . '</div>';
+        }
+        else
+        {
+          echo '<div style="text-align:center;">-</div>';
+        }
+    ?>
+  </div>
+  <div class="detail_journee_cal_col_d">
+    <img class="float_right" src="web/img/coach/<?php echo $tabNomenclStyleCoach[$value->codeStyleCoachExt()]; ?>" alt="Logo équipe ext." width="30px" height="30px"/>
+    <div class="float_left"><?php echo $value->nomEquipeExt(); ?></div>
+  </div>
+</div>
+<?php
+} // Fin foreach calendriers
+// Fermeture du div de la dernière journée
+echo '</div>';
+?>
+</section>
+<section id="detailMatch" class="detail_match">
+<?php
+if (isset($match)) {
+
   // Afficahge des buteurs dans le detail_match_bandeau
   function afficherButeur($joueurs)
   {
@@ -149,80 +226,6 @@ if (isset($calendriers))
     echo '</div>';
   }
 ?>
-<section class="calendrier_journee">
-  <select name="journees" class="choix_journee" onchange="javascript:afficherDivJournee(this)">
-    <?php
-        $numJourneeMax = 2;
-        foreach ($calendriers as $cle => $value)
-        {
-          if($value->numJournee() > $numJourneeMax)
-          {
-              $numJourneeMax = $value->numJournee();
-          }
-        }
-        for ($index = 1; $index <= $numJourneeMax; $index++) {
-          if($index == $indexJournee)
-          {
-              echo '<option value="divJournee' . $index . '" selected="selected">Journée ' . $index . '</option>';
-          }
-          else
-          {
-              echo '<option value="divJournee' . $index . '">Journée ' . $index . '</option>';
-          }
-        }
-     ?>
-  </select>
-  <input type="hidden" id="idMatch" name="id_match" />
-<?php
-    $numJournee = 0;
-    foreach ($calendriers as $cle => $value)
-    {
-      if ($numJournee < $value->numJournee())
-      {
-        // Changement de journée
-        $numJournee = $value->numJournee();
-        if ($numJournee > 1)
-        {
-          // Si ce n'est pas la première journée, on ferme le div de la journée précédente
-          echo '</div>';
-        }
-?>
-  <div id="divJournee<?php echo $numJournee; ?>"
-    class="detail_journee_cal <?php if ($numJournee != $indexJournee) echo 'cache'; ?>">
-<?php
-      }
- ?>
-<div class="detail_journee_cal_match conteneurRow">
-  <div class="detail_journee_cal_col_g">
-    <img class="float_left" src="web/img/coach/<?php echo $tabNomenclStyleCoach[$equipeDom->codeStyleCoach()]; ?>" alt="Logo équipe dom." width="30px" height="30px"/>
-    <div class="float_right"><?php echo $value->nomEquipeDom(); ?></div>
-  </div>
-  <div class="detail_journee_cal_col_c">
-    <?php
-        if ($value->scoreDom() != null)
-        {
-          echo '<div class="score_match" onclick="javascript:stockerMatch(' . $value->id() . ');">'
-          . $value->scoreDom() . ' - ' . $value->scoreExt() . '</div>';
-        }
-        else
-        {
-          echo '<div style="text-align:center;">-</div>';
-        }
-    ?>
-  </div>
-  <div class="detail_journee_cal_col_d">
-    <img class="float_right" src="web/img/coach/<?php echo $tabNomenclStyleCoach[$equipeExt->codeStyleCoach()]; ?>" alt="Logo équipe ext." width="30px" height="30px"/>
-    <div class="float_left"><?php echo $value->nomEquipeExt(); ?></div>
-  </div>
-</div>
-<?php
-} // Fin foreach calendriers
-// Fermeture du div de la dernière journée
-echo '</div>';
-?>
-</section>
-<?php if (isset($match)) { ?>
-<section id="detailMatch" class="detail_match">
   <div class="detail_match_bandeau conteneurRow">
     <div class="detail_match_bandeau_col_g">
       <div class="detail_match_bandeau_equipe">
@@ -276,9 +279,11 @@ echo '</div>';
       <?php if (isset($joueursExt)){afficherRemplacants($joueursExt);} ?>
     </div>
   </div>
+<?php
+} // Fin du if (isset($match))
+?>
 </section>
 <?php
-  } // Fin du if (isset($match))
 } // Fin du if (isset($calendriers))
 else
 {

@@ -441,7 +441,7 @@ if (isset($calReel) && $calLigue->id() != null)
           if (isset($tabNote[$numRemplacement])) {
             $value = 'value="' . $tabNote[$numRemplacement] . '" ';
           }
-          echo '<input class="width_20px margin_left_5px" type="text" name="note_' . $numRemplacement . '"
+          echo '<input class="width_25px margin_left_5px" type="text" name="note_' . $numRemplacement . '"
             onchange="javascript:verifierNote(' . $numRemplacement . ');" maxlength="3" ' . $value . '/>';
           echo '</div>';
           echo '</div>';

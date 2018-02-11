@@ -51,7 +51,8 @@ class CalendrierLigueManager extends ManagerBase
   public function findCalendrierByLigue($idLigue)
   {
       $equipes = [];
-      $q = $this->_bdd->prepare('SELECT c.*, dom.nom as nomEquipeDom, ext.nom as nomEquipeExt
+      $q = $this->_bdd->prepare('SELECT c.*, dom.nom as nomEquipeDom, ext.nom as nomEquipeExt,
+        dom.code_style_coach as codeStyleCoachDom, ext.code_style_coach as codeStyleCoachExt
         FROM calendrier_ligue c
         JOIN equipe dom ON dom.id = c.id_equipe_dom
         JOIN equipe ext ON ext.id = c.id_equipe_ext

@@ -16,6 +16,8 @@ class CalendrierLigue extends ClasseBase
   // nom Equipe fictive
   private $_nomEquipeDom;
   private $_nomEquipeExt;
+  private $_codeStyleCoachDom;
+  private $_codeStyleCoachExt;
 
   public function __construct(array $donnees)
   {
@@ -31,6 +33,8 @@ class CalendrierLigue extends ClasseBase
   public function numJourneeCalReel() { return $this->_numJourneeCalReel; }
   public function nomEquipeDom() { return $this->_nomEquipeDom; }
   public function nomEquipeExt() { return $this->_nomEquipeExt; }
+  public function codeStyleCoachDom() { return $this->_codeStyleCoachDom; }
+  public function codeStyleCoachExt() { return $this->_codeStyleCoachExt; }
 
   public function setId($id)
   {
@@ -75,6 +79,16 @@ class CalendrierLigue extends ClasseBase
   public function setNomEquipeExt($nomEquipeExt)
   {
       $this->_nomEquipeExt = $nomEquipeExt;
+  }
+
+  public function setCodeStyleCoachDom($codeStyleCoachDom)
+  {
+      $this->_codeStyleCoachDom = $codeStyleCoachDom;
+  }
+
+  public function setCodeStyleCoachExt($codeStyleCoachExt)
+  {
+      $this->_codeStyleCoachExt = $codeStyleCoachExt;
   }
 }
 ?>
