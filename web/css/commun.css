@@ -25,6 +25,11 @@ h2
   color: #696969;
   text-decoration: underline;
 }
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
 section {
   padding-bottom: 10px;
 }
@@ -306,23 +311,6 @@ p.colonne {
 /* MERCATO LIGUE */
 
 /* EQUIPE */
-.journeeEquipe {
-  font-size: 25px;
-  font-weight: bold;
-  font-variant: small-caps;
-}
-.enteteJournee p {
-  margin: auto;
-  padding-top: 10px;
-}
-.enteteEquipe {
-  border-bottom: solid #141b4D;
-  padding: 5px;
-}
-.heureProchaineJournee {
-  font-size: 20px;
-  font-weight: bold;
-}
 .selectChoixTactique {
   width: 100px;
   margin: auto;

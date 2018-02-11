@@ -25,6 +25,14 @@ class CalendrierLigueManager extends ManagerBase
       return new CalendrierLigue($donnees);
   }
 
+  public function findJourneeMaxByLigue($idLigue)
+  {
+    $q = $this->_bdd->prepare('SELECT MAX(num_journee) FROM calendrier_ligue WHERE id_ligue = :id');
+    $q->execute([':id' => $idLigue]);
+
+    return (int) $q->fetchColumn();
+  }
+
   public function findProchaineJourneeByCalReel($idEquipe, $numJournee)
   {
       $q = $this->_bdd->prepare('SELECT c.*, dom.nom as nomEquipeDom, ext.nom as nomEquipeExt

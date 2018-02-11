@@ -1,0 +1,62 @@
+.detail_match_bandeau {
+  height: 150px;
+  margin-top: 1rem;
+  padding: 1.5rem;
+  background: url("../img/detail_match_entete.jpg") no-repeat;
+  background-size: cover;
+  text-align: center;
+}
+.detail_match_bandeau_journee_prec, .detail_match_bandeau_journee_suiv {
+  font-size: 3rem;
+  padding: 2.5rem 0;
+  color: white;
+  width: 5%;
+}
+.detail_match_bandeau_journee_prec:hover, .detail_match_bandeau_journee_suiv:hover {
+  cursor: pointer;
+}
+.detail_match_bandeau_col_g {
+    width: 30%;
+}
+.detail_match_bandeau_col_c {
+    width: 30%;
+}
+.detail_match_bandeau_journee {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+}
+.detail_match_bandeau_date {
+  padding: .5rem 0;
+  font-size: .8rem;
+  font-weight: normal;
+  color: rgba(255,255,255,0.5);
+}
+.heureProchaineJournee {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.detail_match_bandeau_ville, .detail_match_bandeau_stade {
+  padding: .2rem 0;
+  font-size: .8rem;
+  font-weight: normal;
+  color: rgba(255,255,255,0.5);
+}
+.detail_match_bandeau_col_d {
+    width: 30%;
+}
+.detail_match_bandeau_equipe {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  line-height: 1.2;
+}
+.detail_match_bandeau_equipe_coach {
+  margin-top: .4rem;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+}
+.detail_match_bandeau_equipe_logo {
+  margin: auto;
+  margin-top: 0.5rem;
+}

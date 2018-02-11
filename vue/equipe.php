@@ -1,6 +1,7 @@
 <?php
 // entete
 $vueJs = 'equipe.js';
+$vueCss = 'equipe.css';
 require_once("vue/commun/enteteflex.php");
 
 function afficherContenuSelect($libSelect, $nameSelect, $joueurs, $tabCompo)
@@ -166,33 +167,48 @@ if (isset($calReel) && $calLigue->id() != null)
 {
 ?>
 <section>
-  <div class="conteneurRow enteteJournee">
-    <p class="width_25pc">
-      <?php
-        echo $calLigue->nomEquipeDom();
-       ?>
-    </p>
-    <p class="width_50pc">
-      <?php
-        echo '<span class="journeeEquipe">Journée ' . $calLigue->numJournee() . '</span>';
-        echo '<br/>';
-        echo 'Stade : ' . $equipe->stade();
-      ?>
-    </p>
-    <p class="width_25pc">
-      <?php
-        echo $calLigue->nomEquipeExt();
-       ?>
-    </p>
-  </div>
-  <div class="conteneurRow enteteEquipe">
-    <p class="width_50pc">
-      <?php
-        $dateDebut = date_create($calReel->dateHeureDebut());
-        echo 'Début de la ' . $calReel->numJournee() . 'e journée de L1' .
-          '<br/><span class="heureProchaineJournee">' . date_format($dateDebut, 'd/m/Y H:i:s') . '</span>';
-      ?>
-    </p>
+  <input type="hidden" name="numJourneeCalReel" value="<?php echo $calReel->numJournee(); ?>"/>
+  <div class="detail_match_bandeau conteneurRow">
+    <div class="detail_match_bandeau_journee_prec"
+      title="<?php if ($avecJourneePrec){echo 'Afficher ma compo de la journée précédente';} ?>"
+      <?php if ($avecJourneePrec){echo 'onclick="javascript:submitForm(\'journeePrec\');"';} ?>>
+      <?php if ($avecJourneePrec){echo '<';} ?>
+    </div>
+    <div class="detail_match_bandeau_col_g">
+      <div class="detail_match_bandeau_equipe">
+        <div><?php echo $calLigue->nomEquipeDom(); ?></div>
+        <div class="detail_match_bandeau_equipe_coach">Coach : <?php echo $equipeDom->nomCoach(); ?></div>
+        <div class="detail_match_bandeau_equipe_logo">
+          <img src="web/img/coach/<?php echo $tabNomenclStyleCoach[$equipeDom->codeStyleCoach()]; ?>" alt="Logo équipe dom." width="60px" height="60px"/>
+        </div>
+      </div>
+    </div>
+    <div class="detail_match_bandeau_col_c">
+      <div class="detail_match_bandeau_journee">Journée <?php echo $calLigue->numJournee(); ?></div>
+      <div class="detail_match_bandeau_ville">Lieu : <?php echo $equipeDom->ville(); ?></div>
+      <div class="detail_match_bandeau_stade">Stade "<?php echo $equipeDom->stade(); ?>"</div>
+      <div class="detail_match_bandeau_date">
+        <?php
+          $dateDebut = date_create($calReel->dateHeureDebut());
+          echo 'Début de la journée ' . $calReel->numJournee() . ' de L1' .
+            '<br/><span class="heureProchaineJournee">' . date_format($dateDebut, 'd/m/Y H:i:s') . '</span>';
+        ?>
+      </div>
+    </div>
+    <div class="detail_match_bandeau_col_d">
+      <div class="detail_match_bandeau_equipe">
+        <div><?php echo $calLigue->nomEquipeExt(); ?></div>
+        <div class="detail_match_bandeau_equipe_coach">Coach : <?php echo $equipeExt->nomCoach(); ?></div>
+        <div class="detail_match_bandeau_equipe_logo">
+          <img src="web/img/coach/<?php echo $tabNomenclStyleCoach[$equipeExt->codeStyleCoach()]; ?>" alt="Logo équipe ext." width="60px" height="60px"/>
+        </div>
+      </div>
+    </div>
+    <div class="detail_match_bandeau_journee_suiv"
+      title="<?php if ($avecJourneeSuiv){echo 'Afficher ma compo de la journée suivante';} ?>"
+      <?php if ($avecJourneeSuiv){echo 'onclick="javascript:submitForm(\'journeeSuiv\');"';} ?>>
+      <?php if ($avecJourneeSuiv){echo '>';} ?>
+    </div>
   </div>
   <div class="conteneurRow">
     <div class="conteneurColumn">
@@ -200,7 +216,7 @@ if (isset($calReel) && $calLigue->id() != null)
       <?php
         if (isset($nomenclTactique))
         {
-          echo '<select name="choixTactique" class="selectChoixTactique" onchange="javascript:submitForm();">';
+          echo '<select name="choixTactique" class="selectChoixTactique" onchange="javascript:submitForm(\'changerTactique\');">';
 
           if ($ligue->modeExpert() == TRUE)
           {

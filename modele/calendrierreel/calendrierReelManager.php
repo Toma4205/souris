@@ -28,4 +28,24 @@ class CalendrierReelManager extends ManagerBase
         return new CalendrierReel($donnees);
       }
   }
+
+  public function findJourneeByNumero($numJournee)
+  {
+    $q = $this->_bdd->prepare('SELECT * FROM calendrier_reel
+      WHERE num_journee = :num');
+
+    $q->execute([':num' => $numJournee]);
+    $donnees = $q->fetch(PDO::FETCH_ASSOC);
+    $q->closeCursor();
+
+    // Si pas de calendrier
+    if (is_bool($donnees))
+    {
+      return new CalendrierReel([]);
+    }
+    else
+    {
+      return new CalendrierReel($donnees);
+    }
+  }
 }

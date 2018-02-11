@@ -8,17 +8,31 @@ $joueurEquipeManager = new JoueurEquipeManager($bdd);
 $compoEquipeManager = new CompoEquipeManager($bdd);
 $bonusManager = new BonusMalusManager($bdd);
 
-$calReel = $calReelManager->findProchaineJournee();
 $equipe = $equipeManager->findEquipeByCoachEtLigue($coach->id(), $ligue->id());
+
+// Récupération des calendriers réels et fictifs
+if (isset($_POST['journeePrec']))
+{
+  $calReel = $calReelManager->findJourneeByNumero($_POST['numJourneeCalReel'] - 1);
+}
+elseif (isset($_POST['journeeSuiv']))
+{
+  $calReel = $calReelManager->findJourneeByNumero($_POST['numJourneeCalReel'] + 1);
+}
+else if (isset($_POST['numJourneeCalReel']))
+{
+  $calReel = $calReelManager->findJourneeByNumero($_POST['numJourneeCalReel']);
+}
+else
+{
+  $calReel = $calReelManager->findProchaineJournee();
+}
+
 $calLigue = new CalendrierLigue([]);
 if ($calReel->numJournee() != null)
 {
   $calLigue = $calLigueManager->findProchaineJourneeByCalReel($equipe->id(), $calReel->numJournee());
 }
-
-echo 'A supp : idCoach=' . $coach->id() . ', idLigue=' . $ligue->id() .
-  ', idEquipe=' . $equipe->id() . ', calReel=' . $calReel->numJournee() .
-  ', calLigue=' . $calLigue->id();
 
 $compoEquipe = new CompoEquipe([]);
 $tabCompo = [];
@@ -162,8 +176,26 @@ elseif ($calLigue->id() != null)
   }
 }
 
+$avecJourneePrec = false;
+$avecJourneeSuiv = false;
 if ($calLigue->id() != null)
 {
+  if ($calLigue->numJournee() > $calLigueManager->findProchaineJourneeByEquipe($equipe->id())->numJournee()) {
+    $avecJourneePrec = true;
+  }
+  if ($calLigueManager->findJourneeMaxByLigue($ligue->id()) > $calLigue->numJournee()) {
+      $avecJourneeSuiv = true;
+  }
+
+  // TODO MPL Mettre en cache application
+  $nomenclStyleCoach = $nomenclManager->findNomenclatureStyleCoach();
+  $tabNomenclStyleCoach;
+  foreach ($nomenclStyleCoach as $key => $value) {
+    $tabNomenclStyleCoach[$value->code()] = $value->nomImage();
+  }
+
+  $equipeDom = $equipeManager->findEquipeById($calLigue->idEquipeDom());
+  $equipeExt = $equipeManager->findEquipeById($calLigue->idEquipeExt());
   $bonusMalus = $bonusManager->findBonusMalusByEquipe($equipe->id(), $calLigue->id());
   $nomenclTactique = $nomenclManager->findNomenclatureTactiqueSelonMode($ligue->modeExpert());
   $joueurs = $joueurEquipeManager->findByEquipe($equipe->id());
@@ -201,6 +233,11 @@ if ($calLigue->id() != null)
   }
   $choixTactique = $nomenclManager->findNomenclatureTactiqueByCode($compoEquipe->codeTactique());
 }
+
+echo 'A supp : idCoach=' . $coach->id() . ', idLigue=' . $ligue->id() .
+  ', idEquipe=' . $equipe->id() . ', calReel=' . $calReel->numJournee() .
+  ', calLigue=' . $calLigue->id() . ', journeePrec=' . $avecJourneePrec .
+  ', journeeSuiv=' . $avecJourneeSuiv;
 
 include_once('vue/equipe.php');
 ?>

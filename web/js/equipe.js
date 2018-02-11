@@ -26,8 +26,8 @@ $(document).ready(function() {
 });
 
 // Appelée lors du changement de tactique
-function submitForm() {
-  var input = $("<input>").attr("type", "hidden").attr("name", "changerTactique");
+function submitForm(name) {
+  var input = $("<input>").attr("type", "hidden").attr("name", name);
   $('#formPrincipal').append($(input)).submit();
 }
 
