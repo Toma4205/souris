@@ -16,9 +16,11 @@ require_once("vue/commun/enteteflex.php");
         if ($value->etat() == EtatLigue::MERCATO)
         {
           $nbAction++;
-          echo '<li class="detail_action_actu">Ton équipe n\'est pas terminée pour la ligue <b>"' . $value->nom() . '"</b> !';
+          echo '<li class="detail_action_actu">';
+          echo '<span class="float_left image_action_actu"><img src="web/img/action_mercato_compte_coach.png" alt="" width="50px" height="50px"/></span>';
+          echo 'Ton équipe n\'est pas terminée pour la ligue <b>"' . $value->nom() . '"</b> !';
           echo '<span class="float_right">';
-          echo '<input type="submit" value="Je prends Neymar et Fekir" name="continuerCreaLigue[' . $value->id() . ']" />';
+          echo '<input type="submit" class="font_size_point_8rem" value="Je prends Neymar et Fekir" name="continuerCreaLigue[' . $value->id() . ']" />';
           echo '</span>';
           echo '</li>';
         }
@@ -27,22 +29,26 @@ require_once("vue/commun/enteteflex.php");
           if ($value->createur())
           {
             $nbAction++;
-            echo '<li class="detail_action_actu">Ta ligue <b>"' . $value->nom() . '"</b> est toujours en cours de création !';
+            echo '<li class="detail_action_actu">';
+            echo '<span class="float_left image_action_actu"><img src="web/img/action_creation_compte_coach.png" alt="" width="50px" height="50px"/></span>';
+            echo 'Ta ligue <b>"' . $value->nom() . '"</b> est toujours en cours de création !';
             echo '<span class="float_right">';
-            echo '<input type="submit" value="Je m\'en occupe maintenant" name="continuerCreaLigue[' . $value->id() . ']" />';
+            echo '<input type="submit" class="font_size_point_8rem" value="Je m\'en occupe maintenant" name="continuerCreaLigue[' . $value->id() . ']" />';
             echo '</span>';
             echo '</li>';
           }
           else if (null == $value->dateValidation())
           {
             $nbAction++;
-            echo '<li class="detail_action_actu"><b>"' . $value->nomCoachCreateur() . '"</b> t\'invite dans sa ligue <b>"' . $value->nom() . '"</b>';
+            echo '<li class="detail_action_actu">';
+            echo '<span class="float_left image_action_actu"><img src="web/img/action_invit_compte_coach.png" alt="" width="50px" height="50px"/></span>';
+            echo '<b>' . $value->nomCoachCreateur() . '</b> t\'invite dans sa ligue <b>"' . $value->nom() . '".</b>';
             if ($value->libellePari() != null) {
-              echo '<br/> (enjeu : <b>"' . $value->libellePari() . '"</b>)';
+              echo '<br/> (enjeu : <b>' . $value->libellePari() . '</b>)';
             }
             echo '<span class="float_right">';
-            echo '. <input type="submit" value="Je me lance" name="accepterInvitation[' . $value->id() . ']" /> ';
-            echo ' <input type="submit" value="J\'ai piscine" name="refuserInvitation[' . $value->id() . ']" />';
+            echo '<input type="submit" class="font_size_point_8rem" value="Je me lance" name="accepterInvitation[' . $value->id() . ']" /> ';
+            echo ' <input type="submit" class="font_size_point_8rem" value="J\'ai piscine" name="refuserInvitation[' . $value->id() . ']" />';
             echo '</span>';
             echo '</li>';
           }
@@ -72,7 +78,9 @@ require_once("vue/commun/enteteflex.php");
           if ($value->createur() == FALSE && null != $value->dateValidation())
           {
             $nbActu++;
-            echo '<li class="detail_action_actu"><b>"' . $value->nomCoachCreateur() . '"</b> doit valider ta participation à la ligue <b>"' . $value->nom() . '"</b>.</li>';
+            echo '<li class="detail_action_actu">';
+            echo '<span class="float_left image_action_actu"><img src="web/img/actu_compte_coach.png" alt="" width="50px" height="50px"/></span>';
+            echo '<b>' . $value->nomCoachCreateur() . '</b> doit valider ta participation à la ligue <b>"' . $value->nom() . '"</b>.</li>';
           }
         }
       }
