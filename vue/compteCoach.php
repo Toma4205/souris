@@ -1,59 +1,70 @@
 <?php
 // entete
+$vueCss = 'compteCoach.css';
 require_once("vue/commun/enteteflex.php");
 ?>
-<section id="sectionMesActions" class="avecBordureInf">
+<section id="sectionMesActions">
     <header>Mes actions en attente</header>
     <?php
     $nbAction = 0;
     if (sizeof($ligues) > 0)
     {
+      echo '<div>';
+      echo '<ul>';
       foreach($ligues as $value)
       {
         if ($value->etat() == EtatLigue::MERCATO)
         {
           $nbAction++;
-          echo '<p>';
-          echo 'Ton équipe n\'est pas terminée pour la ligue <b>"' . $value->nom() . '"</b> !';
+          echo '<li class="detail_action_actu">Ton équipe n\'est pas terminée pour la ligue <b>"' . $value->nom() . '"</b> !';
+          echo '<span class="float_right">';
           echo '<input type="submit" value="Je prends Neymar et Fekir" name="continuerCreaLigue[' . $value->id() . ']" />';
-          echo '</p>';
+          echo '</span>';
+          echo '</li>';
         }
         elseif ($value->etat() == EtatLigue::CREATION)
         {
           if ($value->createur())
           {
             $nbAction++;
-            echo '<p>';
-            echo 'Ta ligue <b>"' . $value->nom() . '"</b> est toujours en cours de création !';
+            echo '<li class="detail_action_actu">Ta ligue <b>"' . $value->nom() . '"</b> est toujours en cours de création !';
+            echo '<span class="float_right">';
             echo '<input type="submit" value="Je m\'en occupe maintenant" name="continuerCreaLigue[' . $value->id() . ']" />';
-            echo '</p>';
+            echo '</span>';
+            echo '</li>';
           }
           else if (null == $value->dateValidation())
           {
             $nbAction++;
-            echo '<p>';
-            echo '<b>"' . $value->nomCoachCreateur() . '"</b> t\'invite dans sa ligue <b>"' . $value->nom() . '"</b>';
+            echo '<li class="detail_action_actu"><b>"' . $value->nomCoachCreateur() . '"</b> t\'invite dans sa ligue <b>"' . $value->nom() . '"</b>';
             if ($value->libellePari() != null) {
-              echo ' (enjeu : <b>"' . $value->libellePari() . '"</b>)';
+              echo '<br/> (enjeu : <b>"' . $value->libellePari() . '"</b>)';
             }
+            echo '<span class="float_right">';
             echo '. <input type="submit" value="Je me lance" name="accepterInvitation[' . $value->id() . ']" /> ';
             echo ' <input type="submit" value="J\'ai piscine" name="refuserInvitation[' . $value->id() . ']" />';
-            echo '</p>';
+            echo '</span>';
+            echo '</li>';
           }
         }
       }
+      echo '</ul>';
+      echo '</div>';
     }
     if ($nbAction == 0) {
       echo '<div>Ton bureau est à jour.</div>';
     }
     ?>
 </section>
-<section class="avecBordureInf">
+<section>
     <header>Actualités</header>
     <?php
     $nbActu = 0;
     if (sizeof($ligues) > 0)
     {
+      echo '<div>';
+      echo '<ul>';
+
       foreach($ligues as $value)
       {
         if ($value->etat() == EtatLigue::CREATION)
@@ -61,13 +72,15 @@ require_once("vue/commun/enteteflex.php");
           if ($value->createur() == FALSE && null != $value->dateValidation())
           {
             $nbActu++;
-            echo '<p><b>"' . $value->nomCoachCreateur() . '"</b> doit valider ta participation à la ligue <b>"' . $value->nom() . '"</b>.</p>';
+            echo '<li class="detail_action_actu"><b>"' . $value->nomCoachCreateur() . '"</b> doit valider ta participation à la ligue <b>"' . $value->nom() . '"</b>.</li>';
           }
         }
       }
+      echo '</ul>';
+      echo '</div>';
     }
     if ($nbActu == 0) {
-      echo '<div>Aucune actualité pour le moment. <b>#viedemerde</b> (on supprimera ce # si c\'est trop ?! ;-))</div>';
+      echo '<div>Aucune actualité pour le moment. <b>#viedeouf</b></div>';
     }
     ?>
 </section>
