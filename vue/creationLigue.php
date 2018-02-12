@@ -36,7 +36,7 @@ require_once("vue/commun/enteteflex.php");
             $arrayBonusMalus = [];
             $arrayBonusMalus[ConstantesAppli::BONUS_MALUS_AUCUN] = 'Aucun';
             $arrayBonusMalus[ConstantesAppli::BONUS_MALUS_CLASSIQUE] = 'Classique';
-            $arrayBonusMalus[ConstantesAppli::BONUS_MALUS_FOLIE] = 'Folie';
+            //$arrayBonusMalus[ConstantesAppli::BONUS_MALUS_FOLIE] = 'Folie';
             foreach ($arrayBonusMalus as $cle => $value)
             {
               if((isset($creaLigue) && $creaLigue->bonusMalus() == $cle)
@@ -53,12 +53,12 @@ require_once("vue/commun/enteteflex.php");
       </select>
     </p>
     <p>Mode expert <br/>
-      <input type="checkbox" name="modeExpert" <?php
-          if (isset($creaLigue) && $creaLigue->modeExpert() == 1)
-          {
-            echo 'checked';
-          }
-          echo ' ', (isset($creaLigue) && null != $creaLigue->id() ? ' disabled' : ' enabled');?>/>
+      <input type="checkbox" name="modeExpert" disabled/>
+    <!--  <input type="checkbox" name="modeExpert" -->
+      <?php if (isset($creaLigue) && $creaLigue->modeExpert() == 1){echo 'checked';}
+          //echo ' ', (isset($creaLigue) && null != $creaLigue->id() ? ' disabled' : ' enabled');
+      ?>
+      <!--/>-->
     </p>
     <p>Mode mercato <br/>
       <select name="modeMercato" <?php
@@ -73,7 +73,7 @@ require_once("vue/commun/enteteflex.php");
 
             $arrayModeMercato = [];
             $arrayModeMercato[ConstantesAppli::MERCATO_ENCHERE] = 'Enchères';
-            $arrayModeMercato[ConstantesAppli::MERCATO_DRAFT] = 'Draft';
+            //$arrayModeMercato[ConstantesAppli::MERCATO_DRAFT] = 'Draft';
             foreach ($arrayModeMercato as $cle => $value)
             {
               if((isset($creaLigue) && $creaLigue->modeMercato() == $cle)
