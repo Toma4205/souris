@@ -15,7 +15,7 @@ class JoueurCompoEquipe extends ClasseBase
   private $_noteMinRemplacement;
   private $_nbButReel;
   private $_nbButVirtuel;
-  private $_aJoue;
+  private $_numeroDefinitif;
 
   // Champs table joueur_reel
   private $_nom;
@@ -38,7 +38,7 @@ class JoueurCompoEquipe extends ClasseBase
   public function nbButVirtuel() { return $this->_nbButVirtuel; }
   public function nbButReel() { return $this->_nbButReel; }
   public function noteMinRemplacement() { return $this->_noteMinRemplacement; }
-  public function aJoue() { return $this->_aJoue; }
+  public function numeroDefinitif() { return $this->_numeroDefinitif; }
   public function nom() { return $this->_nom; }
   public function prenom() { return $this->_prenom; }
   public function nomRemplacant() { return $this->_nomRemplacant; }
@@ -94,9 +94,9 @@ class JoueurCompoEquipe extends ClasseBase
       $this->_nbButVirtuel = $nbBut;
   }
 
-  public function setA_joue($aJoue)
+  public function setNumero_definitif($numeroDefinitif)
   {
-      $this->_aJoue = $aJoue;
+      $this->_numeroDefinitif = $numeroDefinitif;
   }
 
   public function setNom($nom)

@@ -88,7 +88,7 @@ if (isset($match)) {
   {
     foreach ($joueurs as $cle => $value)
     {
-      if ($value->aJoue() == 1 && ($value->nbButReel() > 0 || $value->nbButVirtuel() > 0))
+      if ($value->numeroDefinitif() != null && ($value->nbButReel() > 0 || $value->nbButVirtuel() > 0))
       {
         $total = $value->nbButReel() + $value->nbButVirtuel();
         echo '<li>' . $value->nom();
@@ -150,7 +150,7 @@ if (isset($match)) {
   function afficherJoueur($value, $nom)
   {
     echo '<li class="detail_match_equipe_joueur';
-    if ($value->aJoue() == 0)
+    if ($value->numeroDefinitif() == null)
     {
       echo ' pas_joue';
     }
