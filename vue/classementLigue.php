@@ -52,6 +52,11 @@ require_once("vue/commun/enteteflex.php");
       </tbody>
     </table>
   </div>
+  <?php
+    if ($ligue->libellePari() != null) {
+      echo '<div class="classement_pari_ligue"><span class="classement_pari_ligue_lib">Pari de la ligue :</span> ' . $ligue->libellePari() . '</div>';
+    }
+   ?>
 </section>
 <section id="sectionButeurs" class="cache">
   <div>
