@@ -91,7 +91,11 @@ if (isset($match)) {
       if ($value->numeroDefinitif() != null && ($value->nbButReel() > 0 || $value->nbButVirtuel() > 0))
       {
         $total = $value->nbButReel() + $value->nbButVirtuel();
-        echo '<li>' . $value->nom();
+        echo '<li';
+        if ($value->nbButVirtuel() > 0) {
+            echo ' class="buteur_virtuel"';
+        }
+        echo '>' . $value->nom();
         for ($index = 1; $index <= $total; $index++) {
           echo '<img class="but" src="web/img/but.png" alt="But" width="10px" height="10px"/>';
         }
