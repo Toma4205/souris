@@ -165,7 +165,7 @@ if (isset($match)) {
     if ($value->note() != null)
     {
       echo '<span class="float_right detail_match_equipe_joueur_note bold">' . $value->note() . '</span>';
-      if ($value->noteBonus() != null) {
+      if ($value->noteBonus() != null && $value->noteBonus() != 0) {
         echo '<span class="float_right detail_match_equipe_joueur_note_bonus_malus">';
         if (substr($value->noteBonus(), 0, 1) !== "-")
         {
