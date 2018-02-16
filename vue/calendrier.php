@@ -105,7 +105,7 @@ if (isset($match)) {
   }
 
   // Affichage des bonus/malus dans le detail_match
-  function afficherBonusMalus($codeBonus, $libBonus, $codeTactique)
+  function afficherBonusMalus($codeBonus, $libBonus, $nomJoueurEquipe, $nomJoueurAdv, $miTemps, $codeTactique)
   {
     echo '<div class="detail_match_equipe_bonus_malus">';
     echo '<div class="detail_match_equipe_titre">Bonus</div>';
@@ -114,27 +114,43 @@ if (isset($match)) {
     $avecBonus = false;
     if ($codeBonus != null) {
       $avecBonus = true;
-      echo '<div class="margin_auto">';
+      echo '<div class="margin_auto conteneurRow">';
+      echo '<div>';
       echo '<div class="detail_match_equipe_bonus_malus_lib">' . $libBonus . '</div>';
       if ($codeBonus == 'FUMIGENE') {
-        echo '<img class="margin_auto" src="web/img/bonusmalus/PNG_fumigenes.png" alt="bonus dom." width="40px" height="40px"/>';
+        echo '<img src="web/img/bonusmalus/PNG_fumigenes.png" alt="bonus dom." width="40px" height="40px"/>';
       } else if ($codeBonus == 'DIN_ARB') {
-        echo '<img class="margin_auto" src="web/img/bonusmalus/PNG_diner.png" alt="bonus dom." width="40px" height="40px"/>';
+        echo '<img src="web/img/bonusmalus/PNG_diner.png" alt="bonus dom." width="40px" height="40px"/>';
       } else if ($codeBonus == 'FAM_STA') {
-        echo '<img class="margin_auto" src="web/img/bonusmalus/PNG_family.png" alt="bonus dom." width="40px" height="40px"/>';
+        echo '<img src="web/img/bonusmalus/PNG_family.png" alt="bonus dom." width="40px" height="40px"/>';
       } else if ($codeBonus == 'BUS') {
-        echo '<img class="margin_auto" src="web/img/bonusmalus/PNG_bus.png" alt="bonus dom." width="40px" height="40px"/>';
+        echo '<img src="web/img/bonusmalus/PNG_bus.png" alt="bonus dom." width="40px" height="40px"/>';
       } else if ($codeBonus == 'MAU_CRA') {
-        echo '<img class="margin_auto" src="web/img/bonusmalus/PNG_mauvaisCrampon.png" alt="bonus dom." width="40px" height="40px"/>';
+        echo '<img src="web/img/bonusmalus/PNG_mauvaisCrampon.png" alt="bonus dom." width="40px" height="40px"/>';
       } else if ($codeBonus == 'BOUCHER') {
-        echo '<img class="margin_auto" src="web/img/bonusmalus/PNG_butcher.png" alt="bonus dom." width="40px" height="40px"/>';
+        echo '<img src="web/img/bonusmalus/PNG_butcher.png" alt="bonus dom." width="40px" height="40px"/>';
       } else if ($codeBonus == 'CHA_GB') {
-        echo '<img class="margin_auto" src="web/img/bonusmalus/PNG_changementGardien.png" alt="bonus dom." width="40px" height="40px"/>';
+        echo '<img src="web/img/bonusmalus/PNG_changementGardien.png" alt="bonus dom." width="40px" height="40px"/>';
       } else if ($codeBonus == 'PAR_TRU') {
-        echo '<img class="margin_auto" src="web/img/bonusmalus/PNG_pari.png" alt="bonus dom." width="40px" height="40px"/>';
+        echo '<img src="web/img/bonusmalus/PNG_pari.png" alt="bonus dom." width="40px" height="40px"/>';
       } else if ($codeBonus == 'CON_ZZ') {
-        echo '<img class="margin_auto" src="web/img/bonusmalus/PNG_zizou.png" alt="bonus dom." width="40px" height="40px"/>';
+        echo '<img src="web/img/bonusmalus/PNG_zizou.png" alt="bonus dom." width="40px" height="40px"/>';
       }
+      echo '</div>';
+      echo '<div class="detail_match_equipe_bonus_malus_joueur">';
+      echo '<div class="detail_match_equipe_bonus_malus_joueur_bloc">';
+      if ($nomJoueurEquipe != null) {
+        echo '<div>' . $nomJoueurEquipe;
+        if ($miTemps != null) {
+          echo ' (mi-temps : ' . $miTemps . ')';
+        }
+        echo '</div>';
+      }
+      if ($nomJoueurAdv != null) {
+        echo '<div>Adv : ' . $nomJoueurAdv . '</div>';
+      }
+      echo '</div>';
+      echo '</div>';
       echo '</div>';
     }
     if (substr($codeTactique, 0, 1) === "4") {
@@ -276,12 +292,16 @@ if (isset($match)) {
   </div>
   <div class="detail_match_equipe conteneurRow">
     <div class="detail_match_equipe_g">
-      <?php if (isset($compoDom)){afficherBonusMalus($compoDom->codeBonusMalus(), $compoDom->libCourtBonusMalus(), $compoDom->codeTactique());} ?>
+      <?php if (isset($compoDom)){afficherBonusMalus($compoDom->codeBonusMalus(),
+        $compoDom->libCourtBonusMalus(), $compoDom->nomJoueurReelEquipe(),
+        $compoDom->nomJoueurReelAdverse(), $compoDom->miTemps(), $compoDom->codeTactique());} ?>
       <?php if (isset($joueursDom)){afficherTitulaires($joueursDom, $compoDom->codeTactique());} else {echo '<div>Aucune compo</div>';} ?>
       <?php if (isset($joueursDom)){afficherRemplacants($joueursDom);} ?>
     </div>
     <div class="detail_match_equipe_d">
-      <?php if (isset($compoExt)){afficherBonusMalus($compoExt->codeBonusMalus(), $compoExt->libCourtBonusMalus(), $compoExt->codeTactique());} ?>
+      <?php if (isset($compoExt)){afficherBonusMalus($compoExt->codeBonusMalus(),
+        $compoExt->libCourtBonusMalus(), $compoExt->nomJoueurReelEquipe(),
+        $compoExt->nomJoueurReelAdverse(), $compoExt->miTemps(), $compoExt->codeTactique());} ?>
       <?php if (isset($joueursExt)){afficherTitulaires($joueursExt, $compoExt->codeTactique());} else {echo '<div>Aucune compo</div>';} ?>
       <?php if (isset($joueursExt)){afficherRemplacants($joueursExt);} ?>
     </div>
