@@ -49,7 +49,7 @@ if (isset($_POST["id_match"]))
         $compoDom = $compoEquipeManager->findCompoByEquipeEtCalLigue($value->idEquipeDom(), $value->id());
         $compoExt = $compoEquipeManager->findCompoByEquipeEtCalLigue($value->idEquipeExt(), $value->id());
 
-        $log = 'match=' . $value->id() . ', equipeDom=' . $value->idEquipeDom() . ', equipeExt=' . $value->idEquipeExt();
+        $log = 'ligue=' . $ligue->id() . ', match=' . $value->id() . ', equipeDom=' . $value->idEquipeDom() . ', equipeExt=' . $value->idEquipeExt();
         if ($compoDom != null) {
           $log = $log . ', compoDom=' . $compoDom->id();
           $joueursDom = $compoEquipeManager->findJoueurCompoByCompo($compoDom->id());

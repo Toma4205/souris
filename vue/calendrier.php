@@ -105,7 +105,7 @@ if (isset($match)) {
   }
 
   // Affichage des bonus/malus dans le detail_match
-  function afficherBonusMalus($codeBonus, $codeTactique)
+  function afficherBonusMalus($codeBonus, $libBonus, $codeTactique)
   {
     echo '<div class="detail_match_equipe_bonus_malus">';
     echo '<div class="detail_match_equipe_titre">Bonus</div>';
@@ -114,6 +114,8 @@ if (isset($match)) {
     $avecBonus = false;
     if ($codeBonus != null) {
       $avecBonus = true;
+      echo '<div class="margin_auto">';
+      echo '<div class="detail_match_equipe_bonus_malus_lib">' . $libBonus . '</div>';
       if ($codeBonus == 'FUMIGENE') {
         echo '<img class="margin_auto" src="web/img/bonusmalus/PNG_fumigenes.png" alt="bonus dom." width="40px" height="40px"/>';
       } else if ($codeBonus == 'DIN_ARB') {
@@ -133,6 +135,7 @@ if (isset($match)) {
       } else if ($codeBonus == 'CON_ZZ') {
         echo '<img class="margin_auto" src="web/img/bonusmalus/PNG_zizou.png" alt="bonus dom." width="40px" height="40px"/>';
       }
+      echo '</div>';
     }
     if (substr($codeTactique, 0, 1) === "4") {
       $avecBonus = true;
@@ -273,12 +276,12 @@ if (isset($match)) {
   </div>
   <div class="detail_match_equipe conteneurRow">
     <div class="detail_match_equipe_g">
-      <?php if (isset($compoDom)){afficherBonusMalus($compoDom->codeBonusMalus(), $compoDom->codeTactique());} ?>
+      <?php if (isset($compoDom)){afficherBonusMalus($compoDom->codeBonusMalus(), $compoDom->libCourtBonusMalus(), $compoDom->codeTactique());} ?>
       <?php if (isset($joueursDom)){afficherTitulaires($joueursDom, $compoDom->codeTactique());} else {echo '<div>Aucune compo</div>';} ?>
       <?php if (isset($joueursDom)){afficherRemplacants($joueursDom);} ?>
     </div>
     <div class="detail_match_equipe_d">
-      <?php if (isset($compoExt)){afficherBonusMalus($compoExt->codeBonusMalus(), $compoExt->codeTactique());} ?>
+      <?php if (isset($compoExt)){afficherBonusMalus($compoExt->codeBonusMalus(), $compoExt->libCourtBonusMalus(), $compoExt->codeTactique());} ?>
       <?php if (isset($joueursExt)){afficherTitulaires($joueursExt, $compoExt->codeTactique());} else {echo '<div>Aucune compo</div>';} ?>
       <?php if (isset($joueursExt)){afficherRemplacants($joueursExt);} ?>
     </div>
