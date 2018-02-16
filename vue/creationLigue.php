@@ -1,5 +1,8 @@
 <?php
 // entete
+$vueJs = 'creationLigue.js';
+$vueCss = 'creationLigue.css';
+
 require_once("vue/commun/enteteflex.php");
 ?>
   <!-- ***************************************
@@ -185,7 +188,7 @@ require_once("vue/commun/enteteflex.php");
         echo '<span class="erreur">' . $messageValid . ' (TODO MPL Js)</span>';
       }
     ?>
-    <table class="tableBase">
+    <table id="table_validation_coach" class="tableBase">
       <thead>
         <tr>
           <th>Nom</th>
@@ -202,7 +205,7 @@ require_once("vue/commun/enteteflex.php");
           if (null != $value->dateValidationLigue())
           {
             $nbOK++;
-            echo '<td><input type="checkbox" name="coachInvite[' . $index .']" value="' . $value->id() . '" /></td></tr>';
+            echo '<td><input type="checkbox" name="coachInvite[' . $index .']" value="' . $value->id() . '" onclick="javascript:gererClicValidationCoach();" /></td></tr>';
           }
           else
           {
@@ -213,7 +216,8 @@ require_once("vue/commun/enteteflex.php");
         }
         echo '</tbody></table>';
         echo '<br/>';
-        echo '<input type="submit" value="Valider les participants" name="validationFinale" />';
+        echo '<input id="boutonValCoach" type="submit" value="Valider les participants" name="validationFinale" disabled="disabled" />';
+        echo '<div class="validation_coach_lib">Attention : cette action lance la ligue pour de bon (et le mercato).</div>';
       }
         ?>
 </section>

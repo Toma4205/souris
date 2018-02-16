@@ -157,7 +157,6 @@ CREATE TABLE `joueur_compo_equipe` (
 `numero_remplacement` TINYINT UNSIGNED,
 `id_joueur_reel_remplacant` MEDIUMINT UNSIGNED,
 `note_min_remplacement` DECIMAL(3,1),
-`a_joue` BOOLEAN NOT NULL,
 PRIMARY KEY (`id_compo`, `id_joueur_reel`)
 ) ENGINE = InnoDB;
 ALTER TABLE `joueur_compo_equipe` ADD FOREIGN KEY (`id_compo`) REFERENCES `compo_equipe`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

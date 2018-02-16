@@ -74,8 +74,8 @@ class CompoEquipeManager extends ManagerBase
 
   public function creerJoueurCompoEquipe($idCompo, $numero, $idJoueur, $capitaine)
   {
-    $q = $this->_bdd->prepare('INSERT INTO joueur_compo_equipe(id_compo, id_joueur_reel, numero, capitaine, a_joue)
-        VALUES(:idCompo, :idJoueur, :num, :cap, 0)');
+    $q = $this->_bdd->prepare('INSERT INTO joueur_compo_equipe(id_compo, id_joueur_reel, numero, capitaine)
+        VALUES(:idCompo, :idJoueur, :num, :cap)');
     $q->bindValue(':idCompo', $idCompo);
     $q->bindValue(':idJoueur', $idJoueur);
     $q->bindValue(':num', $numero);
@@ -87,8 +87,8 @@ class CompoEquipeManager extends ManagerBase
   public function creerJoueurCompoEquipeAvecRempl($idCompo, $numero, $idJoueur, $capitaine, $numRempl, $idRempl, $note)
   {
     $q = $this->_bdd->prepare('INSERT INTO joueur_compo_equipe(id_compo, id_joueur_reel, numero, capitaine,
-        numero_remplacement, id_joueur_reel_remplacant, note_min_remplacement, a_joue)
-        VALUES(:idCompo, :idJoueur, :num, :cap, :rempl, :idRempl, :note, 0)');
+        numero_remplacement, id_joueur_reel_remplacant, note_min_remplacement)
+        VALUES(:idCompo, :idJoueur, :num, :cap, :rempl, :idRempl, :note)');
     $q->bindValue(':idCompo', $idCompo);
     $q->bindValue(':idJoueur', $idJoueur);
     $q->bindValue(':num', $numero);

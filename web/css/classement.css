@@ -1,3 +1,16 @@
+/***************/
+/** CLASSEMENT */
+/***************/
+.classement_pari_ligue {
+  font-style: italic;
+  padding-top: 1.5rem;
+  color: #4a61d4;
+}
+.classement_pari_ligue_lib {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
 /************/
 /** BUTEURS */
 /************/
