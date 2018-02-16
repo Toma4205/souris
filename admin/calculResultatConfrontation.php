@@ -3,19 +3,21 @@
 
 <?php
 	
-	$constanteConfrontationLigue = 6;
+	//$constanteConfrontationLigue = 6;
 	$constanteJourneeReelle = isset($_POST['journeeCalculable']) ? $_POST['journeeCalculable'] : NULL;
 	$constante_num_journee_cal_reel = '25'; //Pour test
+	//$constante_num_journee_cal_reel = substr($constanteJourneeReelle, -2); //En prod
+	
 	
 	function updateButReelDuJoueur($id_compo, $journee, $id_joueur_reel, $bdd){
 		//On compte le nombre de but réel d'un joueur sur une journée
-		$req_nbButReel=$bdd->prepare('SELECT t3.but FROM joueur_compo_equipe t1, joueur_reel t2, joueur_stats t3 WHERE t1.id_joueur_reel = t2.id AND t3.id IN (t2.cle_roto_primaire, t2.cle_roto_secondaire) AND t3.journee = :journee AND t1.id_joueur_reel = :id_joueur_reel');
+		$req_nbButReel=$bdd->prepare('SELECT t3.but FROM joueur_compo_equipe t1, joueur_reel t2, joueur_stats t3 WHERE t1.id_joueur_reel = t2.id AND t3.id IN (t2.cle_roto_primaire, t2.cle_roto_secondaire) AND t3.journee = :journee AND t1.id_joueur_reel = :id_joueur_reel AND t1.id_compo = :id_compo');
 		
 		//On update un but réel
 		$upd_butReel= $bdd->prepare('UPDATE joueur_compo_equipe SET nb_but_reel = :nb_but_reel WHERE id_compo = :id_compo AND id_joueur_reel = :id_joueur_reel ;');
 		
 		//On regarde le nombre de but réel marqué par ce joueur sur cette journée
-		$req_nbButReel->execute(array('journee' => $journee, 'id_joueur_reel' => $id_joueur_reel));
+		$req_nbButReel->execute(array('journee' => $journee, 'id_joueur_reel' => $id_joueur_reel, 'id_compo' => $id_compo));
 		$lignesNbButReel = $req_nbButReel->fetchAll();
 		if (count($lignesNbButReel) > 1) {
 			//Erreur, il ne doit y avoir qu'une seule ligne par joueur par journée
@@ -37,7 +39,7 @@
 	}
 	
 	function afficherUneCompo($id_compo, $bdd){
-		$req_compoDefinitive = $bdd->prepare('SELECT t2.cle_roto_primaire, t2.position, t1.numero_definitif , t1.note, t1.nb_but_reel, t1.nb_but_virtuel, t4.nb_def, t4.nb_mil, t4.nb_att FROM joueur_compo_equipe t1, joueur_reel t2, compo_equipe t3, nomenclature_tactique t4 WHERE t1.id_compo = :id_compo AND t1.id_joueur_reel = t2.id AND t1.numero_definitif > 0 AND t1.numero_definitif < 12 AND t1.numero_definitif IS NOT NULL AND t3.id = t1.id_compo AND t3.code_tactique = t4.code ORDER BY t1.numero_definitif ASC;');
+		$req_compoDefinitive = $bdd->prepare('SELECT t2.id, t2.cle_roto_primaire, t2.position, t1.numero_definitif , t1.note, t1.nb_but_reel, t1.nb_but_virtuel, t4.nb_def, t4.nb_mil, t4.nb_att FROM joueur_compo_equipe t1, joueur_reel t2, compo_equipe t3, nomenclature_tactique t4 WHERE t1.id_compo = :id_compo AND t1.id_joueur_reel = t2.id AND t1.numero_definitif > 0 AND t1.numero_definitif < 12 AND t1.numero_definitif IS NOT NULL AND t3.id = t1.id_compo AND t3.code_tactique = t4.code ORDER BY t1.numero_definitif ASC;');
 		
 		$req_compoDefinitive->execute(array('id_compo' => $id_compo));
 		echo "<br />\n";
@@ -54,14 +56,14 @@
 				if(is_null($compoDefinitive['note'])){
 					$gardien = 'P\'tit jeune du club (2.5)';
 				}else{
-					$gardien = $compoDefinitive['cle_roto_primaire'].' ('.$compoDefinitive['note'].')';
+					$gardien = '['.$compoDefinitive['id'].']'.$compoDefinitive['cle_roto_primaire'].' ('.$compoDefinitive['note'].')';
 				}
 			}else{
 				if($compoDefinitive['numero_definitif'] <= $compoDefinitive['nb_def']+1){
 					if(is_null($compoDefinitive['note'])){
 						$defenseurs .= ' Tonton Pat (0) ';
 					}else{
-						$defenseurs .= ' '.$compoDefinitive['cle_roto_primaire'].' ('.$compoDefinitive['note'].') ';
+						$defenseurs .= ' '.'['.$compoDefinitive['id'].']'.$compoDefinitive['cle_roto_primaire'].' ('.$compoDefinitive['note'].') ';
 						if(!is_null($compoDefinitive['nb_but_reel'])){
 							$defenseurs .= '- '.$compoDefinitive['nb_but_reel'].' but(s) ';
 						}
@@ -74,7 +76,7 @@
 						if(is_null($compoDefinitive['note'])){
 							$milieux .= ' Tonton Pat (0) ';
 						}else{
-							$milieux .= ' '.$compoDefinitive['cle_roto_primaire'].' ('.$compoDefinitive['note'].') ';
+							$milieux .= ' '.'['.$compoDefinitive['id'].']'.$compoDefinitive['cle_roto_primaire'].' ('.$compoDefinitive['note'].') ';
 							if(!is_null($compoDefinitive['nb_but_reel'])){
 								$milieux .= '- '.$compoDefinitive['nb_but_reel'].' but(s) ';
 							}
@@ -87,7 +89,7 @@
 							if(is_null($compoDefinitive['note'])){
 								$attaquants .= ' Tonton Pat (0) ';
 							}else{
-								$attaquants .= ' '.$compoDefinitive['cle_roto_primaire'].' ('.$compoDefinitive['note'].') ';
+								$attaquants .= ' '.'['.$compoDefinitive['id'].']'.$compoDefinitive['cle_roto_primaire'].' ('.$compoDefinitive['note'].') ';
 								if(!is_null($compoDefinitive['nb_but_reel'])){
 									$attaquants .= '- '.$compoDefinitive['nb_but_reel'].' but(s) ';
 								}
@@ -378,7 +380,23 @@
 			die('Erreur : ' . $e->getMessage());
 			echo $e;
 		}
-		
+	
+//DEBUT BOUCLE MAJEUR SUR CHAQUE LIGUE (id_ligue) CONCERNEE PAR LA JOURNEE (journee_reelle)
+	
+	$req_ligues_concernees = $bdd->prepare('SELECT distinct id_ligue FROM calendrier_ligue WHERE num_journee_cal_reel = :num_journee_cal_reel;');
+	$req_ligues_concernees->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
+	
+	$ligues_concernees = $req_ligues_concernees->fetchAll();
+			
+	if (count($ligues_concernees) == 0) {
+		echo  'Aucune ligue sur la journee '.$constante_num_journee_cal_reel;
+		echo "<br />\n";
+	} else {
+		foreach ($ligues_concernees as $ligue_concernee) {
+			$constanteConfrontationLigue = $ligue_concernee['id_ligue'];
+			echo "<br />\n";
+			echo ' **************************** LIGUE n°'.$constanteConfrontationLigue.' ********************************';
+	
 // ******************************* CALCUL ET UPDATE DES NOTES **************************************************************
 		
 		echo "<br />\n";
@@ -386,7 +404,7 @@
 		echo "<br />\n";
 		echo "<br />\n";
 		
-		$req_effectifs = $bdd->prepare('SELECT t1.id, t3.id_compo, t2.id_equipe, t1.id_equipe_dom, t1.id_equipe_ext, t3.id_joueur_reel, t4.cle_roto_primaire, t3.capitaine, t4.position, t3.numero , t2.code_tactique, t3.code_bonus_malus AS \'code_bonus_malus_joueur\', t2.code_bonus_malus AS \'code_bonus_malus_equipe\', t3.numero_remplacement, t3.id_joueur_reel_remplacant, t3.note_min_remplacement FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel;');
+		$req_effectifs = $bdd->prepare('SELECT t1.id, t3.id_compo, t2.id_equipe, t1.id_equipe_dom, t1.id_equipe_ext, t3.id_joueur_reel, t4.cle_roto_primaire, t3.capitaine, t4.position, t3.numero , t2.code_tactique, t2.code_bonus_malus AS \'code_bonus_malus_equipe\', t3.numero_remplacement, t3.id_joueur_reel_remplacant, t3.note_min_remplacement FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel;');
 		
 		//constante 17 pour le test uniquement
 		$req_effectifs->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue));
@@ -404,16 +422,19 @@
 		*/
 		
 				
-		$req_noteDuJoueurJournee = $bdd->prepare('SELECT t1.note FROM joueur_stats t1, joueur_compo_equipe t2, joueur_reel t3 WHERE t2.id_joueur_reel = :id_joueur_reel AND t1.journee = :journee AND t2.id_joueur_reel = t3.id AND t1.id IN (t3.cle_roto_primaire, t3.cle_roto_secondaire);');
+		$req_noteDuJoueurJournee = $bdd->prepare('SELECT t1.note, t2.id_compo FROM joueur_stats t1, joueur_compo_equipe t2, joueur_reel t3 WHERE t2.id_joueur_reel = :id_joueur_reel AND t1.journee = :journee AND t2.id_joueur_reel = t3.id AND t1.id IN (t3.cle_roto_primaire, t3.cle_roto_secondaire) AND t2.id_compo = :id_compo;');
 		$req_victoireOuDefaiteCapitaine = $bdd->prepare('SELECT t3.malus_defaite + 2*t3.bonus_victoire AS \'victoireOuDefaite\' FROM joueur_reel t1, joueur_stats t3 WHERE t1.id = :id AND t3.id IN (t1.cle_roto_primaire, t1.cle_roto_secondaire) AND t3.journee = :journee ;');
 		//Renvoie 0 si NUL, 1 si Defaite et 2 si Victoire
 		$req_nbDefenseur = $bdd->prepare('SELECT nb_def FROM nomenclature_tactique WHERE code = :code_tactique ;');
 		
+		
+		$upd_noteBonus = $bdd->prepare('UPDATE joueur_compo_equipe SET note_bonus = :note WHERE id_compo = :id_compo AND id_joueur_reel = :id_joueur_reel ;');
 		$upd_noteJoueurCompo = $bdd->prepare('UPDATE joueur_compo_equipe SET note = :note WHERE id_compo = :id_compo AND id_joueur_reel = :id_joueur_reel ;');
 		while ($donnees = $req_effectifs->fetch())
 		{
 			$note = 0; //Note de base pour un joueur absent
-			$req_noteDuJoueurJournee->execute(array('id_joueur_reel' => $donnees['id_joueur_reel'], 'journee' => $constanteJourneeReelle));
+			$note_bonus = 0; //Bonus de base
+			$req_noteDuJoueurJournee->execute(array('id_joueur_reel' => $donnees['id_joueur_reel'], 'journee' => $constanteJourneeReelle, 'id_compo' => $donnees['id_compo']));
 			$rows = $req_noteDuJoueurJournee->fetchAll();
 			
 			if (count($rows) == 0) {
@@ -437,11 +458,13 @@
 							if($victoireOuPas['victoireOuDefaite'] == 2 && $donnees['capitaine'] == 1){
 								//Le joueur est capitaine et son équipe a gagné => BONUS
 								$note += 0.5;
+								$note_bonus = 0.5;
 								echo ' Capitaine Victoire '; 
 							}else{
 								if($victoireOuPas['victoireOuDefaite'] == 1 && $donnees['capitaine'] == 1){
 									//Le joueur est capitaine et son équipe a perdu => MALUS
 									$note -= 1;
+									$note_bonus = -1;
 									echo ' Capitaine Defaite '; 
 								}
 							}
@@ -454,11 +477,13 @@
 							if($nbDefenseur['nb_def'] == 5 && $donnees['position'] == 'Defender' && $donnees['numero'] <= 11){
 								//Defense à 5, les défenseurs titulaires prennent un bonus
 								$note += 1;
+								$note_bonus += 1;
 								echo ' Défense à 5 '; 
 							}else{
 								if($nbDefenseur['nb_def'] == 4 && $donnees['position'] == 'Defender' && $donnees['numero'] <= 11){
 									//Defense à 5, les défenseurs titulaires prennent un bonus
 									$note += 0.5;
+									$note_bonus += 0.5;
 									echo ' Défense à 4 '; 
 								}
 							}
@@ -467,6 +492,7 @@
 						//ajout bonus/malus (A FAIRE)				
 						if($donnees['code_bonus_malus_equipe'] == 'CON_ZZ'){
 							$note += 0.5;
+							$note_bonus += 0.5;
 						}
 						
 						
@@ -482,6 +508,7 @@
 						echo  $donnees['cle_roto_primaire'].' a eu la note de '.$note.' sur la journée '.$constanteJourneeReelle;
 						/*  UPDATE DES NOTES DANS LA TABLE */
 							$upd_noteJoueurCompo->execute(array('note' => $note, 'id_compo' => $donnees['id_compo'], 'id_joueur_reel' => $donnees['id_joueur_reel']));
+							echo 'MAJ note bonus '.$note_bonus.' ' ; $upd_noteBonus->execute(array('note' => $note_bonus, 'id_compo' => $donnees['id_compo'], 'id_joueur_reel' => $donnees['id_joueur_reel']));
 						
 						echo "<br />\n";					
 						
@@ -493,7 +520,8 @@
 		$req_noteDuJoueurJournee->closeCursor();
 		$req_victoireOuDefaiteCapitaine->closeCursor();
 		$req_nbDefenseur->closeCursor();
-		$upd_noteJoueurCompo->closeCursor();		
+		$upd_noteJoueurCompo->closeCursor();
+		$upd_noteBonus->closeCursor();		
 		
 // ******************************* CONSTRUCTION EQUIPE **************************************************************
 		
@@ -503,20 +531,19 @@
 		echo "<br />\n";
 		
 		//On récupère tous les joueurs positionnés comme titulaires de la journée
-		$req_effectifnote = $bdd->prepare('SELECT t3.id_compo, t2.id_equipe, t1.id_equipe_dom, t1.id_equipe_ext, t3.id_joueur_reel, t4.cle_roto_primaire, t3.capitaine, t4.position, t3.numero , t3.note, t3.code_bonus_malus AS \'code_bonus_malus_joueur\', t2.code_bonus_malus AS \'code_bonus_malus_equipe\', t3.numero_remplacement, t3.id_joueur_reel_remplacant, t3.note_min_remplacement FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero < 12 ;');
+		$req_effectifnote = $bdd->prepare('SELECT t3.id_compo, t2.id_equipe, t1.id_equipe_dom, t1.id_equipe_ext, t3.id_joueur_reel, t4.cle_roto_primaire, t3.capitaine, t4.position, t3.numero , t3.note, t3.note_bonus, t2.code_bonus_malus AS \'code_bonus_malus_equipe\', t3.numero_remplacement, t3.id_joueur_reel_remplacant, t3.note_min_remplacement FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero < 12 ;');
 		
 		//constante 17 pour le test uniquement
 		$req_effectifnote->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue));
 		
 		//On récupère la liste des remplaçants
-		$req_remplacant = $bdd->prepare('SELECT  t3.id_joueur_reel, t4.cle_roto_primaire,  t4.position, t3.numero, t3.note, t3.numero_definitif FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero > 11 AND t2.id_equipe = :id_equipe AND t3.numero_definitif IS NULL ORDER By t3.numero ;');
+		$req_remplacant = $bdd->prepare('SELECT  t3.id_joueur_reel, t4.cle_roto_primaire,  t4.position, t3.numero, t3.note, t3.note_bonus, t3.numero_definitif FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero > 11 AND t2.id_equipe = :id_equipe AND t3.numero_definitif IS NULL ORDER By t3.numero ;');
 		
 		//On remet à Null tous les numéros définitifs d'une compo
 		$upd_remiseANullDesNumérosDefinitifs = $bdd->prepare('UPDATE joueur_compo_equipe SET numero_definitif = NULL WHERE id_compo = :id_compo ;');
 		
 		//On remet à Null tous les buts réels d'une compo
 		$upd_remiseANullDesButsReels = $bdd->prepare('UPDATE joueur_compo_equipe SET nb_but_reel = NULL WHERE id_compo = :id_compo ;');
-		
 		
 		//On update le numéro définitif
 		$upd_numeroDefinitif = $bdd->prepare('UPDATE joueur_compo_equipe SET numero_definitif = :numero_definitif WHERE id_compo = :id_compo AND id_joueur_reel = :id_joueur_reel ;');
@@ -647,9 +674,12 @@
 							$nouvelleNote = $ligneRemplacant['note']-1;
 						}
 						$upd_noteJoueurCompo->execute(array('note' => $nouvelleNote, 'id_compo' => $donneesEffectifNonRemplace['id_compo'], 'id_joueur_reel' => $ligneRemplacant['id_joueur_reel']));
+						$upd_noteBonus-> execute(array('note' => $ligneRemplacant['note_bonus']-1, 'id_compo' => $donneesEffectifNonRemplace['id_compo'], 'id_joueur_reel' => $ligneRemplacant['id_joueur_reel']));
+						
 						echo 'Note - 1 ';
 						echo "<br />\n";
 						$upd_noteJoueurCompo->closeCursor();
+						$upd_noteBonus->closeCursor();
 						
 					}
 				}
@@ -677,7 +707,7 @@
 		echo "<br />\n";
 		echo "<br />\n";
 		
-		$req_attaquant_nonRemplace = $bdd->prepare('SELECT t3.id_compo, t2.id_equipe, t3.id_joueur_reel, t4.cle_roto_primaire, t4.position, t3.numero, t3.note, t3.numero_definitif FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero < 12 AND t3.numero_definitif IS NULL AND t3.note IS NULL AND t4.position = \'Forward\' ORDER BY id_compo, t3.numero ASC ;');
+		$req_attaquant_nonRemplace = $bdd->prepare('SELECT t3.id_compo, t2.id_equipe, t3.id_joueur_reel, t4.cle_roto_primaire, t4.position, t3.numero, t3.note, t3.note_bonus, t3.numero_definitif FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero < 12 AND t3.numero_definitif IS NULL AND t3.note IS NULL AND t4.position = \'Forward\' ORDER BY id_compo, t3.numero ASC ;');
 		
 		//constante 17 pour le test uniquement
 		$req_attaquant_nonRemplace->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue));
@@ -717,9 +747,11 @@
 							$nouvelleNote = $ligneRemplacant['note']-2;
 						}
 						$upd_noteJoueurCompo->execute(array('note' => $nouvelleNote, 'id_compo' => $donneesAttaquantNonRemplace['id_compo'], 'id_joueur_reel' => $ligneRemplacant['id_joueur_reel']));
+						$upd_noteBonus-> execute(array('note' => $ligneRemplacant['note_bonus']-2, 'id_compo' => $donneesEffectifNonRemplace['id_compo'], 'id_joueur_reel' => $ligneRemplacant['id_joueur_reel']));
 						echo 'Note - 2 ';
 						echo "<br />\n";
 						$upd_noteJoueurCompo->closeCursor();
+						$upd_noteBonus->closeCursor();
 					}
 				}
 				if($donneesAttaquantNonRemplace['position'] == 'Forward' && $estRemplace == 0){
@@ -818,13 +850,13 @@
 		$req_malus_bonus= $bdd->prepare('SELECT t2.id, t1.id_equipe, t2.id_equipe_dom, t2.id_equipe_ext, t1.code_bonus_malus FROM compo_equipe t1, calendrier_ligue t2 WHERE t2.num_journee_cal_reel = :num_journee_cal_reel AND t2.id = t1.id_cal_ligue ;');
 		
 		//Requete Joueur Concerné par le bonus
-		$req_joueur_bonus = $bdd->prepare('SELECT t1.id_joueur_reel_equipe, t3.note FROM bonus_malus t1, compo_equipe t4, calendrier_ligue t2, joueur_compo_equipe t3  WHERE t2.num_journee_cal_reel = :num_journee_cal_reel AND t2.id = t4.id_cal_ligue AND t4.id = t3.id_compo AND t3.numero_definitif IS NOT NULL AND t3.id_joueur_reel = t1.id_joueur_reel_equipe AND t1.id_equipe = :id_equipe AND t1.id_cal_ligue = :id_cal_ligue ;');
+		$req_joueur_bonus = $bdd->prepare('SELECT t1.id_joueur_reel_equipe, t3.note, t3.note_bonus, t3.id_compo FROM bonus_malus t1, compo_equipe t4, calendrier_ligue t2, joueur_compo_equipe t3  WHERE t2.num_journee_cal_reel = :num_journee_cal_reel AND t2.id = t4.id_cal_ligue AND t4.id = t3.id_compo AND t3.numero_definitif IS NOT NULL AND t3.id_joueur_reel = t1.id_joueur_reel_equipe AND t1.id_equipe = :id_equipe AND t1.id_cal_ligue = :id_cal_ligue ;');
 		
 		//BONUS FAMILLE STADE
 		$upd_noteFamille = $bdd->prepare('UPDATE compo_equipe t1, calendrier_ligue t2, joueur_compo_equipe t3 SET t3.note = :note WHERE t2.num_journee_cal_reel =  :num_journee_cal_reel AND t2.id = t1.id_cal_ligue AND t1.id = t3.id_compo AND t3.numero_definitif IS NOT NULL AND t3.id_joueur_reel = :id_joueur_reel and t3.note <= 9 ;');
 		
 		//MALUS FUMIGENE Requete note gardien d'une équipe
-		$req_note_gardien = $bdd->prepare('SELECT t2.id_compo, t2.note FROM compo_equipe t1, joueur_compo_equipe t2, calendrier_ligue t3 WHERE t1.id_equipe = :id_equipe AND t2.id_compo = t1.id AND t2.numero_definitif = 1 AND t3.id = t1.id_cal_ligue AND t1.id = t2.id_compo AND t3.num_journee_cal_reel = :num_journee_cal_reel ;');
+		$req_note_gardien = $bdd->prepare('SELECT t2.id_compo, t2.note, t2.note_bonus, t2.id_joueur_reel FROM compo_equipe t1, joueur_compo_equipe t2, calendrier_ligue t3 WHERE t1.id_equipe = :id_equipe AND t2.id_compo = t1.id AND t2.numero_definitif = 1 AND t3.id = t1.id_cal_ligue AND t1.id = t2.id_compo AND t3.num_journee_cal_reel = :num_journee_cal_reel ;');
 		
 		//MALUS FUMIGENE Update note gardien
 		$upd_note_gardien = $bdd->prepare('UPDATE joueur_compo_equipe SET note = :note WHERE id_compo = :id_compo AND numero_definitif = 1 ;');
@@ -860,9 +892,11 @@
 										$noteUpdateGardien = 0.5 ;
 									}
 									$upd_note_gardien->execute(array('note' => $noteUpdateGardien, 'id_compo' => $noteGardienAdverse['id_compo']));
+									echo 'MAJ note bonus '.$note_bonus.' ' ; $upd_noteBonus->execute(array('note' => $noteGardienAdverse['note_bonus']-1, 'id_compo' => $noteGardienAdverse['id_compo'], 'id_joueur_reel' => $noteGardienAdverse['id_joueur_reel']));
 									echo 'FUMIGENE: Malus de -1 sur le gardien de la compo '.$noteGardienAdverse['id_compo'];
 									echo "<br />\n";
 									$upd_note_gardien->closeCursor();
+									$upd_noteBonus->closeCursor();
 								}
 							}
 						}
@@ -887,9 +921,11 @@
 										$noteUpdateGardien = 0.5 ;
 									}
 									$upd_note_gardien->execute(array('note' => $noteUpdateGardien, 'id_compo' => $noteGardienAdverse['id_compo']));
+									echo 'MAJ note bonus '.$note_bonus.' ' ; $upd_noteBonus->execute(array('note' => $noteGardienAdverse['note_bonus']-1, 'id_compo' => $noteGardienAdverse['id_compo'], 'id_joueur_reel' => $noteGardienAdverse['id_joueur_reel']));
 									echo 'FUMIGENE: Malus de -1 sur le gardien de la compo '.$noteGardienAdverse['id_compo'];
 									echo "<br />\n";
 									$upd_note_gardien->closeCursor();
+									$upd_noteBonus->closeCursor();
 								}
 							}
 						}
@@ -903,7 +939,9 @@
 						echo $donneesMalusBonus['code_bonus_malus'].' sur le joueur_reel '.$idJoueurBonus['id_joueur_reel_equipe'].' qui a déjà la note de '.$idJoueurBonus['note'];
 						echo "<br />\n";
 						$upd_noteFamille->execute(array('note' => $idJoueurBonus['note']+1, 'num_journee_cal_reel' => $constante_num_journee_cal_reel,'id_joueur_reel' => $idJoueurBonus['id_joueur_reel_equipe']));
+						echo 'MAJ note bonus '.$note_bonus.' ' ; $upd_noteBonus->execute(array('note' => $idJoueurBonus['note_bonus']+1, 'id_compo' => $idJoueurBonus['id_compo'], 'id_joueur_reel' => $idJoueurBonus['id_joueur_reel_equipe']));
 						$upd_noteFamille->closeCursor();
+						$upd_noteBonus->closeCursor();
 					}	
 					$req_joueur_bonus->closeCursor();
 				}elseif($donneesMalusBonus['code_bonus_malus'] == 'BOUCHER'){
@@ -1029,7 +1067,83 @@
 			$req_listeConfrontationParJournee->closeCursor();
 		
 		//Application des malus équipe de l'adversaire (MAJ Note)
+	
+	}	//FIN DE BOUCLE FOR EACH SUR LA LIGUE
+	}	//FIN DU IF SUR LA LIGUE
 		
+		//Mise à jour des stats
+		
+		//SCORE DOM => TABLE calendrier_ligue
+		
+		$req_score_dom = $bdd->prepare('SELECT t1.id, SUM(IFNULL(t3.nb_but_reel,0)) + SUM(IFNULL(t3.nb_but_virtuel,0)) AS \'score_domicile\' FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t3.numero_definitif IS NOT NULL AND t2.id_equipe = t1.id_equipe_dom  GROUP BY t3.id_compo;');
+		
+		$req_score_dom->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
+		
+		$upd_maj_score_dom = $bdd->prepare('UPDATE calendrier_ligue SET score_dom = :score_dom WHERE calendrier_ligue.id = :id ;');
+				
+		$scores_dom_a_saisir = $req_score_dom->fetchAll();
+			
+		if (count($scores_dom_a_saisir) == 0) {
+			echo  'Aucun score à saisir sur la journee '.$constante_num_journee_cal_reel;
+			echo "<br />\n";
+		} else {
+			foreach ($scores_dom_a_saisir as $score_dom_a_saisir) {
+				$upd_maj_score_dom->execute(array('score_dom' => $score_dom_a_saisir['score_domicile'],'id' => $score_dom_a_saisir['id']));
+				$upd_maj_score_dom->closeCursor();
+			}
+		}
+		$req_score_dom->closeCursor();
+		
+		//SCORE EXT => TABLE calendrier_ligue
+		
+		$req_score_ext = $bdd->prepare('SELECT t1.id, SUM(IFNULL(t3.nb_but_reel,0)) + SUM(IFNULL(t3.nb_but_virtuel,0)) AS \'score_exterieur\' FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t3.numero_definitif IS NOT NULL AND t2.id_equipe = t1.id_equipe_ext  GROUP BY t3.id_compo;');
+		
+		$req_score_ext->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
+		
+		$upd_maj_score_ext = $bdd->prepare('UPDATE calendrier_ligue SET score_ext = :score_ext WHERE calendrier_ligue.id = :id ;');
+		
+		$scores_ext_a_saisir = $req_score_ext->fetchAll();
+		
+		if (count($scores_ext_a_saisir) == 0) {
+			echo  'Aucun score à saisir sur la journee '.$constante_num_journee_cal_reel;
+			echo "<br />\n";
+		} else {
+			foreach ($scores_ext_a_saisir as $score_ext_a_saisir) {
+				$upd_maj_score_ext->execute(array('score_ext' => $score_ext_a_saisir['score_exterieur'],'id' => $score_ext_a_saisir['id']));
+				$upd_maj_score_ext->closeCursor();
+			}
+		}
+		$req_score_ext->closeCursor();
+		
+		//NB_MATCH, NB BUT REEL, NB BUT VIRTUEL => TABLE joueur_equipe
+		
+		$req_nb_match = $bdd->prepare('SELECT count(*) AS \'nb_match\', count(t3.nb_but_reel) AS \'nb_but_reel\', count(t3.nb_but_virtuel) AS \'nb_but_virtuel\', t1.id_ligue, t2.id_equipe, t3.id_joueur_reel FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t3.id_compo = t2.id AND t2.id_cal_ligue = t1.id AND t3.numero_definitif IS NOT NULL AND t1.score_dom IS NOT NULL AND t1.score_ext IS NOT NULL GROUP BY t1.id_ligue, t2.id_equipe, t3.id_joueur_reel ORDER BY t3.id_joueur_reel;');
+		
+		$req_nb_match->execute();
+		
+		$upd_maj_nb_match = $bdd->prepare('UPDATE joueur_equipe SET nb_match = :nb_match, nb_but_reel = :nb_but_reel, nb_but_virtuel = :nb_but_virtuel WHERE id_ligue = :id_ligue AND id_equipe = :id_equipe AND id_joueur_reel = :id_joueur_reel;');
+		
+		$nb_matchs_a_saisir = $req_nb_match->fetchAll();
+				
+		if (count($nb_matchs_a_saisir) == 0) {
+			echo  'Aucun nb de match à saisir sur la journee '.$constante_num_journee_cal_reel;
+			echo "<br />\n";
+		} else {
+			foreach ($nb_matchs_a_saisir as $nb_match_a_saisir) {
+				$upd_maj_nb_match->execute(array('nb_match' => $nb_match_a_saisir['nb_match'],'nb_but_reel' => $nb_match_a_saisir['nb_but_reel'],'nb_but_virtuel' => $nb_match_a_saisir['nb_but_virtuel'],'id_ligue' => $nb_match_a_saisir['id_ligue'],'id_equipe' => $nb_match_a_saisir['id_equipe'],'id_joueur_reel' => $nb_match_a_saisir['id_joueur_reel']));
+				$upd_maj_nb_match->closeCursor();
+			}
+		}
+		$req_nb_match->closeCursor();
+			
+		
+		//NB VICTOIRE => TABLE EQUIPE
+		
+		/*
+		SELECT id_equipe_dom, SUM(IF(score_dom > score_ext, 1,0)) FROM calendrier_ligue GROUP BY id_equipe_dom;
+		SELECT id_equipe_ext, SUM(IF(score_ext > score_dom, 1,0)) FROM calendrier_ligue GROUP BY id_equipe_ext;
+		*/
+			
 		
 ?>
 
