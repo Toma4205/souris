@@ -386,6 +386,12 @@
 	$req_ligues_concernees = $bdd->prepare('SELECT distinct id_ligue FROM calendrier_ligue WHERE num_journee_cal_reel = :num_journee_cal_reel;');
 	$req_ligues_concernees->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
 	
+	$upd_remise_a_zero_jce = $bdd->prepare('UPDATE joueur_compo_equipe, calendrier_ligue, compo_equipe SET joueur_compo_equipe.note = NULL, joueur_compo_equipe.note_bonus = NULL, joueur_compo_equipe.nb_but_reel = NULL, joueur_compo_equipe.nb_but_virtuel = NULL, joueur_compo_equipe.numero_definitif = NULL WHERE calendrier_ligue.num_journee_cal_reel = :num_journee_cal_reel AND calendrier_ligue.id = compo_equipe.id_cal_ligue AND compo_equipe.id = joueur_compo_equipe.id_compo;');
+	
+	$upd_remise_a_zero_jce->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
+	echo "<br />\n";
+	echo 'Remise à zéro des stats des compos concernees par la journée '.$constante_num_journee_cal_reel;
+	
 	$ligues_concernees = $req_ligues_concernees->fetchAll();
 			
 	if (count($ligues_concernees) == 0) {
