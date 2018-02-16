@@ -393,7 +393,9 @@
 	echo 'Remise à zéro des stats des compos concernees par la journée '.$constante_num_journee_cal_reel;
 	
 	$ligues_concernees = $req_ligues_concernees->fetchAll();
-			
+	
+
+// BOUCLE MAJEURE	
 	if (count($ligues_concernees) == 0) {
 		echo  'Aucune ligue sur la journee '.$constante_num_journee_cal_reel;
 		echo "<br />\n";
@@ -974,10 +976,9 @@
 					echo $donneesMalusBonus['code_bonus_malus'];
 					echo "<br />\n";
 				}elseif($donneesMalusBonus['code_bonus_malus'] == 'DIN_ARB'){
-					
 					//A FAIRE
 					//1 but reel adverse en moins
-					echo $donneesMalusBonus['code_bonus_malus'];
+					echo $donneesMalusBonus['code_bonus_malus'].' (traité en boucle 8)';
 					echo "<br />\n";
 				}elseif($donneesMalusBonus['code_bonus_malus'] == 'MAU_CRA'){
 					
@@ -1041,12 +1042,38 @@
 			$req_listeConfrontationParJournee->closeCursor();
 			
 			
+			//################## Huitième boucle ############################
+			// Ici supprime le but réel d'un joueur en réponse au Malus DIN_ARB
+			
 			echo "<br />\n";
-			echo ' ************************ MISE A JOUR DES STATS ET SCORES - BOUCLE 8 **************************';
+			echo ' ************************ MALUS DIN_ARB - BOUCLE 8 **************************';
 			echo "<br />\n";
 			echo "<br />\n";
 			
+			$req_buteurs_impactes_par_malus_dinarb = $bdd->prepare('SELECT DISTINCT t4.id_compo, t4.id_joueur_reel, t4.nb_but_reel FROM joueur_compo_equipe t4, compo_equipe t5 WHERE t5.id = t4.id_compo AND t4.numero_definitif IS NOT NULL AND t4.nb_but_reel > 0 AND t5.id_equipe IN(SELECT t1.id_equipe_dom FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = 25 AND t1.id = t2.id_cal_ligue AND t2.code_bonus_malus = \'DIN_ARB\' AND t3.id_compo = t2.id AND t1.id_equipe_dom != t2.id_equipe UNION SELECT t1.id_equipe_ext FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = 25 AND t1.id = t2.id_cal_ligue AND t2.code_bonus_malus = \'DIN_ARB\' AND t3.id_compo = t2.id AND t1.id_equipe_ext != t2.id_equipe);');
 			
+			//MALUS DIN ARB Update nb_but_reel buteur
+			$upd_nb_but_buteur = $bdd->prepare('UPDATE joueur_compo_equipe SET nb_but_reel = :nb_but_reel WHERE id_compo = :id_compo AND id_joueur_reel = :id_joueur_reel ;');
+			
+			$req_buteurs_impactes_par_malus_dinarb->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
+			$id_compo_deja_affecte=-1;
+			while ($listeButeursImpactesMalusDinArb = $req_buteurs_impactes_par_malus_dinarb->fetch())
+			{	
+				if($listeButeursImpactesMalusDinArb['id_compo'] != $id_compo_deja_affecte)
+				{
+						//Update -1 sur le but réel d'un joueur
+						if($listeButeursImpactesMalusDinArb['nb_but_reel'] == 1){
+							$upd_nb_but_buteur->execute(array('nb_but_reel' => NULL, 'id_compo' => $listeButeursImpactesMalusDinArb['id_compo'], 'id_joueur_reel' => $listeButeursImpactesMalusDinArb['id_joueur_reel'] ));
+						}else{
+							$upd_nb_but_buteur->execute(array('nb_but_reel' => $listeButeursImpactesMalusDinArb['nb_but_reel']-1, 'id_compo' => $listeButeursImpactesMalusDinArb['id_compo'], 'id_joueur_reel' => $listeButeursImpactesMalusDinArb['id_joueur_reel'] ));
+						}
+						$id_compo_deja_affecte = $listeButeursImpactesMalusDinArb['id_compo'];
+						echo 'Joueur avec id : '.$listeButeursImpactesMalusDinArb['id_joueur_reel'].' perd 1 but réel [MALUS DIN ARB]';
+						echo "<br />\n"; 
+				}
+			}
+			
+						
 			//A FAIRE
 			
 			echo "<br />\n";
@@ -1077,6 +1104,12 @@
 	}	//FIN DE BOUCLE FOR EACH SUR LA LIGUE
 	}	//FIN DU IF SUR LA LIGUE
 		
+		
+		echo "<br />\n";
+		echo ' ************************ MISE A JOUR DES STATS **************************';
+		echo "<br />\n";
+		echo "<br />\n";
+		
 		//Mise à jour des stats
 		
 		//SCORE DOM => TABLE calendrier_ligue
@@ -1100,6 +1133,7 @@
 		}
 		$req_score_dom->closeCursor();
 		
+				
 		//SCORE EXT => TABLE calendrier_ligue
 		
 		$req_score_ext = $bdd->prepare('SELECT t1.id, SUM(IFNULL(t3.nb_but_reel,0)) + SUM(IFNULL(t3.nb_but_virtuel,0)) AS \'score_exterieur\' FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t3.numero_definitif IS NOT NULL AND t2.id_equipe = t1.id_equipe_ext  GROUP BY t3.id_compo;');
