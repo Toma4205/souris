@@ -31,6 +31,31 @@ function submitForm(name) {
   $('#formPrincipal').append($(input)).submit();
 }
 
+// Appelée lors de la validation de l'équipe
+function controlerBonus() {
+  var formOK = true;
+  if (!$('select[name="choixJoueurBonus"]').hasClass('cache')) {
+    if ($('select[name="choixJoueurBonus"]').find(":selected").val() == -1) {
+      formOK = false;
+    }
+  }
+  if (!$('select[name="choixJoueurAdvBonus"]').hasClass('cache')) {
+    if ($('select[name="choixJoueurAdvBonus"]').find(":selected").val() == -1) {
+      formOK = false;
+    }
+  }
+  if (!$('select[name="choixMiTempsBonus"]').hasClass('cache')) {
+    if ($('select[name="choixMiTempsBonus"]').find(":selected").val() == -1) {
+      formOK = false;
+    }
+  }
+  if (!formOK && $('#messageErreurBonus').hasClass('cache')) {
+    $('#messageErreurBonus').removeClass('cache');
+  }
+
+  return formOK;
+}
+
 function onSelectionBonusMalus(selectName) {
   var val = $('select[name="' + selectName + '"]').find(":selected").val();
   if (val == 'MAU_CRA' || val == 'BOUCHER') {
@@ -66,6 +91,10 @@ function onSelectionBonusMalus(selectName) {
     cacherAfficherSelectByName('choixJoueurAdvBonus', true);
     cacherAfficherSelectByName('choixJoueurBonus', true);
     cacherAfficherSelectByName('choixMiTempsBonus', true);
+  }
+
+  if (!$('#messageErreurBonus').hasClass('cache')) {
+    $('#messageErreurBonus').addClass('cache');
   }
 }
 
