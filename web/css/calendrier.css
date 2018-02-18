@@ -90,6 +90,9 @@
   text-align: left;
   font-size: 0.8rem;
 }
+.buteur_virtuel {
+  color: #00cdcd;
+}
 .but {
   margin-left: 5px;
 }
@@ -108,8 +111,24 @@
   font-size: 1rem;
   padding: .5rem;
 }
+.detail_match_equipe_bonus_malus_lib {
+  font-size: .8rem;
+  font-style: italic;
+  color: #141b4D;
+  line-height: 1rem;
+}
+.detail_match_equipe_bonus_malus_joueur {
+  line-height: 1rem;
+  font-size: .8rem;
+  font-weight: bold;
+  text-align: left;
+  padding-left: .5rem;
+}
+.detail_match_equipe_bonus_malus_joueur_bloc {
+  padding-top: 1rem;
+}
 .detail_match_equipe_bonus_malus_liste {
-  line-height: 2.5rem;
+  line-height: 3.5rem;
 }
 .detail_match_equipe_titre {
   border-bottom: 2px solid #141b4D;

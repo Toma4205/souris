@@ -54,7 +54,7 @@ require_once("vue/commun/enteteflex.php");
   </div>
   <?php
     if ($ligue->libellePari() != null) {
-      echo '<div class="classement_pari_ligue"><span class="classement_pari_ligue_lib">Pari de la ligue :</span> ' . $ligue->libellePari() . '</div>';
+      echo '<div class="classement_pari_ligue"><span class="classement_pari_ligue_lib">Pari de la ligue</span> : ' . $ligue->libellePari() . '</div>';
     }
    ?>
 </section>

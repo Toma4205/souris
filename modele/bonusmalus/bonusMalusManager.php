@@ -89,15 +89,20 @@ class BonusMalusManager extends ManagerBase
     }
   }
 
-  public function creerOuMajBonusMalusCompoEquipe(BonusMalus $bonus, $idEquipe, $idCalLigue)
+  public function reinitBonusMalusCompoEquipe($idEquipe, $idCalLigue)
   {
-    // Réinitialisation éventuelle d'un bonusMalus déjà enregistré
     $q = $this->_bdd->prepare('UPDATE bonus_malus SET id_cal_ligue = NULL,
       id_joueur_reel_equipe = NULL, id_joueur_reel_adverse = NULL, mi_temps = NULL
       WHERE id_cal_ligue = :calLigue AND id_equipe = :equipe');
     $q->bindValue(':calLigue', $idCalLigue);
     $q->bindValue(':equipe', $idEquipe);
     $q->execute();
+  }
+
+  public function creerOuMajBonusMalusCompoEquipe(BonusMalus $bonus, $idEquipe, $idCalLigue)
+  {
+    // Réinitialisation éventuelle d'un bonusMalus déjà enregistré
+    $this->reinitBonusMalusCompoEquipe($idEquipe, $idCalLigue);
 
     // Sélection de l'id du bonusMalus à mettre à jour
     $q = $this->_bdd->prepare('SELECT * FROM bonus_malus

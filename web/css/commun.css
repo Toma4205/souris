@@ -174,6 +174,9 @@ div#contenu {
 .margin_auto {
   margin: auto;
 }
+.margin_auto_vertical {
+  margin: auto 0 !important;
+}
 .erreur {
   color:red;
   font-weight: bold;
@@ -190,6 +193,14 @@ div#contenu {
   display: flex;
 	flex-direction: row;
 	justify-content: flex-start;
+	align-items: stretch;
+  margin: auto;
+  text-align:center;
+}
+.conteneurRowDroite {
+  display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
 	align-items: stretch;
   margin: auto;
   text-align:center;

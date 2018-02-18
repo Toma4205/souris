@@ -38,6 +38,13 @@ class LigueManager extends ManagerBase
     return $idLigue;
   }
 
+  public final function supprimerLigue($idLigue) {
+		$q = $this->_bdd->prepare('DELETE FROM ligue WHERE id = :id');
+		$q->bindValue(':id', $idLigue);
+
+		$q->execute();
+	}
+
   public function inviterCoachDansLigue($idCoach, $idLigue)
   {
     $q = $this->_bdd->prepare('INSERT INTO coach_ligue(id_coach, id_ligue, createur)

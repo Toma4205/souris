@@ -466,8 +466,10 @@ if (isset($calReel) && $calLigue->id() != null)
     ?>
   </section>
   <div>
-    <input type="submit" value="Valider la compo" name="enregistrer" class="marginBottom width_200px" />
+    <input type="submit" value="Valider la compo" name="enregistrer"
+      onclick="return controlerBonus();" class="marginBottom width_200px" />
   </div>
+  <div id="messageErreurBonus" class="cache">Jean-Michel à moitié... Ta saisie du bonus/malus est incomplète !</div>
 </section>
 <?php
 }

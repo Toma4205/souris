@@ -65,7 +65,7 @@ if (isset($_POST['changerTactique']))
 }
 elseif (isset($_POST['enregistrer']))
 {
-  // TODO MPL traiter cas bonus avec impact joueur sans sélection joueur
+  // TODO MPL Cas où bonus supprimé
   $compoEquipe->setCode_tactique($_POST['choixTactique']);
   if ($_POST['choixBonus'] != -1)
   {
@@ -83,6 +83,11 @@ elseif (isset($_POST['enregistrer']))
     }
 
     $bonusManager->creerOuMajBonusMalusCompoEquipe($bonus, $equipe->id(), $calLigue->id());
+  }
+  else
+  {
+    // Réinit du bonus/malus sélectionné éventuellement avant
+    $bonusManager->reinitBonusMalusCompoEquipe($equipe->id(), $calLigue->id());
   }
   $compoEquipeManager->creerOuMajCompoEquipe($compoEquipe, $equipe->id(), $calLigue->id());
 

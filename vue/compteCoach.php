@@ -1,5 +1,6 @@
 <?php
 // entete
+$vueJs = 'compteCoach.js';
 $vueCss = 'compteCoach.css';
 require_once("vue/commun/enteteflex.php");
 ?>
@@ -16,26 +17,25 @@ require_once("vue/commun/enteteflex.php");
         if ($value->etat() == EtatLigue::MERCATO)
         {
           $nbAction++;
-          echo '<li class="detail_action_actu">';
-          echo '<span class="float_left image_action_actu"><img src="web/img/action_mercato_compte_coach.png" alt="" width="50px" height="50px"/></span>';
+          echo '<li class="detail_action_actu conteneurRow">';
+          echo '<div><span class="float_left image_action_actu"><img src="web/img/action_mercato_compte_coach.png" alt="" width="50px" height="50px"/></span>';
           echo 'Ton équipe n\'est pas terminée pour la ligue <b>"' . $value->nom() . '"</b> !';
-          echo '<span class="float_right">';
-          echo '<input type="submit" class="font_size_point_8rem" value="Je prends Neymar et Fekir" name="continuerCreaLigue[' . $value->id() . ']" />';
-          echo '</span>';
-          echo '</li>';
+          echo '</div><div class="margin_auto"></div><div class="conteneurRowDroite margin_auto_vertical">';
+          echo '<input type="submit" class="font_size_point_8rem" value="Je prends Ney et Fekir" name="continuerCreaLigue[' . $value->id() . ']" />';
+          echo '</div></li>';
         }
         elseif ($value->etat() == EtatLigue::CREATION)
         {
           if ($value->createur())
           {
             $nbAction++;
-            echo '<li class="detail_action_actu">';
-            echo '<span class="float_left image_action_actu"><img src="web/img/action_creation_compte_coach.png" alt="" width="50px" height="50px"/></span>';
+            echo '<li class="detail_action_actu conteneurRow">';
+            echo '<div><span class="float_left image_action_actu"><img src="web/img/action_creation_compte_coach.png" alt="" width="50px" height="50px"/></span>';
             echo 'Ta ligue <b>"' . $value->nom() . '"</b> est toujours en cours de création !';
-            echo '<span class="float_right">';
-            echo '<input type="submit" class="font_size_point_8rem" value="Je m\'en occupe maintenant" name="continuerCreaLigue[' . $value->id() . ']" />';
-            echo '</span>';
-            echo '</li>';
+            echo '</div><div class="margin_auto"></div><div class="conteneurRowDroite margin_auto_vertical">';
+            echo '<input type="submit" class="font_size_point_8rem" value="J\'y vais" name="continuerCreaLigue[' . $value->id() . ']" />';
+            echo '<input type="submit" class="font_size_point_8rem" value="J\'abandonne" name="suppCreaLigue[' . $value->id() . ']" onclick="return confirmerSuppCreaLigue(\'' . $value->nom() . '\');" />';
+            echo '</div></li>';
           }
           else if (null == $value->dateValidation())
           {

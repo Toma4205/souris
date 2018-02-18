@@ -51,12 +51,16 @@ elseif (isset($_POST['rejoindre']))
     header('Location: index.php?section=classementLigue');
   }
 }
+elseif (isset($_POST['suppCreaLigue']))
+{
+  foreach($_POST['suppCreaLigue'] as $cle => $value)
+  {
+    $managerLigue->supprimerLigue($cle);
+  }
+}
 elseif (isset($_POST['masquer']))
 {
-  foreach($_POST['masquer'] as $cle => $value)
-  {
-    // TODO MPL
-  }
+
 }
 
 $ligues = $managerLigue->findLiguesByIdCoach($coach->id());
