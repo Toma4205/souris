@@ -267,7 +267,7 @@ if (isset($match)) {
     <div class="detail_match_bandeau_col_c">
       <div class="detail_match_bandeau_etat">
       <?php
-        if ($match->statut() == 1) {
+        if ($match->statut() == ConstantesAppli::STATUT_CAL_EN_COURS) {
           echo 'En cours';
         } else {
           echo 'Terminé';

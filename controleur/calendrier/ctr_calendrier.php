@@ -59,6 +59,19 @@ if (isset($_POST["id_match"]))
           $joueursExt = $compoEquipeManager->findJoueurCompoByCompo($compoExt->id());
         }
         echo $log;
+
+        // TODO MPL changer algo car non performant
+        if ($match->statut() == ConstantesAppli::STATUT_CAL_EN_COURS) {
+          $joueurReelManager = new JoueurReelManager($bdd);
+          $journee = '2017' . $match->numJourneeCalReel();
+          
+          foreach ($joueursDom as $cle => $value) {
+            $value->setNote($joueurReelManager->getNoteTemp($value->idJoueurReel(), $journee));
+          }
+          foreach ($joueursExt as $cle => $value) {
+            $value->setNote($joueurReelManager->getNoteTemp($value->idJoueurReel(), $journee));
+          }
+        }
         break;
       }
   }

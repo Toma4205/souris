@@ -9,6 +9,17 @@ class JoueurReelManager extends ManagerBase
     $this->setDb($bdd);
   }
 
+  public function getNoteTemp($idJoueur, $numJournee)
+  {
+    $q = $this->_bdd->prepare('SELECT js.note
+        FROM joueur_stats js
+        JOIN joueur_reel jr ON js.id = jr.cle_roto_primaire
+        WHERE js.journee = :numJournee
+        AND jr.id = :id');
+    $q->execute([':id' => $idJoueur, 'numJournee' => $numJournee]);
+    return $q->fetchColumn();
+  }
+
   public function findByPosition($position)
   {
     $joueurs = [];
