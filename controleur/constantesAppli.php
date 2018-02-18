@@ -33,6 +33,10 @@ class ConstantesAppli {
     const MERCATO_DRAFT = 'D';
 
     const TACTIQUE_DEFAUT = '4-4-2';
+
+    const STATUT_CAL_DEFAUT = 0;
+    const STATUT_CAL_EN_COURS = 1;
+    const STATUT_CAL_EN_TERMINE = 1;
 }
 
  ?>

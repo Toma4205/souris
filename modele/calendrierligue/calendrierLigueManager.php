@@ -60,10 +60,12 @@ class CalendrierLigueManager extends ManagerBase
   {
       $equipes = [];
       $q = $this->_bdd->prepare('SELECT c.*, dom.nom as nomEquipeDom, ext.nom as nomEquipeExt,
-        dom.code_style_coach as codeStyleCoachDom, ext.code_style_coach as codeStyleCoachExt
+        dom.code_style_coach as codeStyleCoachDom, ext.code_style_coach as codeStyleCoachExt,
+        cr.statut as statut
         FROM calendrier_ligue c
         JOIN equipe dom ON dom.id = c.id_equipe_dom
         JOIN equipe ext ON ext.id = c.id_equipe_ext
+        JOIN calendrier_reel cr ON c.num_journee_cal_reel = cr.num_journee
         WHERE c.id_ligue = :idLigue
         ORDER BY c.num_journee ASC');
       $q->execute([':idLigue' => $idLigue]);

@@ -1,3 +1,7 @@
+/* Script passée en "PROD" le 18/02/2017 */
+ALTER TABLE `calendrier_reel` ADD `statut` TINYINT(1) NOT NULL DEFAULT '0' AFTER `date_heure_debut`;
+UPDATE `calendrier_reel` SET statut = 2 WHERE date_heure_debut < NOW() AND num_journee != 26;
+
 /* Script passée en "PROD" le 16/02/2017 */
 ALTER TABLE `nomenclature_bonus_malus` ADD `libelle_court` VARCHAR(30) NOT NULL AFTER `code`;
 /* ATTENTION : supprime toutes les tables ayant le code référencé et valorisé (compo, joueur_compo, bonus_malus) */

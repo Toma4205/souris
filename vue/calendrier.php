@@ -265,7 +265,15 @@ if (isset($match)) {
       </div>
     </div>
     <div class="detail_match_bandeau_col_c">
-      <div class="detail_match_bandeau_etat">Terminé</div>
+      <div class="detail_match_bandeau_etat">
+      <?php
+        if ($match->statut() == 1) {
+          echo 'En cours';
+        } else {
+          echo 'Terminé';
+        }
+       ?>
+      </div>
       <div class="detail_match_bandeau_score conteneurRow">
         <div><?php echo $match->scoreDom(); ?></div>
         <div class="detail_match_bandeau_score_tiret">-</div>
