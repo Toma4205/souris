@@ -14,6 +14,9 @@ CREATE TABLE nomenclature_style_coach (`code` VARCHAR(30) NOT NULL , `libelle` V
 CREATE TABLE quantite_bonus_malus (`code` VARCHAR(30) NOT NULL , `nb_joueur` TINYINT UNSIGNED NOT NULL , `nb_pack_classique` TINYINT UNSIGNED NOT NULL , `nb_pack_folie` TINYINT UNSIGNED NOT NULL , PRIMARY KEY (`code`, `nb_joueur`)) ENGINE = InnoDB;
 ALTER TABLE `quantite_bonus_malus` ADD FOREIGN KEY (`code`) REFERENCES `nomenclature_bonus_malus`(`code`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+CREATE TABLE `nomenclature_questions_presse` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT , `categorie` VARCHAR(40) NOT NULL , `libelle` VARCHAR(255) NOT NULL, `date_debut` DATE NOT NULL , `date_fin` DATE NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
 CREATE TABLE `calendrier_reel` (
 `num_journee` TINYINT UNSIGNED NOT NULL,
 `date_heure_debut` TIMESTAMP NOT NULL,
