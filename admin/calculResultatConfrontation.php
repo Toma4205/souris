@@ -1072,7 +1072,8 @@
 						echo "<br />\n"; 
 				}
 			}
-			
+			$upd_nb_but_buteur->closeCursor();
+			$req_buteurs_impactes_par_malus_dinarb->closeCursor();
 						
 			//A FAIRE
 			
@@ -1178,11 +1179,129 @@
 			
 		
 		//NB VICTOIRE => TABLE EQUIPE
+			
+		$upd_nb_victoire = $bdd->prepare('UPDATE equipe SET nb_victoire = nb_victoire+1 WHERE id IN(
+		SELECT id_equipe_dom FROM calendrier_ligue WHERE score_dom > score_ext AND calendrier_ligue.num_journee_cal_reel = :num_journee_cal_reel
+		UNION
+		SELECT id_equipe_ext FROM calendrier_ligue WHERE score_ext > score_dom  AND calendrier_ligue.num_journee_cal_reel = :num_journee_cal_reel) 
+		AND id_ligue IN(
+		SELECT id_ligue FROM calendrier_ligue WHERE score_dom > score_ext AND calendrier_ligue.num_journee_cal_reel = :num_journee_cal_reel
+		UNION
+		SELECT id_ligue FROM calendrier_ligue WHERE score_ext > score_dom  AND calendrier_ligue.num_journee_cal_reel = :num_journee_cal_reel);');
 		
-		/*
-		SELECT id_equipe_dom, SUM(IF(score_dom > score_ext, 1,0)) FROM calendrier_ligue GROUP BY id_equipe_dom;
-		SELECT id_equipe_ext, SUM(IF(score_ext > score_dom, 1,0)) FROM calendrier_ligue GROUP BY id_equipe_ext;
-		*/
+		$upd_nb_victoire->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
+		$upd_nb_victoire->closeCursor();
+		
+		
+		//NB DEFAITE => TABLE EQUIPE
+			
+		$upd_nb_defaite = $bdd->prepare('UPDATE equipe SET nb_defaite = nb_defaite+1 WHERE id IN(
+		SELECT id_equipe_dom FROM calendrier_ligue WHERE score_dom < score_ext AND calendrier_ligue.num_journee_cal_reel = :num_journee_cal_reel
+		UNION
+		SELECT id_equipe_ext FROM calendrier_ligue WHERE score_ext < score_dom  AND calendrier_ligue.num_journee_cal_reel = :num_journee_cal_reel) 
+		AND id_ligue IN(
+		SELECT id_ligue FROM calendrier_ligue WHERE score_dom < score_ext AND calendrier_ligue.num_journee_cal_reel = :num_journee_cal_reel
+		UNION
+		SELECT id_ligue FROM calendrier_ligue WHERE score_ext < score_dom  AND calendrier_ligue.num_journee_cal_reel = :num_journee_cal_reel);');
+		
+		$upd_nb_defaite->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
+		$upd_nb_defaite->closeCursor();
+		
+		
+		//NB NUL => TABLE EQUIPE
+			
+		$upd_nb_nul = $bdd->prepare('UPDATE equipe SET nb_nul = nb_nul+1 WHERE id IN(
+		SELECT id_equipe_dom FROM calendrier_ligue WHERE score_dom = score_ext AND calendrier_ligue.num_journee_cal_reel = :num_journee_cal_reel
+		UNION
+		SELECT id_equipe_ext FROM calendrier_ligue WHERE score_ext = score_dom  AND calendrier_ligue.num_journee_cal_reel = :num_journee_cal_reel) 
+		AND id_ligue IN(
+		SELECT id_ligue FROM calendrier_ligue WHERE score_dom = score_ext AND calendrier_ligue.num_journee_cal_reel = :num_journee_cal_reel
+		UNION
+		SELECT id_ligue FROM calendrier_ligue WHERE score_ext = score_dom  AND calendrier_ligue.num_journee_cal_reel = :num_journee_cal_reel);');
+		
+		$upd_nb_nul->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
+		$upd_nb_nul->closeCursor();
+
+		//NB BUT POUR DOM => TABLE EQUIPE
+			
+		$upd_nb_but_pour_dom = $bdd->prepare('UPDATE equipe e, calendrier_ligue cl SET e.nb_but_pour = e.nb_but_pour + cl.score_dom WHERE cl.num_journee_cal_reel = :num_journee_cal_reel AND cl.id_ligue = e.id_ligue AND cl.id_equipe_dom = e.id;');
+		
+		$upd_nb_but_pour_dom->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
+		$upd_nb_but_pour_dom->closeCursor();
+		
+		
+		//NB BUT POUR EXT => TABLE EQUIPE
+			
+		$upd_nb_but_pour_ext = $bdd->prepare('UPDATE equipe e, calendrier_ligue cl SET e.nb_but_pour = e.nb_but_pour + cl.score_ext WHERE cl.num_journee_cal_reel = :num_journee_cal_reel AND cl.id_ligue = e.id_ligue AND cl.id_equipe_ext = e.id;');
+		
+		$upd_nb_but_pour_ext->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
+		$upd_nb_but_pour_ext->closeCursor();
+		
+		//NB BUT CONTRE DOM => TABLE EQUIPE
+			
+		$upd_nb_but_contre_dom = $bdd->prepare('UPDATE equipe e, calendrier_ligue cl SET e.nb_but_contre = e.nb_but_contre + cl.score_ext WHERE cl.num_journee_cal_reel = :num_journee_cal_reel AND cl.id_ligue = e.id_ligue AND cl.id_equipe_dom = e.id;');
+		
+		$upd_nb_but_contre_dom->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
+		$upd_nb_but_contre_dom->closeCursor();
+		
+		//NB BUT CONTRE EXT => TABLE EQUIPE
+			
+		$upd_nb_but_contre_ext = $bdd->prepare('UPDATE equipe e, calendrier_ligue cl SET e.nb_but_contre = e.nb_but_contre + cl.score_dom WHERE cl.num_journee_cal_reel = :num_journee_cal_reel AND cl.id_ligue = e.id_ligue AND cl.id_equipe_ext = e.id;');
+		
+		$upd_nb_but_contre_ext->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
+		$upd_nb_but_contre_ext->closeCursor();
+		
+		//NB JOUE => TABLE EQUIPE
+			
+		$upd_nb_joue = $bdd->prepare('UPDATE equipe e, calendrier_ligue cl SET e.nb_match = e.nb_match + 1 WHERE cl.num_journee_cal_reel = :num_journee_cal_reel AND e.id IN(cl.id_equipe_dom, cl.id_equipe_ext) AND e.id_ligue = cl.id_ligue;');
+		
+		$upd_nb_joue->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
+		$upd_nb_joue->closeCursor();
+		
+		
+		
+		
+		//NB BONUS => TABLE EQUIPE
+		$req_nb_bonus = $bdd->prepare('UPDATE equipe e, calendrier_ligue cl, compo_equipe ce SET e.nb_bonus = e.nb_bonus + 1 WHERE ce.code_bonus_malus iS NOT NULL AND ce.id_equipe IN (cl.id_equipe_dom, cl.id_equipe_ext) AND cl.num_journee_cal_reel = :num_journee_cal_reel AND e.id_ligue = cl.id_ligue AND e.id = ce.id_equipe;');
+		
+		
+		$req_nb_bonus->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
+		$req_nb_bonus->closeCursor();
+		
+		//NB MALUS => TABLE EQUIPE à faire
+		
+		
+		$upd_nb_malus = $bdd->prepare('UPDATE equipe e, (SELECT cl.id_equipe_ext AS \'equipe_victime\', cl.id_ligue from compo_equipe ce, calendrier_ligue cl WHERE ce.code_bonus_malus IS NOT NULL AND ce.id_cal_ligue = cl.id AND cl.num_journee_cal_reel = :num_journee_cal_reel AND ce.id_equipe = cl.id_equipe_dom UNION SELECT cl1.id_equipe_dom AS \'equipe_victime\', cl1.id_ligue from compo_equipe ce1, calendrier_ligue cl1 WHERE ce1.code_bonus_malus IS NOT NULL AND ce1.id_cal_ligue = cl1.id AND cl1.num_journee_cal_reel = :num_journee_cal_reel AND ce1.id_equipe = cl1.id_equipe_ext) t1 SET e.nb_malus = e.nb_malus+1 WHERE e.id_ligue = t1.id_ligue AND e.id = t1.equipe_victime;');
+		
+		$upd_nb_malus->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
+		$upd_nb_malus->closeCursor();
+		
+		
+		//CLASSEMENT => TABLE EQUIPE
+		$req_ligues_concernees->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
+		$req_set_rank = $bdd->prepare('SET @rank :=0;');
+		$req_classement_ligue = $bdd->prepare('SELECT tmp.id_ligue, tmp.id, @rank := @rank+1 as \'rank\'
+			FROM (Select e.id_ligue, e.id, (e.nb_victoire*3)+(e.nb_nul*2)+(e.nb_but_pour/100)-(e.nb_but_contre/100) as \'points\' from equipe e
+			WHERE e.id_ligue = :id_ligue) tmp
+			GROUP BY tmp.id_ligue, tmp.id
+			ORDER BY tmp.points DESC;');
+			
+		$upd_classement_ligue = $bdd->prepare('UPDATE equipe SET classement = :classement WHERE id_ligue = :id_ligue and id = :id;');
+		
+		while ($listeLiguesConcernees = $req_ligues_concernees->fetch())
+		{
+			$req_set_rank->execute();
+			$req_classement_ligue->execute(array('id_ligue' => $listeLiguesConcernees['id_ligue']));
+			while ($classementCalcule = $req_classement_ligue->fetch())
+			{
+				$upd_classement_ligue->execute(array('classement' => $classementCalcule['rank'], 'id_ligue' => $classementCalcule['id_ligue'], 'id' => $classementCalcule['id']));
+				$upd_classement_ligue->closeCursor();
+			}
+			$req_set_rank->closeCursor();
+			$req_classement_ligue->closeCursor();
+		}
+		$req_ligues_concernees->closeCursor();
+				
 			
 		
 ?>
