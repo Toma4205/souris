@@ -1302,7 +1302,9 @@
 		}
 		$req_ligues_concernees->closeCursor();
 				
-			
+		$upd_statut_journee = $bdd->prepare('UPDATE calendrier_reel SET statut = 2 WHERE num_journee = :num_journee_cal_reel;');
+		$upd_statut_journee->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
+		$upd_statut_journee->closeCursor();
 		
 ?>
 
