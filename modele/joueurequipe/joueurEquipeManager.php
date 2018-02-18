@@ -45,7 +45,7 @@ class JoueurEquipeManager extends ManagerBase
     $joueurs = [];
 
 		$q = $this->_bdd->prepare('SELECT je.prix as prixAchat, je.tour_mercato, j.id,
-        j.nom, j.prenom, j.position, j.prix as prixOrigine, n.libelle as libelleEquipe
+        j.nom, j.prenom, j.position, j.prix as prixOrigine, n.code as codeEquipe, n.libelle as libelleEquipe
         FROM joueur_equipe je
         JOIN joueur_reel j ON je.id_joueur_reel = j.id
         JOIN nomenclature_equipe n ON j.equipe = n.code
@@ -69,7 +69,7 @@ class JoueurEquipeManager extends ManagerBase
     $joueurs = [];
 
 		$q = $this->_bdd->prepare('SELECT je.prix as prixAchat, j.id,
-        j.nom, j.prenom, j.position, j.prix as prixOrigine, n.libelle as libelleEquipe
+        j.nom, j.prenom, j.position, j.prix as prixOrigine, n.code as codeEquipe, n.libelle as libelleEquipe
         FROM joueur_equipe je
         JOIN joueur_reel j ON je.id_joueur_reel = j.id
         JOIN nomenclature_equipe n ON j.equipe = n.code
@@ -166,7 +166,7 @@ class JoueurEquipeManager extends ManagerBase
 
 		$q = $this->_bdd->prepare('SELECT je.prix as prixAchat, je.tour_mercato,
         je.date_offre, je.date_validation, j.id, j.nom, j.prenom, j.position,
-        n.libelle as libelleEquipe, e.nom as nomEquipe
+        n.code as codeEquipe, n.libelle as libelleEquipe, e.nom as nomEquipe
         FROM joueur_equipe je
         JOIN equipe e ON je.id_equipe = e.id
         JOIN joueur_reel j ON je.id_joueur_reel = j.id

@@ -14,6 +14,7 @@ class JoueurPrepaMercato extends ClasseBase
   private $_prixAchat;
 
   // Libelle Equipe
+  private $_codeEquipe;
   private $_libelleEquipe;
 
   public function __construct(array $donnees)
@@ -28,6 +29,7 @@ class JoueurPrepaMercato extends ClasseBase
   public function position() { return $this->_position; }
   public function prixOrigine() { return $this->_prixOrigine; }
   public function prixAchat() { return $this->_prixAchat; }
+  public function codeEquipe() { return $this->_codeEquipe; }
   public function libelleEquipe() { return $this->_libelleEquipe; }
 
   public function setId($id)
@@ -63,6 +65,11 @@ class JoueurPrepaMercato extends ClasseBase
   public function setPrixAchat($prixAchat)
   {
       $this->_prixAchat = $prixAchat;
+  }
+
+  public function setCodeEquipe($codeEquipe)
+  {
+      $this->_codeEquipe = $codeEquipe;
   }
 
   public function setLibelleEquipe($libelleEquipe)

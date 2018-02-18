@@ -460,8 +460,16 @@ header.menuClassement p {
 .tableBase tr td {
   padding: 3px 0;
 }
-#tableMercato tr td:first-child {
+#tableMercato {
+  font-size: .8rem;
+}
+#tableMercato tr td:first-child,
+#tableMercato tr td:nth-child(2),
+#tableMercato tr td:nth-child(3) {
   text-align: left;
+}
+#tableMercato tr td:first-child img {
+  padding-right: .3rem;
 }
 .tableMercatoLigue {
   width: 100%;
@@ -503,6 +511,15 @@ header.menuClassement p {
   text-align: center;
   margin-top:5px;
 }
+#listeAchatGB, #listeAchatDEF, #listeAchatMIL, #listeAchatATT {
+  font-size: .8rem;
+}
+#listeAchatGB p img,
+#listeAchatDEF p img,
+#listeAchatMIL p img,
+#listeAchatATT p img {
+  padding-right: .3rem;
+}
 
 /* DataTable */
 .filtreMercato {
@@ -518,17 +535,31 @@ header.menuClassement p {
 .joueurAchete {
   width: 400px !important;
   margin-right: 0 !important;
-  background-color: #98FB98;
+  color: #30a014;
   text-align: left;
 }
 tr.joueurAchete {
   font-weight: bold;
 }
 
+.joueurAcheteMercatoLigue {
+  width: 400px !important;
+  margin-right: 0 !important;
+  background-color: #98FB98;
+  text-align: left;
+  font-weight: bold;
+}
+
+.joueurPerduMercatoLigue {
+  width: 400px !important;
+  margin-right: 0 !important;
+  text-align: left;
+}
+
 .joueurEnCours {
   width: 400px !important;
   margin-right: 0 !important;
-  background-color: #EEE8AA;
+  color: #588bcc;
   text-align: left;
 }
 

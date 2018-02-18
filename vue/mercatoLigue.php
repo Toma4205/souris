@@ -15,7 +15,7 @@ if (isset($joueursEquipeTries))
         $dateOffre = date_create($joueur->dateOffre());
         if ($joueur->dateValidation() != null)
         {
-            echo '<tr class="joueurAchete">';
+            echo '<tr class="joueurAcheteMercatoLigue">';
             echo '<td>' . $joueur->nom() . ' ' . $joueur->prenom() . '</td>';
             echo '<td>' . $joueur->libelleEquipe() . '</td>';
             echo '<td>' . $joueur->prixAchat() . ' M€</td>';
@@ -25,7 +25,7 @@ if (isset($joueursEquipeTries))
         }
         else
         {
-          echo '<tr class="joueurEnCours">';
+          echo '<tr class="joueurPerduMercatoLigue">';
           echo '<td></td>';
           echo '<td></td>';
           echo '<td>' . $joueur->prixAchat() . '</td>';

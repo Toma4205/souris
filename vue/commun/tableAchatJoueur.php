@@ -8,7 +8,8 @@ function afficherJoueurPrepaMercato($joueursAchetes, $position)
     // Attention, si changement => effectuer aussi dans mercato.js
     if ($value->position() == $position)
     {
-      echo '<p id="Achat_' . $value->id() . '" class="joueurEnCours">';
+      echo '<p id="Achat_' . $value->id() . '" class="joueurEnCours"><span class="float_left"><img src="web/img/maillot/shirt_' . strtolower($value->codeEquipe()) . '.png"
+        alt="' . $value->codeEquipe() . '" width="20px" height="20px" /></span>';
       echo '<b>' . $value->nom() . ' ' . $value->prenom() . '</b> - ' . $value->libelleEquipe() . ' (prix = ' . $value->prixOrigine() . ')';
       echo '<span class="float_right fond_blanc">';
       echo '<input type="text" class="inputPrix" name="name_' . $value->id() . '" value="' . $value->prixAchat() . '" onchange="javascript:recalculerBudgetRestant();"/>';
@@ -26,7 +27,8 @@ function afficherJoueurDejaAchete($joueursAchetes, $position)
     // Attention, si changement => effectuer aussi dans mercato.js
     if ($value->position() == $position)
     {
-      echo '<p id="Achat_' . $value->id() . '" class="joueurAchete">';
+      echo '<p id="Achat_' . $value->id() . '" class="joueurAchete"><span class="float_left"><img src="web/img/maillot/shirt_' . strtolower($value->codeEquipe()) . '.png"
+        alt="' . $value->codeEquipe() . '" width="20px" height="20px" /></span>';
       echo '<b>' . $value->nom() . ' ' . $value->prenom() . '</b> - ' . $value->libelleEquipe() . ' (prix = ' . $value->prixOrigine() . ')';
       echo '<span class="float_right fond_blanc">';
       echo '<input type="text" class="inputPrix" value="' . $value->prixAchat() . '" disabled/>';

@@ -48,7 +48,9 @@
       <?php
       foreach($joueursReels as $value)
       {
-        echo '<tr id="' . $value->id() . '"><td>' . $value->nom() . ' ' . $value->prenom() . '</td>';
+        echo '<tr id="' . $value->id() . '">';
+        echo '<td><span class="float_left"><img src="web/img/maillot/shirt_' . strtolower($value->equipe()) . '.png"
+          alt="' . $value->equipe() . '" width="20px" height="20px" /></span>' . $value->nom() . ' ' . $value->prenom() . '</td>';
         echo '<td>' . $value->positionIHM() . '</td>';
         echo '<td>' . $value->libelleEquipe() . '</td>';
         echo '<td>' . $value->prix() . '</td>';

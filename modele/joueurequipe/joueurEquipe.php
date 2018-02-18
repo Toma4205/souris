@@ -20,7 +20,8 @@ class JoueurEquipe extends ClasseBase
   private $_nbMatch;
   private $_totalBut;
 
-  // Libelle Equipe réelle
+  // Code/Libelle Equipe réelle
+  private $_codeEquipe;
   private $_libelleEquipe;
   // nom Equipe fictive
   private $_nomEquipe;
@@ -38,6 +39,7 @@ class JoueurEquipe extends ClasseBase
   public function prixOrigine() { return $this->_prixOrigine; }
   public function prixAchat() { return $this->_prixAchat; }
   public function tourMercato() { return $this->_tourMercato; }
+  public function codeEquipe() { return $this->_codeEquipe; }
   public function libelleEquipe() { return $this->_libelleEquipe; }
   public function nomEquipe() { return $this->_nomEquipe; }
   public function dateOffre() { return $this->_dateOffre; }
@@ -80,6 +82,11 @@ class JoueurEquipe extends ClasseBase
   public function setPrixAchat($prixAchat)
   {
       $this->_prixAchat = $prixAchat;
+  }
+
+  public function setCodeEquipe($codeEquipe)
+  {
+      $this->_codeEquipe = $codeEquipe;
   }
 
   public function setLibelleEquipe($libelleEquipe)
