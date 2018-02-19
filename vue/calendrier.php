@@ -84,7 +84,7 @@ echo '</div>';
 if (isset($match)) {
 
   // Afficahge des buteurs dans le detail_match_bandeau
-  function afficherButeur($joueurs)
+  function afficherButeur($joueurs, $codeBonusAdv, $nomJoueur)
   {
     foreach ($joueurs as $cle => $value)
     {
@@ -97,7 +97,11 @@ if (isset($match)) {
         }
         echo '>' . $value->nom();
         for ($index = 1; $index <= $total; $index++) {
-          echo '<img class="but" src="web/img/but.png" alt="But" width="10px" height="10px"/>';
+          if ($index == 1 && $codeBonusAdv == 'DIN_ARB'  && $nomJoueur == $value->nom()) {
+            echo '<img class="but" src="web/img/but_annule.png" alt="But" width="10px" height="10px"/>';
+          } else {
+            echo '<img class="but" src="web/img/but.png" alt="But" width="10px" height="10px"/>';
+          }
         }
         echo '</li>';
       }
@@ -259,7 +263,14 @@ if (isset($match)) {
         </div>
         <div class="detail_match_bandeau_equipe_buteur">
           <ul>
-            <?php if (isset($joueursDom)){afficherButeur($joueursDom);} ?>
+            <?php if (isset($joueursDom)){
+              $codeBonus = null;
+              $nomJoueurAdv = null;
+              if (isset($compoExt)) {
+                $codeBonus = $compoExt->codeBonusMalus();
+                $nomJoueurAdv = $compoExt->nomJoueurReelAdverse();
+              }
+              afficherButeur($joueursDom, $codeBonus, $nomJoueurAdv);} ?>
           </ul>
         </div>
       </div>
@@ -292,7 +303,14 @@ if (isset($match)) {
         </div>
         <div class="detail_match_bandeau_equipe_buteur">
           <ul>
-            <?php if (isset($joueursExt)){afficherButeur($joueursExt);} ?>
+            <?php if (isset($joueursExt)){
+              $codeBonus = null;
+              $nomJoueurAdv = null;
+              if (isset($compoDom)) {
+                $codeBonus = $compoDom->codeBonusMalus();
+                $nomJoueurAdv = $compoDom->nomJoueurReelAdverse();
+              }
+              afficherButeur($joueursExt, $codeBonus, $nomJoueurAdv);} ?>
           </ul>
         </div>
       </div>
