@@ -264,7 +264,8 @@ if (isset($match)) {
     $noteDef = 0;
     $noteMil = 0;
     $noteAtt = 0;
-    $noteGB = 0;
+    // Par défaut 1 = jeune du club
+    $noteGB = 1;
 
     foreach ($joueurs as $cle => $value)
     {
@@ -295,6 +296,7 @@ if (isset($match)) {
       }
     }
 
+    // TODO MPL-TVE les moyennes sont déjà calculées pour les buts virtuels => peut être les mettre en BDD ??
     $moyDef = ($noteDef / $nbDef) - ($nbDefInit - $nbDef);
     $moyMil = ($noteMil / $nbMil) - ($nbMilInit - $nbMil);
     $moyAtt = ($noteAtt / $nbAtt) - ($nbAttInit - $nbAtt);
