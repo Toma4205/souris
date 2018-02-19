@@ -1050,13 +1050,16 @@
 			echo "<br />\n";
 			echo "<br />\n";
 			
-			$req_buteurs_impactes_par_malus_dinarb = $bdd->prepare('SELECT DISTINCT t4.id_compo, t4.id_joueur_reel, t4.nb_but_reel FROM joueur_compo_equipe t4, compo_equipe t5 WHERE t5.id = t4.id_compo AND t4.numero_definitif IS NOT NULL AND t4.nb_but_reel > 0 AND t5.id_equipe IN(SELECT t1.id_equipe_dom FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id = t2.id_cal_ligue AND t2.code_bonus_malus = \'DIN_ARB\' AND t3.id_compo = t2.id AND t1.id_equipe_dom != t2.id_equipe UNION SELECT t1.id_equipe_ext FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id = t2.id_cal_ligue AND t2.code_bonus_malus = \'DIN_ARB\' AND t3.id_compo = t2.id AND t1.id_equipe_ext != t2.id_equipe);');
+			$req_buteurs_impactes_par_malus_dinarb = $bdd->prepare('SELECT DISTINCT IF(t5.id_equipe = cl.id_equipe_dom, cl.id_equipe_ext, cl.id_equipe_dom) AS \'id_adversaire\', cl.id, t4.id_compo, t4.id_joueur_reel, t4.nb_but_reel FROM joueur_compo_equipe t4, compo_equipe t5, calendrier_ligue cl WHERE cl.id = t5.id_cal_ligue AND t5.id = t4.id_compo AND t4.numero_definitif IS NOT NULL AND t4.nb_but_reel > 0 AND t5.id_equipe IN(SELECT t1.id_equipe_dom FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id = t2.id_cal_ligue AND t2.code_bonus_malus = \'DIN_ARB\' AND t3.id_compo = t2.id AND t1.id_equipe_dom != t2.id_equipe UNION SELECT t1.id_equipe_ext FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id = t2.id_cal_ligue AND t2.code_bonus_malus = \'DIN_ARB\' AND t3.id_compo = t2.id AND t1.id_equipe_ext != t2.id_equipe);');
 			
 			//MALUS DIN ARB Update nb_but_reel buteur
 			$upd_nb_but_buteur = $bdd->prepare('UPDATE joueur_compo_equipe SET nb_but_reel = :nb_but_reel WHERE id_compo = :id_compo AND id_joueur_reel = :id_joueur_reel ;');
 			
 			$req_buteurs_impactes_par_malus_dinarb->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
 			$id_compo_deja_affecte=-1;
+			
+			$upd_buteur_impacte_par_malus_dinarb = $bdd->prepare('UPDATE bonus_malus SET id_joueur_reel_adverse = :id_joueur_reel_adverse WHERE id_equipe = :id_equipe AND id_cal_ligue = :id_cal_ligue;');
+			
 			while ($listeButeursImpactesMalusDinArb = $req_buteurs_impactes_par_malus_dinarb->fetch())
 			{	
 				if($listeButeursImpactesMalusDinArb['id_compo'] != $id_compo_deja_affecte)
@@ -1067,6 +1070,9 @@
 						}else{
 							$upd_nb_but_buteur->execute(array('nb_but_reel' => $listeButeursImpactesMalusDinArb['nb_but_reel']-1, 'id_compo' => $listeButeursImpactesMalusDinArb['id_compo'], 'id_joueur_reel' => $listeButeursImpactesMalusDinArb['id_joueur_reel'] ));
 						}
+						
+						$upd_buteur_impacte_par_malus_dinarb->execute(array('id_joueur_reel_adverse' => $listeButeursImpactesMalusDinArb['id_joueur_reel'],'id_equipe' => $listeButeursImpactesMalusDinArb['id_aversaire'], 'id_cal_ligue' => $listeButeursImpactesMalusDinArb['id']));
+						$upd_buteur_impacte_par_malus_dinarb->closeCursor();
 						$id_compo_deja_affecte = $listeButeursImpactesMalusDinArb['id_compo'];
 						echo 'Joueur avec id : '.$listeButeursImpactesMalusDinArb['id_joueur_reel'].' perd 1 but réel [MALUS DIN ARB]';
 						echo "<br />\n"; 
@@ -1104,6 +1110,14 @@
 	
 	}	//FIN DE BOUCLE FOR EACH SUR LA LIGUE
 	}	//FIN DU IF SUR LA LIGUE
+		
+		echo "<br />\n";
+		echo ' ************************ NETTOYAGE DES NUMEROS DEFINITIFS RESTES A ZERO **************************';
+		echo "<br />\n";
+		echo "<br />\n";
+		
+		$upd_numero_definitif_zero = $bdd->prepare('UPDATE joueur_compo_equipe SET numero_definitif = NULL WHERE numero_definitif = 0;');
+		$upd_numero_definitif_zero->execute();
 		
 		
 		echo "<br />\n";
@@ -1158,7 +1172,7 @@
 		
 		//NB_MATCH, NB BUT REEL, NB BUT VIRTUEL => TABLE joueur_equipe
 		
-		$req_nb_match = $bdd->prepare('SELECT count(*) AS \'nb_match\', count(t3.nb_but_reel) AS \'nb_but_reel\', count(t3.nb_but_virtuel) AS \'nb_but_virtuel\', t1.id_ligue, t2.id_equipe, t3.id_joueur_reel FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t3.id_compo = t2.id AND t2.id_cal_ligue = t1.id AND t3.numero_definitif IS NOT NULL AND t1.score_dom IS NOT NULL AND t1.score_ext IS NOT NULL GROUP BY t1.id_ligue, t2.id_equipe, t3.id_joueur_reel ORDER BY t3.id_joueur_reel;');
+		$req_nb_match = $bdd->prepare('SELECT count(*) AS \'nb_match\', SUM(IFNULL(t3.nb_but_reel,0)) AS \'nb_but_reel\', SUM(IFNULL(t3.nb_but_virtuel,0)) AS \'nb_but_virtuel\', t1.id_ligue, t2.id_equipe, t3.id_joueur_reel FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t3.id_compo = t2.id AND t2.id_cal_ligue = t1.id AND t3.numero_definitif IS NOT NULL AND t1.score_dom IS NOT NULL AND t1.score_ext IS NOT NULL GROUP BY t1.id_ligue, t2.id_equipe, t3.id_joueur_reel ORDER BY t3.id_joueur_reel;');
 		
 		$req_nb_match->execute();
 		
@@ -1262,7 +1276,7 @@
 		
 		
 		//NB BONUS => TABLE EQUIPE
-		$req_nb_bonus = $bdd->prepare('UPDATE equipe e, calendrier_ligue cl, compo_equipe ce SET e.nb_bonus = e.nb_bonus + 1 WHERE ce.code_bonus_malus iS NOT NULL AND ce.id_equipe IN (cl.id_equipe_dom, cl.id_equipe_ext) AND cl.num_journee_cal_reel = :num_journee_cal_reel AND e.id_ligue = cl.id_ligue AND e.id = ce.id_equipe;');
+		$req_nb_bonus = $bdd->prepare('UPDATE equipe e, calendrier_ligue cl, compo_equipe ce SET e.nb_bonus = e.nb_bonus+1 WHERE ce.code_bonus_malus iS NOT NULL AND cl.num_journee_cal_reel = :num_journee_cal_reel AND e.id_ligue = cl.id_ligue AND e.id = ce.id_equipe AND cl.id = ce.id_cal_ligue;');
 		
 		
 		$req_nb_bonus->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
