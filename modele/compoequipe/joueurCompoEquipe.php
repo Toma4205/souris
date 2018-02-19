@@ -20,6 +20,7 @@ class JoueurCompoEquipe extends ClasseBase
   // Champs table joueur_reel
   private $_nom;
   private $_prenom;
+  private $_position;
   private $_nomRemplacant;
   private $_prenomRemplacant;
 
@@ -41,6 +42,7 @@ class JoueurCompoEquipe extends ClasseBase
   public function numeroDefinitif() { return $this->_numeroDefinitif; }
   public function nom() { return $this->_nom; }
   public function prenom() { return $this->_prenom; }
+  public function position() { return $this->_position; }
   public function nomRemplacant() { return $this->_nomRemplacant; }
   public function prenomRemplacant() { return $this->_prenomRemplacant; }
 
@@ -107,6 +109,11 @@ class JoueurCompoEquipe extends ClasseBase
   public function setPrenom($prenom)
   {
       $this->_prenom = $prenom;
+  }
+
+  public function setPosition($position)
+  {
+      $this->_position = $position;
   }
 
   public function setNom_remplacant($nom)

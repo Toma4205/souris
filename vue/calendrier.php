@@ -97,7 +97,7 @@ if (isset($match)) {
         }
         echo '>' . $value->nom();
         for ($index = 1; $index <= $total; $index++) {
-          if ($index == 1 && $codeBonusAdv == 'DIN_ARB'  && $nomJoueur == $value->nom()) {
+          if ($index == 1 && $codeBonusAdv == ConstantesAppli::BONUS_MALUS_DIN_ARB  && $nomJoueur == $value->nom()) {
             echo '<img class="but" src="web/img/but_annule.png" alt="But" width="10px" height="10px"/>';
           } else {
             echo '<img class="but" src="web/img/but.png" alt="But" width="10px" height="10px"/>';
@@ -121,23 +121,23 @@ if (isset($match)) {
       echo '<div class="margin_auto conteneurRow">';
       echo '<div>';
       echo '<div class="detail_match_equipe_bonus_malus_lib">' . $libBonus . '</div>';
-      if ($codeBonus == 'FUMIGENE') {
+      if ($codeBonus == ConstantesAppli::BONUS_MALUS_FUMIGENE) {
         echo '<img src="web/img/bonusmalus/PNG_fumigenes.png" alt="bonus dom." width="40px" height="40px"/>';
-      } else if ($codeBonus == 'DIN_ARB') {
+      } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_DIN_ARB) {
         echo '<img src="web/img/bonusmalus/PNG_diner.png" alt="bonus dom." width="40px" height="40px"/>';
-      } else if ($codeBonus == 'FAM_STA') {
+      } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_FAM_STA) {
         echo '<img src="web/img/bonusmalus/PNG_family.png" alt="bonus dom." width="40px" height="40px"/>';
-      } else if ($codeBonus == 'BUS') {
+      } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_BUS) {
         echo '<img src="web/img/bonusmalus/PNG_bus.png" alt="bonus dom." width="40px" height="40px"/>';
-      } else if ($codeBonus == 'MAU_CRA') {
+      } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_MAU_CRA) {
         echo '<img src="web/img/bonusmalus/PNG_mauvaisCrampon.png" alt="bonus dom." width="40px" height="40px"/>';
-      } else if ($codeBonus == 'BOUCHER') {
+      } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_BOUCHER) {
         echo '<img src="web/img/bonusmalus/PNG_butcher.png" alt="bonus dom." width="40px" height="40px"/>';
-      } else if ($codeBonus == 'CHA_GB') {
+      } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_CHA_GB) {
         echo '<img src="web/img/bonusmalus/PNG_changementGardien.png" alt="bonus dom." width="40px" height="40px"/>';
-      } else if ($codeBonus == 'PAR_TRU') {
+      } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_PAR_TRU) {
         echo '<img src="web/img/bonusmalus/PNG_pari.png" alt="bonus dom." width="40px" height="40px"/>';
-      } else if ($codeBonus == 'CON_ZZ') {
+      } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_CON_ZZ) {
         echo '<img src="web/img/bonusmalus/PNG_zizou.png" alt="bonus dom." width="40px" height="40px"/>';
       }
       echo '</div>';
@@ -204,7 +204,7 @@ if (isset($match)) {
   // Affichage des titulaires dans le detail_match
   function afficherTitulaires($joueurs, $codeTactique)
   {
-    echo '<div class="detail_match_equipe_joueurs">';
+    echo '<div class="detail_match_equipe_titu">';
     echo '<div class="detail_match_equipe_titre">Titulaires (' . $codeTactique . ')</div>';
     echo '<div>';
     echo '<ul>';
@@ -247,6 +247,76 @@ if (isset($match)) {
           $tabRempl[$value->idJoueurReelRemplacant()] = $value->nomRemplacant() . ' remplace ' . $value->nom() . ' si note < ' . $value->noteMinRemplacement();
       }
     }
+
+    echo '</ul>';
+    echo '</div>';
+    echo '</div>';
+  }
+
+  function afficherMoyennes($joueurs, $code)
+  {
+    $nbDefInit = 0;
+    $nbMilInit = 0;
+    $nbAttInit = 0;
+    $nbDef = 0;
+    $nbMil = 0;
+    $nbAtt = 0;
+    $noteDef = 0;
+    $noteMil = 0;
+    $noteAtt = 0;
+    $noteGB = 0;
+
+    foreach ($joueurs as $cle => $value)
+    {
+      if ($value->numero() <= 11)
+      {
+        if ($value->position() == ConstantesAppli::DEFENSEUR) {
+          $nbDefInit += 1;
+        } else if ($value->position() == ConstantesAppli::MILIEU) {
+          $nbMilInit += 1;
+        } else if ($value->position() == ConstantesAppli::ATTAQUANT) {
+          $nbAttInit += 1;
+        }
+      }
+      if ($value->numeroDefinitif() != null)
+      {
+        if ($value->position() == ConstantesAppli::DEFENSEUR) {
+          $nbDef += 1;
+          $noteDef += $value->note();
+        } else if ($value->position() == ConstantesAppli::MILIEU) {
+          $nbMil += 1;
+          $noteMil += $value->note();
+        } else if ($value->position() == ConstantesAppli::ATTAQUANT) {
+          $nbAtt += 1;
+          $noteAtt += $value->note();
+        } else {
+          $noteGB = $value->note();
+        }
+      }
+    }
+
+    $moyDef = ($noteDef / $nbDef) - ($nbDefInit - $nbDef);
+    $moyMil = ($noteMil / $nbMil) - ($nbMilInit - $nbMil);
+    $moyAtt = ($noteAtt / $nbAtt) - ($nbAttInit - $nbAtt);
+    $moyGen = (($moyDef * $nbDefInit) + ($moyMil * $nbMilInit) + ($moyAtt * $nbAttInit) + $noteGB) / 11;
+
+    echo '<div class="detail_match_equipe_moyenne">';
+    echo '<div class="detail_match_equipe_titre">Moyennes</div>';
+    echo '<div>';
+    echo '<ul>';
+
+    echo '<li class="detail_match_equipe_moyenne_ligne">Défense';
+    echo '<span class="float_right detail_match_equipe_moyenne_ligne_valeur bold">' . number_format($moyDef, 2) . '</span>';
+    echo '</li>';
+    echo '<li class="detail_match_equipe_moyenne_ligne">Milieu';
+    echo '<span class="float_right detail_match_equipe_moyenne_ligne_valeur bold">' . number_format($moyMil, 2) . '</span>';
+    echo '</li>';
+    echo '<li class="detail_match_equipe_moyenne_ligne">Attaque';
+    echo '<span class="float_right detail_match_equipe_moyenne_ligne_valeur bold">' . number_format($moyAtt, 2) . '</span>';
+    echo '</li>';
+    echo '<li class="detail_match_equipe_moyenne_ligne">Générale';
+    echo '<span class="float_right detail_match_equipe_moyenne_ligne_valeur bold">' . number_format($moyGen, 2) . '</span>';
+    echo '</li>';
 
     echo '</ul>';
     echo '</div>';
@@ -323,6 +393,7 @@ if (isset($match)) {
         $compoDom->nomJoueurReelAdverse(), $compoDom->miTemps(), $compoDom->codeTactique());} ?>
       <?php if (isset($joueursDom)){afficherTitulaires($joueursDom, $compoDom->codeTactique());} else {echo '<div>Aucune compo</div>';} ?>
       <?php if (isset($joueursDom)){afficherRemplacants($joueursDom);} ?>
+      <?php if (isset($joueursDom)){afficherMoyennes($joueursDom, $compoDom->codeTactique());} ?>
     </div>
     <div class="detail_match_equipe_d">
       <?php if (isset($compoExt)){afficherBonusMalus($compoExt->codeBonusMalus(),
@@ -330,6 +401,7 @@ if (isset($match)) {
         $compoExt->nomJoueurReelAdverse(), $compoExt->miTemps(), $compoExt->codeTactique());} ?>
       <?php if (isset($joueursExt)){afficherTitulaires($joueursExt, $compoExt->codeTactique());} else {echo '<div>Aucune compo</div>';} ?>
       <?php if (isset($joueursExt)){afficherRemplacants($joueursExt);} ?>
+      <?php if (isset($joueursExt)){afficherMoyennes($joueursExt, $compoExt->codeTactique());} ?>
     </div>
   </div>
 <?php
