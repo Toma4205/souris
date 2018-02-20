@@ -60,7 +60,10 @@ elseif (isset($_POST['suppCreaLigue']))
 }
 elseif (isset($_POST['masquer']))
 {
-
+  foreach($_POST['masquer'] as $cle => $value)
+  {
+    $managerLigue->masquerLigue($cle, $coach->id());
+  }
 }
 
 $ligues = $managerLigue->findLiguesByIdCoach($coach->id());

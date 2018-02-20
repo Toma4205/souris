@@ -23,6 +23,9 @@ require_once("vue/commun/enteteflex.php");
       <input type="text" class="width_200px" name="codePostal" maxlength="5" value="<?php
         echo $coach->codePostal();
         ?>" /></p>
+    <p>Afficher mes ligues masquées : <input type="checkbox" name="affLigueMasquee" <?php
+        if ($coach->affLigueMasquee() == 1){echo 'checked';}
+        ?> /></p>
     <input type="submit" value="Mettre à jour" name="majCompte" class="marginBottom" />
   </div>
 </section>

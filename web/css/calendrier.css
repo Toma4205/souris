@@ -136,12 +136,10 @@
   color: #4a61d4;
   margin-bottom: .5rem;
 }
-.detail_match_equipe_joueurs {
+.detail_match_equipe_titu, .detail_match_equipe_rempl, .detail_match_equipe_moyenne {
   padding: .5rem;
 }
-.detail_match_equipe_titu {
-}
-.detail_match_equipe_joueur {
+.detail_match_equipe_joueur, .detail_match_equipe_moyenne_ligne {
   border-bottom: 1px dashed #141b4D;
   margin-top: .5rem;
   font-size: .8rem;
@@ -151,12 +149,9 @@
   width: 30px;
   font-size: .8rem;
 }
-.detail_match_equipe_joueur_note {
+.detail_match_equipe_joueur_note, .detail_match_equipe_moyenne_ligne_valeur  {
   margin: 0 .5rem;
   width: 20px;
-}
-.detail_match_equipe_rempl {
-  padding: .5rem;
 }
 .pas_joue {
   color: grey;

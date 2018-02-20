@@ -115,7 +115,8 @@ class LigueManager extends ManagerBase
 						INNER JOIN coach_ligue cl ON cl.id_ligue = l.id
             LEFT JOIN coach c ON c.id = (SELECT cl2.id_coach FROM coach_ligue cl2 WHERE cl2.id_ligue = cl.id_ligue AND cl2.createur = TRUE)
             LEFT JOIN equipe e ON e.id_ligue = l.id AND e.id_coach = :id
-						WHERE cl.id_coach = :id');
+						WHERE cl.id_coach = :id
+            AND (cl.masquee = FALSE OR c.aff_ligue_masquee = TRUE)');
 		$q->execute([':id' => $idCoach]);
 
 		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
@@ -126,6 +127,16 @@ class LigueManager extends ManagerBase
 
 		return $ligues;
 	}
+
+  public function masquerLigue($idLigue, $idCoach)
+  {
+    $q = $this->_bdd->prepare('UPDATE coach_ligue SET masquee = TRUE
+          WHERE id_coach = :idCoach AND id_ligue = :idLigue');
+    $q->bindValue(':idCoach', $idCoach);
+    $q->bindValue(':idLigue', $idLigue);
+
+    $q->execute();
+  }
 
   public function findLigueById($idLigue)
 	{

@@ -1,4 +1,9 @@
-/*Script passé en "PROD" le 18/02/2018 20:48*/
+/*Script passé en "PROD" le 20/02/2018 */
+ALTER TABLE `coach_ligue` ADD `masquee` BOOLEAN NOT NULL DEFAULT FALSE AFTER `date_validation`;
+ALTER TABLE `coach` ADD `aff_ligue_masquee` BOOLEAN NOT NULL DEFAULT FALSE AFTER `date_maj`;
+ALTER TABLE `calendrier_ligue` ADD `selectionneur` BOOLEAN NOT NULL DEFAULT FALSE AFTER `score_ext`;
+
+/*Script passé en "PROD" le 18/02/2018 */
 CREATE TABLE `nomenclature_questions_presse` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT , `categorie` VARCHAR(40) NOT NULL , `libelle` VARCHAR(255) NOT NULL, `date_debut` DATE NOT NULL , `date_fin` DATE NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;
 INSERT INTO `nomenclature_questions_presse`(`categorie`, `libelle`, `date_debut`) VALUES
 ('victoire','C\'est passé de justesse ce weekend mais les trois points sont pour vous, quel était l\'élément décisif de cette victoire ?','2017-01-01'),
@@ -17,9 +22,6 @@ INSERT INTO `nomenclature_questions_presse`(`categorie`, `libelle`, `date_debut`
 ('avant match','Des rumeurs disent que vous êtes prêt à tout pour gagner ce weekend, pouvez-vous nous en dire plus ?','2017-01-01'),
 ('chambre','Après une telle leçon de football, vos adversaires ont étété trouvés en PLS dans les vestiaires, regrettez vous cette démonstration de force ?','2017-01-01'),
 ('chambre','Le coaching de votre adversaire a été risible et non professionnel, auriez vous des conseils à lui prodiguer ?','2017-01-01');
-
-
-
 
 /* Script passée en "PROD" le 18/02/2017 */
 ALTER TABLE `calendrier_reel` ADD `statut` TINYINT(1) NOT NULL DEFAULT '0' AFTER `date_heure_debut`;
