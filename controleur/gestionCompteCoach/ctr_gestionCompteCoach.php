@@ -20,6 +20,14 @@ if (isset($_POST['majCompte']) && isset($_POST['nom']) && !empty($_POST['nom']))
     $coach->setMail($_POST['mail']);
     $coach->setCode_postal($_POST['codePostal']);
 
+    if(isset($_POST['affLigueMasquee']))
+    {
+      $coach->setAff_ligue_masquee(1);
+    }
+    else {
+      $coach->setAff_ligue_masquee(0);
+    }
+
     $manager->majCoach($coach);
 
     $_SESSION[ConstantesSession::COACH] = $coach;

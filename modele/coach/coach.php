@@ -12,6 +12,7 @@ class Coach extends ClasseBase
   private $_codePostal;
   private $_dateCreation;
   private $_dateMaj;
+  private $_affLigueMasquee;
 
   // Champs Table coach_ligue
   private $_dateValidationLigue;
@@ -29,6 +30,7 @@ class Coach extends ClasseBase
   public function dateCreation() { return $this->_dateCreation; }
   public function dateMaj() { return $this->_dateMaj; }
   public function dateValidationLigue() { return $this->_dateValidationLigue; }
+  public function affLigueMasquee() { return $this->_affLigueMasquee; }
 
   public function setId($id)
   {
@@ -68,6 +70,11 @@ class Coach extends ClasseBase
   public function setDate_validation_ligue($dateValid)
   {
       $this->_dateValidationLigue = $dateValid;
+  }
+
+  public function setAff_ligue_masquee($affLigueMasquee)
+  {
+      $this->_affLigueMasquee = $affLigueMasquee;
   }
 }
 

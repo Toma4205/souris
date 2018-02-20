@@ -30,11 +30,13 @@ class CoachManager extends ManagerBase
 
   public function majCoach(Coach $coach)
   {
-    $q = $this->_bdd->prepare('UPDATE coach SET nom = :nom, mail = :mail, code_postal = :code, date_maj = NOW()
+    $q = $this->_bdd->prepare('UPDATE coach SET nom = :nom, mail = :mail, code_postal = :code,
+        date_maj = NOW(), aff_ligue_masquee = :affLigueMasquee
         WHERE id = :id');
     $q->bindValue(':nom', $coach->nom());
     $q->bindValue(':mail', $coach->mail());
     $q->bindValue(':code', $coach->codePostal());
+    $q->bindValue(':affLigueMasquee', $coach->affLigueMasquee());
     $q->bindValue(':id', $coach->id());
 
     $q->execute();

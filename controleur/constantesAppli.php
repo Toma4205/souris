@@ -36,7 +36,7 @@ class ConstantesAppli {
 
     const STATUT_CAL_DEFAUT = 0;
     const STATUT_CAL_EN_COURS = 1;
-    const STATUT_CAL_EN_TERMINE = 1;
+    const STATUT_CAL_TERMINE = 2;
 }
 
  ?>

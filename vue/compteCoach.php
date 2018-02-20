@@ -104,10 +104,12 @@ require_once("vue/commun/enteteflex.php");
             <th>Nom</th>
             <th>Classement</th>
             <th>Action</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <?php
+          echo '<input type="hidden" name="masquer"/>';
           foreach($ligues as $value)
           {
             if ($value->etat() == EtatLigue::EN_COURS || $value->etat() == EtatLigue::TERMINEE)
@@ -122,14 +124,13 @@ require_once("vue/commun/enteteflex.php");
                 echo '<td>Aucun</td>';
               }
 
-              if ($value->etat() == EtatLigue::EN_COURS) {
-                echo '<td><input type="submit" value="Rejoindre" name="rejoindre[' . $value->id() . ']" /></td>';
+              echo '<td><input type="submit" value="Rejoindre" name="rejoindre[' . $value->id() . ']" /></td>';
+              echo '<td>';
+              if ($value->etat() == EtatLigue::TERMINEE) {
+                echo '<img src="./web/img/croix.jpg" alt="Masquer" title="Masquer cette ligue"
+                  width="15px" height="15px" onclick="javascript:masquerLigue(\'' . $value->id() . '\');" />';
               }
-              elseif ($value->etat() == EtatLigue::TERMINEE) {
-                echo '<td>A venir... (T)</td>';
-                //echo '<td><input type="submit" value="Masquer" name="masquer[' . $value->id() . ']" /></td>';
-              }
-              echo '</tr>';
+              echo '</td></tr>';
             }
           }
           echo '</tbody></table>';
