@@ -1,6 +1,7 @@
 /*Script passé en "PROD" le 20/02/2018 */
 ALTER TABLE `coach_ligue` ADD `masquee` BOOLEAN NOT NULL DEFAULT FALSE AFTER `date_validation`;
 ALTER TABLE `coach` ADD `aff_ligue_masquee` BOOLEAN NOT NULL DEFAULT FALSE AFTER `date_maj`;
+ALTER TABLE `calendrier_ligue` ADD `selectionneur` BOOLEAN NOT NULL DEFAULT FALSE AFTER `score_ext`;
 
 /*Script passé en "PROD" le 18/02/2018 */
 CREATE TABLE `nomenclature_questions_presse` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT , `categorie` VARCHAR(40) NOT NULL , `libelle` VARCHAR(255) NOT NULL, `date_debut` DATE NOT NULL , `date_fin` DATE NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;
