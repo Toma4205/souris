@@ -365,6 +365,9 @@ if (isset($match)) {
       <div class="detail_match_bandeau_date">Journée <?php echo $match->numJourneeCalReel(); ?> de Ligue 1</div>
       <div class="detail_match_bandeau_ville">Lieu : <?php echo $equipeDom->ville(); ?></div>
       <div class="detail_match_bandeau_stade">Stade "<?php echo $equipeDom->stade(); ?>"</div>
+      <div class="detail_match_bandeau_selectionneur"><?php if ($match->selectionneur() == 1){
+        echo '<img src="web/img/bonusmalus/PNG_selection.png" alt="Sélectionneur" width="80px" height="80px"
+          title="La Dech\' est dans les tribunes (+0.5 aux français)."/>';} ?></div>
     </div>
     <div class="detail_match_bandeau_col_d">
       <div class="detail_match_bandeau_equipe">
