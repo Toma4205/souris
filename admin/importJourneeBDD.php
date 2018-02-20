@@ -86,7 +86,7 @@ function buildTableauJournee($idJournee) {
 		die('Erreur : ' . $e->getMessage());
 		echo $e;
 	}
-	$req = $bdd->prepare('SELECT * FROM resultatsL1_reel WHERE journee = :journee');
+	$req = $bdd->prepare('SELECT * FROM resultatsl1_reel WHERE journee = :journee');
 	$req->execute(array('journee' => $idJournee));
 	$ligne=0;
 	while ($donnees = $req->fetch())

@@ -54,7 +54,7 @@
 			
 			if($compoDefinitive['numero_definitif'] == 1){
 				if(is_null($compoDefinitive['note'])){
-					$gardien = 'P\'tit jeune du club (2.5)';
+					$gardien = 'P\'tit jeune du club (1)';
 				}else{
 					$gardien = '['.$compoDefinitive['id'].']'.$compoDefinitive['cle_roto_primaire'].' ('.$compoDefinitive['note'].')';
 				}
@@ -156,7 +156,7 @@
 		{
 			if($compoDefinitive['numero_definitif'] == 1){
 				if(is_null($compoDefinitive['note'])){
-					$moyGardienA = 2.5 ;
+					$moyGardienA = 1 ;
 				}else{
 					$moyGardienA =  $compoDefinitive['note'];
 				}
@@ -215,7 +215,7 @@
 		{
 			if($compoDefinitive['numero_definitif'] == 1){
 				if(is_null($compoDefinitive['note'])){
-					$moyGardienB = 2.5 ;
+					$moyGardienB = 1 ;
 				}else{
 					$moyGardienB =  $compoDefinitive['note'];
 				}
@@ -1112,12 +1112,15 @@
 	}	//FIN DU IF SUR LA LIGUE
 		
 		echo "<br />\n";
-		echo ' ************************ NETTOYAGE DES NUMEROS DEFINITIFS RESTES A ZERO **************************';
+		echo ' ************************ NETTOYAGE DES NUMEROS DEFINITIFS A ZERO ET DES NOTES DES REMPLACANTS **************************';
 		echo "<br />\n";
 		echo "<br />\n";
 		
 		$upd_numero_definitif_zero = $bdd->prepare('UPDATE joueur_compo_equipe SET numero_definitif = NULL WHERE numero_definitif = 0;');
 		$upd_numero_definitif_zero->execute();
+		
+		$upd_pas_de_note_remplacant = $bdd->prepare('UPDATE joueur_compo_equipe SET note = NULL WHERE numero > 11 AND numero_definitif IS NULL;');
+		$upd_pas_de_note_remplacant->execute();
 		
 		
 		echo "<br />\n";
@@ -1316,7 +1319,7 @@
 		}
 		$req_ligues_concernees->closeCursor();
 				
-		$upd_statut_journee = $bdd->prepare('UPDATE calendrier_reel SET statut = 2 WHERE num_journee = :num_journee_cal_reel;');
+		$upd_statut_journee = $bdd->prepare('UPDATE calendrier_reel SET statut = 3 WHERE num_journee = :num_journee_cal_reel;');
 		$upd_statut_journee->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
 		$upd_statut_journee->closeCursor();
 		
