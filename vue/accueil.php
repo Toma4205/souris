@@ -34,6 +34,14 @@ require_once("vue/commun/enteteflex.php");
         echo '<span class="erreur">' . $messageInscr . '</span>';
       }
      ?>
+    <p>Mail<br/>
+         <input type="email" class="width_200px" name="mailCrea" maxlength="50" value="<?php
+             if(isset($_POST['mailCrea']))
+             {
+               echo htmlspecialchars($_POST['mailCrea']);
+             }
+           ?>" />
+    </p>
     <p>Nom coach<br/>
         <input type="text" class="width_200px" name="nomCrea" maxlength="40" value="<?php
             if(isset($_POST['nomCrea']))
