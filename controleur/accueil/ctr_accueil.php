@@ -12,11 +12,13 @@ if (isset($_GET['deconnexion']))
 $manager = new CoachManager($bdd);
 
 if (isset($_POST['inscription']) && isset($_POST['nomCrea']) && isset($_POST['motDePasseCrea'])
-  && isset($_POST['confirmMotDePasseCrea']) && !empty($_POST['nomCrea'])
-  && !empty($_POST['motDePasseCrea']) && !empty($_POST['confirmMotDePasseCrea']))
+  && isset($_POST['confirmMotDePasseCrea']) && isset($_POST['mailCrea']) && !empty($_POST['nomCrea'])
+  && !empty($_POST['motDePasseCrea']) && !empty($_POST['confirmMotDePasseCrea']) && !empty($_POST['mailCrea']))
 {
+  // TODO MPL vérifier validité (regex) du mail + envoi mail
   $coach = new Coach(['nom' => $_POST['nomCrea'],
-                      'mot_de_passe' => $_POST['motDePasseCrea']]);
+                      'mot_de_passe' => $_POST['motDePasseCrea'],
+                      'mail' => $_POST['mailCrea']]);
 
   if ($manager->existeByNom($coach->nom()))
   {
@@ -53,7 +55,7 @@ elseif (isset($_POST['connexion']) && isset($_POST['nom']) && isset($_POST['motD
 }
 elseif(isset($_POST['inscription']))
 {
-  $messageInscr = 'Pour s\'inscrire, veuillez saisir les 3 champs.';
+  $messageInscr = 'Pour s\'inscrire, veuillez saisir tous les champs.';
 }
 elseif(isset($_POST['connexion']))
 {
