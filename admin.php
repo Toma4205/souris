@@ -1,3 +1,11 @@
+<?php
+
+if (isset($_POST['initJournee']))
+{
+	include_once('./admin/initDebutJournee.php');
+}
+
+ ?>
 <html>
 <body>
 	<h1>Page Administrateur</h1>
@@ -9,29 +17,32 @@
 		</p>
 		<p>
 			<a class="bouton" href="#titreMAJResultatsEquipe">Mettre à jour les résultats des équipes</a>
-		</p> 
+		</p>
 		<p>
 			<a class="bouton" href="#titreImportCSV">Importer les statistiques des joueurs à partir du CSV</a>
-		</p> 
+		</p>
 		<p>
 			<a class="bouton" href="#titreCalculDesNotes">Calcul des notes</a>
 		</p>
 		<p>
 			<a class="bouton" href="#titreCalculerLesConfrontations">Calculer les Confrontations</a>
 		</p>
-	
+		<p>
+			<a class="bouton" href="#titreInitDebutJournee">Initialiser le début de journée</a>
+		</p>
+
 	<HR size=2 align=center width="100%">
 	<h2 id="titreScrapValeur">Vérification Prix des Joueurs</h2>
 	<form method="post" id="scrapValeur" action="admin/valeursJoueurs.php" enctype="multipart/form-data">
 		 <input type="submit" name="submit" value="Etudier les valeurs" />
 	</form>
-	
+
 	<HR size=2 align=center width="100%">
 	<h2 id="titreMAJAutoResultatsEquipe">MAJ Auto des résultats des équipes</h2>
 	<form method="post" id="MAJAutoResultatsEquipe" action="admin/maj_auto_resultats.php" enctype="multipart/form-data">
 		 <input type="submit" name="submit" value="Mettre à jour les résultats" />
 	</form>
-	
+
 	<HR size=2 align=center width="100%">
 	<h2 id="titreMAJResultatsEquipe">Mettre à jour les résultats des équipes</h2>
 	<form method="post" id="MAJResultatsEquipe" action="admin/MAJResultatL1.php" enctype="multipart/form-data">
@@ -205,7 +216,7 @@
 					<input type="submit" name="MAJ" value="Mettre à Jour" />
 				</td>
 			 </tr>
-			
+
 	</form>
 	<table border="1">
 	<h4 id="titreResultatsEquipeEnBase">Resultats L1 presents en BDD</h4>
@@ -224,7 +235,7 @@
 			die('Erreur : ' . $e->getMessage());
 			echo $e;
 		}
-		
+
 		$req = $bdd->query('SELECT * FROM resultatsl1_reel ORDER BY journee DESC');
 		// On affiche chaque entrée une à une
 		while ($donnees = $req->fetch())
@@ -233,7 +244,7 @@
 		 <tr><td>
 		<?php
 			echo $donnees['journee'];
-		?>	
+		?>
 		</td><td>
 		<?php
 			echo $donnees['equipeDomicile'];
@@ -241,7 +252,7 @@
 		</td><td>
 		<?php
 			echo $donnees['homeDomicile'];
-		?>	
+		?>
 		</td><td>
 		<?php
 			echo $donnees['butDomicile'];
@@ -261,7 +272,7 @@
 		</td><td>
 		<?php
 			echo $donnees['homeVisiteur'];
-		?>	
+		?>
 		</td><td>
 		<?php
 			echo $donnees['butVisiteur'];
@@ -281,7 +292,7 @@
 		?>
 	</tbody>
 	</table>
-	
+
 	<HR size=2 align=center width="100%">
 	<h2 id="titreImportCSV">Importer les statistiques des joueurs à partir du CSV</h2>
 	<form method="post" id="importCSV" action="admin/importJourneeBDD.php" enctype="multipart/form-data">
@@ -290,24 +301,24 @@
 		 <input type="file" name="mon_fichier" id="mon_fichier" /><br />
 		 <input type="submit" name="submit" value="Importer" />
 	</form>
-	
+
 	<HR size=2 align=center width="100%">
 	<h2 id="titreCalculDesNotes">Calcul des notes des joueurs</h2>
-	<?php 
+	<?php
 		$req1 = $bdd->query('SELECT COUNT(*) FROM joueur_stats WHERE note IS NULL');
 		$nbJoueurSansNote=$req1->fetch(PDO::FETCH_ASSOC);
 		echo 'Actuellement, '.$nbJoueurSansNote['COUNT(*)'].' joueurs ne sont pas notés dans la base de données';
 		echo "<br />\n";
-		$req1->closeCursor();		
+		$req1->closeCursor();
 	?>
 	<form method="post" id="afficheNonNotes" action="admin/afficherJoueursNonNotes.php" enctype="multipart/form-data">
 		 <input type="submit" name="submit" value="Qui sont les joueurs non notés ?" /><br />
 	</form>
-	
+
 	<form method="post" id="calculNote" action="admin/calculNoteJoueurBDD.php" enctype="multipart/form-data">
 		 <input type="submit" name="submit" value="Lancer le calcul des notes des joueurs non notés" /><br />
 	</form>
-	
+
 	<HR size=2 align=center width="100%">
 	<h2 id="titreCalculerLesConfrontations">Calculer les Confrontations</h2>
 	<h4 id="titreDiagDonneesEnBase">Diagnostique des données en base : </h4>
@@ -324,7 +335,7 @@
 				echo "<br />\n";
 			}
 		}
-		$req1->closeCursor();		
+		$req1->closeCursor();
 	?>
 	<h5 id="titreVerifResultatsEtStats">Vérification de la saisie des résultats L1</h5>
 	<?php
@@ -339,10 +350,10 @@
 				echo "<br />\n";
 			}
 		}
-		$req1->closeCursor();		
+		$req1->closeCursor();
 	?>
-	
-	
+
+
 	<?php
 		$req1 = $bdd->query('SELECT t2.journee FROM resultatsl1_reel t2 WHERE t2.journee IN (SELECT t1.journee FROM joueur_stats t1 WHERE t1.note IS NOT NULL  GROUP BY t1.journee HAVING COUNT(t1.journee) > 340) GROUP BY t2.journee HAVING COUNT(t2.journee) = 10 ORDER BY t2.journee DESC;');
 		$journeesCalculables=$req1->fetchAll();
@@ -372,6 +383,20 @@
 <?php
 		}
 ?>
+
+<HR size=2 align=center width="100%">
+<h2 id="titreInitDebutJournee">Initialiser le début de journée</h2>
+<form method="post" id="initDebutJournee"  action="">
+	<?php
+	if (isset($messageInitDebutJournee))
+	{
+		echo '<p>' . $messageInitDebutJournee . '</p>';
+	}
+	 ?>
+	 <div>
+		 <input type="submit" name="initJournee" value="Init. journée" />
+	</div>
+</form>
 
 </body>
 </html>
