@@ -11,7 +11,21 @@ function CallAPI()
 {
 	
 }
-
+	require_once(__DIR__ . '/../modele/connexionSQL.php');
+	try
+	{
+		// Récupération de la connexion
+		$bdd = ConnexionBDD::getInstance();
+	}
+	catch (Exception $e)
+	{
+		die('Erreur : ' . $e->getMessage());
+		echo $e;
+	}
+	
+	$req_derniere_journee = $bdd->prepare('SELECT IF(count(journee)<10,journee,journee+1) AS \'next_resultat_a_saisir\' FROM resultatsl1_reel WHERE butDomicile IS NOT NULL AND butVisiteur IS NOT NULL AND journee IN (SELECT MAX(rr.journee) FROM resultatsl1_reel rr)  GROUP BY journee;');
+	
+	
 	// ------------------------------------------------------------------------
 	// ------------ Partie 1 --------------------------------------------------
 	// ------------ Récupération des données sur le web -----------------------
@@ -30,7 +44,19 @@ function CallAPI()
 	$finTableau = 'Tous les r';
 	$pos2 = strpos($pos1, $finTableau	);
 	
-	$journeeRecherchee=26; //VARIABLE A ADAPTER
+	$journeeRecherchee=26; //EN TEST
+	//EN PROD
+	/*
+	$req_derniere_journee->exectute();
+	$prochaines_journees = $req_derniere_journee->fetchAll();
+	if(count($prochaines_journees) == 1) {
+		//Ok on a trouvé LA journee
+		foreach ($prochaines_journees as $prochaine_journee) {
+			$journeeRecherchee = substr($prochaine_journee['next_resultat_a_saisir'],-2);
+		}
+	}
+	$req_derniere_journee->closeCursor();	
+	*/
 	
 	//Variables de l'algo
 	$journee;
@@ -178,6 +204,10 @@ function CallAPI()
 	// ------------------------------------------------------------------------
 	// ------------ Partie 2 --------------------------------------------------
 	// ------------ Création des requêtes pour insertion en base --------------
+	
+	//Pour chaque confrontation, on vérifie qu'elle n'est pas déjà présente
+	//Si pas présente, proposition de l'INSERT en base
+	
 	
 	
 	
