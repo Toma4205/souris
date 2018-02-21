@@ -1,3 +1,31 @@
+/*Script passé en "PROD" le 21/02/2018 */
+CREATE TABLE `nomenclature_equipes_reelles` (
+`trigramme` CHAR(3) NOT NULL,
+`ville_maxi` VARCHAR(100) NOT NULL,
+PRIMARY KEY (`trigramme`)
+) ENGINE = InnoDB;
+INSERT INTO `nomenclature_equipes_reelles` (`trigramme`, `ville_maxi`) VALUES
+('AMN','Amiens'),
+('ANG','Angers'),
+('BDX','Bordeaux'),
+('CAE','Caen'),
+('DIJ','Dijon'),
+('ETI','St Etienne'),
+('GUI','Guingamp'),
+('LIL','Lille'),
+('LYO','Lyon'),
+('MAR','Marseille'),
+('MET','Metz'),
+('MON','Monaco'),
+('MTP','Montpellier'),
+('NIC','Nice'),
+('NTE','Nantes'),
+('PAR','Paris SG'),
+('REN','Rennes'),
+('STR','Strasbourg'),
+('TOU','Toulouse'),
+('TRO','Troyes');
+
 /*Script passé en "PROD" le 20/02/2018 */
 ALTER TABLE `coach_ligue` ADD `masquee` BOOLEAN NOT NULL DEFAULT FALSE AFTER `date_validation`;
 ALTER TABLE `coach` ADD `aff_ligue_masquee` BOOLEAN NOT NULL DEFAULT FALSE AFTER `date_maj`;

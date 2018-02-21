@@ -5,6 +5,9 @@
 			<a class="bouton" href="#titreScrapValeur">Vérification Prix des Joueurs</a>
 		</p>
 		<p>
+			<a class="bouton" href="#titreMAJAutoResultatsEquipe">MAJ Auto des résultats des équipes</a>
+		</p>
+		<p>
 			<a class="bouton" href="#titreMAJResultatsEquipe">Mettre à jour les résultats des équipes</a>
 		</p> 
 		<p>
@@ -21,6 +24,12 @@
 	<h2 id="titreScrapValeur">Vérification Prix des Joueurs</h2>
 	<form method="post" id="scrapValeur" action="admin/valeursJoueurs.php" enctype="multipart/form-data">
 		 <input type="submit" name="submit" value="Etudier les valeurs" />
+	</form>
+	
+	<HR size=2 align=center width="100%">
+	<h2 id="titreMAJAutoResultatsEquipe">MAJ Auto des résultats des équipes</h2>
+	<form method="post" id="MAJAutoResultatsEquipe" action="admin/maj_auto_resultats.php" enctype="multipart/form-data">
+		 <input type="submit" name="submit" value="Mettre à jour les résultats" />
 	</form>
 	
 	<HR size=2 align=center width="100%">

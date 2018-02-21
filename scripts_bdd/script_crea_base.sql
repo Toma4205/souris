@@ -16,6 +16,11 @@ ALTER TABLE `quantite_bonus_malus` ADD FOREIGN KEY (`code`) REFERENCES `nomencla
 
 CREATE TABLE `nomenclature_questions_presse` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT , `categorie` VARCHAR(40) NOT NULL , `libelle` VARCHAR(255) NOT NULL, `date_debut` DATE NOT NULL , `date_fin` DATE NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
+CREATE TABLE `nomenclature_equipes_reelles` (
+`trigramme` CHAR(3) NOT NULL,
+`ville_maxi` VARCHAR(100) NOT NULL,
+PRIMARY KEY (`trigramme`)
+) ENGINE = InnoDB;
 
 CREATE TABLE `calendrier_reel` (
 `num_journee` TINYINT UNSIGNED NOT NULL,
