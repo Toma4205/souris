@@ -176,6 +176,10 @@ $resultatsJournee = buildTableauJournee(substr($fichierName,0,6));
 	fwrite($fp,$lignes1);
 	fclose($fp);
 //Fin du Téléchargement
+
+//Ici il faudra vérifier l'état du CSV et surtout supprimer les rencontres qui n'appartiennent pas à la journée (match en retard)
+
+
 	
 $erreur_sur_fichier = 1;
 if (($handle = @fopen($fichier, "r")) !== FALSE) {

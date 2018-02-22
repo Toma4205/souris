@@ -1,3 +1,5 @@
+/*Script passé en "PROD" le 22/02/2018 */
+UPDATE `nomenclature_equipes_reelles` SET `trigramme` = 'PSG' WHERE `nomenclature_equipes_reelles`.`trigramme` = 'PAR';
 /*Script passé en "PROD" le 21/02/2018 */
 CREATE TABLE `nomenclature_equipes_reelles` (
 `trigramme` CHAR(3) NOT NULL,

@@ -82,7 +82,7 @@
 		$resultat_nouveau->closeCursor();
 		
 		if($nbResultat_nouveau < 1){
-			$req = $bdd->prepare('INSERT INTO resultatsL1_reel( journee,equipeDomicile,homeDomicile,butDomicile,winOrLoseDomicile,penaltyDomicile,equipeVisiteur,homeVisiteur,butVisiteur,WinOrLoseVisiteur,penaltyVisiteur) VALUES(
+			$req = $bdd->prepare('INSERT INTO resultatsl1_reel( journee,equipeDomicile,homeDomicile,butDomicile,winOrLoseDomicile,penaltyDomicile,equipeVisiteur,homeVisiteur,butVisiteur,WinOrLoseVisiteur,penaltyVisiteur) VALUES(
 			:journee,
 			:equipeDomicile,
 			:homeDomicile,
