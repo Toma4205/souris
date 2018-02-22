@@ -11,7 +11,21 @@ function CallAPI()
 {
 	
 }
-
+	require_once(__DIR__ . '/../modele/connexionSQL.php');
+	try
+	{
+		// Récupération de la connexion
+		$bdd = ConnexionBDD::getInstance();
+	}
+	catch (Exception $e)
+	{
+		die('Erreur : ' . $e->getMessage());
+		echo $e;
+	}
+	
+	$req_derniere_journee = $bdd->prepare('SELECT IF(count(journee)<10,journee,journee+1) AS \'next_resultat_a_saisir\' FROM resultatsl1_reel WHERE butDomicile IS NOT NULL AND butVisiteur IS NOT NULL AND journee IN (SELECT MAX(rr.journee) FROM resultatsl1_reel rr)  GROUP BY journee;');
+	
+	
 	// ------------------------------------------------------------------------
 	// ------------ Partie 1 --------------------------------------------------
 	// ------------ Récupération des données sur le web -----------------------
@@ -30,7 +44,19 @@ function CallAPI()
 	$finTableau = 'Tous les r';
 	$pos2 = strpos($pos1, $finTableau	);
 	
-	$journeeRecherchee=26; //VARIABLE A ADAPTER
+	$journeeRecherchee=26; //EN TEST
+	//EN PROD
+	/*
+	$req_derniere_journee->exectute();
+	$prochaines_journees = $req_derniere_journee->fetchAll();
+	if(count($prochaines_journees) == 1) {
+		//Ok on a trouvé LA journee
+		foreach ($prochaines_journees as $prochaine_journee) {
+			$journeeRecherchee = substr($prochaine_journee['next_resultat_a_saisir'],-2);
+		}
+	}
+	$req_derniere_journee->closeCursor();	
+	*/
 	
 	//Variables de l'algo
 	$journee;
@@ -62,8 +88,8 @@ function CallAPI()
 							$lignes5 = explode("&gt;",$ligne4);
 							foreach ($lignes5 as $ligne5) {
 								//Debug
-								echo 'Ligne '.$i.'|'.$j.'|'.$k.'|'.$m.'|'.$n.'|'.$p.' '.$ligne5;
-								echo "<br />\n";
+								//echo 'Ligne '.$i.'|'.$j.'|'.$k.'|'.$m.'|'.$n.'|'.$p.' '.$ligne5;
+								//echo "<br />\n";
 								
 								if($i>=1 && $j==2 && $k==0 && $m==0 && $n==0&& $p==1 && strpos($ligne5,"journ")>0){ //JOURNEE
 									$journee = substr($ligne5,0,2);
@@ -88,7 +114,7 @@ function CallAPI()
 									if ($pos === false && $pos1 === false) {
 										//pas de penalty
 									}else{
-										echo 'penalty';
+										//echo 'penalty';
 										$posEspace = strrpos($cibletexte," "); 
 										$lastRow = end($resultats);
 										$buteurs[$nb_buteurs][0]= $lastRow[0];
@@ -179,7 +205,66 @@ function CallAPI()
 	// ------------ Partie 2 --------------------------------------------------
 	// ------------ Création des requêtes pour insertion en base --------------
 	
+	//Pour chaque confrontation, on vérifie qu'elle n'est pas déjà présente
+	//Si pas présente, proposition de l'INSERT en base
+	$req_rencontre_deja_saisie = $bdd->prepare('SELECT journee, equipeDomicile, butDomicile, winOrLoseDomicile, penaltyDomicile, equipeVisiteur, butVisiteur, winOrLoseVisiteur, penaltyVisiteur FROM resultatsl1_reel WHERE journee = :journee AND equipeDomicile IN (SELECT ner1.trigramme FROM nomenclature_equipes_reelles ner1 WHERE ner1.ville_maxi = :ville1) AND equipeVisiteur IN (SELECT ner2.trigramme FROM nomenclature_equipes_reelles ner2 WHERE ner2.ville_maxi = :ville2);');
 	
+	foreach($resultats as $rencontre)
+	{
+		$req_rencontre_deja_saisie->execute(array('journee' => '2017'.$journee, 'ville1' => $rencontre[0], 'ville2' => $rencontre[4]));
+		$rencontreSimilaire = $req_rencontre_deja_saisie->fetchAll();
+		if (count($rencontreSimilaire) > 1) {
+			//Erreur, il ne doit y avoir deux lignes d'une même rencontre
+			echo 'Erreur il ne doit y avoir deux lignes d\'une même rencontre : '.$rencontreSimilaire['equipeDomicile'].' vs '.$rencontreSimilaire['equipeVisiteur'].' sur la journée '.$rencontreSimilaire['journee'];
+			echo "<br />\n";
+		}elseif(count($rencontreSimilaire) == 1){
+			//La rencontre est déjà saisie, on vérifie si le résultat est différent
+			foreach ($rencontreSimilaire as $larencontreSimilaire) {
+				if($rencontre[1] == $larencontreSimilaire['butDomicile'] && $rencontre[2] == $larencontreSimilaire['penaltyDomicile']  && $rencontre[3] == $larencontreSimilaire['butVisiteur'] && $rencontre[5] == $larencontreSimilaire['penaltyVisiteur'])
+				{
+					//Le résultat est similaire
+					echo 'Ligne déjà présente : '.$larencontreSimilaire['equipeDomicile'].' vs '.$larencontreSimilaire['equipeVisiteur'].' sur la journée '.$larencontreSimilaire['journee'];
+					echo "<br />\n";
+				}else{
+					echo 'INSERT INTO resultatsl1_reel(journee,equipeDomicile,homeDomicile,butDomicile,winOrLoseDomicile,penaltyDomicile,equipeVisiteur,homeVisiteur,butVisiteur,WinOrLoseVisiteur,penaltyVisiteur) VALUES(2017'.$journee.','.$larencontreSimilaire['equipeDomicile'].',Dom,'.$rencontre[1].','.$statusDOM.','.$rencontre[2].','.$larencontreSimilaire['equipeVisiteur'].',Visit,'.$rencontre[3].','.$statusEXT.','.$rencontre[5].');';
+					echo "<br />\n";
+				}
+			}	
+		}else{
+			//Rencontre non saisie : GO pour INSERT
+			
+			if($rencontre[1]>$rencontre[3]){
+				$statusDOM = 'W';
+				$statusEXT = 'L';
+			}elseif($rencontre[1]<$rencontre[3]){
+				$statusDOM = 'L';
+				$statusEXT = 'W';
+			}else{
+				$statusDOM = 'D';
+				$statusEXT = 'D';
+			}
+			
+			$req_trigramme = $bdd->prepare('SELECT trigramme FROM nomenclature_equipes_reelles WHERE ville_maxi = :ville_maxi;');
+			$req_trigramme->execute(array('ville_maxi' => $rencontre[0]));
+			$trigrammes_obtenus = $req_trigramme->fetchAll();
+			
+			foreach ($trigrammes_obtenus as $trigramme_obtenu) {
+				$trigrammeDom = $trigramme_obtenu['trigramme'];
+			}
+			$req_trigramme->closeCursor();
+			
+			$req_trigramme->execute(array('ville_maxi' => $rencontre[4]));
+			$trigrammes_obtenus = $req_trigramme->fetchAll();
+			foreach ($trigrammes_obtenus as $trigramme_obtenu) {
+				$trigrammeExt = $trigramme_obtenu['trigramme'];
+			}
+			$req_trigramme->closeCursor();
+			
+			echo 'INSERT INTO resultatsl1_reel(journee,equipeDomicile,homeDomicile,butDomicile,winOrLoseDomicile,penaltyDomicile,equipeVisiteur,homeVisiteur,butVisiteur,WinOrLoseVisiteur,penaltyVisiteur) VALUES(\'2017'.$journee.'\',\''.$trigrammeDom.'\',\'Dom\','.$rencontre[1].',\''.$statusDOM.'\','.$rencontre[2].',\''.$trigrammeExt.'\',\'Visit\','.$rencontre[3].',\''.$statusEXT.'\','.$rencontre[5].');';
+			echo "<br />\n";
+		}
+		$req_rencontre_deja_saisie->closeCursor();
+	}
 	
 ?>
 

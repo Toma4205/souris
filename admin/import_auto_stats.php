@@ -4,8 +4,58 @@
 <?php
 
 $row = 0;
-$fichier = $_FILES['mon_fichier']['tmp_name'];
-$fichierName = $_FILES['mon_fichier']['name'];
+//$fichier = $_FILES['mon_fichier']['tmp_name'];
+//$fichierName = $_FILES['mon_fichier']['name'];
+
+$idJournee = isset($_POST['idJournee']) ? $_POST['idJournee'] : NULL;
+$fichier = __DIR__ . '\\rotostats\\'.$idJournee.'.csv';
+$fichierName = $idJournee;
+$url_part1 = "https://www.rotowire.com/soccer/player_stats.xls?pos=A&league=FRAN&season=";
+$url_option_saison = substr($idJournee,0,4);
+$url_part2 = "&start=";
+$url_option_journee = substr($idJournee,-2);
+$url_part3 = "&end=";
+$url_part4 = "&gp=GP&min=MIN&st=ST&on=ON&off=OFF&y=Y&yr=YR&r=R&g=G&a=A&s=S&sog=SOG&cr=CR&acr=ACR&cc=CC&blk=BLK&int=INT&tkl=TKL&tklw=TKLW&fc=FC&fs=FS&pkg=PKG&pkm=PKM&pkc=PKC&crn=CRN&p=P&ap=AP&acro=ACRO&bcc=BCC&aw=AW&dr=DR&dsp=DSP&dw=DW&cl=CL&ecl=ECL&own=OWN&touch=TOUCH&gc=GC&cs=CS&sv=SV&pkf=PKF&pksv=PKSV&aks=AKS&punch=PUNCH&ibs=IBS&obs=OBS&ibsog=IBSOG&obsog=OBSOG&ibg=IBG&obg=OBG&fks=FKS&fksog=FKSOG&fkg=FKG&tbox=TBOX&fkcr=FKCR&fkacr=FKACR&crncr=CRNCR&br=BR&crnw=CRNW&pksvd=PKSVD&ibsv=IBSV&obsv=OBSV&pk=PK&sa=SA";
+	
+$url_definitif = $url_part1.$url_option_saison.$url_part2.$url_option_journee.$url_part3.$url_option_journee.$url_part4;
+
+//Fonction de Login sur Roto
+function login($url,$data){
+		$fp = fopen("cookie.txt", "w");
+		fclose($fp);
+		$login = curl_init();
+		curl_setopt($login, CURLOPT_COOKIEJAR, "cookie.txt");
+		curl_setopt($login, CURLOPT_COOKIEFILE, "cookie.txt");
+		curl_setopt($login, CURLOPT_TIMEOUT, 40000);
+		curl_setopt($login, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($login, CURLOPT_URL, $url);
+		curl_setopt($login, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+		curl_setopt($login, CURLOPT_FOLLOWLOCATION, TRUE);
+		curl_setopt($login, CURLOPT_POST, TRUE);
+		curl_setopt($login, CURLOPT_POSTFIELDS, $data);
+		ob_start();
+		return curl_exec ($login);
+		ob_end_clean();
+		curl_close ($login);
+		unset($login);    
+}   
+
+
+//Fonction de récupération d'une page
+function grab_page($site){
+		
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 40);
+		curl_setopt($ch, CURLOPT_COOKIEFILE, "cookie.txt");
+		curl_setopt($ch, CURLOPT_URL, $site);
+		ob_start();
+		return curl_exec ($ch);
+		ob_end_clean();
+		curl_close ($ch);
+
+}
 
 //Cherche la position (n° ligne) d'une needle dans un tableau haystack
 function recursive_array_search($needle,$haystack) {
@@ -111,7 +161,29 @@ function buildTableauJournee($idJournee) {
 
 //DEBUT DE L'ALGO
 $resultatsJournee = buildTableauJournee(substr($fichierName,0,6));
-if (($handle = fopen($fichier, "r")) !== FALSE) {
+
+//Téléchargement du fichier journee au format CSV
+	//Id et MDP de connexion
+	login("https://www.rotowire.com/users/loginnow.htm?link=%2Findex.php","username=xzw32&p1=rotowiremotdepasse&Submit=Login");
+	
+	$output = grab_page($url_definitif);
+	$lignes1 = str_replace("\t\r\n","\n",$output);
+	$lignes1 = str_replace("\r","\n",$lignes1);
+	$lignes1 = str_replace("\t",";",$lignes1);
+	
+	$path = __DIR__.'/rotostats/'.$url_option_saison.$url_option_journee.".csv";
+	$fp = fopen ($path, 'w');
+	fwrite($fp,$lignes1);
+	fclose($fp);
+//Fin du Téléchargement
+
+//Ici il faudra vérifier l'état du CSV et surtout supprimer les rencontres qui n'appartiennent pas à la journée (match en retard)
+
+
+	
+$erreur_sur_fichier = 1;
+if (($handle = @fopen($fichier, "r")) !== FALSE) {
+	$erreur_sur_fichier = 0;
 	while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
 		$num = count($data);
 		// echo "<p> $num champs à la ligne $row: <br /></p>\n";
@@ -677,6 +749,7 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 	
 }
 
+if($erreur_sur_fichier == 0){
 	require_once(__DIR__ . '/../modele/connexionSQL.php');
 		try
 		{
@@ -1033,6 +1106,10 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 		$req->closeCursor();
 //print_r($tableau[1]);
 //var_dump($array);
+}else{
+	echo 'Erreur de fichier (probablement fichier absent)';
+	echo "<br />\n";
+}
 
 ?>
 

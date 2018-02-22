@@ -16,6 +16,9 @@ if (isset($_POST['initJournee']))
 			<a class="bouton" href="#titreMAJAutoResultatsEquipe">MAJ Auto des résultats des équipes</a>
 		</p>
 		<p>
+			<a class="bouton" href="#titreImportAutoStatsJournee">Import Auto des stats de la journée</a>
+		</p>
+		<p>
 			<a class="bouton" href="#titreMAJResultatsEquipe">Mettre à jour les résultats des équipes</a>
 		</p>
 		<p>
@@ -38,11 +41,37 @@ if (isset($_POST['initJournee']))
 	</form>
 
 	<HR size=2 align=center width="100%">
-	<h2 id="titreMAJAutoResultatsEquipe">MAJ Auto des résultats des équipes</h2>
+	<h2 id="titreMAJAutoResultatsEquipe">MAJ Auto des résultats des équipes (encore en test)</h2>
 	<form method="post" id="MAJAutoResultatsEquipe" action="admin/maj_auto_resultats.php" enctype="multipart/form-data">
 		 <input type="submit" name="submit" value="Mettre à jour les résultats" />
 	</form>
 
+	<HR size=2 align=center width="100%">
+	<h2 id="titreImportAutoStatsJournee">Import Auto des stats de la journée (encore en test)</h2>
+	<form method="post" id="importAutoStatsJournee" action="admin/import_auto_stats.php" enctype="multipart/form-data">
+		<select name="idJournee" size=1>
+				<option>201721
+				<option>201722
+				<option>201723
+				<option>201724
+				<option>201725
+				<option>201726
+				<option>201727
+				<option>201728
+				<option>201729
+				<option>201730
+				<option>201731
+				<option>201732
+				<option>201733
+				<option>201734
+				<option>201735
+				<option>201736
+				<option>201737
+				<option>201738
+			  </select>
+		<input type="submit" name="submit" value="Import Auto des stats de la journée" />
+	</form>
+	
 	<HR size=2 align=center width="100%">
 	<h2 id="titreMAJResultatsEquipe">Mettre à jour les résultats des équipes</h2>
 	<form method="post" id="MAJResultatsEquipe" action="admin/MAJResultatL1.php" enctype="multipart/form-data">

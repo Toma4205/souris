@@ -20,7 +20,7 @@ INSERT INTO `nomenclature_equipes_reelles` (`trigramme`, `ville_maxi`) VALUES
 ('MTP','Montpellier'),
 ('NIC','Nice'),
 ('NTE','Nantes'),
-('PAR','Paris SG'),
+('PSG','Paris SG'),
 ('REN','Rennes'),
 ('STR','Strasbourg'),
 ('TOU','Toulouse'),
