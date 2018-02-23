@@ -398,7 +398,7 @@ if (isset($match)) {
         $compoDom->nomJoueurReelAdverse(), $compoDom->miTemps(), $compoDom->codeTactique());} ?>
       <?php if (isset($joueursDom)){afficherTitulaires($joueursDom, $compoDom->codeTactique());} else {echo '<div>Aucune compo</div>';} ?>
       <?php if (isset($joueursDom)){afficherRemplacants($joueursDom);} ?>
-      <?php if (isset($joueursDom)){afficherMoyennes($joueursDom, $compoDom->codeTactique());} ?>
+      <?php if (isset($joueursDom) && $match->statut() == ConstantesAppli::STATUT_CAL_TERMINE){afficherMoyennes($joueursDom, $compoDom->codeTactique());} ?>
     </div>
     <div class="detail_match_equipe_d">
       <?php if (isset($compoExt)){afficherBonusMalus($compoExt->codeBonusMalus(),
@@ -406,7 +406,7 @@ if (isset($match)) {
         $compoExt->nomJoueurReelAdverse(), $compoExt->miTemps(), $compoExt->codeTactique());} ?>
       <?php if (isset($joueursExt)){afficherTitulaires($joueursExt, $compoExt->codeTactique());} else {echo '<div>Aucune compo</div>';} ?>
       <?php if (isset($joueursExt)){afficherRemplacants($joueursExt);} ?>
-      <?php if (isset($joueursExt)){afficherMoyennes($joueursExt, $compoExt->codeTactique());} ?>
+      <?php if (isset($joueursExt) && $match->statut() == ConstantesAppli::STATUT_CAL_TERMINE){afficherMoyennes($joueursExt, $compoExt->codeTactique());} ?>
     </div>
   </div>
 <?php
