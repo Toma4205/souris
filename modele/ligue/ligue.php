@@ -25,6 +25,10 @@ class Ligue extends ClasseBase
   // Champs de equipe
   private $_classement;
 
+  // Champs de calendrier_ligue
+  private $_scoreDom;
+  private $_scoreExt;
+
   public function __construct(array $donnees)
   {
     parent::hydrate($donnees);
@@ -43,6 +47,8 @@ class Ligue extends ClasseBase
   public function dateValidation() { return $this->_dateValidation; }
   public function nomCoachCreateur() { return $this->_nomCoachCreateur; }
   public function classement() { return $this->_classement; }
+  public function scoreDom() { return $this->_scoreDom; }
+  public function scoreExt() { return $this->_scoreExt; }
 
   public function setId($id)
   {
@@ -107,5 +113,15 @@ class Ligue extends ClasseBase
   public function setClassement($classement)
   {
     $this->_classement = (int) $classement;
+  }
+
+  public function setScoreDom($scoreDom)
+  {
+    $this->_scoreDom = $scoreDom;
+  }
+
+  public function setScoreExt($scoreExt)
+  {
+    $this->_scoreExt = $scoreExt;
   }
 }

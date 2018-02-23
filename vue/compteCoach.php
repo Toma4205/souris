@@ -103,6 +103,7 @@ require_once("vue/commun/enteteflex.php");
           <tr>
             <th>Nom</th>
             <th>Classement</th>
+            <?php if ($numJourneeEnCours != null){echo '<th>Score en cours</th>';} ?>
             <th>Action</th>
             <th></th>
           </tr>
@@ -110,6 +111,7 @@ require_once("vue/commun/enteteflex.php");
         <tbody>
           <?php
           echo '<input type="hidden" name="masquer"/>';
+          echo '<input type="hidden" name="scoreLigue"/>';
           foreach($ligues as $value)
           {
             if ($value->etat() == EtatLigue::EN_COURS || $value->etat() == EtatLigue::TERMINEE)
@@ -122,6 +124,14 @@ require_once("vue/commun/enteteflex.php");
               else
               {
                 echo '<td>Aucun</td>';
+              }
+
+              if ($numJourneeEnCours != null) {
+                if ($value->scoreDom() != null) {
+                  echo '<td class="score_direct" onclick="allerVersScoreLigue(\'' . $value->id() . '\')"><b>' . $value->scoreDom() . ' - ' . $value->scoreExt() . '</b></td>';
+                } else {
+                  echo '<td></td>';
+                }
               }
 
               echo '<td><input type="submit" value="Rejoindre" name="rejoindre[' . $value->id() . ']" /></td>';

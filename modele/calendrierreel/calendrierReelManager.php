@@ -9,6 +9,14 @@ class CalendrierReelManager extends ManagerBase
     $this->setDb($bdd);
   }
 
+  public function findNumJourneeEnCours()
+  {
+    $q = $this->_bdd->prepare('SELECT num_journee FROM calendrier_reel
+      WHERE statut = :statut');
+    $q->execute(['statut' => ConstantesAppli::STATUT_CAL_EN_COURS]);
+    return $q->fetchColumn();
+  }
+
   public function findProchaineJournee()
   {
       $q = $this->_bdd->prepare('SELECT * FROM calendrier_reel

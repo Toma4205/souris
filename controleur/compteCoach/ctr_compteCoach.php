@@ -2,9 +2,11 @@
 
 $managerConfrere = new ConfrereManager($bdd);
 $managerLigue = new LigueManager($bdd);
+$managerCalReel = new CalendrierReelManager($bdd);
 
 $confreres = $managerConfrere->findConfreresByIdCoach($coach->id());
 $_SESSION[ConstantesSession::LISTE_CONFRERES] = $confreres;
+$numJourneeEnCours = $managerCalReel->findNumJourneeEnCours();
 
 if (isset($_POST['continuerCreaLigue']))
 {
@@ -58,15 +60,29 @@ elseif (isset($_POST['suppCreaLigue']))
     $managerLigue->supprimerLigue($cle);
   }
 }
-elseif (isset($_POST['masquer']))
+elseif (isset($_POST['masquer']) && $_POST['masquer'] != null)
 {
   foreach($_POST['masquer'] as $cle => $value)
   {
     $managerLigue->masquerLigue($cle, $coach->id());
   }
 }
+elseif (isset($_POST['scoreLigue']) && $_POST['scoreLigue'] != null)
+{
+  foreach($_POST['scoreLigue'] as $cle => $value)
+  {
+    $_SESSION[ConstantesSession::LIGUE] = $managerLigue->findLigueById($cle);
 
-$ligues = $managerLigue->findLiguesByIdCoach($coach->id());
+    // Redirection du visiteur vers la page calendrier de la ligue
+    header('Location: index.php?section=calendrier');
+  }
+}
+
+if ($numJourneeEnCours != null) {
+  $ligues = $managerLigue->findLiguesEnCoursByIdCoach($coach->id(), $numJourneeEnCours);
+} else {
+  $ligues = $managerLigue->findLiguesByIdCoach($coach->id());
+}
 $_SESSION[ConstantesSession::LISTE_LIGUES] = $ligues;
 
 include_once('vue/compteCoach.php');

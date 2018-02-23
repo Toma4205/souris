@@ -9,3 +9,7 @@
 .image_action_actu {
   padding-right: .2rem;
 }
+.score_direct:hover {
+  cursor: pointer;
+  color: #00cdcd;
+}

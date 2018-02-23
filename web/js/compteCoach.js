@@ -6,3 +6,8 @@ function masquerLigue(id) {
   var input = $("<input>").attr("type", "hidden").attr("name", "masquer[" + id + "]");
   $('#formPrincipal').append($(input)).submit();
 }
+
+function allerVersScoreLigue(idLigue) {
+  var input = $("<input>").attr("type", "hidden").attr("name", "scoreLigue[" + idLigue + "]");
+  $('#formPrincipal').append($(input)).submit();
+}
