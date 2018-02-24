@@ -14,6 +14,7 @@ class JoueurCompoEquipe extends ClasseBase
   private $_idJoueurReelRemplacant;
   private $_noteMinRemplacement;
   private $_nbButReel;
+  private $_nbCsc;
   private $_nbButVirtuel;
   private $_numeroDefinitif;
 
@@ -38,6 +39,7 @@ class JoueurCompoEquipe extends ClasseBase
   public function idJoueurReelRemplacant() { return $this->_idJoueurReelRemplacant; }
   public function nbButVirtuel() { return $this->_nbButVirtuel; }
   public function nbButReel() { return $this->_nbButReel; }
+  public function nbCsc() { return $this->_nbCsc; }
   public function noteMinRemplacement() { return $this->_noteMinRemplacement; }
   public function numeroDefinitif() { return $this->_numeroDefinitif; }
   public function nom() { return $this->_nom; }
@@ -86,14 +88,19 @@ class JoueurCompoEquipe extends ClasseBase
       $this->_noteMinRemplacement = $noteMinRemplacement;
   }
 
-  public function setNb_but_reel($nom)
+  public function setNb_but_reel($nb)
   {
-      $this->_nbButReel = $nom;
+      $this->_nbButReel = $nb;
   }
 
-  public function setNb_but_virtuel($nbBut)
+  public function setNb_csc($nb)
   {
-      $this->_nbButVirtuel = $nbBut;
+      $this->_nbCsc = $nb;
+  }
+
+  public function setNb_but_virtuel($nb)
+  {
+      $this->_nbButVirtuel = $nb;
   }
 
   public function setNumero_definitif($numeroDefinitif)

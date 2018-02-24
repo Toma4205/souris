@@ -1,3 +1,6 @@
+/*Script passé en "PROD" le 24/02/2018 */
+ALTER TABLE `joueur_compo_equipe` ADD `nb_csc` TINYINT(1) NULL AFTER `nb_but_reel`;
+
 /*Script passé en "PROD" le 22/02/2018 */
 UPDATE `nomenclature_equipes_reelles` SET `trigramme` = 'PSG' WHERE `nomenclature_equipes_reelles`.`trigramme` = 'PAR';
 /*Script passé en "PROD" le 21/02/2018 */

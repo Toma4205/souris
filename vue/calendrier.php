@@ -84,7 +84,7 @@ echo '</div>';
 if (isset($match)) {
 
   // Afficahge des buteurs dans le detail_match_bandeau
-  function afficherButeur($joueurs, $codeBonusAdv, $nomJoueur, $statut)
+  function afficherButeur($joueurs, $joueursAdv, $codeBonusAdv, $nomJoueur, $statut)
   {
     if ($statut == ConstantesAppli::STATUT_CAL_TERMINE)
     {
@@ -108,6 +108,17 @@ if (isset($match)) {
           echo '</li>';
         }
       }
+      foreach ($joueursAdv as $cle => $value)
+      {
+        if ($value->numeroDefinitif() != null && $value->nbCsc() > 0)
+        {
+          echo '<li>' . $value->nom() . ' (csc)';
+          for ($index = 1; $index <= $value->nbCsc(); $index++) {
+            echo '<img class="but" src="web/img/but.png" alt="But" width="10px" height="10px"/>';
+          }
+          echo '</li>';
+        }
+      }
     } elseif ($statut == ConstantesAppli::STATUT_CAL_EN_COURS)
     {
       foreach ($joueurs as $cle => $value)
@@ -116,6 +127,17 @@ if (isset($match)) {
         {
           echo '<li>' . $value->nom();
           for ($index = 1; $index <= $value->nbButReel(); $index++) {
+            echo '<img class="but" src="web/img/but.png" alt="But" width="10px" height="10px"/>';
+          }
+          echo '</li>';
+        }
+      }
+      foreach ($joueursAdv as $cle => $value)
+      {
+        if ($value->numero() < 12 && $value->nbCsc() > 0)
+        {
+          echo '<li>' . $value->nom() . ' (csc)';
+          for ($index = 1; $index <= $value->nbCsc(); $index++) {
             echo '<img class="but" src="web/img/but.png" alt="But" width="10px" height="10px"/>';
           }
           echo '</li>';
@@ -359,7 +381,7 @@ if (isset($match)) {
                 $codeBonus = $compoExt->codeBonusMalus();
                 $nomJoueurAdv = $compoExt->nomJoueurReelAdverse();
               }
-              afficherButeur($joueursDom, $codeBonus, $nomJoueurAdv, $match->statut());} ?>
+              afficherButeur($joueursDom, $joueursExt, $codeBonus, $nomJoueurAdv, $match->statut());} ?>
           </ul>
         </div>
       </div>
@@ -402,7 +424,7 @@ if (isset($match)) {
                 $codeBonus = $compoDom->codeBonusMalus();
                 $nomJoueurAdv = $compoDom->nomJoueurReelAdverse();
               }
-              afficherButeur($joueursExt, $codeBonus, $nomJoueurAdv, $match->statut());} ?>
+              afficherButeur($joueursExt, $joueursDom, $codeBonus, $nomJoueurAdv, $match->statut());} ?>
           </ul>
         </div>
       </div>
