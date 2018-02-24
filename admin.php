@@ -3,6 +3,9 @@
 if (isset($_POST['initJournee']))
 {
 	include_once('./admin/initDebutJournee.php');
+} elseif (isset($_POST['majScoreJourneeEnCours']))
+{
+	include_once('./admin/majScoreJourneeEnCours.php');
 }
 
  ?>
@@ -32,6 +35,9 @@ if (isset($_POST['initJournee']))
 		</p>
 		<p>
 			<a class="bouton" href="#titreInitDebutJournee">Initialiser le début de journée</a>
+		</p>
+		<p>
+			<a class="bouton" href="#titreMajScoreJourneeEnCours">Maj buteurs/scores journée en cours</a>
 		</p>
 
 	<HR size=2 align=center width="100%">
@@ -71,7 +77,7 @@ if (isset($_POST['initJournee']))
 			  </select>
 		<input type="submit" name="submit" value="Import Auto des stats de la journée" />
 	</form>
-	
+
 	<HR size=2 align=center width="100%">
 	<h2 id="titreMAJResultatsEquipe">Mettre à jour les résultats des équipes</h2>
 	<form method="post" id="MAJResultatsEquipe" action="admin/MAJResultatL1.php" enctype="multipart/form-data">
@@ -424,6 +430,20 @@ if (isset($_POST['initJournee']))
 	 ?>
 	 <div>
 		 <input type="submit" name="initJournee" value="Init. journée" />
+	</div>
+</form>
+
+<HR size=2 align=center width="100%">
+<h2 id="titreMajScoreJourneeEnCours">Maj buteurs/scores journée en cours</h2>
+<form method="post" id="majScoreJourneeEnCours"  action="">
+	<?php
+	if (isset($messageMajScoreJourneeEnCours))
+	{
+		echo '<p>' . $messageMajScoreJourneeEnCours . '</p>';
+	}
+	 ?>
+	 <div>
+		 <input type="submit" name="majScoreJourneeEnCours" value="Maj buteurs/scores" />
 	</div>
 </form>
 
