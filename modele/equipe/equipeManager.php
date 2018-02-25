@@ -24,11 +24,13 @@ class EquipeManager extends ManagerBase
 
     $q->execute();
 
-    // récupération de l'id
-    $idEquipe = $this->_bdd->lastInsertId();
+    if (ConstantesAppli::BONUS_MALUS_AUCUN != $bonusMalus) {
+      // récupération de l'id
+      $idEquipe = $this->_bdd->lastInsertId();
 
-    $bonusManager = new BonusMalusManager($this->db());
-    $bonusManager->creerBonusMalusEquipe($idEquipe, $bonusMalus, $nbEquipe);
+      $bonusManager = new BonusMalusManager($this->db());
+      $bonusManager->creerBonusMalusEquipe($idEquipe, $bonusMalus, $nbEquipe);
+    }
 	}
 
   public function fermerMercato($id)
