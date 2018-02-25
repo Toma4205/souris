@@ -39,7 +39,7 @@ if (isset($_POST['inscription']) && isset($_POST['nomCrea']) && isset($_POST['mo
 elseif (isset($_POST['connexion']) && isset($_POST['mail']) && isset($_POST['motDePasse'])
   && !empty($_POST['mail']) && !empty($_POST['motDePasse']))
 {
-  if ('admin' == $_POST['mail'])
+  if ('admin@mail.fr' == $_POST['mail'])
   {
     header('Location: admin.php');
   }
