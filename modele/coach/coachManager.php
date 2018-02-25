@@ -44,12 +44,12 @@ class CoachManager extends ManagerBase
     $q->execute();
   }
 
-  public function findByNomMotDePasse(Coach $coach)
+  public function findByMailMotDePasse(Coach $coach)
   {
     $q = $this->_bdd->prepare('SELECT *
             FROM coach
-            WHERE nom = :nom AND mot_de_passe = :motDePasse');
-    $q->execute([':nom' => $coach->nom(), ':motDePasse' => $coach->motDePasse()]);
+            WHERE mail = :mail AND mot_de_passe = :motDePasse');
+    $q->execute([':mail' => $coach->mail(), ':motDePasse' => $coach->motDePasse()]);
 
     // TODO MPL récupération du fil actu et des ligues en même temps
 
@@ -68,10 +68,10 @@ class CoachManager extends ManagerBase
     }
   }
 
-  public function existeByNom($nom)
+  public function existeByMail($mail)
   {
-      $q = $this->_bdd->prepare('SELECT COUNT(*) FROM coach WHERE nom = :nom');
-      $q->execute([':nom' => $nom]);
+      $q = $this->_bdd->prepare('SELECT COUNT(*) FROM coach WHERE mail = :mail');
+      $q->execute([':mail' => $mail]);
 
       return (bool) $q->fetchColumn();
   }

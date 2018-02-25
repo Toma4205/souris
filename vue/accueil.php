@@ -11,11 +11,11 @@ require_once("vue/commun/enteteflex.php");
         echo '<span class="erreur">' . $messageConn . '</span>';
       }
      ?>
-    <p>Nom coach<br/>
-        <input type="text" class="width_200px" name="nom" maxlength="40" value="<?php
-            if(isset($_POST['nom']))
+    <p>Mail<br/>
+        <input type="email" class="width_200px" name="mail" maxlength="50" value="<?php
+            if(isset($_POST['mail']))
             {
-              echo htmlspecialchars($_POST['nom']);
+              echo htmlspecialchars($_POST['mail']);
             }
           ?>" />
     </p>

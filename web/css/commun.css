@@ -181,6 +181,9 @@ div#contenu {
   color:red;
   font-weight: bold;
 }
+.read_only {
+  background-color: #c7b8b8;
+}
 .conteneurRow {
   display: flex;
 	flex-direction: row;

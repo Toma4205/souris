@@ -16,9 +16,9 @@ require_once("vue/commun/enteteflex.php");
         echo $coach->nom();
         ?>" /></p>
     <p>Mail <br/>
-      <input type="email" class="width_200px" name="mail" maxlength="50" value="<?php
+      <input type="email" class="width_200px read_only" name="mail" maxlength="50" value="<?php
         echo $coach->mail();
-        ?>" /></p>
+        ?>" readonly /></p>
     <p>Code Postal <br/>
       <input type="text" class="width_200px" name="codePostal" maxlength="5" value="<?php
         echo $coach->codePostal();
