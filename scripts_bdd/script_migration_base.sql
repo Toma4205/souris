@@ -3,6 +3,10 @@ ALTER TABLE `joueur_compo_equipe` ADD `nb_csc` TINYINT(1) NULL AFTER `nb_but_ree
 ALTER TABLE `coach` DROP INDEX `ind_uni_nom`;
 UPDATE coach SET mail = nom WHERE mail IS NULL;
 ALTER TABLE `coach` MODIFY mail VARCHAR(50) NOT NULL;
+INSERT INTO `nomenclature_tactique`(`code`, `date_debut`, `nb_def`, `nb_mil`, `nb_att`, `nb_dc`, `nb_dlg`, `nb_dld`,
+`nb_mdef`, `nb_mc`, `nb_mg`, `nb_md`, `nb_mo`, `nb_ailg`, `nb_aild`, `nb_but`) VALUES
+('4-3-3','2017-01-01',4,3,3,2,1,1,0,3,0,0,0,1,1,1),
+('4-5-1','2017-01-01',4,5,1,2,1,1,1,3,1,0,0,0,0,1);
 
 /*Script passé en "PROD" le 22/02/2018 */
 UPDATE `nomenclature_equipes_reelles` SET `trigramme` = 'PSG' WHERE `nomenclature_equipes_reelles`.`trigramme` = 'PAR';

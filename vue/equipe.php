@@ -254,7 +254,7 @@ if (isset($calReel) && $calLigue->id() != null)
                 $tactiquePrecedente = $tactique;
                 if ($tactique != $tactiqueSelect)
                 {
-                  echo '<option value="' . $value->code() . '">' . $tactique . '</option>';
+                  echo '<option value="' . $tactique . '">' . $tactique . '</option>';
                 }
                 else
                 {
