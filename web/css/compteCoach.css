@@ -13,3 +13,17 @@
   cursor: pointer;
   color: #00cdcd;
 }
+.score_direct_victoire {
+  color: green;
+}
+.score_direct_victoire:hover {
+  cursor: pointer;
+  color: #00cdcd;
+}
+.score_direct_defaite {
+  color: red;
+}
+.score_direct_defaite:hover {
+  cursor: pointer;
+  color: #00cdcd;
+}

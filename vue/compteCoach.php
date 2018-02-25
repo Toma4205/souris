@@ -128,7 +128,15 @@ require_once("vue/commun/enteteflex.php");
 
               if ($numJourneeEnCours != null) {
                 if ($value->scoreDom() != null) {
-                  echo '<td class="score_direct" onclick="allerVersScoreLigue(\'' . $value->id() . '\')"><b>' . $value->scoreDom() . ' - ' . $value->scoreExt() . '</b></td>';
+                  $classeVictDefaire = 'score_direct';
+                  if (($value->dom() == TRUE && $value->scoreDom() > $value->scoreExt())
+                    || ($value->dom() == FALSE && $value->scoreDom() < $value->scoreExt())) {
+                    $classeVictDefaire = 'score_direct_victoire';
+                  } else if (($value->dom() == TRUE && $value->scoreDom() < $value->scoreExt())
+                    || ($value->dom() == FALSE && $value->scoreDom() > $value->scoreExt())) {
+                    $classeVictDefaire = 'score_direct_defaite';
+                  }
+                  echo '<td class="' . $classeVictDefaire . '" onclick="allerVersScoreLigue(\'' . $value->id() . '\')"><b>' . $value->scoreDom() . ' - ' . $value->scoreExt() . '</b></td>';
                 } else {
                   echo '<td></td>';
                 }

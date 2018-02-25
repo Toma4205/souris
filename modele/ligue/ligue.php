@@ -26,6 +26,7 @@ class Ligue extends ClasseBase
   private $_classement;
 
   // Champs de calendrier_ligue
+  private $_dom; // Détermine si l'équipe du coach est à domicile
   private $_scoreDom;
   private $_scoreExt;
 
@@ -48,6 +49,7 @@ class Ligue extends ClasseBase
   public function nomCoachCreateur() { return $this->_nomCoachCreateur; }
   public function classement() { return $this->_classement; }
   public function scoreDom() { return $this->_scoreDom; }
+  public function dom() { return $this->_dom; }
   public function scoreExt() { return $this->_scoreExt; }
 
   public function setId($id)
@@ -113,6 +115,11 @@ class Ligue extends ClasseBase
   public function setClassement($classement)
   {
     $this->_classement = (int) $classement;
+  }
+
+  public function setDom($dom)
+  {
+    $this->_dom = $dom;
   }
 
   public function setScoreDom($scoreDom)
