@@ -220,28 +220,32 @@ if (isset($match)) {
     echo '</div>';
   }
 
-  function afficherJoueur($value, $nom)
+  function afficherJoueur($joueur, $nom, $tabRemp)
   {
     echo '<li class="detail_match_equipe_joueur';
-    if ($value->numeroDefinitif() == null)
-    {
+    if ($joueur->numeroDefinitif() == null) {
       echo ' pas_joue';
     }
-    echo '"><b>' . $value->numero() . '</b> ' . $nom;
-    if ($value->capitaine() == 1) {
+    echo '"><b>' . $joueur->numero() . '</b> ' . $nom;
+    if ($joueur->capitaine() == 1) {
       echo '<b> (C)</b>';
     }
-    if ($value->note() != null)
-    {
-      echo '<span class="float_right detail_match_equipe_joueur_note bold">' . $value->note() . '</span>';
-      if ($value->noteBonus() != null && $value->noteBonus() != 0) {
-        echo '<span class="float_right detail_match_equipe_joueur_note_bonus_malus">';
-        if (substr($value->noteBonus(), 0, 1) !== "-")
-        {
+    if ($joueur->note() != null) {
+      echo '<span class="float_right detail_match_equipe_joueur_note_bonus_malus">';
+      if ($joueur->noteBonus() != null && $joueur->noteBonus() != 0) {
+        if (substr($joueur->noteBonus(), 0, 1) !== "-") {
           echo '+';
         }
-        echo $value->noteBonus() . '</span>';
+        echo $joueur->noteBonus();
+      } else {
+        echo '.';
       }
+      echo '</span>';
+      echo '<span class="float_right detail_match_equipe_joueur_note bold">' . $joueur->note() . '</span>';
+    } elseif ($tabRemp != null && !isset($tabRemp[$joueur->numero()])) {
+      echo '<span class="float_right detail_match_equipe_joueur_tontonpat">';
+      echo '<img src="web/img/tontonpat.png" alt="Tonton Pat\'" title="Tonton Pat\'" width="18px" height="18px"/>';
+      echo '</span>';
     }
 
     echo '</li>';
@@ -251,16 +255,28 @@ if (isset($match)) {
   function afficherTitulaires($joueurs, $codeTactique)
   {
     echo '<div class="detail_match_equipe_titu">';
-    echo '<div class="detail_match_equipe_titre">Titulaires (' . $codeTactique . ')</div>';
+    echo '<div class="detail_match_equipe_titre">Titulaires (' . $codeTactique . ')';
+    echo '<span class="float_right detail_match_equipe_joueur_note_bonus_malus_titre">Dont</span>';
+    echo '<span class="float_right detail_match_equipe_joueur_note_titre">Note</span>';
+    echo '</div>';
     echo '<div>';
     echo '<ul>';
+
+    // On cherche les Remplaçants
+    $tabRemp = [];
+    foreach ($joueurs as $cle => $value)
+    {
+      if ($value->numero() > 11 && $value->numeroDefinitif() != null) {
+        $tabRemp[$value->numeroDefinitif()] = $value->numero();
+      }
+    }
 
     foreach ($joueurs as $cle => $value)
     {
       if ($value->numero() > 11) {
         break;
       }
-      afficherJoueur($value, $value->nom());
+      afficherJoueur($value, $value->nom(), $tabRemp);
     }
 
     echo '</ul>';
@@ -272,7 +288,10 @@ if (isset($match)) {
   function afficherRemplacants($joueurs)
   {
     echo '<div class="detail_match_equipe_rempl">';
-    echo '<div class="detail_match_equipe_titre">Remplaçants</div>';
+    echo '<div class="detail_match_equipe_titre">Remplaçants';
+    echo '<span class="float_right detail_match_equipe_joueur_note_bonus_malus_titre">Dont</span>';
+    echo '<span class="float_right detail_match_equipe_joueur_note_titre">Note</span>';
+    echo '</div>';
     echo '<div>';
     echo '<ul>';
 
@@ -286,7 +305,7 @@ if (isset($match)) {
         {
           $nom = $tabRempl[$value->idJoueurReel()];
         }
-        afficherJoueur($value, $nom);
+        afficherJoueur($value, $nom, null);
       }
       else if ($value->numeroRemplacement() != null)
       {
@@ -343,9 +362,21 @@ if (isset($match)) {
     }
 
     // TODO MPL-TVE les moyennes sont déjà calculées pour les buts virtuels => peut être les mettre en BDD ??
-    $moyDef = ($noteDef / $nbDef) - ($nbDefInit - $nbDef);
-    $moyMil = ($noteMil / $nbMil) - ($nbMilInit - $nbMil);
-    $moyAtt = ($noteAtt / $nbAtt) - ($nbAttInit - $nbAtt);
+    $moyDef = 0;
+    if ($nbDef > 0) {
+      $moyDef = ($noteDef / $nbDef) - ($nbDefInit - $nbDef);
+    }
+
+    $moyMil = 0;
+    if ($nbMil > 0) {
+      $moyMil = ($noteMil / $nbMil) - ($nbMilInit - $nbMil);
+    }
+
+    $moyAtt = 0;
+    if ($nbAtt > 0) {
+      $moyAtt = ($noteAtt / $nbAtt) - ($nbAttInit - $nbAtt);
+    }
+
     $moyGen = (($moyDef * $nbDefInit) + ($moyMil * $nbMilInit) + ($moyAtt * $nbAttInit) + $noteGB) / 11;
 
     echo '<div class="detail_match_equipe_moyenne">';

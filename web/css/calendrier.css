@@ -144,17 +144,33 @@
 }
 .detail_match_equipe_joueur, .detail_match_equipe_moyenne_ligne {
   border-bottom: 1px dashed #141b4D;
-  margin-top: .5rem;
+  margin-top: .3rem;
+  padding-bottom: .3rem;
   font-size: .8rem;
+}
+.detail_match_equipe_joueur_note_titre {
+  margin: 0 .5rem;
+  width: 20px;
+  font-size: .7rem;
+}
+.detail_match_equipe_joueur_note_bonus_malus_titre {
+  margin: 0 .5rem;
+  width: 30px;
+  font-size: .7rem;
+  font-style: italic;
 }
 .detail_match_equipe_joueur_note_bonus_malus {
   margin: 0 .5rem;
   width: 30px;
-  font-size: .8rem;
+  font-size: .7rem;
 }
 .detail_match_equipe_joueur_note, .detail_match_equipe_moyenne_ligne_valeur  {
   margin: 0 .5rem;
   width: 20px;
+}
+.detail_match_equipe_joueur_tontonpat {
+  margin: 0 .5rem;
+  width: 65px;
 }
 .pas_joue {
   color: grey;
