@@ -139,6 +139,15 @@
   color: #4a61d4;
   margin-bottom: .5rem;
 }
+.image_brassard {
+  padding : 0 .6rem;
+}
+.detail_match_equipe_titu {
+  height: 320px;
+}
+.detail_match_equipe_rempl {
+  height: 215px;
+}
 .detail_match_equipe_titu, .detail_match_equipe_rempl, .detail_match_equipe_moyenne {
   padding: .5rem;
 }
@@ -148,18 +157,21 @@
   padding-bottom: .3rem;
   font-size: .8rem;
 }
-.detail_match_equipe_joueur_note_titre {
+.detail_match_equipe_joueur_note_titre, .detail_match_equipe_moyenne_titre {
   margin: 0 .5rem;
   width: 20px;
   font-size: .7rem;
 }
-.detail_match_equipe_joueur_note_bonus_malus_titre {
+.detail_match_equipe_joueur_note_bonus_malus_titre, .detail_match_equipe_moyenne_malus_titre {
   margin: 0 .5rem;
   width: 30px;
   font-size: .7rem;
   font-style: italic;
 }
-.detail_match_equipe_joueur_note_bonus_malus {
+.detail_match_equipe_moyenne_malus_titre {
+  cursor: pointer;
+}
+.detail_match_equipe_joueur_note_bonus_malus, .detail_match_equipe_moyenne_malus {
   margin: 0 .5rem;
   width: 30px;
   font-size: .7rem;

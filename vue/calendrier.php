@@ -222,13 +222,13 @@ if (isset($match)) {
 
   function afficherJoueur($joueur, $nom, $tabRemp)
   {
-    echo '<li class="detail_match_equipe_joueur';
+    echo '<li name="' . $joueur->idJoueurReel() . '" class="detail_match_equipe_joueur';
     if ($joueur->numeroDefinitif() == null) {
       echo ' pas_joue';
     }
     echo '"><b>' . $joueur->numero() . '</b> ' . $nom;
     if ($joueur->capitaine() == 1) {
-      echo '<b> (C)</b>';
+      echo '<img src="web/img/brassard_capitaine.jpg" class="image_brassard" alt="Chef Capt\'aine" title="Chef Capt\'aine" width="18px" height="18px"/>';
     }
     if ($joueur->note() != null) {
       echo '<span class="float_right detail_match_equipe_joueur_note_bonus_malus">';
@@ -380,20 +380,45 @@ if (isset($match)) {
     $moyGen = (($moyDef * $nbDefInit) + ($moyMil * $nbMilInit) + ($moyAtt * $nbAttInit) + $noteGB) / 11;
 
     echo '<div class="detail_match_equipe_moyenne">';
-    echo '<div class="detail_match_equipe_titre">Moyennes</div>';
+    echo '<div class="detail_match_equipe_titre">Moyennes';
+    echo '<span class="float_right detail_match_equipe_moyenne_malus_titre" title="-1 par Tonton Pat\'">Dont *</span>';
+    echo '<span class="float_right detail_match_equipe_moyenne_titre">Moy.</span>';
+    echo '</div>';
     echo '<div>';
     echo '<ul>';
 
     echo '<li class="detail_match_equipe_moyenne_ligne">Défense';
+    echo '<span class="float_right detail_match_equipe_moyenne_malus">';
+    if (($nbDefInit - $nbDef) > 0) {
+      echo '-' . ($nbDefInit - $nbDef);
+    } else {
+      echo '.';
+    }
+    echo '</span>';
     echo '<span class="float_right detail_match_equipe_moyenne_ligne_valeur bold">' . number_format($moyDef, 2) . '</span>';
     echo '</li>';
     echo '<li class="detail_match_equipe_moyenne_ligne">Milieu';
+    echo '<span class="float_right detail_match_equipe_moyenne_malus">';
+    if (($nbMilInit - $nbMil) > 0) {
+      echo '-' . ($nbMilInit - $nbMil);
+    } else {
+      echo '.';
+    }
+    echo '</span>';
     echo '<span class="float_right detail_match_equipe_moyenne_ligne_valeur bold">' . number_format($moyMil, 2) . '</span>';
     echo '</li>';
     echo '<li class="detail_match_equipe_moyenne_ligne">Attaque';
+    echo '<span class="float_right detail_match_equipe_moyenne_malus">';
+    if (($nbAttInit - $nbAtt) > 0) {
+      echo '-' . ($nbAttInit - $nbAtt);
+    } else {
+      echo '.';
+    }
+    echo '</span>';
     echo '<span class="float_right detail_match_equipe_moyenne_ligne_valeur bold">' . number_format($moyAtt, 2) . '</span>';
     echo '</li>';
     echo '<li class="detail_match_equipe_moyenne_ligne">Générale';
+    echo '<span class="float_right detail_match_equipe_moyenne_malus">.</span>';
     echo '<span class="float_right detail_match_equipe_moyenne_ligne_valeur bold">' . number_format($moyGen, 2) . '</span>';
     echo '</li>';
 
