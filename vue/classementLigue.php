@@ -82,7 +82,7 @@ require_once("vue/commun/enteteflex.php");
         $index = 1;
         foreach($buteurs as $value)
         {
-          echo '<tr><td>' . $index . ' . ' . $value->nom() . ' ' . $value->prenom() . '</td>';
+          echo '<tr><td>' . $index . ' . ' . $value->nom() . '</td>';
           echo '<td>' . $value->nomEquipe() . '</td>';
           echo '<td>' . $value->totalBut() . ' (' . $value->nbButReel() . '+' . $value->nbButVirtuel() . ')</td>';
           echo '<td>' . $value->prixAchat() . '</td>';
@@ -140,7 +140,7 @@ require_once("vue/commun/enteteflex.php");
         foreach ($joueurs as $cle => $value)
         {
           if ($value->position() == $poste) {
-            echo '<li class="detail_effectif_joueur">' . $value->nom() . ' ' . $value->prenom() . ' (' . $value->libelleEquipe() . ')';
+            echo '<li class="detail_effectif_joueur">' . $value->nom() . ' (' . $value->libelleEquipe() . ')';
             echo '<span class="float_right detail_effectif_joueur_tour_m">' . $value->tourMercato() . '</span>';
             echo '<span class="float_right detail_effectif_joueur_prix">' . $value->prixAchat() . '</span>';
             echo '</li>';

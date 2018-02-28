@@ -80,11 +80,11 @@ function ajouterOptionJoueur($numPosition, $joueurs, $tabCompo)
   {
     $cleTabCompo = array_search($joueur->id(), $tabCompo);
     if (isset($tabCompo[$numPosition]) && $tabCompo[$numPosition] == $joueur->id()) {
-      $contenu .= '<option value="' . $joueur->id() . '" selected="selected">' . $joueur->nom() . ' ' . $joueur->prenom() . ' - ' . $joueur->libelleEquipe() . '</option>';
+      $contenu .= '<option value="' . $joueur->id() . '" selected="selected">' . $joueur->nom() . ' - ' . $joueur->libelleEquipe() . '</option>';
     } elseif ($cleTabCompo > 0 && $cleTabCompo <= 11) {
-      $contenu .= '<option class="cache" value="' . $joueur->id() . '">' . $joueur->nom() . ' ' . $joueur->prenom() . ' - ' . $joueur->libelleEquipe() . '</option>';
+      $contenu .= '<option class="cache" value="' . $joueur->id() . '">' . $joueur->nom() . ' - ' . $joueur->libelleEquipe() . '</option>';
     } else {
-      $contenu .= '<option value="' . $joueur->id() . '">' . $joueur->nom() . ' ' . $joueur->prenom() . ' - ' . $joueur->libelleEquipe() . '</option>';
+      $contenu .= '<option value="' . $joueur->id() . '">' . $joueur->nom() . ' - ' . $joueur->libelleEquipe() . '</option>';
     }
   }
 
@@ -97,11 +97,11 @@ function ajouterOptionRempl($numPosition, $preLib, $joueurs, $tabCompo)
   foreach ($joueurs as $joueur)
   {
     if (isset($tabCompo[$numPosition]) && $tabCompo[$numPosition] == $joueur->id()) {
-      $contenu .= '<option value="' . $joueur->id() . '" selected="selected">' . $preLib . ') ' . $joueur->nom() . ' ' . $joueur->prenom() . ' - ' . $joueur->libelleEquipe() . '</option>';
+      $contenu .= '<option value="' . $joueur->id() . '" selected="selected">' . $preLib . ') ' . $joueur->nom() . ' - ' . $joueur->libelleEquipe() . '</option>';
     } elseif (in_array($joueur->id(), $tabCompo)) {
-      $contenu .= '<option class="cache" value="' . $joueur->id() . '">' . $preLib . ') ' . $joueur->nom() . ' ' . $joueur->prenom() . ' - ' . $joueur->libelleEquipe() . '</option>';
+      $contenu .= '<option class="cache" value="' . $joueur->id() . '">' . $preLib . ') ' . $joueur->nom() . ' - ' . $joueur->libelleEquipe() . '</option>';
     } else {
-      $contenu .= '<option value="' . $joueur->id() . '">' . $preLib . ') ' . $joueur->nom() . ' ' . $joueur->prenom() . ' - ' . $joueur->libelleEquipe() . '</option>';
+      $contenu .= '<option value="' . $joueur->id() . '">' . $preLib . ') ' . $joueur->nom() . ' - ' . $joueur->libelleEquipe() . '</option>';
     }
   }
 
@@ -116,11 +116,11 @@ function ajouterOptionRentrant($numPosition, $joueurs, $tabRempl, $tabRentrant)
     $cleRempl = array_search($joueur->id(), $tabRempl);
     $cleRentrant = array_search($joueur->id(), $tabRentrant);
     if (isset($tabRentrant[$numPosition]) && $tabRentrant[$numPosition] == $joueur->id()) {
-      $contenu .= '<option value="' . $joueur->id() . '" selected="selected">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
+      $contenu .= '<option value="' . $joueur->id() . '" selected="selected">' . $joueur->nom() . '</option>';
     } elseif ($cleRempl > 0 && $cleRentrant == 0) {
-      $contenu .= '<option value="' . $joueur->id() . '">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
+      $contenu .= '<option value="' . $joueur->id() . '">' . $joueur->nom() . '</option>';
     } else {
-      $contenu .= '<option class="cache" value="' . $joueur->id() . '">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
+      $contenu .= '<option class="cache" value="' . $joueur->id() . '">' . $joueur->nom() . '</option>';
     }
   }
 
@@ -152,11 +152,11 @@ function ajouterOptionSortant($numPosition, $joueurs, $tabTitu, $tabRrentrant, $
     $cleSortant = array_search($joueur->id(), $tabSortant);
 
     if (isset($tabSortant[$numPosition]) && $tabSortant[$numPosition] == $joueur->id()) {
-      $contenu .= '<option value="' . $joueur->id() . '" selected="selected">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
+      $contenu .= '<option value="' . $joueur->id() . '" selected="selected">' . $joueur->nom() . '</option>';
     } elseif ($avecRentrant > 0 && $cleTitu > 0 && $cleSortant == 0) {
-      $contenu .= '<option value="' . $joueur->id() . '">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
+      $contenu .= '<option value="' . $joueur->id() . '">' . $joueur->nom() . '</option>';
     } else {
-      $contenu .= '<option class="cache" value="' . $joueur->id() . '">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
+      $contenu .= '<option class="cache" value="' . $joueur->id() . '">' . $joueur->nom() . '</option>';
     }
   }
 
@@ -326,9 +326,9 @@ if (isset($calReel) && $calLigue->id() != null)
             foreach ($joueursAdvBonus as $joueur)
             {
               if ($joueurAdvBonus == $joueur->id()) {
-                echo '<option value="' . $joueur->id() . '" selected="selected">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
+                echo '<option value="' . $joueur->id() . '" selected="selected">' . $joueur->nom() . '</option>';
               } else {
-                echo '<option value="' . $joueur->id() . '">' . $joueur->nom() . ' ' . $joueur->prenom() . '</option>';
+                echo '<option value="' . $joueur->id() . '">' . $joueur->nom() . '</option>';
               }
             }
            ?>
