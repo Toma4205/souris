@@ -44,7 +44,7 @@ function CallAPI()
 	$finTableau = 'Tous les r';
 	$pos2 = strpos($pos1, $finTableau	);
 	
-	$journeeRecherchee=26; //EN TEST
+	$journeeRecherchee=27; //EN TEST
 	//EN PROD
 	/*
 	$req_derniere_journee->exectute();
@@ -88,11 +88,16 @@ function CallAPI()
 							$lignes5 = explode("&gt;",$ligne4);
 							foreach ($lignes5 as $ligne5) {
 								//Debug
-								//echo 'Ligne '.$i.'|'.$j.'|'.$k.'|'.$m.'|'.$n.'|'.$p.' '.$ligne5;
-								//echo "<br />\n";
+								echo 'Ligne '.$i.'|'.$j.'|'.$k.'|'.$m.'|'.$n.'|'.$p.' '.$ligne5;
+								echo "<br />\n";
 								
 								if($i>=1 && $j==2 && $k==0 && $m==0 && $n==0&& $p==1 && strpos($ligne5,"journ")>0){ //JOURNEE
-									$journee = substr($ligne5,0,2);
+									if($journee > substr($ligne5,0,2)){
+									
+									}else{
+										$journee = substr($ligne5,0,2);
+									}
+									echo 'journee : '.$journee;
 								}
 								
 								if($i>1 && $j==2 && $k==1 && $m==0 && $n==0&& $p==0 && $journee == $journeeRecherchee){ // EQUIPE DOM
@@ -104,6 +109,12 @@ function CallAPI()
 									$cibletexte = $ligne5;
 									if ($pos === false) {
 										//pas de penalty
+										$pos = strpos($ligne5,", csc");
+										if ($pos === false) {
+											//pas de csc
+										}else{
+											$cibletexte = substr($ligne5,0,$pos);
+										}
 									}else{
 										$nb_penalty++;
 										$cibletexte = substr($ligne5,0,$pos);
@@ -111,10 +122,12 @@ function CallAPI()
 									}
 									$pos = strpos($ligne5,"'&lt;"); //COLLECTE BUTEUR
 									$pos1 = strpos($ligne5,"', sp&lt;"); //COLLECTE BUTEUR penalty
-									if ($pos === false && $pos1 === false) {
+									$pos2 = strpos($ligne5,"', csc&lt;"); //COLLECTE BUTEUR CSC
+									if ($pos === false && $pos1 === false && $pos2 === false) {
 										//pas de penalty
 									}else{
 										//echo 'penalty';
+										echo 'cibletexte '.$cibletexte;
 										$posEspace = strrpos($cibletexte," "); 
 										$lastRow = end($resultats);
 										$buteurs[$nb_buteurs][0]= $lastRow[0];
@@ -130,6 +143,12 @@ function CallAPI()
 									$cibletexte = $ligne5;
 									if ($pos === false) {
 										//pas de penalty
+										$pos = strpos($ligne5,", csc");
+										if ($pos === false) {
+											//pas de csc
+										}else{
+											$cibletexte = substr($ligne5,0,$pos);
+										}
 									}else{
 										$nb_penalty++;
 										$cibletexte = substr($ligne5,0,$pos);
@@ -142,7 +161,8 @@ function CallAPI()
 									}
 									$pos = strpos($ligne5,"'&lt;"); //COLLECTE BUTEUR
 									$pos1 = strpos($ligne5,"', sp&lt;"); //COLLECTE BUTEUR penalty
-									if ($pos === false && $pos1 === false) {
+									$pos2 = strpos($ligne5,"', csc&lt;"); //COLLECTE BUTEUR CSC
+									if ($pos === false && $pos1 === false && $pos2 === false) {
 										//pas de penalty
 									}else{
 										$posEspace = strrpos($cibletexte," "); 

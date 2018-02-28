@@ -185,6 +185,7 @@ CREATE TABLE `resultatsl1_reel` (
 `butVisiteur` INT UNSIGNED NOT NULL,
 `winOrLoseVisiteur` VARCHAR(30),
 `penaltyVisiteur` INT UNSIGNED NOT NULL,
+`statut`TINYINT NOT NULL DEFAULT '0',
 PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 
