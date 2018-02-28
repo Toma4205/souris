@@ -180,7 +180,7 @@
 					}else{
 						if($compoDefinitive['numero_definitif'] <= $compoDefinitive['nb_att']+$compoDefinitive['nb_mil']+$compoDefinitive['nb_def']+1){
 							if(is_null($compoDefinitive['note'])){
-								$tontonPatMilieuA++;
+								$tontonPatAttaqueA++;
 							}else{
 								$moyAttaqueA += $compoDefinitive['note'];
 								$nbAttA++;
@@ -261,7 +261,7 @@
 					}else{
 						if($compoDefinitive['numero_definitif'] <= $compoDefinitive['nb_att']+$compoDefinitive['nb_mil']+$compoDefinitive['nb_def']+1){
 							if(is_null($compoDefinitive['note'])){
-								$tontonPatMilieuB++;
+								$tontonPatAttaqueB++;
 							}else{
 								$moyAttaqueB += $compoDefinitive['note'];
 								$nbAttB++;
