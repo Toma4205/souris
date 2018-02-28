@@ -5,7 +5,7 @@
 	
 	//$constanteConfrontationLigue = 6;
 	$constanteJourneeReelle = isset($_POST['journeeCalculable']) ? $_POST['journeeCalculable'] : NULL;
-	$constante_num_journee_cal_reel = '25'; //Pour test
+	$constante_num_journee_cal_reel = '29'; //Pour test
 	//$constante_num_journee_cal_reel = substr($constanteJourneeReelle, -2); //En prod
 	
 	
@@ -118,6 +118,17 @@
 
 		$req_compoDefinitive->closeCursor();
 	}
+	
+	function impactCSC($journee, $short_journee, $bdd){
+		
+		//Attention id_journee vs num_journee_cal_reel
+		$upd_csc = $bdd->prepare('UPDATE compo_equipe ce, joueur_compo_equipe jce, joueur_stats js, joueur_reel jr, calendrier_ligue cl SET jce.nb_csc = js.csc WHERE jce.id_compo = ce.id  AND jr.id = jce.id_joueur_reel AND js.id IN (jr.cle_roto_primaire, jr.cle_roto_secondaire) AND ce.id_cal_ligue = cl.id AND js.journee = :journee AND cl.num_journee_cal_reel = :short_journee AND js.csc > 0 AND jce.numero_definitif > 0 AND jce.numero_definitif < 12;');
+		
+		$upd_csc->execute(array('journee' => $journee, 'short_journee' => $short_journee));
+		
+	}
+	
+	
 	
 	function calculButVirtuel($equipeA,$equipeB,$bdd){
 		$req_compoDefinitive = $bdd->prepare('SELECT t1.id_joueur_reel, t2.cle_roto_primaire, t2.position, t1.numero_definitif , t1.note, t1.nb_but_reel, t4.nb_def, t4.nb_mil, t4.nb_att FROM joueur_compo_equipe t1, joueur_reel t2, compo_equipe t3, nomenclature_tactique t4 WHERE t1.id_compo = :id_compo AND t1.id_joueur_reel = t2.id AND t1.numero_definitif > 0 AND t1.numero_definitif < 12 AND t1.numero_definitif IS NOT NULL AND t3.id = t1.id_compo AND t3.code_tactique = t4.code ORDER BY t1.numero_definitif ASC;');
@@ -458,7 +469,7 @@
 					}else{
 						$note = $row['note'];
 						
-						//ajout bonus capitaine
+						//test ajout bonus capitaine
 						
 						$req_victoireOuDefaiteCapitaine->execute(array('id' => $donnees['id_joueur_reel'], 'journee' => $constanteJourneeReelle));
 						$LignesVictoireOuPas = $req_victoireOuDefaiteCapitaine->fetchAll();
@@ -1018,10 +1029,7 @@
 		echo ' ************************ CALCUL BUT VIRTUEL EQUIPE - BOUCLE 7 **************************';
 		echo "<br />\n";
 		echo "<br />\n";
-		
-		//Mettre à jour les tables : joueur_equipe, equipe
-
-		
+			
 			// Calcul But Virtuel
 			$req_listeConfrontationParJournee = $bdd->prepare('SELECT id_cal_ligue, t2.id FROM calendrier_ligue t1, compo_equipe t2 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id = t2.id_cal_ligue AND t1.id_equipe_dom = t2.id_equipe UNION SELECT id_cal_ligue, t2.id FROM calendrier_ligue t1, compo_equipe t2 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id = t2.id_cal_ligue AND t1.id_equipe_ext = t2.id_equipe ORDER BY id_cal_ligue ;');
 			
@@ -1130,9 +1138,16 @@
 		
 		//Mise à jour des stats
 		
+		
+		//CSC
+		impactCSC($constanteJourneeReelle, $constante_num_journee_cal_reel,$bdd);
+		
+		
 		//SCORE DOM => TABLE calendrier_ligue
 		
-		$req_score_dom = $bdd->prepare('SELECT t1.id, SUM(IFNULL(t3.nb_but_reel,0)) + SUM(IFNULL(t3.nb_but_virtuel,0)) AS \'score_domicile\' FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t3.numero_definitif IS NOT NULL AND t2.id_equipe = t1.id_equipe_dom  GROUP BY t3.id_compo;');
+		$req_score_dom = $bdd->prepare('SELECT t1.id, SUM(IFNULL(t3.nb_but_reel,0)) + SUM(IFNULL(t3.nb_but_virtuel,0)) AS \'score_domicile\', SUM(IFNULL(t3.nb_csc,0)) AS \'csc_concedes\' FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t3.numero_definitif IS NOT NULL AND t2.id_equipe = t1.id_equipe_dom  GROUP BY t3.id_compo;');
+		
+		$req_csc_adversaire_dom = $bdd->prepare('SELECT t1.id, SUM(IFNULL(t3.nb_csc,0)) AS \'csc_concedes\' FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.id = :id AND t3.id_compo = t2.id AND t3.numero_definitif IS NOT NULL AND t2.id_equipe = t1.id_equipe_ext  GROUP BY t3.id_compo;');
 		
 		$req_score_dom->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
 		
@@ -1145,8 +1160,20 @@
 			echo "<br />\n";
 		} else {
 			foreach ($scores_dom_a_saisir as $score_dom_a_saisir) {
-				$upd_maj_score_dom->execute(array('score_dom' => $score_dom_a_saisir['score_domicile'],'id' => $score_dom_a_saisir['id']));
-				$upd_maj_score_dom->closeCursor();
+				$req_csc_adversaire_dom->execute(array('id' => $score_dom_a_saisir['id']));
+				$csc_adversaires_a_saisir = $req_csc_adversaire_dom->fetchAll();
+				if (count($csc_adversaires_a_saisir) == 0) {
+					echo  'ERREUR Aucun adversaire pour CSC DOM sur la journee '.$constante_num_journee_cal_reel;
+					echo "<br />\n";
+				} else {
+					foreach ($csc_adversaires_a_saisir as $csc_adversaire_a_saisir){
+						echo 'ID cal, DOM : '.$score_dom_a_saisir['id'].' a marqué '.$score_dom_a_saisir['score_domicile'].' buts et obtient '.$csc_adversaire_a_saisir['csc_concedes'].' csc';
+						echo "<br />\n";
+						$upd_maj_score_dom->execute(array('score_dom' => $score_dom_a_saisir['score_domicile']+$csc_adversaire_a_saisir['csc_concedes'],'id' => $score_dom_a_saisir['id']));
+						$upd_maj_score_dom->closeCursor();
+					}
+				}
+				$req_csc_adversaire_dom->closeCursor();
 			}
 		}
 		$req_score_dom->closeCursor();
@@ -1155,6 +1182,9 @@
 		//SCORE EXT => TABLE calendrier_ligue
 		
 		$req_score_ext = $bdd->prepare('SELECT t1.id, SUM(IFNULL(t3.nb_but_reel,0)) + SUM(IFNULL(t3.nb_but_virtuel,0)) AS \'score_exterieur\' FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t3.numero_definitif IS NOT NULL AND t2.id_equipe = t1.id_equipe_ext  GROUP BY t3.id_compo;');
+		
+		$req_csc_adversaire_ext = $bdd->prepare('SELECT t1.id, SUM(IFNULL(t3.nb_csc,0)) AS \'csc_concedes\' FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.id = :id AND t3.id_compo = t2.id AND t3.numero_definitif IS NOT NULL AND t2.id_equipe = t1.id_equipe_dom  GROUP BY t3.id_compo;');
+		
 		
 		$req_score_ext->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
 		
@@ -1167,19 +1197,31 @@
 			echo "<br />\n";
 		} else {
 			foreach ($scores_ext_a_saisir as $score_ext_a_saisir) {
-				$upd_maj_score_ext->execute(array('score_ext' => $score_ext_a_saisir['score_exterieur'],'id' => $score_ext_a_saisir['id']));
-				$upd_maj_score_ext->closeCursor();
+				$req_csc_adversaire_ext->execute(array('id' => $score_ext_a_saisir['id']));
+				$csc_adversaires_a_saisir = $req_csc_adversaire_ext->fetchAll();
+				if (count($csc_adversaires_a_saisir) == 0) {
+					echo  'ERREUR Aucun adversaire pour CSC EXT sur la journee '.$constante_num_journee_cal_reel;
+					echo "<br />\n";
+				} else {
+					foreach ($csc_adversaires_a_saisir as $csc_adversaire_a_saisir){
+						echo 'ID cal, EXT : '.$score_ext_a_saisir['id'].' a marqué '.$score_ext_a_saisir['score_exterieur'].' buts et obtient '.$csc_adversaire_a_saisir['csc_concedes'].' csc';
+						echo "<br />\n";
+						$upd_maj_score_ext->execute(array('score_ext' => $score_ext_a_saisir['score_exterieur']+$csc_adversaire_a_saisir['csc_concedes'],'id' => $score_ext_a_saisir['id']));
+						$upd_maj_score_ext->closeCursor();
+					}
+				}
+				$req_csc_adversaire_ext->closeCursor();
 			}
 		}
 		$req_score_ext->closeCursor();
 		
 		//NB_MATCH, NB BUT REEL, NB BUT VIRTUEL => TABLE joueur_equipe
 		
-		$req_nb_match = $bdd->prepare('SELECT count(*) AS \'nb_match\', SUM(IFNULL(t3.nb_but_reel,0)) AS \'nb_but_reel\', SUM(IFNULL(t3.nb_but_virtuel,0)) AS \'nb_but_virtuel\', t1.id_ligue, t2.id_equipe, t3.id_joueur_reel FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t3.id_compo = t2.id AND t2.id_cal_ligue = t1.id AND t3.numero_definitif IS NOT NULL AND t1.score_dom IS NOT NULL AND t1.score_ext IS NOT NULL GROUP BY t1.id_ligue, t2.id_equipe, t3.id_joueur_reel ORDER BY t3.id_joueur_reel;');
+		$req_nb_match = $bdd->prepare('SELECT count(*) AS \'nb_match\', SUM(IFNULL(t3.nb_but_reel,0)) AS \'nb_but_reel\', SUM(IFNULL(t3.nb_but_virtuel,0)) AS \'nb_but_virtuel\', SUM(IFNULL(t3.nb_csc,0)) AS \'nb_csc\', t1.id_ligue, t2.id_equipe, t3.id_joueur_reel FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t3.id_compo = t2.id AND t2.id_cal_ligue = t1.id AND t3.numero_definitif IS NOT NULL AND t1.score_dom IS NOT NULL AND t1.score_ext IS NOT NULL GROUP BY t1.id_ligue, t2.id_equipe, t3.id_joueur_reel ORDER BY t3.id_joueur_reel;');
 		
 		$req_nb_match->execute();
 		
-		$upd_maj_nb_match = $bdd->prepare('UPDATE joueur_equipe SET nb_match = :nb_match, nb_but_reel = :nb_but_reel, nb_but_virtuel = :nb_but_virtuel WHERE id_ligue = :id_ligue AND id_equipe = :id_equipe AND id_joueur_reel = :id_joueur_reel;');
+		$upd_maj_nb_match = $bdd->prepare('UPDATE joueur_equipe SET nb_match = :nb_match, nb_but_reel = :nb_but_reel, nb_but_virtuel = :nb_but_virtuel, nb_csc = :nb_csc WHERE id_ligue = :id_ligue AND id_equipe = :id_equipe AND id_joueur_reel = :id_joueur_reel;');
 		
 		$nb_matchs_a_saisir = $req_nb_match->fetchAll();
 				
@@ -1188,7 +1230,7 @@
 			echo "<br />\n";
 		} else {
 			foreach ($nb_matchs_a_saisir as $nb_match_a_saisir) {
-				$upd_maj_nb_match->execute(array('nb_match' => $nb_match_a_saisir['nb_match'],'nb_but_reel' => $nb_match_a_saisir['nb_but_reel'],'nb_but_virtuel' => $nb_match_a_saisir['nb_but_virtuel'],'id_ligue' => $nb_match_a_saisir['id_ligue'],'id_equipe' => $nb_match_a_saisir['id_equipe'],'id_joueur_reel' => $nb_match_a_saisir['id_joueur_reel']));
+				$upd_maj_nb_match->execute(array('nb_match' => $nb_match_a_saisir['nb_match'],'nb_but_reel' => $nb_match_a_saisir['nb_but_reel'],'nb_but_virtuel' => $nb_match_a_saisir['nb_but_virtuel'], 'nb_csc' => $nb_match_a_saisir['nb_csc'],'id_ligue' => $nb_match_a_saisir['id_ligue'],'id_equipe' => $nb_match_a_saisir['id_equipe'],'id_joueur_reel' => $nb_match_a_saisir['id_joueur_reel']));
 				$upd_maj_nb_match->closeCursor();
 			}
 		}
@@ -1241,7 +1283,7 @@
 
 		//NB BUT POUR DOM => TABLE EQUIPE
 			
-		$upd_nb_but_pour_dom = $bdd->prepare('UPDATE equipe e, calendrier_ligue cl SET e.nb_but_pour = e.nb_but_pour + cl.score_dom WHERE cl.num_journee_cal_reel = :num_journee_cal_reel AND cl.id_ligue = e.id_ligue AND cl.id_equipe_dom = e.id;');
+		$upd_nb_but_pour_dom = $bdd->prepare('UPDATE equipe e, calendrier_ligue cl SET e.nb_but_pour = IFNULL(e.nb_but_pour,0) + IFNULL(cl.score_dom,0) WHERE cl.num_journee_cal_reel = :num_journee_cal_reel AND cl.id_ligue = e.id_ligue AND cl.id_equipe_dom = e.id;');
 		
 		$upd_nb_but_pour_dom->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
 		$upd_nb_but_pour_dom->closeCursor();
@@ -1249,21 +1291,21 @@
 		
 		//NB BUT POUR EXT => TABLE EQUIPE
 			
-		$upd_nb_but_pour_ext = $bdd->prepare('UPDATE equipe e, calendrier_ligue cl SET e.nb_but_pour = e.nb_but_pour + cl.score_ext WHERE cl.num_journee_cal_reel = :num_journee_cal_reel AND cl.id_ligue = e.id_ligue AND cl.id_equipe_ext = e.id;');
+		$upd_nb_but_pour_ext = $bdd->prepare('UPDATE equipe e, calendrier_ligue cl SET e.nb_but_pour = IFNULL(e.nb_but_pour,0) + IFNULL(cl.score_ext,0) WHERE cl.num_journee_cal_reel = :num_journee_cal_reel AND cl.id_ligue = e.id_ligue AND cl.id_equipe_ext = e.id;');
 		
 		$upd_nb_but_pour_ext->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
 		$upd_nb_but_pour_ext->closeCursor();
 		
 		//NB BUT CONTRE DOM => TABLE EQUIPE
 			
-		$upd_nb_but_contre_dom = $bdd->prepare('UPDATE equipe e, calendrier_ligue cl SET e.nb_but_contre = e.nb_but_contre + cl.score_ext WHERE cl.num_journee_cal_reel = :num_journee_cal_reel AND cl.id_ligue = e.id_ligue AND cl.id_equipe_dom = e.id;');
+		$upd_nb_but_contre_dom = $bdd->prepare('UPDATE equipe e, calendrier_ligue cl SET e.nb_but_contre = IFNULL(e.nb_but_contre,0) + IFNULL(cl.score_ext,0) WHERE cl.num_journee_cal_reel = :num_journee_cal_reel AND cl.id_ligue = e.id_ligue AND cl.id_equipe_dom = e.id;');
 		
 		$upd_nb_but_contre_dom->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
 		$upd_nb_but_contre_dom->closeCursor();
 		
 		//NB BUT CONTRE EXT => TABLE EQUIPE
 			
-		$upd_nb_but_contre_ext = $bdd->prepare('UPDATE equipe e, calendrier_ligue cl SET e.nb_but_contre = e.nb_but_contre + cl.score_dom WHERE cl.num_journee_cal_reel = :num_journee_cal_reel AND cl.id_ligue = e.id_ligue AND cl.id_equipe_ext = e.id;');
+		$upd_nb_but_contre_ext = $bdd->prepare('UPDATE equipe e, calendrier_ligue cl SET e.nb_but_contre = IFNULL(e.nb_but_contre,0) + IFNULL(cl.score_dom,0) WHERE cl.num_journee_cal_reel = :num_journee_cal_reel AND cl.id_ligue = e.id_ligue AND cl.id_equipe_ext = e.id;');
 		
 		$upd_nb_but_contre_ext->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
 		$upd_nb_but_contre_ext->closeCursor();
