@@ -99,6 +99,41 @@
 .but {
   margin-left: 5px;
 }
+
+
+.detail_match_terrain_bloc {
+  width: 100%;
+  padding: 1rem 0;
+}
+.detail_match_terrain_conteneur_img {
+  width: 500px;
+  height: 500px;
+  margin: auto;
+  background: url("../img/football_fied.png") no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+.detail_match_terrain_dom, .detail_match_terrain_ext {
+  height: 50%;
+  width: 400px;
+  margin-left: 10px;
+}
+.detail_match_terrain_ligne {
+  height: 25%;
+  font-size: .8rem;
+}
+.detail_match_terrain_position_centre {
+  width:10%;
+  margin: auto;
+}
+.detail_match_terrain_maillot {
+  height: 60%;
+  width: 100%;
+}
+
+
 .detail_match_equipe {
   text-align: left;
 }

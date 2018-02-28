@@ -427,6 +427,11 @@ if (isset($match)) {
     echo '</div>';
   }
 ?>
+
+  <!-- ********************* -->
+  <!-- AFFICHAGE DU BANDEAU -->
+  <!-- ********************* -->
+
   <div class="detail_match_bandeau conteneurRow">
     <div class="detail_match_bandeau_col_g">
       <div class="detail_match_bandeau_equipe">
@@ -513,6 +518,39 @@ if (isset($match)) {
       </div>
     </div>
   </div>
+
+  <!-- ********************* -->
+  <!-- AFFICHAGE DU TERRAIN -->
+  <!-- ********************* -->
+
+  <div class="detail_match_terrain_bloc">
+    <div class="detail_match_terrain_conteneur_img">
+      <div class="detail_match_terrain_dom">
+        <!-- GB -->
+        <div class="detail_match_terrain_ligne">
+          <div class="detail_match_terrain_position_centre">
+            <img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_mon.png" />
+            <div>Subasic</div>
+          </div>
+        </div>
+        <!-- DEF -->
+        <div class="detail_match_terrain_ligne">
+        </div>
+        <!-- MIL -->
+        <div class="detail_match_terrain_ligne">
+        </div>
+        <!-- ATT -->
+        <div class="detail_match_terrain_ligne">
+        </div>
+      </div>
+      <div class="detail_match_terrain_ext">
+      </div>
+    </div>
+  </div>
+
+  <!-- ********************* -->
+  <!-- AFFICHAGE DES EQUIPES -->
+  <!-- ********************* -->
   <div class="detail_match_equipe conteneurRow">
     <div class="detail_match_equipe_g">
       <?php if (isset($compoDom)){afficherBonusMalus($compoDom->codeBonusMalus(),
