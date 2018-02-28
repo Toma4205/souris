@@ -1,0 +1,763 @@
+[Wed, 28 Feb 2018 10:16:10] 352 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:16:11] 353 a marqué 2 but(s) réel(s)
+[Wed, 28 Feb 2018 10:16:11] 156 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:16:11] 457 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:16:12] 310 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:16:12] 329 a marqué 2 but(s) réel(s)
+[Wed, 28 Feb 2018 10:16:12] 373 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:16:12] 207 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:16:13] 395 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:36:43] Remise à zéro des stats des compos concernees par la journée 29
+[Wed, 28 Feb 2018 10:36:43]  **************************** LIGUE n°6 ********************************
+[Wed, 28 Feb 2018 10:36:43]  ************************ CALCUL ET UPDATE DES NOTES **************************
+[Wed, 28 Feb 2018 10:36:43]  ************************ CONSTRUCTION EQUIPE - BOUCLE 1 **************************
+[Wed, 28 Feb 2018 10:36:43]  ************************ CONSTRUCTION EQUIPE - BOUCLE 2 **************************
+[Wed, 28 Feb 2018 10:36:43]  ************************ CONSTRUCTION EQUIPE - BOUCLE 3 **************************
+[Wed, 28 Feb 2018 10:36:43]  ************************ CONSTRUCTION EQUIPE - BOUCLE 4 **************************
+[Wed, 28 Feb 2018 10:36:43]  ************************ CONSTRUCTION EQUIPE - BOUCLE 5 **************************
+[Wed, 28 Feb 2018 10:36:43]  ************************ APPLICATION DES MALUS ADVERSAIRE - BOUCLE 6 **************************
+[Wed, 28 Feb 2018 10:36:43] L'équipe 19 n'a pas mis de bonus/malus 
+[Wed, 28 Feb 2018 10:36:43] L'équipe 20 n'a pas mis de bonus/malus 
+[Wed, 28 Feb 2018 10:36:43] L'équipe 21 n'a pas mis de bonus/malus 
+[Wed, 28 Feb 2018 10:36:43] L'équipe 22 n'a pas mis de bonus/malus 
+[Wed, 28 Feb 2018 10:36:43]  ************************ CALCUL BUT VIRTUEL EQUIPE - BOUCLE 7 **************************
+[Wed, 28 Feb 2018 10:36:43]  ************************ MALUS DIN_ARB - BOUCLE 8 **************************
+[Wed, 28 Feb 2018 10:36:44]  ************************ AFFICHAGE EQUIPE - BOUCLE 9 **************************
+[Wed, 28 Feb 2018 10:36:44] ########################################################
+[Wed, 28 Feb 2018 10:36:44] 
+[Wed, 28 Feb 2018 10:36:44]  
+[Wed, 28 Feb 2018 10:36:44]  
+[Wed, 28 Feb 2018 10:36:44]  
+[Wed, 28 Feb 2018 10:36:44] ########################################################
+[Wed, 28 Feb 2018 10:36:44]  ------ VERSUS ----------
+[Wed, 28 Feb 2018 10:36:44] ########################################################
+[Wed, 28 Feb 2018 10:36:44] 
+[Wed, 28 Feb 2018 10:36:44]  
+[Wed, 28 Feb 2018 10:36:44]  
+[Wed, 28 Feb 2018 10:36:44]  
+[Wed, 28 Feb 2018 10:36:44] ########################################################
+[Wed, 28 Feb 2018 10:36:44] ########################################################
+[Wed, 28 Feb 2018 10:36:44] 
+[Wed, 28 Feb 2018 10:36:44]  
+[Wed, 28 Feb 2018 10:36:44]  
+[Wed, 28 Feb 2018 10:36:44]  
+[Wed, 28 Feb 2018 10:36:44] ########################################################
+[Wed, 28 Feb 2018 10:36:44]  ------ VERSUS ----------
+[Wed, 28 Feb 2018 10:36:44] ########################################################
+[Wed, 28 Feb 2018 10:36:44] 
+[Wed, 28 Feb 2018 10:36:44]  
+[Wed, 28 Feb 2018 10:36:44]  
+[Wed, 28 Feb 2018 10:36:44]  
+[Wed, 28 Feb 2018 10:36:44] ########################################################
+[Wed, 28 Feb 2018 10:36:44]  **************************** LIGUE n°7 ********************************
+[Wed, 28 Feb 2018 10:36:44]  ************************ CALCUL ET UPDATE DES NOTES **************************
+[Wed, 28 Feb 2018 10:36:44] ThomassonAdrienNTE a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:44] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:44] CostilBenoitBDX a eu la note de 5.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:44] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:44] CyprienWylanNIC a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:44] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:44] SalaEmilianoNTE a eu la note de 4 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:44] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:44] SakaiHirokiMAR a eu la note de 3.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:44] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:44] Toko_EkambiKarlANG a eu la note de 8 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:44] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:44] MbappeKylianPSG a eu la note de 7 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:44] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:44]  Capitaine Defaite 
+[Wed, 28 Feb 2018 10:36:44]  Défense à 4 
+[Wed, 28 Feb 2018 10:36:44] DuboisLeoNTE a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:44] MAJ note bonus -0.5 
+[Wed, 28 Feb 2018 10:36:44] KhazriWahbiREN a eu la note de 7 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:44] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:44]  Défense à 4 
+[Wed, 28 Feb 2018 10:36:44] MarquinhosPSG a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:44] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 10:36:44] PleaAlassaneNIC a eu la note de 4 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:44] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:44] CabellaRemyETI a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:44] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:44]  Défense à 4 
+[Wed, 28 Feb 2018 10:36:44] AguilarRubenMTP a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:45] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 10:36:45] SarrIsmailaREN a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:45] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:45] RuffierStephaneETI a eu la note de 5.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:45] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:45] Saint-MaximinAllanNIC n'est pas rentré 201727
+[Wed, 28 Feb 2018 10:36:45]  Défense à 4 
+[Wed, 28 Feb 2018 10:36:45] SabalyYoussoufBDX a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:45] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 10:36:45] NtepPaul-GeorgesETI a eu la note de 4 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:45] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:45] BalotelliMarioNIC n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 10:36:45]  Défense à 4 
+[Wed, 28 Feb 2018 10:36:45] Da_SilvaDamienCAE a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:45] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 10:36:45] ThauvinFlorianMAR a eu la note de 4 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:45] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:45] Lo_CelsoGiovaniPSG a eu la note de 5.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:45] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:45]  Défense à 4 
+[Wed, 28 Feb 2018 10:36:45] BalliuIvanMET a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:45] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 10:36:45]  Défense à 4 
+[Wed, 28 Feb 2018 10:36:45] GlikKamilMON a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:45] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 10:36:45]  Défense à 4 
+[Wed, 28 Feb 2018 10:36:45] LalaKennySTR a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:45] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 10:36:45] AmaviJordanMAR a eu la note de 3.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:45] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:45] Rony_LopesMON a eu la note de 7.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:45] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:45] FekirNabilLYO a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:46] KimpembePresnelPSG n'est pas rentré 201727
+[Wed, 28 Feb 2018 10:36:46] MandandaSteveMAR n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] GermainValereMAR a eu la note de 3 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:46] SaliburYannisGUI a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:46] PeleYohannMAR a eu la note de 3.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:46] SankhareYounousseBDX n'est pas rentré 201727
+[Wed, 28 Feb 2018 10:36:46] Ait_BennasserYoussefCAE n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] KwonChang-hoonDIJ n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] TatarusanuCiprianNTE a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:46] CavaniEdinsonPSG a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:46] FabinhoMON a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:46] FalcaoRadamelMON n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] RoussillonJeromeMTP n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] JohnssonKarl-JohanGUI a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:46] LemarThomasMON a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:46] MalcomBDX n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] SlitiNaimDIJ a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:46] RouxNolanMET a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:46] MukieleNordiMTP a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:46] HiltonVitorinoMTP a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:46] RamiAdilMAR a eu la note de 3 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:46] Di_MariaAngelPSG a eu la note de 4 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:46] LecomteBenjaminMTP a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:47] AouarHoussemLYO a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:47] PayetDimitriMAR a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:47] KakutaGaelAMN a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:47] JemersonMON a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:47] JoveticStevanMON a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:47] KeitaMON a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:47] TavaresJulioDIJ a eu la note de 7 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:47] AdenonKhaledAMN a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:47] Lees-MelouPierreNIC a eu la note de 5.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:47] MarceloLYO a eu la note de 5.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:47] MarianoLYO a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:47] DepayMemphisLYO a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:47] NeymarPSG a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:48] GurtnerRegisAMN a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:48] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:48] PabloBDX a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 10:36:48] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:36:48]  ************************ CONSTRUCTION EQUIPE - BOUCLE 1 **************************
+[Wed, 28 Feb 2018 10:36:48] CostilBenoitBDX a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:48] MbappeKylianPSG a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:48] 352 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:36:48] DuboisLeoNTE a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:48] MarquinhosPSG a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:48] AguilarRubenMTP a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:48] SabalyYoussoufBDX a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:48] Remplacement de BalotelliMarioNIC par le même poste GermainValereMAR
+[Wed, 28 Feb 2018 10:36:48] Da_SilvaDamienCAE a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:48] ThauvinFlorianMAR a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:48] GlikKamilMON a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:48] Rony_LopesMON a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:48] 353 a marqué 2 but(s) réel(s)
+[Wed, 28 Feb 2018 10:36:48] FekirNabilLYO a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:48] Remplacement de MandandaSteveMAR par le même poste PeleYohannMAR
+[Wed, 28 Feb 2018 10:36:48] Remplacement de SankhareYounousseBDX par le même poste SaliburYannisGUI
+[Wed, 28 Feb 2018 10:36:49] CavaniEdinsonPSG a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:49] 156 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:36:49] FabinhoMON a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:49] Remplacement de FalcaoRadamelMON par le même poste RouxNolanMET
+[Wed, 28 Feb 2018 10:36:49] 457 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:36:49] Aucun défenseur remplaçant, le joueur RoussillonJeromeMTP reste dans la compo
+[Wed, 28 Feb 2018 10:36:49] JohnssonKarl-JohanGUI a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:49] LemarThomasMON a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:49] SlitiNaimDIJ a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:49] MukieleNordiMTP a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:49] HiltonVitorinoMTP a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:49] LecomteBenjaminMTP a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:50] AouarHoussemLYO a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:50] JemersonMON a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:50] Lees-MelouPierreNIC a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:50] MarceloLYO a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:50] DepayMemphisLYO a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:50] PabloBDX a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:36:50]  ************************ CONSTRUCTION EQUIPE - BOUCLE 2 **************************
+[Wed, 28 Feb 2018 10:36:50] Aucun défenseur pour remplacer le milieu KwonChang-hoonDIJ reste dans la compo
+[Wed, 28 Feb 2018 10:36:50]  ************************ CONSTRUCTION EQUIPE - BOUCLE 3 **************************
+[Wed, 28 Feb 2018 10:36:50] Aucun défenseur pour remplacer l'attaquant MalcomBDX reste dans la compo
+[Wed, 28 Feb 2018 10:36:50]  ************************ CONSTRUCTION EQUIPE - BOUCLE 4 **************************
+[Wed, 28 Feb 2018 10:36:50] Remplacement Tactique de ThomassonAdrienNTE par le joueur avec l'id : 510
+[Wed, 28 Feb 2018 10:36:50] Remplacement Tactique de SalaEmilianoNTE par le joueur avec l'id : 668
+[Wed, 28 Feb 2018 10:36:50] Remplacement Tactique de BalliuIvanMET par le joueur avec l'id : 301
+[Wed, 28 Feb 2018 10:36:50] Remplacement Tactique de Di_MariaAngelPSG par le joueur avec l'id : 310
+[Wed, 28 Feb 2018 10:36:50] 310 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:36:50]  ************************ CONSTRUCTION EQUIPE - BOUCLE 5 **************************
+[Wed, 28 Feb 2018 10:36:50] Le remplacement tactique de Toko_EkambiKarlANG n'était pas possible 
+[Wed, 28 Feb 2018 10:36:50] 329 a marqué 2 but(s) réel(s)
+[Wed, 28 Feb 2018 10:36:50] Le remplacement tactique de KhazriWahbiREN n'était pas possible 
+[Wed, 28 Feb 2018 10:36:51] 373 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:36:51] Le remplacement tactique de SarrIsmailaREN n'était pas possible 
+[Wed, 28 Feb 2018 10:36:51] Le remplacement tactique de Lo_CelsoGiovaniPSG n'était pas possible 
+[Wed, 28 Feb 2018 10:36:51] Le remplacement tactique de LalaKennySTR n'était pas possible 
+[Wed, 28 Feb 2018 10:36:51] Le remplacement tactique de KakutaGaelAMN n'était pas possible 
+[Wed, 28 Feb 2018 10:36:51] 207 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:36:51] Le remplacement tactique de MarianoLYO n'était pas possible 
+[Wed, 28 Feb 2018 10:36:51] 395 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:36:51] Le remplacement tactique de NeymarPSG n'était pas possible 
+[Wed, 28 Feb 2018 10:36:51]  ************************ APPLICATION DES MALUS ADVERSAIRE - BOUCLE 6 **************************
+[Wed, 28 Feb 2018 10:36:51] L'équipe 19 n'a pas mis de bonus/malus 
+[Wed, 28 Feb 2018 10:36:51] L'équipe 20 n'a pas mis de bonus/malus 
+[Wed, 28 Feb 2018 10:36:51] L'équipe 21 n'a pas mis de bonus/malus 
+[Wed, 28 Feb 2018 10:36:51] L'équipe 22 n'a pas mis de bonus/malus 
+[Wed, 28 Feb 2018 10:36:51]  ************************ CALCUL BUT VIRTUEL EQUIPE - BOUCLE 7 **************************
+[Wed, 28 Feb 2018 10:36:51] But Virtuel de CabellaRemyETI
+[Wed, 28 Feb 2018 10:36:51] But Virtuel de SarrIsmailaREN
+[Wed, 28 Feb 2018 10:36:52] But Virtuel de NeymarPSG
+[Wed, 28 Feb 2018 10:36:53]  ************************ MALUS DIN_ARB - BOUCLE 8 **************************
+[Wed, 28 Feb 2018 10:36:53]  ************************ AFFICHAGE EQUIPE - BOUCLE 9 **************************
+[Wed, 28 Feb 2018 10:36:53] ########################################################
+[Wed, 28 Feb 2018 10:36:53] [624]PeleYohannMAR (3.5)
+[Wed, 28 Feb 2018 10:36:53]   [274]LalaKennySTR (6.0)  [132]Da_SilvaDamienCAE (4.5)  [269]GlikKamilMON (4.5)  [301]AmaviJordanMAR (3.5) 
+[Wed, 28 Feb 2018 10:36:53]   [194]ThauvinFlorianMAR (4.0)  [353]Rony_LopesMON (7.5) - 2 but(s)  [217]Lo_CelsoGiovaniPSG (5.5)  [616]SaliburYannisGUI (5.0) 
+[Wed, 28 Feb 2018 10:36:53]   [441]FekirNabilLYO (5.0)  [587]GermainValereMAR (3.0) 
+[Wed, 28 Feb 2018 10:36:53] ########################################################
+[Wed, 28 Feb 2018 10:36:53]  ------ VERSUS ----------
+[Wed, 28 Feb 2018 10:36:53] ########################################################
+[Wed, 28 Feb 2018 10:36:53] [87]CostilBenoitBDX (5.5)
+[Wed, 28 Feb 2018 10:36:53]   [360]DuboisLeoNTE (5.0)  [397]MarquinhosPSG (6.5)  [534]AguilarRubenMTP (6.5)  [628]SabalyYoussoufBDX (6.5) 
+[Wed, 28 Feb 2018 10:36:53]   [510]CabellaRemyETI (6.5) - 1 butVirtuel  [373]KhazriWahbiREN (7.0) - 1 but(s)  [545]SarrIsmailaREN (6.0) - 1 butVirtuel 
+[Wed, 28 Feb 2018 10:36:53]   [352]MbappeKylianPSG (7.0) - 1 but(s)  [668]NtepPaul-GeorgesETI (4.0)  [329]Toko_EkambiKarlANG (8.0) - 2 but(s) 
+[Wed, 28 Feb 2018 10:36:53] ########################################################
+[Wed, 28 Feb 2018 10:36:53] ########################################################
+[Wed, 28 Feb 2018 10:36:53] [330]JohnssonKarl-JohanGUI (4.5)
+[Wed, 28 Feb 2018 10:36:53]   [458]MukieleNordiMTP (6.0)  [598]HiltonVitorinoMTP (6.0)  Tonton Pat (0) 
+[Wed, 28 Feb 2018 10:36:53]   [205]FabinhoMON (5.0)  [340]LemarThomasMON (5.0)  Tonton Pat (0)  [442]SlitiNaimDIJ (6.0) 
+[Wed, 28 Feb 2018 10:36:53]   [156]CavaniEdinsonPSG (6.5) - 1 but(s)  [457]RouxNolanMET (6.5) - 1 but(s)  Tonton Pat (0) 
+[Wed, 28 Feb 2018 10:36:53] ########################################################
+[Wed, 28 Feb 2018 10:36:53]  ------ VERSUS ----------
+[Wed, 28 Feb 2018 10:36:53] ########################################################
+[Wed, 28 Feb 2018 10:36:53] [83]LecomteBenjaminMTP (6.0)
+[Wed, 28 Feb 2018 10:36:53]   [391]MarceloLYO (5.5)  [290]JemersonMON (4.5)  [667]PabloBDX (6.0) 
+[Wed, 28 Feb 2018 10:36:53]   [420]DepayMemphisLYO (5.0)  [350]Lees-MelouPierreNIC (5.5)  [124]AouarHoussemLYO (5.0)  [207]KakutaGaelAMN (6.5) - 1 but(s) 
+[Wed, 28 Feb 2018 10:36:53]   [310]JoveticStevanMON (6.0) - 1 but(s)  [448]NeymarPSG (6.5) - 1 butVirtuel  [395]MarianoLYO (6.0) - 1 but(s) 
+[Wed, 28 Feb 2018 10:36:53] ########################################################
+[Wed, 28 Feb 2018 10:36:53]  ************************ NETTOYAGE DES NUMEROS DEFINITIFS A ZERO ET DES NOTES DES REMPLACANTS **************************
+[Wed, 28 Feb 2018 10:36:53]  ************************ MISE A JOUR DES STATS **************************
+[Wed, 28 Feb 2018 10:36:53] ID cal, DOM : 33 a marqué 6 buts et obtient 1 csc
+[Wed, 28 Feb 2018 10:36:53] ID cal, DOM : 35 a marqué 4 buts et obtient 0 csc
+[Wed, 28 Feb 2018 10:36:53] ID cal, EXT : 33 a marqué 2 buts et obtient 0 csc
+[Wed, 28 Feb 2018 10:36:53] ID cal, EXT : 35 a marqué 2 buts et obtient 0 csc
+[Wed, 28 Feb 2018 10:46:45] Remise à zéro des stats des compos concernees par la journée 29
+[Wed, 28 Feb 2018 10:46:45]  **************************** LIGUE n°7 ********************************
+[Wed, 28 Feb 2018 10:46:45]  ************************ CALCUL ET UPDATE DES NOTES **************************
+[Wed, 28 Feb 2018 10:46:45] ThomassonAdrienNTE a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:45] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:45] CostilBenoitBDX a eu la note de 5.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:45] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:45] CyprienWylanNIC a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:45] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:45] SalaEmilianoNTE a eu la note de 4 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:45] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:45] SakaiHirokiMAR a eu la note de 3.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:45] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:45] Toko_EkambiKarlANG a eu la note de 8 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:45] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:45] MbappeKylianPSG a eu la note de 7 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:45] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:45]  Capitaine Defaite 
+[Wed, 28 Feb 2018 10:46:45]  Défense à 4 
+[Wed, 28 Feb 2018 10:46:45] DuboisLeoNTE a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:45] MAJ note bonus -0.5 
+[Wed, 28 Feb 2018 10:46:46] KhazriWahbiREN a eu la note de 7 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:46]  Défense à 4 
+[Wed, 28 Feb 2018 10:46:46] MarquinhosPSG a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:46] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 10:46:46] PleaAlassaneNIC a eu la note de 4 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:46] CabellaRemyETI a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:46]  Défense à 4 
+[Wed, 28 Feb 2018 10:46:46] AguilarRubenMTP a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:46] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 10:46:46] SarrIsmailaREN a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:46] RuffierStephaneETI a eu la note de 5.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:46] Saint-MaximinAllanNIC n'est pas rentré 201727
+[Wed, 28 Feb 2018 10:46:46]  Défense à 4 
+[Wed, 28 Feb 2018 10:46:46] SabalyYoussoufBDX a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:46] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 10:46:46] NtepPaul-GeorgesETI a eu la note de 4 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:46] BalotelliMarioNIC n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 10:46:46]  Défense à 4 
+[Wed, 28 Feb 2018 10:46:46] Da_SilvaDamienCAE a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:46] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 10:46:46] ThauvinFlorianMAR a eu la note de 4 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:46] Lo_CelsoGiovaniPSG a eu la note de 5.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:46] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:46]  Défense à 4 
+[Wed, 28 Feb 2018 10:46:46] BalliuIvanMET a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:46] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 10:46:46]  Défense à 4 
+[Wed, 28 Feb 2018 10:46:46] GlikKamilMON a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:46] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 10:46:46]  Défense à 4 
+[Wed, 28 Feb 2018 10:46:46] LalaKennySTR a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 10:46:47] AmaviJordanMAR a eu la note de 3.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:47] Rony_LopesMON a eu la note de 7.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:47] FekirNabilLYO a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:47] KimpembePresnelPSG n'est pas rentré 201727
+[Wed, 28 Feb 2018 10:46:47] MandandaSteveMAR n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] GermainValereMAR a eu la note de 3 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:47] SaliburYannisGUI a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:47] PeleYohannMAR a eu la note de 3.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:47] SankhareYounousseBDX n'est pas rentré 201727
+[Wed, 28 Feb 2018 10:46:47] Ait_BennasserYoussefCAE n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] KwonChang-hoonDIJ n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] TatarusanuCiprianNTE a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:47] CavaniEdinsonPSG a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:47] FabinhoMON a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:47] FalcaoRadamelMON n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] RoussillonJeromeMTP n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] JohnssonKarl-JohanGUI a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:47] LemarThomasMON a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:47] MalcomBDX n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] SlitiNaimDIJ a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:47] RouxNolanMET a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:47] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:48] MukieleNordiMTP a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:48] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:48] HiltonVitorinoMTP a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:48] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:48] RamiAdilMAR a eu la note de 3 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:48] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:48] Di_MariaAngelPSG a eu la note de 4 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:48] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:48] LecomteBenjaminMTP a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:48] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:48] AouarHoussemLYO a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:48] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:48] PayetDimitriMAR a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:48] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:48] KakutaGaelAMN a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:48] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:48] JemersonMON a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:48] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:48] JoveticStevanMON a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:48] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:48] KeitaMON a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:48] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:48] TavaresJulioDIJ a eu la note de 7 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:48] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:48] AdenonKhaledAMN a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:49] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:49] Lees-MelouPierreNIC a eu la note de 5.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:49] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:49] MarceloLYO a eu la note de 5.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:49] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:49] MarianoLYO a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:49] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:49] DepayMemphisLYO a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:49] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:49] NeymarPSG a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:49] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:49] GurtnerRegisAMN a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:49] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:49] PabloBDX a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 10:46:49] MAJ note bonus 0 
+[Wed, 28 Feb 2018 10:46:49]  ************************ CONSTRUCTION EQUIPE - BOUCLE 1 **************************
+[Wed, 28 Feb 2018 10:46:49] CostilBenoitBDX a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:49] MbappeKylianPSG a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:49] 352 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:46:49] DuboisLeoNTE a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:49] MarquinhosPSG a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:49] AguilarRubenMTP a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:50] SabalyYoussoufBDX a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:50] Remplacement de BalotelliMarioNIC par le même poste GermainValereMAR
+[Wed, 28 Feb 2018 10:46:50] Da_SilvaDamienCAE a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:50] ThauvinFlorianMAR a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:50] GlikKamilMON a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:50] Rony_LopesMON a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:50] 353 a marqué 2 but(s) réel(s)
+[Wed, 28 Feb 2018 10:46:50] FekirNabilLYO a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:50] Remplacement de MandandaSteveMAR par le même poste PeleYohannMAR
+[Wed, 28 Feb 2018 10:46:50] Remplacement de SankhareYounousseBDX par le même poste SaliburYannisGUI
+[Wed, 28 Feb 2018 10:46:50] CavaniEdinsonPSG a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:50] 156 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:46:50] FabinhoMON a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:50] Remplacement de FalcaoRadamelMON par le même poste RouxNolanMET
+[Wed, 28 Feb 2018 10:46:50] 457 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:46:50] Aucun défenseur remplaçant, le joueur RoussillonJeromeMTP reste dans la compo
+[Wed, 28 Feb 2018 10:46:51] JohnssonKarl-JohanGUI a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:51] LemarThomasMON a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:51] SlitiNaimDIJ a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:51] MukieleNordiMTP a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:51] HiltonVitorinoMTP a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:51] LecomteBenjaminMTP a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:51] AouarHoussemLYO a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:51] JemersonMON a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:51] Lees-MelouPierreNIC a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:51] MarceloLYO a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:51] DepayMemphisLYO a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:51] PabloBDX a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 10:46:51]  ************************ CONSTRUCTION EQUIPE - BOUCLE 2 **************************
+[Wed, 28 Feb 2018 10:46:51] Aucun défenseur pour remplacer le milieu KwonChang-hoonDIJ reste dans la compo
+[Wed, 28 Feb 2018 10:46:51]  ************************ CONSTRUCTION EQUIPE - BOUCLE 3 **************************
+[Wed, 28 Feb 2018 10:46:51] Aucun défenseur pour remplacer l'attaquant MalcomBDX reste dans la compo
+[Wed, 28 Feb 2018 10:46:51]  ************************ CONSTRUCTION EQUIPE - BOUCLE 4 **************************
+[Wed, 28 Feb 2018 10:46:51] Remplacement Tactique de ThomassonAdrienNTE par le joueur avec l'id : 510
+[Wed, 28 Feb 2018 10:46:51] Remplacement Tactique de SalaEmilianoNTE par le joueur avec l'id : 668
+[Wed, 28 Feb 2018 10:46:51] Remplacement Tactique de BalliuIvanMET par le joueur avec l'id : 301
+[Wed, 28 Feb 2018 10:46:52] Remplacement Tactique de Di_MariaAngelPSG par le joueur avec l'id : 310
+[Wed, 28 Feb 2018 10:46:52] 310 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:46:52]  ************************ CONSTRUCTION EQUIPE - BOUCLE 5 **************************
+[Wed, 28 Feb 2018 10:46:52] Le remplacement tactique de Toko_EkambiKarlANG n'était pas possible 
+[Wed, 28 Feb 2018 10:46:52] 329 a marqué 2 but(s) réel(s)
+[Wed, 28 Feb 2018 10:46:52] Le remplacement tactique de KhazriWahbiREN n'était pas possible 
+[Wed, 28 Feb 2018 10:46:52] 373 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:46:52] Le remplacement tactique de SarrIsmailaREN n'était pas possible 
+[Wed, 28 Feb 2018 10:46:52] Le remplacement tactique de Lo_CelsoGiovaniPSG n'était pas possible 
+[Wed, 28 Feb 2018 10:46:52] Le remplacement tactique de LalaKennySTR n'était pas possible 
+[Wed, 28 Feb 2018 10:46:52] Le remplacement tactique de KakutaGaelAMN n'était pas possible 
+[Wed, 28 Feb 2018 10:46:52] 207 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:46:52] Le remplacement tactique de MarianoLYO n'était pas possible 
+[Wed, 28 Feb 2018 10:46:52] 395 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 10:46:52] Le remplacement tactique de NeymarPSG n'était pas possible 
+[Wed, 28 Feb 2018 10:46:52]  ************************ APPLICATION DES MALUS ADVERSAIRE - BOUCLE 6 **************************
+[Wed, 28 Feb 2018 10:46:52] L'équipe 19 n'a pas mis de bonus/malus 
+[Wed, 28 Feb 2018 10:46:52] L'équipe 20 n'a pas mis de bonus/malus 
+[Wed, 28 Feb 2018 10:46:52] L'équipe 21 n'a pas mis de bonus/malus 
+[Wed, 28 Feb 2018 10:46:52] L'équipe 22 n'a pas mis de bonus/malus 
+[Wed, 28 Feb 2018 10:46:52]  ************************ CALCUL BUT VIRTUEL EQUIPE - BOUCLE 7 **************************
+[Wed, 28 Feb 2018 10:46:53] But Virtuel de CabellaRemyETI
+[Wed, 28 Feb 2018 10:46:53] But Virtuel de SarrIsmailaREN
+[Wed, 28 Feb 2018 10:46:53] But Virtuel de NeymarPSG
+[Wed, 28 Feb 2018 10:46:54]  ************************ MALUS DIN_ARB - BOUCLE 8 **************************
+[Wed, 28 Feb 2018 10:46:54]  ************************ AFFICHAGE EQUIPE - BOUCLE 9 **************************
+[Wed, 28 Feb 2018 10:46:54] ########################################################
+[Wed, 28 Feb 2018 10:46:54] [87]CostilBenoitBDX (5.5)
+[Wed, 28 Feb 2018 10:46:54]   [360]DuboisLeoNTE (5.0)  [397]MarquinhosPSG (6.5)  [534]AguilarRubenMTP (6.5)  [628]SabalyYoussoufBDX (6.5) 
+[Wed, 28 Feb 2018 10:46:54]   [510]CabellaRemyETI (6.5) - 1 butVirtuel  [373]KhazriWahbiREN (7.0) - 1 but(s)  [545]SarrIsmailaREN (6.0) - 1 butVirtuel 
+[Wed, 28 Feb 2018 10:46:54]   [352]MbappeKylianPSG (7.0) - 1 but(s)  [668]NtepPaul-GeorgesETI (4.0)  [329]Toko_EkambiKarlANG (8.0) - 2 but(s) 
+[Wed, 28 Feb 2018 10:46:54] ########################################################
+[Wed, 28 Feb 2018 10:46:54]  ------ VERSUS ----------
+[Wed, 28 Feb 2018 10:46:54] ########################################################
+[Wed, 28 Feb 2018 10:46:54] [624]PeleYohannMAR (3.5)
+[Wed, 28 Feb 2018 10:46:54]   [274]LalaKennySTR (6.0)  [132]Da_SilvaDamienCAE (4.5)  [269]GlikKamilMON (4.5)  [301]AmaviJordanMAR (3.5) 
+[Wed, 28 Feb 2018 10:46:54]   [194]ThauvinFlorianMAR (4.0)  [353]Rony_LopesMON (7.5) - 2 but(s)  [217]Lo_CelsoGiovaniPSG (5.5)  [616]SaliburYannisGUI (5.0) 
+[Wed, 28 Feb 2018 10:46:54]   [441]FekirNabilLYO (5.0)  [587]GermainValereMAR (3.0) 
+[Wed, 28 Feb 2018 10:46:54] ########################################################
+[Wed, 28 Feb 2018 10:46:54] ########################################################
+[Wed, 28 Feb 2018 10:46:54] [83]LecomteBenjaminMTP (6.0)
+[Wed, 28 Feb 2018 10:46:54]   [391]MarceloLYO (5.5)  [290]JemersonMON (4.5)  [667]PabloBDX (6.0) 
+[Wed, 28 Feb 2018 10:46:54]   [420]DepayMemphisLYO (5.0)  [350]Lees-MelouPierreNIC (5.5)  [124]AouarHoussemLYO (5.0)  [207]KakutaGaelAMN (6.5) - 1 but(s) 
+[Wed, 28 Feb 2018 10:46:54]   [310]JoveticStevanMON (6.0) - 1 but(s)  [448]NeymarPSG (6.5) - 1 butVirtuel  [395]MarianoLYO (6.0) - 1 but(s) 
+[Wed, 28 Feb 2018 10:46:54] ########################################################
+[Wed, 28 Feb 2018 10:46:54]  ------ VERSUS ----------
+[Wed, 28 Feb 2018 10:46:54] ########################################################
+[Wed, 28 Feb 2018 10:46:54] [330]JohnssonKarl-JohanGUI (4.5)
+[Wed, 28 Feb 2018 10:46:54]   [458]MukieleNordiMTP (6.0)  [598]HiltonVitorinoMTP (6.0)  Tonton Pat (0) 
+[Wed, 28 Feb 2018 10:46:54]   [205]FabinhoMON (5.0)  [340]LemarThomasMON (5.0)  Tonton Pat (0)  [442]SlitiNaimDIJ (6.0) 
+[Wed, 28 Feb 2018 10:46:54]   [156]CavaniEdinsonPSG (6.5) - 1 but(s)  [457]RouxNolanMET (6.5) - 1 but(s)  Tonton Pat (0) 
+[Wed, 28 Feb 2018 10:46:54] ########################################################
+[Wed, 28 Feb 2018 10:46:54]  ************************ NETTOYAGE DES NUMEROS DEFINITIFS A ZERO ET DES NOTES DES REMPLACANTS **************************
+[Wed, 28 Feb 2018 10:46:54]  ************************ MISE A JOUR DES STATS **************************
+[Wed, 28 Feb 2018 10:46:54] ID cal, DOM : 33 a marqué 6 buts et obtient 1 csc
+[Wed, 28 Feb 2018 10:46:54] ID cal, DOM : 35 a marqué 4 buts et obtient 0 csc
+[Wed, 28 Feb 2018 10:46:54] ID cal, EXT : 33 a marqué 2 buts et obtient 0 csc
+[Wed, 28 Feb 2018 10:46:54] ID cal, EXT : 35 a marqué 2 buts et obtient 0 csc
+[Wed, 28 Feb 2018 11:03:19] Remise à zéro des stats des compos concernees par la journée 29
+[Wed, 28 Feb 2018 11:03:19]  **************************** LIGUE n°7 ********************************
+[Wed, 28 Feb 2018 11:03:19]  ************************ CALCUL ET UPDATE DES NOTES **************************
+[Wed, 28 Feb 2018 11:03:19] ThomassonAdrienNTE a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:19] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:19] CostilBenoitBDX a eu la note de 5.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:19] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:19] CyprienWylanNIC a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:19] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:19] SalaEmilianoNTE a eu la note de 4 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:19] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:19] SakaiHirokiMAR a eu la note de 3.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:19] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:19] Toko_EkambiKarlANG a eu la note de 8 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:19] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:19] MbappeKylianPSG a eu la note de 7 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:19] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:19]  Capitaine Defaite 
+[Wed, 28 Feb 2018 11:03:19]  Défense à 4 
+[Wed, 28 Feb 2018 11:03:19] DuboisLeoNTE a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:19] MAJ note bonus -0.5 
+[Wed, 28 Feb 2018 11:03:19] KhazriWahbiREN a eu la note de 7 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:19] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:19]  Défense à 4 
+[Wed, 28 Feb 2018 11:03:19] MarquinhosPSG a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:19] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 11:03:19] PleaAlassaneNIC a eu la note de 4 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:19] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:19] CabellaRemyETI a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:19] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:19]  Défense à 4 
+[Wed, 28 Feb 2018 11:03:19] AguilarRubenMTP a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:19] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 11:03:19] SarrIsmailaREN a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:19] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:19] RuffierStephaneETI a eu la note de 5.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:20] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:20] Saint-MaximinAllanNIC n'est pas rentré 201727
+[Wed, 28 Feb 2018 11:03:20]  Défense à 4 
+[Wed, 28 Feb 2018 11:03:20] SabalyYoussoufBDX a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:20] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 11:03:20] NtepPaul-GeorgesETI a eu la note de 4 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:20] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:20] BalotelliMarioNIC n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 11:03:20]  Défense à 4 
+[Wed, 28 Feb 2018 11:03:20] Da_SilvaDamienCAE a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:20] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 11:03:20] ThauvinFlorianMAR a eu la note de 4 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:20] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:20] Lo_CelsoGiovaniPSG a eu la note de 5.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:20] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:20]  Défense à 4 
+[Wed, 28 Feb 2018 11:03:20] BalliuIvanMET a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:20] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 11:03:20]  Défense à 4 
+[Wed, 28 Feb 2018 11:03:20] GlikKamilMON a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:20] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 11:03:20]  Défense à 4 
+[Wed, 28 Feb 2018 11:03:20] LalaKennySTR a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:20] MAJ note bonus 0.5 
+[Wed, 28 Feb 2018 11:03:20] AmaviJordanMAR a eu la note de 3.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:20] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:20] Rony_LopesMON a eu la note de 7.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:20] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:20] FekirNabilLYO a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:20] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:20] KimpembePresnelPSG n'est pas rentré 201727
+[Wed, 28 Feb 2018 11:03:20] MandandaSteveMAR n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 11:03:20] GermainValereMAR a eu la note de 3 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:20] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:20] SaliburYannisGUI a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:20] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:20] PeleYohannMAR a eu la note de 3.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:21] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:21] SankhareYounousseBDX n'est pas rentré 201727
+[Wed, 28 Feb 2018 11:03:21] Ait_BennasserYoussefCAE n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 11:03:21] KwonChang-hoonDIJ n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 11:03:21] TatarusanuCiprianNTE a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:21] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:21] CavaniEdinsonPSG a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:21] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:21] FabinhoMON a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:21] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:21] FalcaoRadamelMON n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 11:03:21] RoussillonJeromeMTP n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 11:03:21] JohnssonKarl-JohanGUI a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:21] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:21] LemarThomasMON a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:21] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:21] MalcomBDX n'a pas joué sur la journée 201727
+[Wed, 28 Feb 2018 11:03:21] SlitiNaimDIJ a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:21] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:21] RouxNolanMET a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:21] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:21] MukieleNordiMTP a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:21] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:21] HiltonVitorinoMTP a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:21] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:21] RamiAdilMAR a eu la note de 3 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:21] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:21] Di_MariaAngelPSG a eu la note de 4 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:21] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:21] LecomteBenjaminMTP a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:21] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:22] AouarHoussemLYO a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:22] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:22] PayetDimitriMAR a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:22] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:22] KakutaGaelAMN a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:22] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:22] JemersonMON a eu la note de 4.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:22] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:22] JoveticStevanMON a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:22] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:22] KeitaMON a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:22] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:22] TavaresJulioDIJ a eu la note de 7 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:22] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:22] AdenonKhaledAMN a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:22] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:22] Lees-MelouPierreNIC a eu la note de 5.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:22] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:22] MarceloLYO a eu la note de 5.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:22] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:22] MarianoLYO a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:22] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:22] DepayMemphisLYO a eu la note de 5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:22] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:22] NeymarPSG a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:22] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:23] GurtnerRegisAMN a eu la note de 6.5 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:23] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:23] PabloBDX a eu la note de 6 sur la journée 201727
+[Wed, 28 Feb 2018 11:03:23] MAJ note bonus 0 
+[Wed, 28 Feb 2018 11:03:23]  ************************ CONSTRUCTION EQUIPE - BOUCLE 1 **************************
+[Wed, 28 Feb 2018 11:03:23] CostilBenoitBDX a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:23] MbappeKylianPSG a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:23] 352 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 11:03:23] DuboisLeoNTE a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:23] MarquinhosPSG a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:23] AguilarRubenMTP a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:23] SabalyYoussoufBDX a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:23] Remplacement de BalotelliMarioNIC par le même poste GermainValereMAR
+[Wed, 28 Feb 2018 11:03:23] Da_SilvaDamienCAE a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:23] ThauvinFlorianMAR a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:23] GlikKamilMON a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:23] Rony_LopesMON a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:23] 353 a marqué 2 but(s) réel(s)
+[Wed, 28 Feb 2018 11:03:23] FekirNabilLYO a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:23] Remplacement de MandandaSteveMAR par le même poste PeleYohannMAR
+[Wed, 28 Feb 2018 11:03:23] Remplacement de SankhareYounousseBDX par le même poste SaliburYannisGUI
+[Wed, 28 Feb 2018 11:03:24] CavaniEdinsonPSG a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:24] 156 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 11:03:24] FabinhoMON a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:24] Remplacement de FalcaoRadamelMON par le même poste RouxNolanMET
+[Wed, 28 Feb 2018 11:03:24] 457 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 11:03:24] Aucun défenseur remplaçant, le joueur RoussillonJeromeMTP reste dans la compo
+[Wed, 28 Feb 2018 11:03:24] JohnssonKarl-JohanGUI a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:24] LemarThomasMON a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:24] SlitiNaimDIJ a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:24] MukieleNordiMTP a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:24] HiltonVitorinoMTP a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:24] LecomteBenjaminMTP a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:24] AouarHoussemLYO a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:24] JemersonMON a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:24] Lees-MelouPierreNIC a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:25] MarceloLYO a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:25] DepayMemphisLYO a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:25] PabloBDX a joué et n'est pas remplacé 
+[Wed, 28 Feb 2018 11:03:25]  ************************ CONSTRUCTION EQUIPE - BOUCLE 2 **************************
+[Wed, 28 Feb 2018 11:03:25] Aucun défenseur pour remplacer le milieu KwonChang-hoonDIJ reste dans la compo
+[Wed, 28 Feb 2018 11:03:25]  ************************ CONSTRUCTION EQUIPE - BOUCLE 3 **************************
+[Wed, 28 Feb 2018 11:03:25] Aucun défenseur pour remplacer l'attaquant MalcomBDX reste dans la compo
+[Wed, 28 Feb 2018 11:03:25]  ************************ CONSTRUCTION EQUIPE - BOUCLE 4 **************************
+[Wed, 28 Feb 2018 11:03:25] Remplacement Tactique de ThomassonAdrienNTE par le joueur avec l'id : 510
+[Wed, 28 Feb 2018 11:03:25] Remplacement Tactique de SalaEmilianoNTE par le joueur avec l'id : 668
+[Wed, 28 Feb 2018 11:03:25] Remplacement Tactique de BalliuIvanMET par le joueur avec l'id : 301
+[Wed, 28 Feb 2018 11:03:25] Remplacement Tactique de Di_MariaAngelPSG par le joueur avec l'id : 310
+[Wed, 28 Feb 2018 11:03:25] 310 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 11:03:26]  ************************ CONSTRUCTION EQUIPE - BOUCLE 5 **************************
+[Wed, 28 Feb 2018 11:03:26] Le remplacement tactique de Toko_EkambiKarlANG n'était pas possible 
+[Wed, 28 Feb 2018 11:03:26] 329 a marqué 2 but(s) réel(s)
+[Wed, 28 Feb 2018 11:03:26] Le remplacement tactique de KhazriWahbiREN n'était pas possible 
+[Wed, 28 Feb 2018 11:03:26] 373 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 11:03:26] Le remplacement tactique de SarrIsmailaREN n'était pas possible 
+[Wed, 28 Feb 2018 11:03:26] Le remplacement tactique de Lo_CelsoGiovaniPSG n'était pas possible 
+[Wed, 28 Feb 2018 11:03:26] Le remplacement tactique de LalaKennySTR n'était pas possible 
+[Wed, 28 Feb 2018 11:03:26] Le remplacement tactique de KakutaGaelAMN n'était pas possible 
+[Wed, 28 Feb 2018 11:03:26] 207 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 11:03:26] Le remplacement tactique de MarianoLYO n'était pas possible 
+[Wed, 28 Feb 2018 11:03:26] 395 a marqué 1 but(s) réel(s)
+[Wed, 28 Feb 2018 11:03:26] Le remplacement tactique de NeymarPSG n'était pas possible 
+[Wed, 28 Feb 2018 11:03:26]  ************************ APPLICATION DES MALUS ADVERSAIRE - BOUCLE 6 **************************
+[Wed, 28 Feb 2018 11:03:26] L'équipe 19 n'a pas mis de bonus/malus 
+[Wed, 28 Feb 2018 11:03:26] L'équipe 20 n'a pas mis de bonus/malus 
+[Wed, 28 Feb 2018 11:03:26] L'équipe 21 n'a pas mis de bonus/malus 
+[Wed, 28 Feb 2018 11:03:26] L'équipe 22 n'a pas mis de bonus/malus 
+[Wed, 28 Feb 2018 11:03:26]  ************************ CALCUL BUT VIRTUEL EQUIPE - BOUCLE 7 **************************
+[Wed, 28 Feb 2018 11:03:26] MOY Compo Dom [20] MoyDefense = 6.125 MoyMilieu = 6.5 MoyAttaque = 6.3333333333333
+[Wed, 28 Feb 2018 11:03:26] TONTON Compo Dom [20] TontonPatDef = 0 TontonPatMil = 0 TontonPatAtt = 0
+[Wed, 28 Feb 2018 11:03:27] MOY Compo Ext [21] MoyDefense = 4.625 MoyMilieu = 5.5 MoyAttaque = 4
+[Wed, 28 Feb 2018 11:03:27] TONTON Compo Ext [21] TontonPatDef = 0 TontonPatMil = 0 TontonPatAtt = 0
+[Wed, 28 Feb 2018 11:03:27] But Virtuel de CabellaRemyETI
+[Wed, 28 Feb 2018 11:03:27] But Virtuel de SarrIsmailaREN
+[Wed, 28 Feb 2018 11:03:27] MOY Compo Dom [23] MoyDefense = 5.3333333333333 MoyMilieu = 5.5 MoyAttaque = 6.1666666666667
+[Wed, 28 Feb 2018 11:03:27] TONTON Compo Dom [23] TontonPatDef = 0 TontonPatMil = 0 TontonPatAtt = 0
+[Wed, 28 Feb 2018 11:03:27] MOY Compo Ext [22] MoyDefense = 5 MoyMilieu = 3.3333333333333 MoyAttaque = 6.5
+[Wed, 28 Feb 2018 11:03:27] TONTON Compo Ext [22] TontonPatDef = 1 TontonPatMil = 2 TontonPatAtt = 0
+[Wed, 28 Feb 2018 11:03:28] But Virtuel de NeymarPSG
+[Wed, 28 Feb 2018 11:03:28]  ************************ MALUS DIN_ARB - BOUCLE 8 **************************
+[Wed, 28 Feb 2018 11:03:28]  ************************ AFFICHAGE EQUIPE - BOUCLE 9 **************************
+[Wed, 28 Feb 2018 11:03:28] ########################################################
+[Wed, 28 Feb 2018 11:03:28] [87]CostilBenoitBDX (5.5)
+[Wed, 28 Feb 2018 11:03:28]   [360]DuboisLeoNTE (5.0)  [397]MarquinhosPSG (6.5)  [534]AguilarRubenMTP (6.5)  [628]SabalyYoussoufBDX (6.5) 
+[Wed, 28 Feb 2018 11:03:28]   [510]CabellaRemyETI (6.5) - 1 butVirtuel  [373]KhazriWahbiREN (7.0) - 1 but(s)  [545]SarrIsmailaREN (6.0) - 1 butVirtuel 
+[Wed, 28 Feb 2018 11:03:28]   [352]MbappeKylianPSG (7.0) - 1 but(s)  [668]NtepPaul-GeorgesETI (4.0)  [329]Toko_EkambiKarlANG (8.0) - 2 but(s) 
+[Wed, 28 Feb 2018 11:03:28] ########################################################
+[Wed, 28 Feb 2018 11:03:28]  ------ VERSUS ----------
+[Wed, 28 Feb 2018 11:03:28] ########################################################
+[Wed, 28 Feb 2018 11:03:28] [624]PeleYohannMAR (3.5)
+[Wed, 28 Feb 2018 11:03:28]   [274]LalaKennySTR (6.0)  [132]Da_SilvaDamienCAE (4.5)  [269]GlikKamilMON (4.5)  [301]AmaviJordanMAR (3.5) 
+[Wed, 28 Feb 2018 11:03:28]   [194]ThauvinFlorianMAR (4.0)  [353]Rony_LopesMON (7.5) - 2 but(s)  [217]Lo_CelsoGiovaniPSG (5.5)  [616]SaliburYannisGUI (5.0) 
+[Wed, 28 Feb 2018 11:03:28]   [441]FekirNabilLYO (5.0)  [587]GermainValereMAR (3.0) 
+[Wed, 28 Feb 2018 11:03:28] ########################################################
+[Wed, 28 Feb 2018 11:03:28] ########################################################
+[Wed, 28 Feb 2018 11:03:28] [83]LecomteBenjaminMTP (6.0)
+[Wed, 28 Feb 2018 11:03:28]   [391]MarceloLYO (5.5)  [290]JemersonMON (4.5)  [667]PabloBDX (6.0) 
+[Wed, 28 Feb 2018 11:03:28]   [420]DepayMemphisLYO (5.0)  [350]Lees-MelouPierreNIC (5.5)  [124]AouarHoussemLYO (5.0)  [207]KakutaGaelAMN (6.5) - 1 but(s) 
+[Wed, 28 Feb 2018 11:03:28]   [310]JoveticStevanMON (6.0) - 1 but(s)  [448]NeymarPSG (6.5) - 1 butVirtuel  [395]MarianoLYO (6.0) - 1 but(s) 
+[Wed, 28 Feb 2018 11:03:28] ########################################################
+[Wed, 28 Feb 2018 11:03:28]  ------ VERSUS ----------
+[Wed, 28 Feb 2018 11:03:28] ########################################################
+[Wed, 28 Feb 2018 11:03:28] [330]JohnssonKarl-JohanGUI (4.5)
+[Wed, 28 Feb 2018 11:03:28]   [458]MukieleNordiMTP (6.0)  [598]HiltonVitorinoMTP (6.0)  Tonton Pat (0) 
+[Wed, 28 Feb 2018 11:03:28]   [205]FabinhoMON (5.0)  [340]LemarThomasMON (5.0)  Tonton Pat (0)  [442]SlitiNaimDIJ (6.0) 
+[Wed, 28 Feb 2018 11:03:28]   [156]CavaniEdinsonPSG (6.5) - 1 but(s)  [457]RouxNolanMET (6.5) - 1 but(s)  Tonton Pat (0) 
+[Wed, 28 Feb 2018 11:03:28] ########################################################
+[Wed, 28 Feb 2018 11:03:28]  ************************ NETTOYAGE DES NUMEROS DEFINITIFS A ZERO ET DES NOTES DES REMPLACANTS **************************
+[Wed, 28 Feb 2018 11:03:28]  ************************ MISE A JOUR DES STATS **************************
+[Wed, 28 Feb 2018 11:03:28] ID cal, DOM : 33 a marqué 6 buts et obtient 1 csc
+[Wed, 28 Feb 2018 11:03:28] ID cal, DOM : 35 a marqué 4 buts et obtient 0 csc
+[Wed, 28 Feb 2018 11:03:28] ID cal, EXT : 33 a marqué 2 buts et obtient 0 csc
+[Wed, 28 Feb 2018 11:03:28] ID cal, EXT : 35 a marqué 2 buts et obtient 0 csc
