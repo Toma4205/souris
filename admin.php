@@ -6,6 +6,12 @@ if (isset($_POST['initJournee']))
 } elseif (isset($_POST['majScoreJourneeEnCours']))
 {
 	include_once('./admin/majScoreJourneeEnCours.php');
+} elseif (isset($_POST['majMoyenneJoueur']))
+{
+	include_once('./admin/majMoyenneJoueur.php');
+} elseif (isset($_POST['majFinLigue']))
+{
+	include_once('./admin/majFinLigue.php');
 }
 
  ?>
@@ -38,6 +44,12 @@ if (isset($_POST['initJournee']))
 		</p>
 		<p>
 			<a class="bouton" href="#titreMajScoreJourneeEnCours">Maj buteurs/scores journée en cours</a>
+		</p>
+		<p>
+			<a class="bouton" href="#titreMajMoyenneJoueur">Maj des moyennes des joueurs</a>
+		</p>
+		<p>
+			<a class="bouton" href="#titreMajFinLigue">Maj fin ligue</a>
 		</p>
 
 	<HR size=2 align=center width="100%">
@@ -444,6 +456,34 @@ if (isset($_POST['initJournee']))
 	 ?>
 	 <div>
 		 <input type="submit" name="majScoreJourneeEnCours" value="Maj buteurs/scores" />
+	</div>
+</form>
+
+<HR size=2 align=center width="100%">
+<h2 id="titreMajMoyenneJoueur">Maj des moyennes des joueurs</h2>
+<form method="post" id="majMoyenneJoueur"  action="">
+	<?php
+	if (isset($messageMajMoyenneJoueur))
+	{
+		echo '<p>' . $messageMajMoyenneJoueur . '</p>';
+	}
+	 ?>
+	 <div>
+		 <input type="submit" name="majMoyenneJoueur" value="Maj moy." />
+	</div>
+</form>
+
+<HR size=2 align=center width="100%">
+<h2 id="titreMajFinLigue">Maj fin ligue</h2>
+<form method="post" id="majFinLigue"  action="">
+	<?php
+	if (isset($messageMajFinLigue))
+	{
+		echo '<p>' . $messageMajFinLigue . '</p>';
+	}
+	 ?>
+	 <div>
+		 <input type="submit" name="majFinLigue" value="Maj fin ligue" />
 	</div>
 </form>
 

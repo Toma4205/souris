@@ -1,3 +1,6 @@
+/*Script passé en "PROD" le 01/03/2018 */
+ALTER TABLE `joueur_equipe` ADD `moy_note` DECIMAL(3,2) NULL AFTER `nb_match`;
+
 /*Script passé en "PROD" le 28/02/2018 */
 ALTER TABLE `resultatsl1_reel` ADD `statut` TINYINT NOT NULL DEFAULT '0' AFTER `penaltyVisiteur`;
 
