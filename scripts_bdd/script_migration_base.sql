@@ -1,3 +1,14 @@
+/*Script passé en "PROD" le 02/03/2018 */
+CREATE TABLE `buteur_live_journee` (
+`id_buteur_live` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+`journee` TINYINT UNSIGNED NOT NULL,
+`id_joueur_reel` MEDIUMINT UNSIGNED,
+`id_joueur_maxi` VARCHAR(100) NOT NULL,
+`sur_penalty` TINYINT UNSIGNED NOT NULL,
+`sur_csc` TINYINT UNSIGNED NOT NULL,
+PRIMARY KEY (`id_buteur_live`)
+) ENGINE = InnoDB;
+
 /*Script passé en "PROD" le 01/03/2018 */
 ALTER TABLE `joueur_equipe` ADD `moy_note` DECIMAL(3,2) NULL AFTER `nb_match`;
 
