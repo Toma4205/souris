@@ -96,6 +96,7 @@ CREATE TABLE `buteur_live_journee` (
 `journee` TINYINT UNSIGNED NOT NULL,
 `id_joueur_reel` MEDIUMINT UNSIGNED,
 `id_joueur_maxi` VARCHAR(100) NOT NULL,
+`ville_maxi` VARCHAR(100) NOT NULL,
 `sur_penalty` TINYINT UNSIGNED NOT NULL,
 `sur_csc` TINYINT UNSIGNED NOT NULL,
 PRIMARY KEY (`id_buteur_live`)
