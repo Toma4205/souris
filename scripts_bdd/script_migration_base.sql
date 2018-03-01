@@ -8,6 +8,7 @@ CREATE TABLE `buteur_live_journee` (
 `sur_csc` TINYINT UNSIGNED NOT NULL,
 PRIMARY KEY (`id_buteur_live`)
 ) ENGINE = InnoDB;
+ALTER TABLE `buteur_live_journee` ADD `ville_maxi` VARCHAR(100) NOT NULL AFTER `id_joueur_maxi`;
 
 /*Script passé en "PROD" le 01/03/2018 */
 ALTER TABLE `joueur_equipe` ADD `moy_note` DECIMAL(3,2) NULL AFTER `nb_match`;
