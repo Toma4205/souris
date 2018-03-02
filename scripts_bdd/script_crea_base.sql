@@ -91,6 +91,17 @@ ALTER TABLE `equipe` ADD FOREIGN KEY (`id_ligue`) REFERENCES `ligue`(`id`) ON DE
 ALTER TABLE `equipe` ADD FOREIGN KEY (`code_caricature`) REFERENCES `nomenclature_caricature`(`code`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE `equipe` ADD FOREIGN KEY (`code_style_coach`) REFERENCES `nomenclature_style_coach`(`code`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
+CREATE TABLE `buteur_live_journee` (
+`id_buteur_live` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+`journee` TINYINT UNSIGNED NOT NULL,
+`id_joueur_reel` MEDIUMINT UNSIGNED,
+`id_joueur_maxi` VARCHAR(100) NOT NULL,
+`ville_maxi` VARCHAR(100) NOT NULL,
+`sur_penalty` TINYINT UNSIGNED NOT NULL,
+`sur_csc` TINYINT UNSIGNED NOT NULL,
+PRIMARY KEY (`id_buteur_live`)
+) ENGINE = InnoDB;
+
 CREATE TABLE `joueur_equipe` (
 `id_ligue` INT UNSIGNED NOT NULL,
 `id_equipe` INT UNSIGNED NOT NULL ,
