@@ -49,33 +49,18 @@ function majButeurTempJourneeEnCours($bdd, $numJournee)
   $q->closeCursor();
 }
 
-function reinitScoreA0($bdd, $numJournee)
-{
-  $q = $bdd->prepare('UPDATE calendrier_ligue SET score_dom = 0
-    WHERE num_journee_cal_reel = :numJournee AND score_dom IS NULL');
-  $q->bindValue(':numJournee', $numJournee);
-
-  $q->execute();
-
-  $q = $bdd->prepare('UPDATE calendrier_ligue SET score_ext = 0
-    WHERE num_journee_cal_reel = :numJournee AND score_ext IS NULL');
-  $q->bindValue(':numJournee', $numJournee);
-
-  $q->execute();
-}
-
 function majScoreTempJourneeEnCours($bdd, $numJournee)
 {
     $q = $bdd->prepare('UPDATE calendrier_ligue cl
       SET cl.score_dom = (
-        SELECT SUM(jce.nb_but_reel)
+        SELECT COALESCE(SUM(jce.nb_but_reel),0)
         FROM joueur_compo_equipe jce
         JOIN compo_equipe ce ON ce.id = jce.id_compo
         WHERE ce.id_equipe = cl.id_equipe_dom
         AND ce.id_cal_ligue = cl.id
       ),
       cl.score_ext = (
-        SELECT SUM(jce.nb_but_reel)
+        SELECT COALESCE(SUM(jce.nb_but_reel),0)
         FROM joueur_compo_equipe jce
         JOIN compo_equipe ce ON ce.id = jce.id_compo
         WHERE ce.id_equipe = cl.id_equipe_ext
@@ -86,19 +71,17 @@ function majScoreTempJourneeEnCours($bdd, $numJournee)
 
     $q->execute();
 
-    reinitScoreA0($bdd, $numJournee);
-
     // Prise en compte des CSC
     $q = $bdd->prepare('UPDATE calendrier_ligue cl
       SET cl.score_dom = (cl.score_dom + (
-        SELECT SUM(jce.nb_csc)
+        SELECT COALESCE(SUM(jce.nb_csc),0)
         FROM joueur_compo_equipe jce
         JOIN compo_equipe ce ON ce.id = jce.id_compo
         WHERE ce.id_equipe = cl.id_equipe_ext
         AND ce.id_cal_ligue = cl.id
       )),
       cl.score_ext = (cl.score_ext + (
-        SELECT SUM(jce.nb_csc)
+        SELECT COALESCE(SUM(jce.nb_csc),0)
         FROM joueur_compo_equipe jce
         JOIN compo_equipe ce ON ce.id = jce.id_compo
         WHERE ce.id_equipe = cl.id_equipe_dom
@@ -108,8 +91,6 @@ function majScoreTempJourneeEnCours($bdd, $numJournee)
       $q->bindValue(':numJournee', $numJournee);
 
       $q->execute();
-
-      reinitScoreA0($bdd, $numJournee);
 }
 
 $numJournee = getNumJourneeEnCours($bdd);
