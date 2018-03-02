@@ -473,9 +473,17 @@ if (isset($calReel) && $calLigue->id() != null)
 </section>
 <?php
 }
-else
+elseif ($ligue->etat() == EtatLigue::TERMINEE)
+{
+  echo '<p>Ligue terminée !</p>';
+}
+elseif (!isset($calReel))
 {
   echo '<p>Plus de match de championnat !</p>';
+}
+elseif ($ligue->etat() == EtatLigue::EN_COURS)
+{
+  echo '<p>Pas de match pour toi pour cette journée.</p>';
 }
 // Le pied de page
 require_once("vue/commun/pied_de_pageflex.php");
