@@ -13,6 +13,7 @@ foreach ($nomenclStyleCoach as $key => $value) {
 }
 
 $equipe = $equipeManager->findEquipeByCoachEtLigue($coach->id(), $ligue->id());
+$equipes = $equipeManager->findEquipeByLigue($ligue->id());
 $calendriers = $calLigueManager->findCalendrierByLigue($ligue->id());
 $indexJournee = 1;
 if (isset($_POST["journees"]))
@@ -20,6 +21,8 @@ if (isset($_POST["journees"]))
   $indexJournee = substr($_POST["journees"], 10);
 }
 else {
+
+  // Recherche de la dernière journée en cours/terminée
   foreach ($calendriers as $cle => $value)
   {
     if ($value->scoreDom() !== null && $value->numJournee() >= $indexJournee)

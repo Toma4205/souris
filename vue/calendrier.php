@@ -33,14 +33,29 @@ if (isset($calendriers))
   <input type="hidden" id="idMatch" name="id_match" />
 <?php
     $numJournee = 0;
+    $tabIdEquipeParJournee = [];
     foreach ($calendriers as $cle => $value)
     {
       if ($numJournee < $value->numJournee())
       {
         // Changement de journée
+
         $numJournee = $value->numJournee();
         if ($numJournee > 1)
         {
+          // Recherche équipe exempt
+          if (sizeof($equipes) % 2 == 1) {
+            foreach ($equipes as $idEqu => $equ) {
+              if (!in_array($idEqu, $tabIdEquipeParJournee)) {
+                echo '<div class="detail_journee_cal_match conteneurRow">';
+                echo 'Exempt : ' . $equ->nom();
+                echo '</div>';
+                break;
+              }
+            }
+          }
+          $tabIdEquipeParJournee = [];
+
           // Si ce n'est pas la première journée, on ferme le div de la journée précédente
           echo '</div>';
         }
@@ -57,6 +72,8 @@ if (isset($calendriers))
   </div>
   <div class="detail_journee_cal_col_c">
     <?php
+        $tabIdEquipeParJournee[] = $value->idEquipeDom();
+        $tabIdEquipeParJournee[] = $value->idEquipeExt();
         if ($value->scoreDom() != null)
         {
           echo '<div class="score_match" onclick="javascript:stockerMatch(' . $value->id() . ');">'
@@ -523,7 +540,7 @@ if (isset($match)) {
   <!-- AFFICHAGE DU TERRAIN -->
   <!-- ********************* -->
 
-  <div class="detail_match_terrain_bloc">
+  <div class="detail_match_terrain_bloc cache">
     <div class="detail_match_terrain_conteneur_img">
       <div class="detail_match_terrain_dom">
         <!-- GB -->
