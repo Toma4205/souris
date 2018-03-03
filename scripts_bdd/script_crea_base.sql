@@ -199,6 +199,11 @@ CREATE TABLE `resultatsl1_reel` (
 `statut`TINYINT NOT NULL DEFAULT '0',
 PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
+ALTER TABLE `resultatsl1_reel` CHANGE `butDomicile` `butDomicile` INT(10) UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `resultatsl1_reel` CHANGE `penaltyDomicile` `penaltyDomicile` INT(10) UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `resultatsl1_reel` CHANGE `butVisiteur` `butVisiteur` INT(10) UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `resultatsl1_reel` CHANGE `penaltyVisiteur` `penaltyVisiteur` INT(10) UNSIGNED NULL DEFAULT NULL;
+
 
 --LOAD DATA LOCAL INFILE 'C:\\Bitnami\\resultatsL1.csv' INTO TABLE resultatsL1_reel FIELDS TERMINATED BY ';' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
 
