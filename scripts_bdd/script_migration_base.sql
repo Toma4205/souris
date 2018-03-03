@@ -1,3 +1,9 @@
+/*Sript PAS ENCORE PASSE EN PROD */
+ALTER TABLE `resultatsl1_reel` CHANGE `butDomicile` `butDomicile` INT(10) UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `resultatsl1_reel` CHANGE `penaltyDomicile` `penaltyDomicile` INT(10) UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `resultatsl1_reel` CHANGE `butVisiteur` `butVisiteur` INT(10) UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `resultatsl1_reel` CHANGE `penaltyVisiteur` `penaltyVisiteur` INT(10) UNSIGNED NULL DEFAULT NULL;
+
 /*Script passé en "PROD" le 02/03/2018 */
 CREATE TABLE `buteur_live_journee` (
 `id_buteur_live` INT UNSIGNED NOT NULL AUTO_INCREMENT,
