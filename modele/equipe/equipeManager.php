@@ -117,7 +117,7 @@ class EquipeManager extends ManagerBase
 
       while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
     	{
-    		$equipes[] = new Equipe($donnees);
+    		$equipes[$donnees['id']] = new Equipe($donnees);
     	}
 
     	$q->closeCursor();

@@ -44,8 +44,9 @@ class JoueurEquipeManager extends ManagerBase
   {
     $joueurs = [];
 
-		$q = $this->_bdd->prepare('SELECT je.prix as prixAchat, je.tour_mercato, j.id,
-        j.nom, j.prenom, j.position, j.prix as prixOrigine, n.code as codeEquipe, n.libelle as libelleEquipe
+		$q = $this->_bdd->prepare('SELECT je.prix as prixAchat, je.tour_mercato,
+        je.moy_note, je.nb_match, je.id_equipe, j.id, j.nom, j.prenom, j.position,
+        j.prix as prixOrigine, n.code as codeEquipe, n.libelle as libelleEquipe
         FROM joueur_equipe je
         JOIN joueur_reel j ON je.id_joueur_reel = j.id
         JOIN nomenclature_equipe n ON j.equipe = n.code
@@ -53,6 +54,56 @@ class JoueurEquipeManager extends ManagerBase
         AND je.date_validation IS NOT NULL
         ORDER BY j.nom, j.prenom');
     $q->execute([':id' => $idEquipe]);
+
+		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+		{
+			$joueurs[] = new JoueurEquipe($donnees);
+		}
+
+		$q->closeCursor();
+
+		return $joueurs;
+	}
+
+  public function findJoueursPourEffectifsByLigue($idLigue)
+  {
+    $joueurs = [];
+
+		$q = $this->_bdd->prepare('SELECT je.prix as prixAchat, je.tour_mercato,
+        je.moy_note, je.nb_match, je.id_equipe, j.id, j.nom, j.prenom, j.position,
+        j.prix as prixOrigine, n.code as codeEquipe, n.libelle as libelleEquipe
+        FROM joueur_equipe je
+        JOIN joueur_reel j ON je.id_joueur_reel = j.id
+        JOIN nomenclature_equipe n ON j.equipe = n.code
+        WHERE je.id_ligue = :id
+        AND je.date_validation IS NOT NULL
+        ORDER BY j.nom, j.prenom');
+    $q->execute([':id' => $idLigue]);
+
+		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+		{
+			$joueurs[] = new JoueurEquipe($donnees);
+		}
+
+		$q->closeCursor();
+
+		return $joueurs;
+	}
+
+  public function findJoueursPourStatsByLigue($idLigue)
+  {
+    $joueurs = [];
+
+		$q = $this->_bdd->prepare('SELECT je.prix as prixAchat, je.tour_mercato,
+        je.moy_note, je.nb_match, je.id_equipe, j.id, j.nom, j.prenom, j.position,
+        j.prix as prixOrigine, n.code as codeEquipe, n.libelle as libelleEquipe
+        FROM joueur_equipe je
+        JOIN joueur_reel j ON je.id_joueur_reel = j.id
+        JOIN nomenclature_equipe n ON j.equipe = n.code
+        WHERE je.id_ligue = :id
+        AND je.date_validation IS NOT NULL
+        ORDER BY je.moy_note DESC');
+    $q->execute([':id' => $idLigue]);
 
 		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
 		{

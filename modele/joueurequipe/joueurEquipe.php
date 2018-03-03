@@ -6,6 +6,7 @@ class JoueurEquipe extends ClasseBase
 {
   // Champs BDD
   private $_id;
+  private $_idEquipe;
   private $_nom;
   private $_prenom;
   private $_equipe;
@@ -19,6 +20,7 @@ class JoueurEquipe extends ClasseBase
   private $_nbButVirtuel;
   private $_nbMatch;
   private $_totalBut;
+  private $_moyNote;
 
   // Code/Libelle Equipe réelle
   private $_codeEquipe;
@@ -32,6 +34,7 @@ class JoueurEquipe extends ClasseBase
   }
 
   public function id() { return $this->_id; }
+  public function idEquipe() { return $this->_idEquipe; }
   public function nom() { return $this->_nom; }
   public function prenom() { return $this->_prenom; }
   public function equipe() { return $this->_equipe; }
@@ -48,10 +51,16 @@ class JoueurEquipe extends ClasseBase
   public function nbButVirtuel() { return $this->_nbButVirtuel; }
   public function nbMatch() { return $this->_nbMatch; }
   public function totalBut() { return $this->_totalBut; }
+  public function moyNote() { return $this->_moyNote; }
 
   public function setId($id)
   {
     $this->_id = $id;
+  }
+
+  public function setId_equipe($id)
+  {
+    $this->_idEquipe = $id;
   }
 
   public function setNom($nom)
@@ -127,6 +136,11 @@ class JoueurEquipe extends ClasseBase
   public function setTotalBut($totalBut)
   {
     $this->_totalBut = $totalBut;
+  }
+
+  public function setMoy_note($noteMoy)
+  {
+    $this->_moyNote = $noteMoy;
   }
 
   public function setTour_mercato($tourMercato)

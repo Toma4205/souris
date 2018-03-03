@@ -1,9 +1,11 @@
 var sectionAffichee = 'sectionClassement';
 var choixAffiche = 'choixClassement';
 var effectifAffiche;
+var statsEquipeAffiche;
 
 $(document).ready(function() {
-  effectifAffiche = $( ".choix_effectif" ).val();
+  effectifAffiche = $(".choix_effectif").val();
+  statsEquipeAffiche = $(".choix_stats_equipe").val();
 });
 
 function afficherSection(choixMenu, idSection)
@@ -21,4 +23,11 @@ function afficherDivEffectif(option)
   $('#' + effectifAffiche).addClass('cache');
   effectifAffiche = option.value;
   $('#' + effectifAffiche).removeClass('cache');
+}
+
+function afficherDivStatsEquipe(option)
+{
+  $('#' + statsEquipeAffiche).addClass('cache');
+  statsEquipeAffiche = option.value;
+  $('#' + statsEquipeAffiche).removeClass('cache');
 }

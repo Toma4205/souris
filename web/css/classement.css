@@ -1,31 +1,7 @@
 /***************/
-/** CLASSEMENT */
+/**   COMMUN   */
 /***************/
-.classement_pari_ligue {
-  font-style: italic;
-  padding-top: 1.5rem;
-  color: #4a61d4;
-}
-.classement_pari_ligue_lib {
-  text-decoration: underline;
-  font-weight: bold;
-}
-
-/************/
-/** BUTEURS */
-/************/
-.tableButeur {
-  font-size: .8rem;
-}
-
-/**************/
-/** EFFECTIFS */
-/**************/
-.bloc_choix_effectif {
-  padding: 1rem 0;
-  text-align: center;
-}
-.choix_effectif {
+.choix_effectif, .choix_stats_equipe {
   font-size: 1.2rem;
 }
 .detail_effectif {
@@ -56,5 +32,50 @@
 .detail_effectif_joueur_tour_m {
   margin: 0 .5rem;
   width: 2.8rem;
+  text-align: center;
+}
+.detail_effectif_joueur_moy, .detail_effectif_joueur_nb_match {
+  margin: 0 .5rem;
+  width: 2.8rem;
+  text-align: center;
+}
+
+
+/***************/
+/** CLASSEMENT */
+/***************/
+.classement_pari_ligue {
+  font-style: italic;
+  padding-top: 1.5rem;
+  color: #4a61d4;
+}
+.classement_pari_ligue_lib {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+/************/
+/** BUTEURS */
+/************/
+.tableButeur {
+  font-size: .8rem;
+}
+
+/************/
+/** JOUEURS */
+/************/
+.bloc_choix_stats_joueurs {
+  padding: 1rem 0;
+  text-align: center;
+}
+.bloc_moy_ligue {
+  padding-top: 2rem
+}
+
+/**************/
+/** EFFECTIFS */
+/**************/
+.bloc_choix_effectif {
+  padding: 1rem 0;
   text-align: center;
 }

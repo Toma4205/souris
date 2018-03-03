@@ -10,6 +10,7 @@ require_once("vue/commun/enteteflex.php");
   <p id="choixButeurs" onclick="javascript:afficherSection(this, 'sectionButeurs');">Buteurs</p>
   <p id="choixJoueurs" onclick="javascript:afficherSection(this, 'sectionJoueurs');">Joueurs</p>
   <p id="choixEffectif" onclick="javascript:afficherSection(this, 'sectionEffectifs');">Effectifs</p>
+  <p id="choixTrophee" onclick="javascript:afficherSection(this, 'sectionTrophees');">Trophées</p>
 </header>
 <section id="sectionClassement">
   <div>
@@ -71,9 +72,9 @@ require_once("vue/commun/enteteflex.php");
           <th>Equipe</th>
           <th>Total (réel + fictif)</th>
           <th>Prix</th>
-          <th>€ / B.</th>
           <th>Match</th>
           <th>B. / Match</th>
+          <th>€ / B.</th>
           <th>Tour mercato</th>
         </tr>
       </thead>
@@ -86,9 +87,9 @@ require_once("vue/commun/enteteflex.php");
           echo '<td>' . $value->nomEquipe() . '</td>';
           echo '<td>' . $value->totalBut() . ' (' . $value->nbButReel() . '+' . $value->nbButVirtuel() . ')</td>';
           echo '<td>' . $value->prixAchat() . '</td>';
-          echo '<td>' . round(($value->prixAchat() / $value->totalBut()), 2) . '</td>';
           echo '<td>' . $value->nbMatch() . '</td>';
           echo '<td>' . round(($value->totalBut() / $value->nbMatch()), 2) . '</td>';
+          echo '<td>' . round(($value->prixAchat() / $value->totalBut()), 2) . '</td>';
           echo '<td>' . $value->tourMercato() . '</td></tr>';
 
           $index++;
@@ -105,7 +106,134 @@ require_once("vue/commun/enteteflex.php");
 </section>
 <section id="sectionJoueurs" class="cache">
   <div>
-    <p>A venir Joueurs ...</p>
+    <div class="bloc_choix_stats_joueurs">
+      <select name="statsEquipe" class="choix_stats_equipe" onchange="javascript:afficherDivStatsEquipe(this)">
+      <?php
+          foreach ($equipes as $cle => $value) {
+            if($value->id() == $equipe->id())
+            {
+                echo '<option value="statsEquipe' . $value->id() . '" selected="selected">' . $value->nom() . '</option>';
+            }
+            else
+            {
+                echo '<option value="statsEquipe' . $value->id() . '">' . $value->nom() . '</option>';
+            }
+          }
+       ?>
+     </select>
+   </div>
+   <?php
+
+    function afficherStatsJoueurs($joueurs)
+    {
+      $top = array(1 => new JoueurEquipe(["moy_note" => 0]),
+                  2 => new JoueurEquipe(["moy_note" => 0]),
+                  3 => new JoueurEquipe(["moy_note" => 0]));
+      foreach ($joueurs as $cle => $joueur)
+      {
+        if ($top[1]->moyNote() <= $joueur->moyNote()) {
+          $top[3] = $top[2];
+          $top[2] = $top[1];
+          $top[1] = $joueur;
+        } elseif ($top[2]->moyNote() <= $joueur->moyNote()) {
+          $top[3] = $top[2];
+          $top[2] = $joueur;
+        }
+        elseif ($top[3]->moyNote() <= $joueur->moyNote()) {
+          $top[3] = $joueur;
+        }
+      }
+
+      echo '<div class="detail_effectif">';
+      echo '<div class="detail_effectif_titre">Top 3 - Equipe';
+      echo '<span class="float_right detail_effectif_joueur_prix detail_effectif_joueur_caract_titre">Prix Achat</span>';
+      echo '<span class="float_right detail_effectif_joueur_nb_match detail_effectif_joueur_caract_titre">Nb match</span>';
+      echo '<span class="float_right detail_effectif_joueur_moy detail_effectif_joueur_caract_titre">Note moy.</span>';
+      echo '</div>';
+      echo '<div>';
+      echo '<ul>';
+
+      $nb = 0;
+      foreach ($top as $cle => $joueur)
+      {
+        if ($joueur->moyNote() > 0) {
+          $nb++;
+          echo '<li class="detail_effectif_joueur"><b>' . $joueur->nom() . '</b> (' . $joueur->libelleEquipe() . ')';
+          echo '<span class="float_right detail_effectif_joueur_prix">' . $joueur->prixAchat() . '</span>';
+          echo '<span class="float_right detail_effectif_joueur_nb_match">' . $joueur->nbMatch() . '</span>';
+          echo '<span class="float_right detail_effectif_joueur_moy">' . $joueur->moyNote() . '</span>';
+          echo '</li>';
+        } else {
+          break;
+        }
+      }
+
+      echo '</ul>';
+      echo '</div>';
+      if ($nb == 0) {
+        echo '<p>Aucune note pour le moment.</p>';
+      }
+      echo '</div>';
+    }
+
+    foreach ($equipes as $cle => $value)
+    {
+      echo '<div id="statsEquipe' . $value->id(). '"';
+      if ($value->id() != $equipe->id())
+      {
+        echo ' class="cache"';
+      }
+      echo '>';
+      $joueurs = $tabEffectif[$value->id()];
+      afficherStatsJoueurs($tabEffectif[$value->id()]);
+      echo '</div>';
+    }
+    ?>
+  </div>
+  <div class="bloc_moy_ligue">
+    <?php
+      function afficherBlocTop($top, $libPoste, $equipes)
+      {
+        echo '<div class="detail_effectif">';
+        echo '<div class="detail_effectif_titre">Top ' . $libPoste . ' - Ligue';
+        echo '<span class="float_right detail_effectif_joueur_prix detail_effectif_joueur_caract_titre">Prix Achat</span>';
+        echo '<span class="float_right detail_effectif_joueur_nb_match detail_effectif_joueur_caract_titre">Nb match</span>';
+        echo '<span class="float_right detail_effectif_joueur_moy detail_effectif_joueur_caract_titre">Note moy.</span>';
+        echo '</div>';
+        echo '<div>';
+        echo '<ul>';
+
+        $nb = 0;
+        foreach ($top as $cle => $joueur)
+        {
+          if ($joueur->moyNote() > 0) {
+            $nb++;
+            echo '<li class="detail_effectif_joueur"><b>' . $joueur->nom() . '</b> (' . $equipes[$joueur->idEquipe()]->nom() . ')';
+            echo '<span class="float_right detail_effectif_joueur_prix">' . $joueur->prixAchat() . '</span>';
+            echo '<span class="float_right detail_effectif_joueur_nb_match">' . $joueur->nbMatch() . '</span>';
+            echo '<span class="float_right detail_effectif_joueur_moy">' . $joueur->moyNote() . '</span>';
+            echo '</li>';
+          } else {
+            break;
+          }
+        }
+
+        echo '</ul>';
+        echo '</div>';
+        if ($nb == 0) {
+          echo '<p>Aucune note pour le moment.</p>';
+        }
+        echo '</div>';
+      }
+
+      afficherBlocTop($topGB, ConstantesAppli::GARDIEN_IHM, $equipes);
+      afficherBlocTop($topDEF, ConstantesAppli::DEFENSEUR_IHM, $equipes);
+      afficherBlocTop($topMIL, ConstantesAppli::MILIEU_IHM, $equipes);
+      afficherBlocTop($topATT, ConstantesAppli::ATTAQUANT_IHM, $equipes);
+    ?>
+  </div>
+  <div class="bloc_equipe_type">
+    <p>A venir bloc équipe Type / Pipe ...</p>
   </div>
 </section>
 <section id="sectionEffectifs" class="cache">
@@ -140,7 +268,7 @@ require_once("vue/commun/enteteflex.php");
         foreach ($joueurs as $cle => $value)
         {
           if ($value->position() == $poste) {
-            echo '<li class="detail_effectif_joueur">' . $value->nom() . ' (' . $value->libelleEquipe() . ')';
+            echo '<li class="detail_effectif_joueur"><b>' . $value->nom() . '</b> (' . $value->libelleEquipe() . ')';
             echo '<span class="float_right detail_effectif_joueur_tour_m">' . $value->tourMercato() . '</span>';
             echo '<span class="float_right detail_effectif_joueur_prix">' . $value->prixAchat() . '</span>';
             echo '</li>';
@@ -168,6 +296,11 @@ require_once("vue/commun/enteteflex.php");
       echo '</div>';
     }
   ?>
+</section>
+<section id="sectionTrophees" class="cache">
+  <div>
+    <p>A venir Trophées ...</p>
+  </div>
 </section>
 <?php
 // Le pied de page
