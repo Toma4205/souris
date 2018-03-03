@@ -7,9 +7,9 @@ class ConnexionBDD
    * @var SPDO
    * @access private
    * @static
-   */ 
+   */
   private static $instance = null;
- 
+
   /**
    * Constructeur
    *
@@ -20,7 +20,7 @@ class ConnexionBDD
   private function __construct()
   {
   }
- 
+
    /**
     * Crée et retourne l'objet SPDO
     *
@@ -30,12 +30,12 @@ class ConnexionBDD
     * @return SPDO $instance
     */
   public static function getInstance()
-  {  
+  {
     if(is_null(self::$instance))
     {
       try
       {
-        self::$instance = new PDO('mysql:host=localhost;dbname=souris;charset=utf8', 'souris', 'souris',
+        self::$instance = new PDO('mysql:host=localhost;dbname=id3559928_souris;charset=utf8', 'souris', 'souris',
           array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
       }
       catch(Exception $e)
@@ -45,8 +45,8 @@ class ConnexionBDD
     }
     return self::$instance;
   }
-  
-  public function __clone() 
+
+  public function __clone()
   {
     throw new Exception("Impossible de cloner la connexion.");
   }
