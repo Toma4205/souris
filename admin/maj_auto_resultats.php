@@ -6,11 +6,8 @@
 
 <?php
 
-
-function CallAPI()
-{
-	
-}
+	include('./fonctions_admin.php');
+	/*
 	require_once(__DIR__ . '/../modele/connexionSQL.php');
 	try
 	{
@@ -45,21 +42,9 @@ function CallAPI()
 	$pos2 = strpos($pos1, $finTableau	);
 	
 	$journeeRecherchee=27; //EN TEST
-	//EN PROD
-	/*
-	$req_derniere_journee->exectute();
-	$prochaines_journees = $req_derniere_journee->fetchAll();
-	if(count($prochaines_journees) == 1) {
-		//Ok on a trouvé LA journee
-		foreach ($prochaines_journees as $prochaine_journee) {
-			$journeeRecherchee = substr($prochaine_journee['next_resultat_a_saisir'],-2);
-		}
-	}
-	$req_derniere_journee->closeCursor();	
-	*/
 	
 	//Variables de l'algo
-	$journee;
+	$journee = 0;
 	$resultats; // Tableau contenant pour chaque ligne : ville_dom, nb_but_dom, nb_but_dom_sur_penalty, nb_but_ext, ville_ext, nb_but_ext_sur_penalty
 	$buteurs; //Tableau contenant pour chaque ligne : ville, nom_buteur
 	$nb_buteurs=0; 
@@ -92,11 +77,8 @@ function CallAPI()
 								echo "<br />\n";
 								
 								if($i>=1 && $j==2 && $k==0 && $m==0 && $n==0&& $p==1 && strpos($ligne5,"journ")>0){ //JOURNEE
-									if($journee > substr($ligne5,0,2)){
+									$journee = substr($ligne5,0,2);
 									
-									}else{
-										$journee = substr($ligne5,0,2);
-									}
 									echo 'journee : '.$journee;
 								}
 								
@@ -132,6 +114,17 @@ function CallAPI()
 										$lastRow = end($resultats);
 										$buteurs[$nb_buteurs][0]= $lastRow[0];
 										$buteurs[$nb_buteurs][1]= substr($ligne5,0,$posEspace);
+										if($pos1 === false){
+											$buteurs[$nb_buteurs][2]= 0; //but sans penalty
+										}else{
+											$buteurs[$nb_buteurs][2]= 1; //but sur penalty
+										}
+										if($pos2 === false){
+											$buteurs[$nb_buteurs][3]= 0; //but sans csc
+										}else{
+											$buteurs[$nb_buteurs][3]= 1; //but sur csc
+										}				
+										$buteurs[$nb_buteurs][4] = $journee;
 										$nb_buteurs++;
 									}
 									
@@ -169,6 +162,17 @@ function CallAPI()
 										$lastRow = end($resultats);
 										$buteurs[$nb_buteurs][0]= $lastRow[4];
 										$buteurs[$nb_buteurs][1]= substr($ligne5,0,$posEspace);
+										if($pos1 === false){
+											$buteurs[$nb_buteurs][2]= 0; //but sans penalty
+										}else{
+											$buteurs[$nb_buteurs][2]= 1; //but sur penalty
+										}
+										if($pos2 === false){
+											$buteurs[$nb_buteurs][3]= 0; //but sans csc
+										}else{
+											$buteurs[$nb_buteurs][3]= 1; //but sur csc
+										}				
+										$buteurs[$nb_buteurs][4] = $journee;
 										$nb_buteurs++;
 									}
 								}
@@ -197,7 +201,7 @@ function CallAPI()
 			if($n>1){$i_match++;}			
 		}
 		
-	echo 'Resultat de la dernière journée n°'.$journee;
+	echo 'Resultat de la dernière journée n°'.$journeeRecherchee;
 	echo "<br />\n";
 	foreach($resultats as $rencontre){
 		if($rencontre[1]>$rencontre[3]){
@@ -210,14 +214,14 @@ function CallAPI()
 			$statusDOM = 'D';
 			$statusEXT = 'D';
 		}
-		echo '2017'.$journee.' | '.$rencontre[0].' | '.$statusDOM.$rencontre[1].'('.$rencontre[2].' sp) - '.$rencontre[3].' ('.$rencontre[5].' sp) '.$statusEXT.' | '.$rencontre[4];
+		echo '2017'.$journeeRecherchee.' | '.$rencontre[0].' | '.$statusDOM.$rencontre[1].'('.$rencontre[2].' sp) - '.$rencontre[3].' ('.$rencontre[5].' sp) '.$statusEXT.' | '.$rencontre[4].' | '.$rencontre[5].' | '.$rencontre[6].' | '.$rencontre[7];
 		echo "<br />\n";
 	}
 	
-	echo 'Buteur de la journée n°'.$journee;
+	echo 'Buteurs de la journée n°'.$journeeRecherchee;
 	echo "<br />\n";
 	foreach($buteurs as $buteur){
-		echo $buteur[0].' - '.$buteur[1];
+		echo $buteur[0].' - '.$buteur[1].' PENAL? '.$buteur[2].' CSC? '.$buteur[3].' Journee : '.$buteur[4];
 		echo "<br />\n";
 	}
 	
@@ -231,7 +235,7 @@ function CallAPI()
 	
 	foreach($resultats as $rencontre)
 	{
-		$req_rencontre_deja_saisie->execute(array('journee' => '2017'.$journee, 'ville1' => $rencontre[0], 'ville2' => $rencontre[4]));
+		$req_rencontre_deja_saisie->execute(array('journee' => '2017'.$journeeRecherchee, 'ville1' => $rencontre[0], 'ville2' => $rencontre[4]));
 		$rencontreSimilaire = $req_rencontre_deja_saisie->fetchAll();
 		if (count($rencontreSimilaire) > 1) {
 			//Erreur, il ne doit y avoir deux lignes d'une même rencontre
@@ -246,7 +250,7 @@ function CallAPI()
 					echo 'Ligne déjà présente : '.$larencontreSimilaire['equipeDomicile'].' vs '.$larencontreSimilaire['equipeVisiteur'].' sur la journée '.$larencontreSimilaire['journee'];
 					echo "<br />\n";
 				}else{
-					echo 'INSERT INTO resultatsl1_reel(journee,equipeDomicile,homeDomicile,butDomicile,winOrLoseDomicile,penaltyDomicile,equipeVisiteur,homeVisiteur,butVisiteur,WinOrLoseVisiteur,penaltyVisiteur) VALUES(2017'.$journee.','.$larencontreSimilaire['equipeDomicile'].',Dom,'.$rencontre[1].','.$statusDOM.','.$rencontre[2].','.$larencontreSimilaire['equipeVisiteur'].',Visit,'.$rencontre[3].','.$statusEXT.','.$rencontre[5].');';
+					echo 'INSERT INTO resultatsl1_reel(journee,equipeDomicile,homeDomicile,butDomicile,winOrLoseDomicile,penaltyDomicile,equipeVisiteur,homeVisiteur,butVisiteur,WinOrLoseVisiteur,penaltyVisiteur) VALUES(2017'.$journeeRecherchee.','.$larencontreSimilaire['equipeDomicile'].',Dom,'.$rencontre[1].','.$statusDOM.','.$rencontre[2].','.$larencontreSimilaire['equipeVisiteur'].',Visit,'.$rencontre[3].','.$statusEXT.','.$rencontre[5].');';
 					echo "<br />\n";
 				}
 			}	
@@ -285,6 +289,13 @@ function CallAPI()
 		}
 		$req_rencontre_deja_saisie->closeCursor();
 	}
+	
+	*/
+	//test
+	echo 'GO TEST';
+	echo "<br />\n";
+	scrapMaxi('28');
+	echo 'FIN TEST';
 	
 ?>
 
