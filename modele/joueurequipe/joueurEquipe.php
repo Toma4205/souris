@@ -5,12 +5,8 @@ require_once(__DIR__ . '/../classeBase.php');
 class JoueurEquipe extends ClasseBase
 {
   // Champs BDD
-  private $_id;
   private $_idEquipe;
-  private $_nom;
-  private $_prenom;
   private $_equipe;
-  private $_position;
   private $_prixOrigine;
   private $_prixAchat;
   private $_tourMercato;
@@ -21,6 +17,12 @@ class JoueurEquipe extends ClasseBase
   private $_nbMatch;
   private $_totalBut;
   private $_moyNote;
+
+  // JoueurReel
+  private $_id;
+  private $_position;
+  private $_nom;
+  private $_prenom;
 
   // Code/Libelle Equipe réelle
   private $_codeEquipe;
