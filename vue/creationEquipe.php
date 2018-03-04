@@ -20,6 +20,9 @@ require_once("vue/commun/enteteflex.php");
     <p>Nom <br/>
       <input type="text" class="width_200px" name="nom" maxlength="40"
         value="<?php echo htmlspecialchars($creaLigue->nom());?>" disabled/></p>
+    <p>Nb équipes <br/>
+      <input type="text" class="width_20px" name="nbEquipe" maxlength="2"
+        value="<?php echo $nbEquipeLigue;?>" disabled/></p>
     <p>Pack Bonus/Malus <br/>
       <select name="bonusMalus" disabled><?php
             $arrayBonusMalus = [];

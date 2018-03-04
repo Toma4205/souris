@@ -181,4 +181,13 @@ class LigueManager extends ManagerBase
 
     return (int) $q->fetchColumn();
 	}
+
+  public function getNbEquipeByLigue($idLigue)
+	{
+    $q = $this->_bdd->prepare('SELECT COUNT(*) FROM coach_ligue
+      WHERE id_ligue = :id AND date_validation IS NOT NULL');
+    $q->execute([':id' => $idLigue]);
+
+    return (int) $q->fetchColumn();
+	}
 }

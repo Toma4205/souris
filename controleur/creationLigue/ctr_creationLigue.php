@@ -111,6 +111,7 @@ if (isset($_POST['creationEquipe']))
 if (isset($creaLigue) && $creaLigue->etat() == EtatLigue::MERCATO)
 {
   $equipe = $equipeManager->findEquipeByCoachEtLigue($coach->id(), $creaLigue->id());
+  $nbEquipeLigue = $ligueManager->getNbEquipeByLigue($creaLigue->id());
   $_SESSION[ConstantesSession::EQUIPE_CREA] = $equipe;
 }
 
