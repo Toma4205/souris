@@ -1,6 +1,3 @@
-<html>
-<body>
-
 <?php
 
 $row = 0;
@@ -24,7 +21,7 @@ function butsEncaissesSanSPenalty($ligne,$team,$tableauScore,$dataJoueur) {
 	if($tableauScore[$position][0]==$dataJoueur[2]){
 			return ($tableauScore[$position][7]-$tableauScore[$position][9]);
 	}else{
-		
+
 		return ($tableauScore[$position][2]-$tableauScore[$position][4]);
 	}
 }
@@ -35,7 +32,7 @@ function ecartScore($ligne,$team,$tableauScore,$dataJoueur) {
 	//echo $tableauScore[$position][0].' == '.$dataJoueur[2];
 	if($tableauScore[$position][0]==$dataJoueur[2]){
 		//echo ' ____ '.($tableauScore[$position][2]-$tableauScore[$position][7]).' ____ ';
-		return ($tableauScore[$position][2]-$tableauScore[$position][7]);	
+		return ($tableauScore[$position][2]-$tableauScore[$position][7]);
 	}else{
 		//echo ' ____ '.($tableauScore[$position][7]-$tableauScore[$position][2]).' ____ ';
 		return ($tableauScore[$position][7]-$tableauScore[$position][2]);
@@ -104,7 +101,7 @@ function buildTableauJournee($idJournee) {
 		$ligne++;
 	}
 	$req->closeCursor();
-	
+
 	//print_r($resultatsJourneeTab);
 	return $resultatsJourneeTab;
 }
@@ -124,7 +121,7 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 			$tableau[$row][0] = str_replace(' ','_',rtrim(ltrim($data[0])).rtrim(ltrim($data[1])).$data[2]);
 			$tableau[$row][1] = substr($fichierName,0,6);
 		}
-		
+
 		for ($c=0; $c < $num; $c++) {
 			if($c>6){
 				$tableau[$row][] = str_replace(' ','',$data[$c]);
@@ -132,7 +129,7 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 			}
 		}
 	}
-		
+
 	if($row==0) {
 		$tableau[$row][] = '6ButPrisSansPenal';
 		$tableau[$row][] = '5ButPrisSansPenal';
@@ -216,11 +213,11 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 		$tableauEnTete[] = '100BallonsTouch';
 		$tableauEnTete[] = 'BonusVict';
 		$tableauEnTete[] = 'CoupFrancRate';
-								
+
 	}else {
 		//echo '---'. $tableau[$row][0];
 		//echo '## '.count($tableau[$row]).' ##';
-		
+
 		//echo 'Calculs buts encaissés : ';
 		$i = butsEncaissesSanSPenalty($row,$data[2],$resultatsJournee,$data);
 		if ($i==1) {
@@ -275,7 +272,7 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 		}
 		//echo '## '.count($tableau[$row]).' ##';
 		//echo 'Calculs cartons rouge : ';
-		
+
 		if($data[14]==1)
 		{
 				if($data[8]<60){
@@ -313,7 +310,7 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 		//echo '## '.count($tableau[$row]).' ##';
 		//echo 'Calculs Centre Raté : ';
 		$tableau[$row][] = ($data[21]-$data[22]);//'CentreRate';
-		
+
 		//echo '## '.count($tableau[$row]).' ##';
 		//echo 'Calculs CleanSheet W : ';
 		if(isCleanSheet($row,$data[2],$resultatsJournee,$data)){
@@ -321,7 +318,7 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 		}else{
 			$tableau[$row][] = 0; //'Clean60';
 		}
-		
+
 		//echo '## '.count($tableau[$row]).' ##';
 		//echo 'Calculs CleanSheet D : ';
 		if(isCleanSheetNul($row,$data[2],$resultatsJournee,$data)){
@@ -329,7 +326,7 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 		}else{
 			$tableau[$row][] = 0; //'Clean60D';
 		}
-		
+
 		//echo '## '.count($tableau[$row]).' ##';
 		//echo 'Calculs Ecarts But : ';
 		//echo '>>>>>>> '.$data[2];
@@ -399,7 +396,7 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 			$tableau[$row][] = 0; //'Ecart+3';
 			$tableau[$row][] = 0; //'Ecart+4';
 		}
-		
+
 		//echo '## '.count($tableau[$row]).' ##';
 		//echo 'Calculs GrossOccazRate : ';
 		if($data[41]-$data[15]<0){
@@ -407,15 +404,15 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 		}else{
 			$tableau[$row][] = $data[41]-$data[15] ;
 		}
-		
+
 		//echo '## '.count($tableau[$row]).' ##';
 		//echo 'Calculs MalusDefaite : ';
 		if(testVictoire($row,$data[2],$resultatsJournee,$data)=='L'){
 			$tableau[$row][] = 1;
 		}else{
-			$tableau[$row][] = 0;	
+			$tableau[$row][] = 0;
 		}
-		
+
 		//echo '## '.count($tableau[$row]).' ##';
 		//echo 'Calculs % passes réussies :';
 		if($data[30]>=30){
@@ -525,7 +522,7 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 				$tableau[$row][] = 0 ;//'25PassOK90';
 				$tableau[$row][] = 0 ;//'25PassOK95';
 				$tableau[$row][] = 0 ;//'25PassOK100';
-				
+
 			}elseif(100*$data[29]/$data[30]<=40){
 				$tableau[$row][] = 0 ;//'15PassOK30';
 				$tableau[$row][] = 1 ;//'15PassOK40';
@@ -539,7 +536,7 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 				$tableau[$row][] = 0 ;//'25PassOK90';
 				$tableau[$row][] = 0 ;//'25PassOK95';
 				$tableau[$row][] = 0 ;//'25PassOK100';
-				
+
 			}elseif(100*$data[29]/$data[30]<50){
 				$tableau[$row][] = 0 ;//'15PassOK30';
 				$tableau[$row][] = 0 ;//'15PassOK40';
@@ -553,7 +550,7 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 				$tableau[$row][] = 0 ;//'25PassOK90';
 				$tableau[$row][] = 0 ;//'25PassOK95';
 				$tableau[$row][] = 0 ;//'25PassOK100';
-				
+
 			}elseif(100*$data[29]/$data[30]<90){
 				$tableau[$row][] = 0 ;//'15PassOK30';
 				$tableau[$row][] = 0 ;//'15PassOK40';
@@ -567,7 +564,7 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 				$tableau[$row][] = 0 ;//'25PassOK90';
 				$tableau[$row][] = 0 ;//'25PassOK95';
 				$tableau[$row][] = 0 ;//'25PassOK100';
-	
+
 			}elseif(100*$data[29]/$data[30]<=95){
 				$tableau[$row][] = 0 ;//'15PassOK30';
 				$tableau[$row][] = 0 ;//'15PassOK40';
@@ -581,7 +578,7 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 				$tableau[$row][] = 0 ;//'25PassOK90';
 				$tableau[$row][] = 0 ;//'25PassOK95';
 				$tableau[$row][] = 0 ;//'25PassOK100';
-		
+
 			}elseif(100*$data[29]/$data[30]<=100){
 				$tableau[$row][] = 0 ;//'15PassOK30';
 				$tableau[$row][] = 0 ;//'15PassOK40';
@@ -595,7 +592,7 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 				$tableau[$row][] = 0 ;//'25PassOK90';
 				$tableau[$row][] = 0 ;//'25PassOK95';
 				$tableau[$row][] = 0 ;//'25PassOK100';
-				
+
 			}else{
 				$tableau[$row][] = 0 ;//'15PassOK30';
 				$tableau[$row][] = 0 ;//'15PassOK40';
@@ -609,7 +606,7 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 				$tableau[$row][] = 0 ;//'25PassOK90';
 				$tableau[$row][] = 0 ;//'25PassOK95';
 				$tableau[$row][] = 0 ;//'25PassOK100';
-				
+
 			}
 		}else{
 			$tableau[$row][] = 0 ;//'15PassOK30';
@@ -624,18 +621,18 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 			$tableau[$row][] = 0 ;//'25PassOK90';
 			$tableau[$row][] = 0 ;//'25PassOK95';
 			$tableau[$row][] = 0 ;//'25PassOK100';
-		
+
 		}
-		
+
 		//echo '## '.count($tableau[$row]).' ##';
 		//echo 'Calculs tacle lost';
 		$tableau[$row][] = $data[25] - $data[26];//'TackleLost';
-		
+
 		//echo '## '.count($tableau[$row]).' ##';
 		//echo 'Calculs TirPasCadre';
 		$tableau[$row][] = $data[18] - $data[19];//'TirPasCadre';
 		//echo 'Tirs PAS CADRE : '.$tableau[$row][107].' ////////';
-		
+
 		//echo '## '.count($tableau[$row]).' ##';
 		//echo 'Calculs ballons touchés';
 		if($data[37]>=100){
@@ -655,26 +652,26 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 			$tableau[$row][] = 0 ;//'90BallonsTouch';
 			$tableau[$row][] = 0 ;//'100BallonsTouch';
 		}
-		
+
 		//echo '## '.count($tableau[$row]).' ##';
 		//echo 'Calculs BonusVictoire : ';
 		if(testVictoire($row,$data[2],$resultatsJournee,$data)=='W'){
 			$tableau[$row][] = 1;
 		}else{
-			$tableau[$row][] = 0;	
+			$tableau[$row][] = 0;
 		}
-		
+
 		//echo '## '.count($tableau[$row]).' ##';
 		//echo 'Calculs CoupFrancRate : ';
-		$tableau[$row][] = ($data[56]-$data[57]);//'CoupFrancRate';	
-	
+		$tableau[$row][] = ($data[56]-$data[57]);//'CoupFrancRate';
+
 		}
-			
+
 		//echo "<br />\n";
 		$row++;
 	}
 	fclose($handle);
-	
+
 }
 
 	require_once(__DIR__ . '/../modele/connexionSQL.php');
@@ -688,8 +685,8 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 			die('Erreur : ' . $e->getMessage());
 			echo $e;
 		}
-		
-		
+
+
 		$supprimerStatsAncienne = $bdd->prepare('DELETE FROM joueur_stats WHERE journee = :journee');
 		$supprimerStatsAncienne->execute (array('journee' => substr($fichierName,0,6)));
 		$supprimerStatsAncienne->closeCursor();
@@ -1029,16 +1026,9 @@ if (($handle = fopen($fichier, "r")) !== FALSE) {
 					));
 			}
 		}
-		echo 'INSERT des stats De la Journee en BDD => OK';
+		$messageImportBDD = 'INSERT des stats De la Journee en BDD => OK';
 		$req->closeCursor();
 //print_r($tableau[1]);
 //var_dump($array);
 
 ?>
-
-	<form method="post" action="../admin.php" enctype="multipart/form-data">
-		<input type="submit" name="retourAdmin" value="Retour page Admin" />
-	</form>
-
-</body>
-</html>

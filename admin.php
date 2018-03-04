@@ -12,6 +12,12 @@ if (isset($_POST['initJournee']))
 } elseif (isset($_POST['majFinLigue']))
 {
 	include_once('./admin/majFinLigue.php');
+} elseif (isset($_POST['majResultatsL1']))
+{
+	include_once('./admin/MAJResultatL1.php');
+} elseif (isset($_POST['importerStatsBDD']))
+{
+	include_once('./admin/importJourneeBDD.php');
 }
 
  ?>
@@ -92,7 +98,15 @@ if (isset($_POST['initJournee']))
 
 	<HR size=2 align=center width="100%">
 	<h2 id="titreMAJResultatsEquipe">Mettre à jour les résultats des équipes</h2>
-	<form method="post" id="MAJResultatsEquipe" action="admin/MAJResultatL1.php" enctype="multipart/form-data">
+	<form method="post" id="MAJResultatsEquipe" action="" enctype="multipart/form-data">
+
+		<?php
+		if (isset($messageMajScore))
+		{
+			echo '<p>' . $messageMajScore . '</p>';
+		}
+		 ?>
+
 		 <label for="Ajout">Ajouter des résultats de Ligue 1 :</label><br />
 		 <table border="1">
 		 <tbody>
@@ -260,7 +274,7 @@ if (isset($_POST['initJournee']))
 			 </tr>
 			 <tr align=CENTER>
 				<td colspan=7>
-					<input type="submit" name="MAJ" value="Mettre à Jour" />
+					<input type="submit" name="majResultatsL1" value="Mettre à Jour" />
 				</td>
 			 </tr>
 
@@ -283,7 +297,19 @@ if (isset($_POST['initJournee']))
 			echo $e;
 		}
 
-		$req = $bdd->query('SELECT * FROM resultatsl1_reel ORDER BY journee DESC');
+		function getDerniereNumJournee($bdd)
+		{
+		  $q = $bdd->prepare('SELECT num_journee FROM calendrier_reel
+				WHERE statut != 0 ORDER BY date_heure_debut DESC LIMIT 1');
+		  $q->execute();
+		  return $q->fetchColumn();
+		}
+
+		$numJournee = '2017' . getDerniereNumJournee($bdd);
+
+		$req = $bdd->prepare('SELECT * FROM resultatsl1_reel WHERE journee = :num');
+		$req->execute(['num' => $numJournee]);
+
 		// On affiche chaque entrée une à une
 		while ($donnees = $req->fetch())
 		{
@@ -342,11 +368,17 @@ if (isset($_POST['initJournee']))
 
 	<HR size=2 align=center width="100%">
 	<h2 id="titreImportCSV">Importer les statistiques des joueurs à partir du CSV</h2>
-	<form method="post" id="importCSV" action="admin/importJourneeBDD.php" enctype="multipart/form-data">
+	<?php
+	if (isset($messageImportBDD))
+	{
+		echo '<p>' . $messageImportBDD . '</p>';
+	}
+	 ?>
+	<form method="post" id="importCSV" action="" enctype="multipart/form-data">
 		 <label for="mon_fichier">Fichier Stat à Importer (format csv | max. 1 Mo) :</label><br />
 		 <label for="mon_fichier">(fichier brut Rotowire nommé AAAAJJ (exemple 201714 pour la saison 2017/2018 et la journée 14)</label><br />
 		 <input type="file" name="mon_fichier" id="mon_fichier" /><br />
-		 <input type="submit" name="submit" value="Importer" />
+		 <input type="submit" name="importerStatsBDD" value="Importer" />
 	</form>
 
 	<HR size=2 align=center width="100%">

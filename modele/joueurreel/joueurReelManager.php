@@ -15,6 +15,7 @@ class JoueurReelManager extends ManagerBase
         FROM joueur_stats js
         JOIN joueur_reel jr ON js.id = jr.cle_roto_primaire
         WHERE js.journee = :numJournee
+        AND js.note > 0
         AND jr.id = :id');
     $q->execute([':id' => $idJoueur, 'numJournee' => $numJournee]);
     return $q->fetchColumn();

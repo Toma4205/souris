@@ -1,9 +1,6 @@
-<html>
-<body>
-
 <?php
 
-	function ajoutResultatDansBDD(){
+	function ajoutResultatDansBDD($messageMajScore){
 		$idJournee = isset($_POST['idJournee']) ? $_POST['idJournee'] : NULL;
 		$teamDom = isset($_POST['teamDom']) ? $_POST['teamDom'] : NULL;
 		$butsDom = isset($_POST['butsDom']) ? $_POST['butsDom'] : NULL;
@@ -12,38 +9,32 @@
 		$butsExt = isset($_POST['butsExt']) ? $_POST['butsExt'] : NULL;
 		$penaltyExt = isset($_POST['penaltyExt']) ? $_POST['penaltyExt'] : NULL;
 
-		echo 'Journée n°'.substr($idJournee,strlen($idJournee)-2,2);
-
+		$messageMajScore = $messageMajScore . 'Journée n°'.substr($idJournee,strlen($idJournee)-2,2) . '<br/>';
 
 		if($butsDom == 'ANNULE'){
 			$etatDom = 'ANNULE';
 			$etatExt = 'ANNULE';
-			echo '/ '.$teamDom;
-			echo ' Match Annulé : '.$butsdom;
-			echo ' ('.$penaltyDom;
-			echo ' pen) - '.$butsExt;
-			echo ' ('.$penaltyExt;
-			echo ' pen) : '.$teamExt;
+			$messageMajScore = $messageMajScore . '/ '.$teamDom . ' Match Annulé : '.$butsdom .
+				' ('.$penaltyDom . ' pen) - '.$butsExt . ' ('.$penaltyExt . ' pen) : '.$teamExt . '<br/>';
 			$tableau[] = array(substr($idJournee,strlen($idJournee)-6,6),$teamDom,'Dom','0',$etatDom,'0',$teamExt,'Visit','0',$etatExt,'0');
 		}else{
 			if($butsDom>$butsExt){
 
 				$etatDom = 'W';
 				$etatExt = 'L';
-				echo '/ '.$teamDom.' Victoire : '.$butsDom.' ('.$penaltyDom.' pen) - '.$butsExt.' ('.$penaltyExt.' pen) : '.$teamExt.' Défaite';
+				$messageMajScore = $messageMajScore . '/ '.$teamDom.' Victoire : '.$butsDom.' ('.$penaltyDom.' pen) - '.$butsExt.' ('.$penaltyExt.' pen) : '.$teamExt.' Défaite' . '<br/>';
 			}elseif($butsDom<$butsExt){
 
 				$etatDom = 'L';
 				$etatExt = 'W';
-				echo '/ '.$teamDom.' Défaite : '.$butsDom.' ('.$penaltyDom.' pen) - '.$butsExt.' ('.$penaltyExt.' pen) : '.$teamExt.' Victoire';
+				$messageMajScore = $messageMajScore . '/ '.$teamDom.' Défaite : '.$butsDom.' ('.$penaltyDom.' pen) - '.$butsExt.' ('.$penaltyExt.' pen) : '.$teamExt.' Victoire' . '<br/>';
 			}else{
 
 				$etatDom = 'D';
 				$etatExt = 'D';
-				echo '/ '.$teamDom.' Nul : '.$butsDom.' ('.$penaltyDom.' pen) - '.$butsExt.' ('.$penaltyExt.' pen) : '.$teamExt.' Nul';
+				$messageMajScore = $messageMajScore . '/ '.$teamDom.' Nul : '.$butsDom.' ('.$penaltyDom.' pen) - '.$butsExt.' ('.$penaltyExt.' pen) : '.$teamExt.' Nul' . '<br/>';
 			}
 
-			echo "<br />\n";
 			$tableau[] = array(substr($idJournee,strlen($idJournee)-6,6),$teamDom,'Dom',$butsDom,$etatDom,$penaltyDom,$teamExt,'Visit',$butsExt,$etatExt,$penaltyExt);
 		}
 
@@ -108,10 +99,12 @@
 				'penaltyVisiteur' => $tableau[0][10]
 				));
 				$req->closeCursor();
-			echo 'INSERT en BDD => OK';
+			$messageMajScore = $messageMajScore . 'INSERT en BDD => OK <br/>';
 		}else{
-			echo 'Ce résultat est déjà présent en base de donnée ';
+			$messageMajScore = $messageMajScore . 'Ce résultat est déjà présent en base de donnée. <br/>';
 		}
+
+		return $messageMajScore;
 	}
 
 	function testResultatsCorrect(){
@@ -123,7 +116,7 @@
 		$teamExt = isset($_POST['teamExt']) ? $_POST['teamExt'] : NULL;
 		$butsExt = isset($_POST['butsExt']) ? $_POST['butsExt'] : NULL;
 		$penaltyExt = isset($_POST['penaltyExt']) ? $_POST['penaltyExt'] : NULL;
-		$messageRetour = NULL;
+		$messageRetour = '';
 
 		if(is_null($idJournee)){
 				$messageRetour .= 'ERREUR : Aucune Journée sélectionnée';
@@ -173,21 +166,11 @@
 		return $messageRetour;
 	}
 
-	echo 'Statut du processus "Ajout du Nouveau Résultat" : ';
-	echo "<br />\n";
+	$messageMajScore = 'Statut du processus "Ajout du Nouveau Résultat" : <br/>';
 	if(strlen(testResultatsCorrect())>1){
-		echo testResultatsCorrect();
+		$messageMajScore = $messageMajScore . testResultatsCorrect();
 	}else{
-		ajoutResultatDansBDD();
-
+		$messageMajScore = ajoutResultatDansBDD($messageMajScore);
 	}
 
 ?>
-
-	<form method="post" action="../admin.php" enctype="multipart/form-data">
-		<input type="submit" name="retourAdmin" value="Retour page Admin" />
-	</form>
-
-
-</body>
-</html>
