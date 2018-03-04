@@ -13,7 +13,7 @@ class JoueurReelManager extends ManagerBase
   {
     $q = $this->_bdd->prepare('SELECT js.note
         FROM joueur_stats js
-        JOIN joueur_reel jr ON js.id = jr.cle_roto_primaire
+        JOIN joueur_reel jr ON (js.id = jr.cle_roto_primaire OR js.id = jr.cle_roto_secondaire)
         WHERE js.journee = :numJournee
         AND js.note > 0
         AND jr.id = :id');

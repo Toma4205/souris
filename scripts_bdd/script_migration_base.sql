@@ -1,3 +1,6 @@
+/*Script passé en "PROD" le 04/03/2018 */
+UPDATE joueur_reel SET cle_roto_secondaire = 'NkunkuChristopherPSG' WHERE id = 456;
+
 /*Sript PAS ENCORE PASSE EN PROD */
 ALTER TABLE `resultatsl1_reel` CHANGE `butDomicile` `butDomicile` INT(10) UNSIGNED NULL DEFAULT NULL;
 ALTER TABLE `resultatsl1_reel` CHANGE `penaltyDomicile` `penaltyDomicile` INT(10) UNSIGNED NULL DEFAULT NULL;
