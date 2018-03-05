@@ -3,6 +3,7 @@
 
 function addLogEvent
 function getStatutJournee
+function setStatutJournee
 function initializeJournee
 function scrapMaxi
 function setStatutMatch
@@ -12,6 +13,20 @@ function maj_table_live_buteur
 function nettoyageTableButeurLive
 function setButeurLive
 function associer_buteur_live_joueur_reel
+function afficher_log_buteur_sans_matching
+function get_nb_match_termine_par_journee
+function annuler_match_restants
+function scrapRoto
+function login
+function grab_page
+function recursive_array_search
+function butsEncaissesSanSPenalty
+function ecartScore
+function testVictoire
+function isCleanSheet
+function isCleanSheetNul
+function buildTableauJournee
+
 
 */
 
@@ -25,7 +40,7 @@ function addLogEvent($event)
 	
 	
 	$year_month = date("YF");
-	$fichier = __DIR__ . '\\logs\\'.$year_month.'.log';
+	$fichier = __DIR__ . '/logs/'.$year_month.'.log';
 	
     $event = $time.$event."\n";
  
@@ -54,7 +69,28 @@ function getStatutJournee($num_journee){
 	}
 	
 	$reqStatutJournee->closeCursor();
+	addLogEvent('FUNCTION getStatutJournee');
 	return $statut;
+}
+
+//Retourne le statut d'une journée selon la table calendrier_reel
+function setStatutJournee($num_journee,$statut){
+	addLogEvent('FUNCTION setStatutJournee');
+	require_once(__DIR__ . '/../modele/connexionSQL.php');
+	try
+	{
+		// Récupération de la connexion
+		$bdd = ConnexionBDD::getInstance();
+	}
+	catch (Exception $e)
+	{
+		die('Erreur : ' . $e->getMessage());
+		echo $e;
+	}
+	$updStatutJournee = $bdd->prepare('UPDATE calendrier_reel SET statut = :statut WHERE num_journee = :num_journee');
+	$updStatutJournee->execute(array('num_journee' => $num_journee, 'statut' => $statut));
+	
+	$updStatutJournee->closeCursor();
 }
 
 //Passage du statut d'une journée de 0 à 1 dans calendrier réel
@@ -86,6 +122,7 @@ function initializeJournee($num_journee){
 
 
 function scrapMaxi($num_journee){
+	addLogEvent('FUNCTION scrapMaxi');
 	// ------------ Récupération des données sur le web -----------------------
 	$adresseMaxi = 'http://www.maxifoot.fr/resultat-ligue-1.htm';
 	$curl_handle=curl_init();
@@ -95,7 +132,7 @@ function scrapMaxi($num_journee){
 	curl_setopt($curl_handle, CURLOPT_USERAGENT, 'Your application name');
 	$query = curl_exec($curl_handle);
 	curl_close($curl_handle);
-	
+		
 	$debutTableau = 'id=lastres';
 	$pos1 = strstr($query, $debutTableau);
 	$finTableau = 'Tous les r';
@@ -109,7 +146,7 @@ function scrapMaxi($num_journee){
 	$buteurs; //Tableau contenant pour chaque ligne : ville, nom_buteur
 	$nb_buteurs=0; 
 	$i_match = 0;
-	$statut = 0; //0 pas terminé et 1 terminé
+	$statut = 1; //0 pas terminé et 1 terminé
 	$equipeDOM;
 	$equipeEXT;
 	$tab_id_csc = array();
@@ -138,8 +175,7 @@ function scrapMaxi($num_journee){
 							$lignes5 = explode("&gt;",$ligne4);
 							foreach ($lignes5 as $ligne5) {
 								//Debug
-								echo 'Ligne '.$i.'|'.$j.'|'.$k.'|'.$m.'|'.$n.'|'.$p.' '.$ligne5;
-								echo "<br />\n";
+								addLogEvent('Ligne '.$i.'|'.$j.'|'.$k.'|'.$m.'|'.$n.'|'.$p.' '.$ligne5);
 								
 								if($i>=1 && $j==2 && $k==0 && $m==0 && $n==0&& $p==1 && strpos($ligne5,"journ")>0){ //JOURNEE
 									$journee = substr($ligne5,0,2);
@@ -289,27 +325,39 @@ function scrapMaxi($num_journee){
 		}
 	
 	
+	//Dernier résultat ajouté
+	if(!is_null($resultats))
+	{
+		$resultats[$i_match][]=$journeeRecherchee;
+		$resultats[$i_match][]=$statut;
+	}	
+	addLogEvent('scrapMaxi // '.print_r($resultats));
+	$time_fin_dernier_match = null;
 	foreach($resultats as $tab_resultat)
 	{
-		//VERIF STATUT
-		if($tab_resultat[7] == 0){
-			setScoreMatch($tab_resultat);
-		}elseif($tab_resultat[7] == 1){
+		addLogEvent('scrapMaxi // '.$tab_resultat[7]);
+		if($tab_resultat[7] == 1){
 			//VERIF Le match vient de se terminer ?
-			if(getStatutMatch($tab_resultat[0],$tab_resultat[6])==0)
-			{
+			addLogEvent('scrapMaxi // condition '.$tab_resultat[0].' et '.$tab_resultat[6]);
+			if(getStatutMatch($tab_resultat[0],$tab_resultat[6])==0){
+			
+				addLogEvent('scrapMaxi // condition OK');
+				setScoreMatch($tab_resultat);
 				setStatutMatch($tab_resultat[0],$tab_resultat[6],1);
+				$time_fin_dernier_match = strtotime("now");
 			}
-		}else{
-			//Erreur
 		}			
 	}
-	maj_table_live_buteur($buteurs);
+	//Inutile pour l'instant
+	//maj_table_live_buteur($buteurs);
+	
+	return $time_fin_dernier_match;
 }
 
 //FONCTION POUR METTRE LE STATUT DU MATCH AU NUMERO 0 ou 1
 function setStatutMatch($nom_ville_maxi_dom, $journee, $statut)
 {
+	addLogEvent('FONCTION setStatutMatch');
 	require_once(__DIR__ . '/../modele/connexionSQL.php');
 	try
 	{
@@ -321,18 +369,19 @@ function setStatutMatch($nom_ville_maxi_dom, $journee, $statut)
 		die('Erreur : ' . $e->getMessage());
 		echo $e;
 	}
-	$upd_statut_match=$bdd->prepare('UPDATE resultatsl1_reel rr, nomenclature_equipes_reelles ner SET rr.statut = 1 WHERE rr.equipeDomicile = ner.trigramme AND ner.ville_maxi = :ville_maxi AND SUBSTRING(rr.journee,5,2) = :journee AND rr.statut = :statut;');
+	$upd_statut_match=$bdd->prepare('UPDATE resultatsl1_reel rr, nomenclature_equipes_reelles ner SET rr.statut = :statut WHERE rr.equipeDomicile = ner.trigramme AND ner.ville_maxi = :ville_maxi AND SUBSTRING(rr.journee,5,2) = :journee AND rr.statut = 0;');
 	
 	$upd_statut_match->execute(array('ville_maxi' => $nom_ville_maxi_dom, 'journee' => $journee, 'statut' => $statut));
 	$upd_statut_match->closeCursor();
 
-	addLogEvent('FONCTION setStatutMatch');
+	
 	addLogEvent('ville_maxi => '.$nom_ville_maxi_dom.', journee => '.$journee.', statut => '.$statut);
 }
 
 //RECUPERER LE STATUT D'UN MATCH
 function getStatutMatch($nom_ville_maxi_dom, $journee)
 {
+	addLogEvent('FONCTION getStatutMatch');
 	require_once(__DIR__ . '/../modele/connexionSQL.php');
 	try
 	{
@@ -356,7 +405,7 @@ function getStatutMatch($nom_ville_maxi_dom, $journee)
 	
 	$req_statut_match->closeCursor();
 
-	addLogEvent('FONCTION getStatutMatch');
+	
 	addLogEvent('ville_maxi => '.$nom_ville_maxi_dom.', journee => '.$journee);
 	addLogEvent('STATUT => '.$statut);
 
@@ -367,6 +416,7 @@ function getStatutMatch($nom_ville_maxi_dom, $journee)
 //A PARTIR DU TABLEAU DE SCRAP => REMPLIR LA TABLE resultatl1reel 
 //FORMAT TABLEAU : NOM_VILLE_MAXI_DOM, NB_BUT_DOM, NB_PENALTY_DOM, NB_BUT_EXT, NOM_VILLE_MAXI_EXT, NB_PENALTY_EXT, JOURNEE, STATUT_MATCH
 function setScoreMatch($tab_resultat){
+	addLogEvent('FONCTION UPDATE SCORE EN BASE setScoreMatch');
 	require_once(__DIR__ . '/../modele/connexionSQL.php');
 	try
 	{
@@ -397,7 +447,7 @@ function setScoreMatch($tab_resultat){
 	
 	$upd_score_match->closeCursor();
 	
-	addLogEvent('FONCTION UPDATE SCORE EN BASE setScoreMatch');
+	
 	addLogEvent('butDomicile => '.$tab_resultat[1].', winOrLoseDomicile => '.$statusDOM.', penaltyDomicile => '.$tab_resultat[2].',butVisiteur => '.$tab_resultat[3].',winOrLoseVisiteur => '.$statusEXT.',penaltyVisiteur => '.$tab_resultat[5].',ville_maxi => '.$tab_resultat[0].',journee => '.$tab_resultat[6]);
 
 }
@@ -410,15 +460,13 @@ function maj_table_live_buteur($tab_buteurs){
 	//On vide la table
 	nettoyageTableButeurLive();
 	
-	print_r($tab_buteurs);
 	//On rempli la table avec les infos brutes
 	foreach($tab_buteurs as $buteur){
 		addLogEvent('INFO BRUTE : '.$buteur[0].' - '.$buteur[1].' PENAL? '.$buteur[2].' CSC? '.$buteur[3].' Journee : '.$buteur[4].' Pour l\'équipe : '.$buteur[5]);
 		setButeurLive($buteur);
 		associer_buteur_live_joueur_reel();
-		//recuperer_buteur_sans_match
+		afficher_log_buteur_sans_matching();
 	}
-	
 }
 
 function nettoyageTableButeurLive(){
@@ -497,6 +545,1176 @@ function associer_buteur_live_joueur_reel(){
 	$upd_matching_buteur_id_reel->execute();
 	$upd_matching_buteur_id_reel->closeCursor();
 	addLogEvent('FONCTION associer_buteur_live_joueur_reel');
+}
+
+//Ecrit dans le fichier LOG le nom_maxi de chaque buteur n'ayant pas trouvé de correspondance dans la table joueur_reel
+function afficher_log_buteur_sans_matching(){
+	addLogEvent('FONCTION afficher_log_buteur_sans_matching');
+	require_once(__DIR__ . '/../modele/connexionSQL.php');
+	try
+	{
+		// Récupération de la connexion
+		$bdd = ConnexionBDD::getInstance();
+	}
+	catch (Exception $e)
+	{
+		die('Erreur : ' . $e->getMessage());
+		echo $e;
+	}
+	$req_buteurs_sans_matching=$bdd->prepare('SELECT id_joueur_maxi FROM buteur_live_journee WHERE id_joueur_reel IS NULL ;');
+	$req_buteurs_sans_matching->execute();
+	
+	while ($buteur_maxi = $req_buteurs_sans_matching->fetch())
+	{
+		addLogEvent('Aucun joueur reel trouvé pour le buteur maxi : '.$buteur_maxi['id_joueur_maxi']);
+	}
+	
+	$req_buteurs_sans_matching->closeCursor();	
+}
+
+//Renvoie le nombre de match ayant un statut à 1 sur une journée déterminée
+function get_nb_match_termine_par_journee($num_journee){
+	addLogEvent('FONCTION get_nb_match_termine_par_journee');
+	require_once(__DIR__ . '/../modele/connexionSQL.php');
+	try
+	{
+		// Récupération de la connexion
+		$bdd = ConnexionBDD::getInstance();
+	}
+	catch (Exception $e)
+	{
+		die('Erreur : ' . $e->getMessage());
+		echo $e;
+	}
+	
+	$req_nb_match_termine_journee=$bdd->prepare('SELECT COUNT(*) AS \'nb_match_termine\' FROM resultatsl1_reel WHERE SUBSTRING(journee,5,2) = :journee AND statut = 1;');
+	$req_nb_match_termine_journee->execute(array('journee' => $num_journee));
+	
+	while ($nb_match = $req_nb_match_termine_journee->fetch())
+	{
+		addLogEvent('Matchs terminés sur la journée '.$num_journee.' : '.$nb_match['nb_match_termine']);
+		return $nb_match['nb_match_termine'];
+	}
+	$req_nb_match_termine_journee->closeCursor();
+}
+
+
+//Annule tous les matchs avec un statut à 1
+function annuler_match_restants($num_journee)
+{
+	addLogEvent('FONCTION annuler_match_restants');
+	require_once(__DIR__ . '/../modele/connexionSQL.php');
+	try
+	{
+		// Récupération de la connexion
+		$bdd = ConnexionBDD::getInstance();
+	}
+	catch (Exception $e)
+	{
+		die('Erreur : ' . $e->getMessage());
+		echo $e;
+	}
+	
+	//En cours
+	//$upd_annule_match_restant_journee=$bdd->prepare('UPDATE resultatsl1_reel SET WHERE SUBSTRING(journee,5,2) = :journee ;');
+	$upd_annule_match_restant_journee->execute(array('journee' => $num_journee));
+	
+	$upd_annule_match_restant_journee->closeCursor();
+
+}
+
+//CHERCHE Le FICHIER CSV CORRESPONDANT A LA JOURNEE
+function scrapRoto($num_journee_avec_annee)
+{
+	$row = 0;
+	$url_part1 = "https://www.rotowire.com/soccer/player_stats.xls?pos=A&league=FRAN&season=";
+	$url_option_saison = substr($num_journee_avec_annee,0,4);
+	$url_part2 = "&start=";
+	$url_option_journee = substr($num_journee_avec_annee,-2);
+	$url_part3 = "&end=";
+	$url_part4 = "&gp=GP&min=MIN&st=ST&on=ON&off=OFF&y=Y&yr=YR&r=R&g=G&a=A&s=S&sog=SOG&cr=CR&acr=ACR&cc=CC&blk=BLK&int=INT&tkl=TKL&tklw=TKLW&fc=FC&fs=FS&pkg=PKG&pkm=PKM&pkc=PKC&crn=CRN&p=P&ap=AP&acro=ACRO&bcc=BCC&aw=AW&dr=DR&dsp=DSP&dw=DW&cl=CL&ecl=ECL&own=OWN&touch=TOUCH&gc=GC&cs=CS&sv=SV&pkf=PKF&pksv=PKSV&aks=AKS&punch=PUNCH&ibs=IBS&obs=OBS&ibsog=IBSOG&obsog=OBSOG&ibg=IBG&obg=OBG&fks=FKS&fksog=FKSOG&fkg=FKG&tbox=TBOX&fkcr=FKCR&fkacr=FKACR&crncr=CRNCR&br=BR&crnw=CRNW&pksvd=PKSVD&ibsv=IBSV&obsv=OBSV&pk=PK&sa=SA";
+		
+	$url_definitif = $url_part1.$url_option_saison.$url_part2.$url_option_journee.$url_part3.$url_option_journee.$url_part4;
+	$resultatsJournee = buildTableauJournee($num_journee_avec_annee);
+	
+	//Téléchargement du fichier journee au format CSV
+	//Id et MDP de connexion
+	login("https://www.rotowire.com/users/loginnow.htm?link=%2Findex.php","username=xzw32&p1=rotowiremotdepasse&Submit=Login");
+	
+	$output = grab_page($url_definitif);
+	$lignes1 = str_replace("\t\r\n","\n",$output);
+	$lignes1 = str_replace("\r","\n",$lignes1);
+	$lignes1 = str_replace("\t",";",$lignes1);
+
+	$path = __DIR__.'/rotostats/'.$url_option_saison.$url_option_journee.".csv";
+	$fp = fopen ($path, 'w');
+	fwrite($fp,$lignes1);
+	fclose($fp);
+	
+	nettoyageFichierStat($path);
+	
+	
+	//Calcul des statistiques complémentaires
+	$erreur_sur_fichier = 1;
+	if (($handle = @fopen($path, "r")) !== FALSE) {
+		$erreur_sur_fichier = 0;
+		while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
+			$num = count($data);
+			if($row==0) {
+				$tableau[$row][0] = 'IDRECHERCHE';
+				$tableau[$row][1] = 'JOURNEE';
+				$tableauEnTete[0] = 'IDRECHERCHE';
+				$tableauEnTete[1] = 'JOURNEE';
+			}else {
+				$tableau[$row][0] = str_replace(' ','_',rtrim(ltrim($data[0])).rtrim(ltrim($data[1])).$data[2]);
+				$tableau[$row][1] = $num_journee_avec_annee;
+			}
+			
+			for ($c=0; $c < $num; $c++) {
+				if($c>6){
+					$tableau[$row][] = str_replace(' ','',$data[$c]);
+					if($row==0){$tableauEnTete[] = str_replace(' ','',$data[$c]);
+				}
+			}
+		}
+			
+		if($row==0) {
+			$tableau[$row][] = '6ButPrisSansPenal';
+			$tableau[$row][] = '5ButPrisSansPenal';
+			$tableau[$row][] = '4ButPrisSansPenal';
+			$tableau[$row][] = '3ButPrisSansPenal';
+			$tableau[$row][] = '2ButPrisSansPenal';
+			$tableau[$row][] = '1ButPrisSansPenal';
+			$tableau[$row][] = 'CRouge60';
+			$tableau[$row][] = 'CRouge75';
+			$tableau[$row][] = 'CRouge80';
+			$tableau[$row][] = 'CRouge85';
+			$tableau[$row][] = 'CentreRate';
+			$tableau[$row][] = 'Clean60';
+			$tableau[$row][] = 'Clean60D';
+			$tableau[$row][] = 'Ecart-5';
+			$tableau[$row][] = 'Ecart-4';
+			$tableau[$row][] = 'Ecart-3';
+			$tableau[$row][] = 'Ecart-2';
+			$tableau[$row][] = 'Ecart+2';
+			$tableau[$row][] = 'Ecart+3';
+			$tableau[$row][] = 'Ecart+4';
+			$tableau[$row][] = 'GrossOccazRate';
+			$tableau[$row][] = 'MalusDefaite';
+			$tableau[$row][] = '15PassOK30';
+			$tableau[$row][] = '15PassOK40';
+			$tableau[$row][] = '15PassOK50';
+			$tableau[$row][] = '15PassOK90';
+			$tableau[$row][] = '15PassOK95';
+			$tableau[$row][] = '15PassOK100';
+			$tableau[$row][] = '25PassOK30';
+			$tableau[$row][] = '25PassOK40';
+			$tableau[$row][] = '25PassOK50';
+			$tableau[$row][] = '25PassOK90';
+			$tableau[$row][] = '25PassOK95';
+			$tableau[$row][] = '25PassOK100';
+			$tableau[$row][] = 'TackleLost';
+			$tableau[$row][] = 'TirPasCadre';
+			$tableau[$row][] = '80BallonsTouch';
+			$tableau[$row][] = '90BallonsTouch';
+			$tableau[$row][] = '100BallonsTouch';
+			$tableau[$row][] = 'BonusVict';
+			$tableau[$row][] = 'CoupFrancRate';
+			$tableauEnTete[] = '6ButPrisSansPenal';
+			$tableauEnTete[] = '5ButPrisSansPenal';
+			$tableauEnTete[] = '4ButPrisSansPenal';
+			$tableauEnTete[] = '3ButPrisSansPenal';
+			$tableauEnTete[] = '2ButPrisSansPenal';
+			$tableauEnTete[] = '1ButPrisSansPenal';
+			$tableauEnTete[] = 'CRouge60';
+			$tableauEnTete[] = 'CRouge75';
+			$tableauEnTete[] = 'CRouge80';
+			$tableauEnTete[] = 'CRouge85';
+			$tableauEnTete[] = 'CentreRate';
+			$tableauEnTete[] = 'Clean60';
+			$tableauEnTete[] = 'Clean60D';
+			$tableauEnTete[] = 'Ecart-5';
+			$tableauEnTete[] = 'Ecart-4';
+			$tableauEnTete[] = 'Ecart-3';
+			$tableauEnTete[] = 'Ecart-2';
+			$tableauEnTete[] = 'Ecart+2';
+			$tableauEnTete[] = 'Ecart+3';
+			$tableauEnTete[] = 'Ecart+4';
+			$tableauEnTete[] = 'GrossOccazRate';
+			$tableauEnTete[] = 'MalusDefaite';
+			$tableauEnTete[] = '15PassOK30';
+			$tableauEnTete[] = '15PassOK40';
+			$tableauEnTete[] = '15PassOK50';
+			$tableauEnTete[] = '15PassOK90';
+			$tableauEnTete[] = '15PassOK95';
+			$tableauEnTete[] = '15PassOK100';
+			$tableauEnTete[] = '25PassOK30';
+			$tableauEnTete[] = '25PassOK40';
+			$tableauEnTete[] = '25PassOK50';
+			$tableauEnTete[] = '25PassOK90';
+			$tableauEnTete[] = '25PassOK95';
+			$tableauEnTete[] = '25PassOK100';
+			$tableauEnTete[] = 'TackleLost';
+			$tableauEnTete[] = 'TirPasCadre';
+			$tableauEnTete[] = '80BallonsTouch';
+			$tableauEnTete[] = '90BallonsTouch';
+			$tableauEnTete[] = '100BallonsTouch';
+			$tableauEnTete[] = 'BonusVict';
+			$tableauEnTete[] = 'CoupFrancRate';
+									
+		}else {
+			$i = butsEncaissesSanSPenalty($row,$data[2],$resultatsJournee,$data);
+			if ($i==1) {
+				$tableau[$row][] = 0;//'6ButPrisSansPenal';
+				$tableau[$row][] = 0;//'5ButPrisSansPenal';
+				$tableau[$row][] = 0;//'4ButPrisSansPenal';
+				$tableau[$row][] = 0;//'3ButPrisSansPenal';
+				$tableau[$row][] = 0;//'2ButPrisSansPenal';
+				$tableau[$row][] = 1;//'1ButPrisSansPenal';
+			} elseif ($i == 2) {
+				$tableau[$row][] = 0;//'6ButPrisSansPenal';
+				$tableau[$row][] = 0;//'5ButPrisSansPenal';
+				$tableau[$row][] = 0;//'4ButPrisSansPenal';
+				$tableau[$row][] = 0;//'3ButPrisSansPenal';
+				$tableau[$row][] = 1;//'2ButPrisSansPenal';
+				$tableau[$row][] = 0;//'1ButPrisSansPenal';
+			} elseif ($i == 3) {
+				$tableau[$row][] = 0;//'6ButPrisSansPenal';
+				$tableau[$row][] = 0;//'5ButPrisSansPenal';
+				$tableau[$row][] = 0;//'4ButPrisSansPenal';
+				$tableau[$row][] = 1;//'3ButPrisSansPenal';
+				$tableau[$row][] = 0;//'2ButPrisSansPenal';
+				$tableau[$row][] = 0;//'1ButPrisSansPenal';
+			} elseif ($i == 4) {
+				$tableau[$row][] = 0;//'6ButPrisSansPenal';
+				$tableau[$row][] = 0;//'5ButPrisSansPenal';
+				$tableau[$row][] = 1;//'4ButPrisSansPenal';
+				$tableau[$row][] = 0;//'3ButPrisSansPenal';
+				$tableau[$row][] = 0;//'2ButPrisSansPenal';
+				$tableau[$row][] = 0;//'1ButPrisSansPenal';
+			} elseif ($i == 5) {
+				$tableau[$row][] = 0;//'6ButPrisSansPenal';
+				$tableau[$row][] = 1;//'5ButPrisSansPenal';
+				$tableau[$row][] = 0;//'4ButPrisSansPenal';
+				$tableau[$row][] = 0;//'3ButPrisSansPenal';
+				$tableau[$row][] = 0;//'2ButPrisSansPenal';
+				$tableau[$row][] = 0;//'1ButPrisSansPenal';
+			} elseif ($i >= 6) {
+				$tableau[$row][] = 1;//'6ButPrisSansPenal';
+				$tableau[$row][] = 0;//'5ButPrisSansPenal';
+				$tableau[$row][] = 0;//'4ButPrisSansPenal';
+				$tableau[$row][] = 0;//'3ButPrisSansPenal';
+				$tableau[$row][] = 0;//'2ButPrisSansPenal';
+				$tableau[$row][] = 0;//'1ButPrisSansPenal';
+			} else {
+				$tableau[$row][] = 0;//'6ButPrisSansPenal';
+				$tableau[$row][] = 0;//'5ButPrisSansPenal';
+				$tableau[$row][] = 0;//'4ButPrisSansPenal';
+				$tableau[$row][] = 0;//'3ButPrisSansPenal';
+				$tableau[$row][] = 0;//'2ButPrisSansPenal';
+				$tableau[$row][] = 0;//'1ButPrisSansPenal';
+			}
+						
+			if($data[14]==1)
+			{
+					if($data[8]<60){
+						$tableau[$row][] = 1;//'CRouge60';
+						$tableau[$row][] = 0;//'CRouge75';
+						$tableau[$row][] = 0;//'CRouge80';
+						$tableau[$row][] = 0;//'CRouge85';
+					}elseif($data[8]<75){
+						$tableau[$row][] = 0;//'CRouge60';
+						$tableau[$row][] = 1;//'CRouge75';
+						$tableau[$row][] = 0;//'CRouge80';
+						$tableau[$row][] = 0;//'CRouge85';
+					}elseif($data[8]<80){
+						$tableau[$row][] = 0;//'CRouge60';
+						$tableau[$row][] = 0;//'CRouge75';
+						$tableau[$row][] = 1;//'CRouge80';
+						$tableau[$row][] = 0;//'CRouge85';
+					}elseif($data[8]<85){
+						$tableau[$row][] = 0;//'CRouge60';
+						$tableau[$row][] = 0;//'CRouge75';
+						$tableau[$row][] = 0;//'CRouge80';
+						$tableau[$row][] = 1;//'CRouge85';
+					}else{
+						$tableau[$row][] = 0;//'CRouge60';
+						$tableau[$row][] = 0;//'CRouge75';
+						$tableau[$row][] = 0;//'CRouge80';
+						$tableau[$row][] = 0;//'CRouge85';
+					}
+			}else{
+				$tableau[$row][] = 0;//'CRouge60';
+				$tableau[$row][] = 0;//'CRouge75';
+				$tableau[$row][] = 0;//'CRouge80';
+				$tableau[$row][] = 0;//'CRouge85';
+			}
+			$tableau[$row][] = ($data[21]-$data[22]);//'CentreRate';
+			
+			//echo '## '.count($tableau[$row]).' ##';
+			//echo 'Calculs CleanSheet W : ';
+			if(isCleanSheet($row,$data[2],$resultatsJournee,$data)){
+				$tableau[$row][] = 1; //'Clean60';
+			}else{
+				$tableau[$row][] = 0; //'Clean60';
+			}
+			
+			if(isCleanSheetNul($row,$data[2],$resultatsJournee,$data)){
+				$tableau[$row][] = 1; //'Clean60D';
+			}else{
+				$tableau[$row][] = 0; //'Clean60D';
+			}
+			
+
+			if(ecartScore($row,$data[2],$resultatsJournee,$data)<=-5){
+				$tableau[$row][] = 1; //'Ecart-5';
+				$tableau[$row][] = 0; //'Ecart-4';
+				$tableau[$row][] = 0; //'Ecart-3';
+				$tableau[$row][] = 0; //'Ecart-2';
+				$tableau[$row][] = 0; //'Ecart+2';
+				$tableau[$row][] = 0; //'Ecart+3';
+				$tableau[$row][] = 0; //'Ecart+4';
+			}elseif(ecartScore($row,$data[2],$resultatsJournee,$data)==-4){
+				$tableau[$row][] = 0; //'Ecart-5';
+				$tableau[$row][] = 1; //'Ecart-4';
+				$tableau[$row][] = 0; //'Ecart-3';
+				$tableau[$row][] = 0; //'Ecart-2';
+				$tableau[$row][] = 0; //'Ecart+2';
+				$tableau[$row][] = 0; //'Ecart+3';
+				$tableau[$row][] = 0; //'Ecart+4';
+			}elseif(ecartScore($row,$data[2],$resultatsJournee,$data)==-3){
+				$tableau[$row][] = 0; //'Ecart-5';
+				$tableau[$row][] = 0; //'Ecart-4';
+				$tableau[$row][] = 1; //'Ecart-3';
+				$tableau[$row][] = 0; //'Ecart-2';
+				$tableau[$row][] = 0; //'Ecart+2';
+				$tableau[$row][] = 0; //'Ecart+3';
+				$tableau[$row][] = 0; //'Ecart+4';
+			}elseif(ecartScore($row,$data[2],$resultatsJournee,$data)==-2){
+				$tableau[$row][] = 0; //'Ecart-5';
+				$tableau[$row][] = 0; //'Ecart-4';
+				$tableau[$row][] = 0; //'Ecart-3';
+				$tableau[$row][] = 1; //'Ecart-2';
+				$tableau[$row][] = 0; //'Ecart+2';
+				$tableau[$row][] = 0; //'Ecart+3';
+				$tableau[$row][] = 0; //'Ecart+4';
+			}elseif(ecartScore($row,$data[2],$resultatsJournee,$data)==2){
+				$tableau[$row][] = 0; //'Ecart-5';
+				$tableau[$row][] = 0; //'Ecart-4';
+				$tableau[$row][] = 0; //'Ecart-3';
+				$tableau[$row][] = 0; //'Ecart-2';
+				$tableau[$row][] = 1; //'Ecart+2';
+				$tableau[$row][] = 0; //'Ecart+3';
+				$tableau[$row][] = 0; //'Ecart+4';
+			}elseif(ecartScore($row,$data[2],$resultatsJournee,$data)==3){
+				$tableau[$row][] = 0; //'Ecart-5';
+				$tableau[$row][] = 0; //'Ecart-4';
+				$tableau[$row][] = 0; //'Ecart-3';
+				$tableau[$row][] = 0; //'Ecart-2';
+				$tableau[$row][] = 0; //'Ecart+2';
+				$tableau[$row][] = 1; //'Ecart+3';
+				$tableau[$row][] = 0; //'Ecart+4';
+			}elseif(ecartScore($row,$data[2],$resultatsJournee,$data)>=4){
+				$tableau[$row][] = 0; //'Ecart-5';
+				$tableau[$row][] = 0; //'Ecart-4';
+				$tableau[$row][] = 0; //'Ecart-3';
+				$tableau[$row][] = 0; //'Ecart-2';
+				$tableau[$row][] = 0; //'Ecart+2';
+				$tableau[$row][] = 0; //'Ecart+3';
+				$tableau[$row][] = 1; //'Ecart+4';
+			}else{
+				$tableau[$row][] = 0; //'Ecart-5';
+				$tableau[$row][] = 0; //'Ecart-4';
+				$tableau[$row][] = 0; //'Ecart-3';
+				$tableau[$row][] = 0; //'Ecart-2';
+				$tableau[$row][] = 0; //'Ecart+2';
+				$tableau[$row][] = 0; //'Ecart+3';
+				$tableau[$row][] = 0; //'Ecart+4';
+			}
+			
+			//echo '## '.count($tableau[$row]).' ##';
+			//echo 'Calculs GrossOccazRate : ';
+			if($data[41]-$data[15]<0){
+				$tableau[$row][] = 0 ;
+			}else{
+				$tableau[$row][] = $data[41]-$data[15] ;
+			}
+			
+			//echo '## '.count($tableau[$row]).' ##';
+			//echo 'Calculs MalusDefaite : ';
+			if(testVictoire($row,$data[2],$resultatsJournee,$data)=='L'){
+				$tableau[$row][] = 1;
+			}else{
+				$tableau[$row][] = 0;	
+			}
+			
+			//echo '## '.count($tableau[$row]).' ##';
+			//echo 'Calculs % passes réussies :';
+			if($data[30]>=30){
+				if(100*$data[29]/$data[30]<=30){
+					$tableau[$row][] = 1 ;//'15PassOK30';
+					$tableau[$row][] = 0 ;//'15PassOK40';
+					$tableau[$row][] = 0 ;//'15PassOK50';
+					$tableau[$row][] = 0 ;//'15PassOK90';
+					$tableau[$row][] = 0 ;//'15PassOK95';
+					$tableau[$row][] = 0 ;//'15PassOK100';
+					$tableau[$row][] = 1 ;//'25PassOK30';
+					$tableau[$row][] = 0 ;//'25PassOK40';
+					$tableau[$row][] = 0 ;//'25PassOK50';
+					$tableau[$row][] = 0 ;//'25PassOK90';
+					$tableau[$row][] = 0 ;//'25PassOK95';
+					$tableau[$row][] = 0 ;//'25PassOK100';
+				}elseif(100*$data[29]/$data[30]<=40){
+					$tableau[$row][] = 0 ;//'15PassOK30';
+					$tableau[$row][] = 1 ;//'15PassOK40';
+					$tableau[$row][] = 0 ;//'15PassOK50';
+					$tableau[$row][] = 0 ;//'15PassOK90';
+					$tableau[$row][] = 0 ;//'15PassOK95';
+					$tableau[$row][] = 0 ;//'15PassOK100';
+					$tableau[$row][] = 0 ;//'25PassOK30';
+					$tableau[$row][] = 1 ;//'25PassOK40';
+					$tableau[$row][] = 0 ;//'25PassOK50';
+					$tableau[$row][] = 0 ;//'25PassOK90';
+					$tableau[$row][] = 0 ;//'25PassOK95';
+					$tableau[$row][] = 0 ;//'25PassOK100';
+				}elseif(100*$data[29]/$data[30]<50){
+					$tableau[$row][] = 0 ;//'15PassOK30';
+					$tableau[$row][] = 0 ;//'15PassOK40';
+					$tableau[$row][] = 1 ;//'15PassOK50';
+					$tableau[$row][] = 0 ;//'15PassOK90';
+					$tableau[$row][] = 0 ;//'15PassOK95';
+					$tableau[$row][] = 0 ;//'15PassOK100';
+					$tableau[$row][] = 0 ;//'25PassOK30';
+					$tableau[$row][] = 0 ;//'25PassOK40';
+					$tableau[$row][] = 1 ;//'25PassOK50';
+					$tableau[$row][] = 0 ;//'25PassOK90';
+					$tableau[$row][] = 0 ;//'25PassOK95';
+					$tableau[$row][] = 0 ;//'25PassOK100';
+				}elseif(100*$data[29]/$data[30]<90){
+					$tableau[$row][] = 0 ;//'15PassOK30';
+					$tableau[$row][] = 0 ;//'15PassOK40';
+					$tableau[$row][] = 0 ;//'15PassOK50';
+					$tableau[$row][] = 1 ;//'15PassOK90';
+					$tableau[$row][] = 0 ;//'15PassOK95';
+					$tableau[$row][] = 0 ;//'15PassOK100';
+					$tableau[$row][] = 0 ;//'25PassOK30';
+					$tableau[$row][] = 0 ;//'25PassOK40';
+					$tableau[$row][] = 0 ;//'25PassOK50';
+					$tableau[$row][] = 1 ;//'25PassOK90';
+					$tableau[$row][] = 0 ;//'25PassOK95';
+					$tableau[$row][] = 0 ;//'25PassOK100';
+				}elseif(100*$data[29]/$data[30]<=95){
+					$tableau[$row][] = 0 ;//'15PassOK30';
+					$tableau[$row][] = 0 ;//'15PassOK40';
+					$tableau[$row][] = 0 ;//'15PassOK50';
+					$tableau[$row][] = 0 ;//'15PassOK90';
+					$tableau[$row][] = 1 ;//'15PassOK95';
+					$tableau[$row][] = 0 ;//'15PassOK100';
+					$tableau[$row][] = 0 ;//'25PassOK30';
+					$tableau[$row][] = 0 ;//'25PassOK40';
+					$tableau[$row][] = 0 ;//'25PassOK50';
+					$tableau[$row][] = 0 ;//'25PassOK90';
+					$tableau[$row][] = 1 ;//'25PassOK95';
+					$tableau[$row][] = 0 ;//'25PassOK100';
+				}elseif(100*$data[29]/$data[30]<=100){
+					$tableau[$row][] = 0 ;//'15PassOK30';
+					$tableau[$row][] = 0 ;//'15PassOK40';
+					$tableau[$row][] = 0 ;//'15PassOK50';
+					$tableau[$row][] = 0 ;//'15PassOK90';
+					$tableau[$row][] = 0 ;//'15PassOK95';
+					$tableau[$row][] = 1 ;//'15PassOK100';
+					$tableau[$row][] = 0 ;//'25PassOK30';
+					$tableau[$row][] = 0 ;//'25PassOK40';
+					$tableau[$row][] = 0 ;//'25PassOK50';
+					$tableau[$row][] = 0 ;//'25PassOK90';
+					$tableau[$row][] = 0 ;//'25PassOK95';
+					$tableau[$row][] = 1 ;//'25PassOK100';
+				}else{
+					$tableau[$row][] = 0 ;//'15PassOK30';
+					$tableau[$row][] = 0 ;//'15PassOK40';
+					$tableau[$row][] = 0 ;//'15PassOK50';
+					$tableau[$row][] = 0 ;//'15PassOK90';
+					$tableau[$row][] = 0 ;//'15PassOK95';
+					$tableau[$row][] = 0 ;//'15PassOK100';
+					$tableau[$row][] = 0 ;//'25PassOK30';
+					$tableau[$row][] = 0 ;//'25PassOK40';
+					$tableau[$row][] = 0 ;//'25PassOK50';
+					$tableau[$row][] = 0 ;//'25PassOK90';
+					$tableau[$row][] = 0 ;//'25PassOK95';
+					$tableau[$row][] = 0 ;//'25PassOK100';
+				}
+			}elseif($data[30]>=15){
+				if(100*$data[29]/$data[30]<=30){
+					$tableau[$row][] = 1 ;//'15PassOK30';
+					$tableau[$row][] = 0 ;//'15PassOK40';
+					$tableau[$row][] = 0 ;//'15PassOK50';
+					$tableau[$row][] = 0 ;//'15PassOK90';
+					$tableau[$row][] = 0 ;//'15PassOK95';
+					$tableau[$row][] = 0 ;//'15PassOK100';
+					$tableau[$row][] = 0 ;//'25PassOK30';
+					$tableau[$row][] = 0 ;//'25PassOK40';
+					$tableau[$row][] = 0 ;//'25PassOK50';
+					$tableau[$row][] = 0 ;//'25PassOK90';
+					$tableau[$row][] = 0 ;//'25PassOK95';
+					$tableau[$row][] = 0 ;//'25PassOK100';
+					
+				}elseif(100*$data[29]/$data[30]<=40){
+					$tableau[$row][] = 0 ;//'15PassOK30';
+					$tableau[$row][] = 1 ;//'15PassOK40';
+					$tableau[$row][] = 0 ;//'15PassOK50';
+					$tableau[$row][] = 0 ;//'15PassOK90';
+					$tableau[$row][] = 0 ;//'15PassOK95';
+					$tableau[$row][] = 0 ;//'15PassOK100';
+					$tableau[$row][] = 0 ;//'25PassOK30';
+					$tableau[$row][] = 0 ;//'25PassOK40';
+					$tableau[$row][] = 0 ;//'25PassOK50';
+					$tableau[$row][] = 0 ;//'25PassOK90';
+					$tableau[$row][] = 0 ;//'25PassOK95';
+					$tableau[$row][] = 0 ;//'25PassOK100';
+					
+				}elseif(100*$data[29]/$data[30]<50){
+					$tableau[$row][] = 0 ;//'15PassOK30';
+					$tableau[$row][] = 0 ;//'15PassOK40';
+					$tableau[$row][] = 1 ;//'15PassOK50';
+					$tableau[$row][] = 0 ;//'15PassOK90';
+					$tableau[$row][] = 0 ;//'15PassOK95';
+					$tableau[$row][] = 0 ;//'15PassOK100';
+					$tableau[$row][] = 0 ;//'25PassOK30';
+					$tableau[$row][] = 0 ;//'25PassOK40';
+					$tableau[$row][] = 0 ;//'25PassOK50';
+					$tableau[$row][] = 0 ;//'25PassOK90';
+					$tableau[$row][] = 0 ;//'25PassOK95';
+					$tableau[$row][] = 0 ;//'25PassOK100';
+					
+				}elseif(100*$data[29]/$data[30]<90){
+					$tableau[$row][] = 0 ;//'15PassOK30';
+					$tableau[$row][] = 0 ;//'15PassOK40';
+					$tableau[$row][] = 0 ;//'15PassOK50';
+					$tableau[$row][] = 1 ;//'15PassOK90';
+					$tableau[$row][] = 0 ;//'15PassOK95';
+					$tableau[$row][] = 0 ;//'15PassOK100';
+					$tableau[$row][] = 0 ;//'25PassOK30';
+					$tableau[$row][] = 0 ;//'25PassOK40';
+					$tableau[$row][] = 0 ;//'25PassOK50';
+					$tableau[$row][] = 0 ;//'25PassOK90';
+					$tableau[$row][] = 0 ;//'25PassOK95';
+					$tableau[$row][] = 0 ;//'25PassOK100';
+		
+				}elseif(100*$data[29]/$data[30]<=95){
+					$tableau[$row][] = 0 ;//'15PassOK30';
+					$tableau[$row][] = 0 ;//'15PassOK40';
+					$tableau[$row][] = 0 ;//'15PassOK50';
+					$tableau[$row][] = 0 ;//'15PassOK90';
+					$tableau[$row][] = 1 ;//'15PassOK95';
+					$tableau[$row][] = 0 ;//'15PassOK100';
+					$tableau[$row][] = 0 ;//'25PassOK30';
+					$tableau[$row][] = 0 ;//'25PassOK40';
+					$tableau[$row][] = 0 ;//'25PassOK50';
+					$tableau[$row][] = 0 ;//'25PassOK90';
+					$tableau[$row][] = 0 ;//'25PassOK95';
+					$tableau[$row][] = 0 ;//'25PassOK100';
+			
+				}elseif(100*$data[29]/$data[30]<=100){
+					$tableau[$row][] = 0 ;//'15PassOK30';
+					$tableau[$row][] = 0 ;//'15PassOK40';
+					$tableau[$row][] = 0 ;//'15PassOK50';
+					$tableau[$row][] = 0 ;//'15PassOK90';
+					$tableau[$row][] = 0 ;//'15PassOK95';
+					$tableau[$row][] = 1 ;//'15PassOK100';
+					$tableau[$row][] = 0 ;//'25PassOK30';
+					$tableau[$row][] = 0 ;//'25PassOK40';
+					$tableau[$row][] = 0 ;//'25PassOK50';
+					$tableau[$row][] = 0 ;//'25PassOK90';
+					$tableau[$row][] = 0 ;//'25PassOK95';
+					$tableau[$row][] = 0 ;//'25PassOK100';
+					
+				}else{
+					$tableau[$row][] = 0 ;//'15PassOK30';
+					$tableau[$row][] = 0 ;//'15PassOK40';
+					$tableau[$row][] = 0 ;//'15PassOK50';
+					$tableau[$row][] = 0 ;//'15PassOK90';
+					$tableau[$row][] = 0 ;//'15PassOK95';
+					$tableau[$row][] = 0 ;//'15PassOK100';
+					$tableau[$row][] = 0 ;//'25PassOK30';
+					$tableau[$row][] = 0 ;//'25PassOK40';
+					$tableau[$row][] = 0 ;//'25PassOK50';
+					$tableau[$row][] = 0 ;//'25PassOK90';
+					$tableau[$row][] = 0 ;//'25PassOK95';
+					$tableau[$row][] = 0 ;//'25PassOK100';
+					
+				}
+			}else{
+				$tableau[$row][] = 0 ;//'15PassOK30';
+				$tableau[$row][] = 0 ;//'15PassOK40';
+				$tableau[$row][] = 0 ;//'15PassOK50';
+				$tableau[$row][] = 0 ;//'15PassOK90';
+				$tableau[$row][] = 0 ;//'15PassOK95';
+				$tableau[$row][] = 0 ;//'15PassOK100';
+				$tableau[$row][] = 0 ;//'25PassOK30';
+				$tableau[$row][] = 0 ;//'25PassOK40';
+				$tableau[$row][] = 0 ;//'25PassOK50';
+				$tableau[$row][] = 0 ;//'25PassOK90';
+				$tableau[$row][] = 0 ;//'25PassOK95';
+				$tableau[$row][] = 0 ;//'25PassOK100';
+			
+			}
+			
+			//echo '## '.count($tableau[$row]).' ##';
+			//echo 'Calculs tacle lost';
+			$tableau[$row][] = $data[25] - $data[26];//'TackleLost';
+			
+			//echo '## '.count($tableau[$row]).' ##';
+			//echo 'Calculs TirPasCadre';
+			$tableau[$row][] = $data[18] - $data[19];//'TirPasCadre';
+			//echo 'Tirs PAS CADRE : '.$tableau[$row][107].' ////////';
+			
+			//echo '## '.count($tableau[$row]).' ##';
+			//echo 'Calculs ballons touchés';
+			if($data[37]>=100){
+				$tableau[$row][] = 0 ;//'80BallonsTouch';
+				$tableau[$row][] = 0 ;//'90BallonsTouch';
+				$tableau[$row][] = 1 ;//'100BallonsTouch';
+			}elseif($data[37]>=90){
+				$tableau[$row][] = 0 ;//'80BallonsTouch';
+				$tableau[$row][] = 1 ;//'90BallonsTouch';
+				$tableau[$row][] = 0 ;//'100BallonsTouch';
+			}elseif($data[37]>=80){
+				$tableau[$row][] = 1 ;//'80BallonsTouch';
+				$tableau[$row][] = 0 ;//'90BallonsTouch';
+				$tableau[$row][] = 0 ;//'100BallonsTouch';
+			}else{
+				$tableau[$row][] = 0 ;//'80BallonsTouch';
+				$tableau[$row][] = 0 ;//'90BallonsTouch';
+				$tableau[$row][] = 0 ;//'100BallonsTouch';
+			}
+			
+			//echo '## '.count($tableau[$row]).' ##';
+			//echo 'Calculs BonusVictoire : ';
+			if(testVictoire($row,$data[2],$resultatsJournee,$data)=='W'){
+				$tableau[$row][] = 1;
+			}else{
+				$tableau[$row][] = 0;	
+			}
+			
+			//echo '## '.count($tableau[$row]).' ##';
+			//echo 'Calculs CoupFrancRate : ';
+			$tableau[$row][] = ($data[56]-$data[57]);//'CoupFrancRate';	
+		
+			}
+				
+			//echo "<br />\n";
+			$row++;
+		}
+		fclose($handle);
+		
+	}
+
+	//Import en BDD des statistiques
+	if($erreur_sur_fichier == 0){
+		require_once(__DIR__ . '/../modele/connexionSQL.php');
+			try
+			{
+				// Récupération de la connexion
+				$bdd = ConnexionBDD::getInstance();
+			}
+			catch (Exception $e)
+			{
+				die('Erreur : ' . $e->getMessage());
+				echo $e;
+			}
+			
+			
+			$supprimerStatsAncienne = $bdd->prepare('DELETE FROM joueur_stats WHERE journee = :journee');
+			$supprimerStatsAncienne->execute (array('journee' => $num_journee_avec_annee));
+			$supprimerStatsAncienne->closeCursor();
+			$premiereLigne=0;
+			foreach($tableau as $ligneDeStats)
+			{
+				if($premiereLigne==0){
+					$premiereLigne++;
+				}else{
+					$req = $bdd->prepare('INSERT IGNORE INTO joueur_stats(
+					id,
+					journee,
+					a_joue,
+					minutes,
+					titulaire,
+					est_rentre,
+					est_sorti,
+					jaune,
+					jaune_rouge,
+					rouge,
+					but,
+					passe_d,
+					second_passe_d,
+					tir,
+					tir_cadre,
+					interception,
+					centre,
+					centre_reussi,
+					occasion_creee,
+					contre,
+					total_tacle,
+					tacle_reussi,
+					faute_commise,
+					faute_subie,
+					passe,
+					passe_tentee,
+					centre_reussi_dans_le_jeu,
+					duel_aerien_gagne,
+					grosse_occasion_creee,
+					ballon_recupere,
+					dribble,
+					duel_gagne,
+					ballon_touche,
+					ballon_touche_int_surface,
+					tir_int_surface,
+					tir_ext_surface,
+					tir_cadre_int_surface,
+					tir_cadre_ext_surface,
+					but_int_surface,
+					but_ext_surface,
+					ballon_perdu,
+					csc,
+					penalty_tire,
+					penalty_marque,
+					penalty_rate,
+					penalty_arrete,
+					corner_tire,
+					corner_centre,
+					corner_gagne,
+					coup_franc_centre,
+					coup_franc_centre_reussi,
+					coup_franc_tire,
+					coup_franc_cadre,
+					coup_franc_marque,
+					but_concede,
+					cleansheet,
+					arret,
+					arret_tir_int_surface,
+					arret_tir_ext_surface,
+					sortie_ext_surface_reussie,
+					penalty_concede,
+					penalty_subi_gb,
+					penalty_arrete_gb,
+					degagement,
+					degagement_reussi,
+					degagement_poing,
+					6_buts_ou_plus_pris_sans_penalty,
+					5_buts_pris_sans_penalty,
+					4_buts_pris_sans_penalty,
+					3_buts_pris_sans_penalty,
+					2_buts_pris_sans_penalty,
+					1_but_pris_sans_penalty,
+					rouge_60,
+					rouge_75,
+					rouge_80,
+					rouge_85,
+					centre_rate,
+					clean_60,
+					clean_60D,
+					ecart_moins_5,
+					ecart_moins_4,
+					ecart_moins_3,
+					ecart_moins_2,
+					ecart_plus_2,
+					ecart_plus_3,
+					ecart_plus_4,
+					grosse_occasion_ratee,
+					malus_defaite,
+					15_passes_OK_30,
+					15_passes_OK_40,
+					15_passes_OK_50,
+					15_passes_OK_90,
+					15_passes_OK_95,
+					15_passes_OK_100,
+					25_passes_OK_30,
+					25_passes_OK_40,
+					25_passes_OK_50,
+					25_passes_OK_90,
+					25_passes_OK_95,
+					25_passes_OK_100,
+					tacle_rate,
+					tir_non_cadre,
+					80_ballons_touches,
+					90_ballons_touches,
+					100_ballons_touches,
+					bonus_victoire,
+					coup_franc_rate,
+					note
+					)VALUES(
+					:id,
+					:journee,
+					:a_joue,
+					:minutes,
+					:titulaire,
+					:est_rentre,
+					:est_sorti,
+					:jaune,
+					:jaune_rouge,
+					:rouge,
+					:but,
+					:passe_d,
+					:second_passe_d,
+					:tir,
+					:tir_cadre,
+					:interception,
+					:centre,
+					:centre_reussi,
+					:occasion_creee,
+					:contre,
+					:total_tacle,
+					:tacle_reussi,
+					:faute_commise,
+					:faute_subie,
+					:passe,
+					:passe_tentee,
+					:centre_reussi_dans_le_jeu,
+					:duel_aerien_gagne,
+					:grosse_occasion_creee,
+					:ballon_recupere,
+					:dribble,
+					:duel_gagne,
+					:ballon_touche,
+					:ballon_touche_int_surface,
+					:tir_int_surface,
+					:tir_ext_surface,
+					:tir_cadre_int_surface,
+					:tir_cadre_ext_surface,
+					:but_int_surface,
+					:but_ext_surface,
+					:ballon_perdu,
+					:csc,
+					:penalty_tire,
+					:penalty_marque,
+					:penalty_rate,
+					:penalty_arrete,
+					:corner_tire,
+					:corner_centre,
+					:corner_gagne,
+					:coup_franc_centre,
+					:coup_franc_centre_reussi,
+					:coup_franc_tire,
+					:coup_franc_cadre,
+					:coup_franc_marque,
+					:but_concede,
+					:cleansheet,
+					:arret,
+					:arret_tir_int_surface,
+					:arret_tir_ext_surface,
+					:sortie_ext_surface_reussie,
+					:penalty_concede,
+					:penalty_subi_gb,
+					:penalty_arrete_gb,
+					:degagement,
+					:degagement_reussi,
+					:degagement_poing,
+					:6_buts_ou_plus_pris_sans_penalty,
+					:5_buts_pris_sans_penalty,
+					:4_buts_pris_sans_penalty,
+					:3_buts_pris_sans_penalty,
+					:2_buts_pris_sans_penalty,
+					:1_but_pris_sans_penalty,
+					:rouge_60,
+					:rouge_75,
+					:rouge_80,
+					:rouge_85,
+					:centre_rate,
+					:clean_60,
+					:clean_60D,
+					:ecart_moins_5,
+					:ecart_moins_4,
+					:ecart_moins_3,
+					:ecart_moins_2,
+					:ecart_plus_2,
+					:ecart_plus_3,
+					:ecart_plus_4,
+					:grosse_occasion_ratee,
+					:malus_defaite,
+					:15_passes_OK_30,
+					:15_passes_OK_40,
+					:15_passes_OK_50,
+					:15_passes_OK_90,
+					:15_passes_OK_95,
+					:15_passes_OK_100,
+					:25_passes_OK_30,
+					:25_passes_OK_40,
+					:25_passes_OK_50,
+					:25_passes_OK_90,
+					:25_passes_OK_95,
+					:25_passes_OK_100,
+					:tacle_rate,
+					:tir_non_cadre,
+					:80_ballons_touches,
+					:90_ballons_touches,
+					:100_ballons_touches,
+					:bonus_victoire,
+					:coup_franc_rate,
+					NULL)');
+					$colonne=0;
+					$req->execute(array(
+						'id' => $ligneDeStats[$colonne++],
+						'journee' => $ligneDeStats[$colonne++],
+						'a_joue' => $ligneDeStats[$colonne++],
+						'minutes' => $ligneDeStats[$colonne++],
+						'titulaire' => $ligneDeStats[$colonne++],
+						'est_rentre' => $ligneDeStats[$colonne++],
+						'est_sorti' => $ligneDeStats[$colonne++],
+						'jaune' => $ligneDeStats[$colonne++],
+						'jaune_rouge' => $ligneDeStats[$colonne++],
+						'rouge' => abs($ligneDeStats[$colonne++]),
+						'but' => $ligneDeStats[$colonne++],
+						'passe_d' => $ligneDeStats[$colonne++],
+						'second_passe_d' => $ligneDeStats[$colonne++],
+						'tir' => $ligneDeStats[$colonne++],
+						'tir_cadre' => $ligneDeStats[$colonne++],
+						'interception' => $ligneDeStats[$colonne++],
+						'centre' => $ligneDeStats[$colonne++],
+						'centre_reussi' => $ligneDeStats[$colonne++],
+						'occasion_creee' => $ligneDeStats[$colonne++],
+						'contre' => $ligneDeStats[$colonne++],
+						'total_tacle' => $ligneDeStats[$colonne++],
+						'tacle_reussi' => $ligneDeStats[$colonne++],
+						'faute_commise' => $ligneDeStats[$colonne++],
+						'faute_subie' => $ligneDeStats[$colonne++],
+						'passe' => $ligneDeStats[$colonne++],
+						'passe_tentee' => $ligneDeStats[$colonne++],
+						'centre_reussi_dans_le_jeu' => $ligneDeStats[$colonne++],
+						'duel_aerien_gagne' => $ligneDeStats[$colonne++],
+						'grosse_occasion_creee' => $ligneDeStats[$colonne++],
+						'ballon_recupere' => $ligneDeStats[$colonne++],
+						'dribble' => $ligneDeStats[$colonne++],
+						'duel_gagne' => $ligneDeStats[$colonne++],
+						'ballon_touche' => $ligneDeStats[$colonne++],
+						'ballon_touche_int_surface' => $ligneDeStats[$colonne++],
+						'tir_int_surface' => $ligneDeStats[$colonne++],
+						'tir_ext_surface' => $ligneDeStats[$colonne++],
+						'tir_cadre_int_surface' => $ligneDeStats[$colonne++],
+						'tir_cadre_ext_surface' => $ligneDeStats[$colonne++],
+						'but_int_surface' => $ligneDeStats[$colonne++],
+						'but_ext_surface' => $ligneDeStats[$colonne++],
+						'ballon_perdu' => $ligneDeStats[$colonne++],
+						'csc' => $ligneDeStats[$colonne++],
+						'penalty_tire' => $ligneDeStats[$colonne++],
+						'penalty_marque' => $ligneDeStats[$colonne++],
+						'penalty_rate' => $ligneDeStats[$colonne++],
+						'penalty_arrete' => $ligneDeStats[$colonne++],
+						'corner_tire' => $ligneDeStats[$colonne++],
+						'corner_centre' => $ligneDeStats[$colonne++],
+						'corner_gagne' => $ligneDeStats[$colonne++],
+						'coup_franc_centre' => $ligneDeStats[$colonne++],
+						'coup_franc_centre_reussi' => $ligneDeStats[$colonne++],
+						'coup_franc_tire' => $ligneDeStats[$colonne++],
+						'coup_franc_cadre' => $ligneDeStats[$colonne++],
+						'coup_franc_marque' => $ligneDeStats[$colonne++],
+						'but_concede' => $ligneDeStats[$colonne++],
+						'cleansheet' => $ligneDeStats[$colonne++],
+						'arret' => $ligneDeStats[$colonne++],
+						'arret_tir_int_surface' => $ligneDeStats[$colonne++],
+						'arret_tir_ext_surface' => $ligneDeStats[$colonne++],
+						'sortie_ext_surface_reussie' => $ligneDeStats[$colonne++],
+						'penalty_concede' => $ligneDeStats[$colonne++],
+						'penalty_subi_gb' => $ligneDeStats[$colonne++],
+						'penalty_arrete_gb' => $ligneDeStats[$colonne++],
+						'degagement' => $ligneDeStats[$colonne++],
+						'degagement_reussi' => $ligneDeStats[$colonne++],
+						'degagement_poing' => $ligneDeStats[$colonne++],
+						'6_buts_ou_plus_pris_sans_penalty' => $ligneDeStats[$colonne++],
+						'5_buts_pris_sans_penalty' => $ligneDeStats[$colonne++],
+						'4_buts_pris_sans_penalty' => $ligneDeStats[$colonne++],
+						'3_buts_pris_sans_penalty' => $ligneDeStats[$colonne++],
+						'2_buts_pris_sans_penalty' => $ligneDeStats[$colonne++],
+						'1_but_pris_sans_penalty' => $ligneDeStats[$colonne++],
+						'rouge_60' => $ligneDeStats[$colonne++],
+						'rouge_75' => $ligneDeStats[$colonne++],
+						'rouge_80' => $ligneDeStats[$colonne++],
+						'rouge_85' => $ligneDeStats[$colonne++],
+						'centre_rate' => $ligneDeStats[$colonne++],
+						'clean_60' => $ligneDeStats[$colonne++],
+						'clean_60D' => $ligneDeStats[$colonne++],
+						'ecart_moins_5' => $ligneDeStats[$colonne++],
+						'ecart_moins_4' => $ligneDeStats[$colonne++],
+						'ecart_moins_3' => $ligneDeStats[$colonne++],
+						'ecart_moins_2' => $ligneDeStats[$colonne++],
+						'ecart_plus_2' => $ligneDeStats[$colonne++],
+						'ecart_plus_3' => $ligneDeStats[$colonne++],
+						'ecart_plus_4' => $ligneDeStats[$colonne++],
+						'grosse_occasion_ratee' => $ligneDeStats[$colonne++],
+						'malus_defaite' => $ligneDeStats[$colonne++],
+						'15_passes_OK_30' => $ligneDeStats[$colonne++],
+						'15_passes_OK_40' => $ligneDeStats[$colonne++],
+						'15_passes_OK_50' => $ligneDeStats[$colonne++],
+						'15_passes_OK_90' => $ligneDeStats[$colonne++],
+						'15_passes_OK_95' => $ligneDeStats[$colonne++],
+						'15_passes_OK_100' => $ligneDeStats[$colonne++],
+						'25_passes_OK_30' => $ligneDeStats[$colonne++],
+						'25_passes_OK_40' => $ligneDeStats[$colonne++],
+						'25_passes_OK_50' => $ligneDeStats[$colonne++],
+						'25_passes_OK_90' => $ligneDeStats[$colonne++],
+						'25_passes_OK_95' => $ligneDeStats[$colonne++],
+						'25_passes_OK_100' => $ligneDeStats[$colonne++],
+						'tacle_rate' => $ligneDeStats[$colonne++],
+						'tir_non_cadre' => $ligneDeStats[$colonne++],
+						'80_ballons_touches' => $ligneDeStats[$colonne++],
+						'90_ballons_touches' => $ligneDeStats[$colonne++],
+						'100_ballons_touches' => $ligneDeStats[$colonne++],
+						'bonus_victoire' => $ligneDeStats[$colonne++],
+						'coup_franc_rate' => $ligneDeStats[$colonne++]
+						));
+				}
+			}
+			addLogEvent('INSERT des stats De la Journee en BDD => OK');
+			$req->closeCursor();
+	//print_r($tableau[1]);
+	//var_dump($array);
+	}else{
+		addLogEvent('Erreur lors Import Stats ROTO - fichier (probablement fichier absent)');
+	}
+}
+
+//Fonction de Login sur Roto
+function login($url,$data){
+		$fp = fopen("cookie.txt", "w");
+		fclose($fp);
+		$login = curl_init();
+		curl_setopt($login, CURLOPT_COOKIEJAR, "cookie.txt");
+		curl_setopt($login, CURLOPT_COOKIEFILE, "cookie.txt");
+		curl_setopt($login, CURLOPT_TIMEOUT, 40000);
+		curl_setopt($login, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($login, CURLOPT_URL, $url);
+		curl_setopt($login, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+		curl_setopt($login, CURLOPT_FOLLOWLOCATION, TRUE);
+		curl_setopt($login, CURLOPT_POST, TRUE);
+		curl_setopt($login, CURLOPT_POSTFIELDS, $data);
+		ob_start();
+		return curl_exec ($login);
+		ob_end_clean();
+		curl_close ($login);
+		unset($login);    
+}
+
+//Fonction de récupération d'une page
+function grab_page($site){
+		
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 40);
+		curl_setopt($ch, CURLOPT_COOKIEFILE, "cookie.txt");
+		curl_setopt($ch, CURLOPT_URL, $site);
+		ob_start();
+		return curl_exec ($ch);
+		ob_end_clean();
+		curl_close ($ch);
+
+}
+
+//Cherche la position (n° ligne) d'une needle dans un tableau haystack
+function recursive_array_search($needle,$haystack) {
+	foreach($haystack as $key=>$value) {
+		$current_key=$key;
+		if($needle===$value OR (is_array($value) && recursive_array_search($needle,$value) !== false)) {
+			return $current_key;
+		}
+	}
+	return false;
+}   
+
+//Renvoie le nb de but encaissés par une équipe sans compter les penaltys
+function butsEncaissesSanSPenalty($ligne,$team,$tableauScore,$dataJoueur) {
+	$position = recursive_array_search($team,$tableauScore);
+	if($tableauScore[$position][0]==$dataJoueur[2]){
+			return ($tableauScore[$position][7]-$tableauScore[$position][9]);
+	}else{
+		
+		return ($tableauScore[$position][2]-$tableauScore[$position][4]);
+	}
+}
+
+//Renvoie l'écart de score d'une équipe
+function ecartScore($ligne,$team,$tableauScore,$dataJoueur) {
+	$position = recursive_array_search($team,$tableauScore);
+	//echo $tableauScore[$position][0].' == '.$dataJoueur[2];
+	if($tableauScore[$position][0]==$dataJoueur[2]){
+		//echo ' ____ '.($tableauScore[$position][2]-$tableauScore[$position][7]).' ____ ';
+		return ($tableauScore[$position][2]-$tableauScore[$position][7]);	
+	}else{
+		//echo ' ____ '.($tableauScore[$position][7]-$tableauScore[$position][2]).' ____ ';
+		return ($tableauScore[$position][7]-$tableauScore[$position][2]);
+	}
+}
+
+//Renvoie W en cas de victoire, L en cas de défaite, D en cas de nul et ANNULE en cas de match non joué
+function testVictoire($ligne,$team,$tableauScore,$dataJoueur) {
+	$position = recursive_array_search($team,$tableauScore);
+	if($tableauScore[$position][0]==$dataJoueur[2]){
+		return $tableauScore[$position][3];
+	}else{
+		return $tableauScore[$position][8];
+	}
+}
+
+//Renvoie true si cleansheet et victoire du joueur ayant joué au moins 60 minutes
+function isCleanSheet($ligne,$team,$tableauScore,$dataJoueur) {
+	if(testVictoire($ligne,$team,$tableauScore,$dataJoueur)=='W' && butsEncaissesSanSPenalty($ligne,$team,$tableauScore,$dataJoueur) == 0 && $dataJoueur[8]>=60){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+
+//Renvoie true si cleansheet match NUL du joueur ayant joué au moins 60 minutes
+function isCleanSheetNul($ligne,$team,$tableauScore,$dataJoueur) {
+	if(testVictoire($ligne,$team,$tableauScore,$dataJoueur)=='D' && butsEncaissesSanSPenalty($ligne,$team,$tableauScore,$dataJoueur) == 0 && $dataJoueur[8]>=60){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+
+//Fonction de collecte des résultats de la journéé
+//A partir du CSV resultatsL1.csv
+function buildTableauJournee($idJournee) {
+	$resultatsJourneeTab = null;
+	require_once(__DIR__ . '/../modele/connexionSQL.php');
+	try
+	{
+		// Récupération de la connexion
+		$bdd = ConnexionBDD::getInstance();
+	}
+	catch (Exception $e)
+	{
+		die('Erreur : ' . $e->getMessage());
+		echo $e;
+	}
+	$req = $bdd->prepare('SELECT * FROM resultatsl1_reel WHERE journee = :journee');
+	$req->execute(array('journee' => $idJournee));
+	$ligne=0;
+	while ($donnees = $req->fetch())
+	{
+		$resultatsJourneeTab[$ligne][]=$donnees['equipeDomicile'];
+		$resultatsJourneeTab[$ligne][]=$donnees['homeDomicile'];
+		$resultatsJourneeTab[$ligne][]=$donnees['butDomicile'];
+		$resultatsJourneeTab[$ligne][]=$donnees['winOrLoseDomicile'];
+		$resultatsJourneeTab[$ligne][]=$donnees['penaltyDomicile'];
+		$resultatsJourneeTab[$ligne][]=$donnees['equipeVisiteur'];
+		$resultatsJourneeTab[$ligne][]=$donnees['homeVisiteur'];
+		$resultatsJourneeTab[$ligne][]=$donnees['butVisiteur'];
+		$resultatsJourneeTab[$ligne][]=$donnees['winOrLoseVisiteur'];
+		$resultatsJourneeTab[$ligne][]=$donnees['penaltyVisiteur'];
+		$ligne++;
+	}
+	$req->closeCursor();
+	
+	//print_r($resultatsJourneeTab);
+	return $resultatsJourneeTab;
+}
+
+function nettoyageFichierStat()
+{
+	
 }
 
 
