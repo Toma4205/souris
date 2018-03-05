@@ -168,6 +168,7 @@ function afficherBonusMalus($codeBonus, $libBonus, $nomJoueurEquipe, $nomJoueurA
     $nbDefInit = 0;
     $nbMilInit = 0;
     $nbAttInit = 0;
+    $nbGb = 0;
     $nbDef = 0;
     $nbMil = 0;
     $nbAtt = 0;
@@ -189,19 +190,23 @@ function afficherBonusMalus($codeBonus, $libBonus, $nomJoueurEquipe, $nomJoueurA
           $nbAttInit += 1;
         }
       }
+    }
+    foreach ($joueurs as $cle => $value)
+    {
       if ($value->numeroDefinitif() != null)
       {
-        if ($value->position() == ConstantesAppli::DEFENSEUR) {
+        if ($value->numeroDefinitif() == 1) {
+          $nbGb += 1;
+          $noteGB = $value->note();
+        } else if ($value->numeroDefinitif() <= ($nbDefInit + 1)) {
           $nbDef += 1;
           $noteDef += $value->note();
-        } else if ($value->position() == ConstantesAppli::MILIEU) {
+        } else if ($value->numeroDefinitif() <= ($nbDefInit + $nbMilInit + + 1)) {
           $nbMil += 1;
           $noteMil += $value->note();
-        } else if ($value->position() == ConstantesAppli::ATTAQUANT) {
+        } else {
           $nbAtt += 1;
           $noteAtt += $value->note();
-        } else {
-          $noteGB = $value->note();
         }
       }
     }
@@ -232,6 +237,12 @@ function afficherBonusMalus($codeBonus, $libBonus, $nomJoueurEquipe, $nomJoueurA
     echo '<div>';
     echo '<ul>';
 
+    echo '<li class="detail_match_equipe_moyenne_ligne">Gardien';
+    echo '<span class="float_right detail_match_equipe_moyenne_malus">';
+    echo '.';
+    echo '</span>';
+    echo '<span class="float_right detail_match_equipe_moyenne_ligne_valeur bold">' . $noteGB . '</span>';
+    echo '</li>';
     echo '<li class="detail_match_equipe_moyenne_ligne">Défense';
     echo '<span class="float_right detail_match_equipe_moyenne_malus">';
     if (($nbDefInit - $nbDef) > 0) {
