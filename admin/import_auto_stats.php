@@ -3,6 +3,10 @@
 
 <?php
 
+include('./fonctions_admin.php');
+scrapRoto('201728');
+
+/*
 $row = 0;
 //$fichier = $_FILES['mon_fichier']['tmp_name'];
 //$fichierName = $_FILES['mon_fichier']['name'];
@@ -1111,11 +1115,13 @@ if($erreur_sur_fichier == 0){
 	echo "<br />\n";
 }
 
+*/
 ?>
 
 	<form method="post" action="../admin.php" enctype="multipart/form-data">
 		<input type="submit" name="retourAdmin" value="Retour page Admin" />
 	</form>
 
+	
 </body>
 </html>

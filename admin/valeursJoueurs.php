@@ -2,7 +2,9 @@
 <body>
 
 <?php
-			
+	
+	set_time_limit(500);
+	
 	function algoCalculValeurJoueur($valeur)
 	{
 		//Constantes

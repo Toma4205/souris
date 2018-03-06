@@ -1,3 +1,5 @@
+
+
 /*Script passé en "PROD" le 04/03/2018 */
 UPDATE joueur_reel SET cle_roto_secondaire = 'NkunkuChristopherPSG' WHERE id = 456;
 
@@ -6,6 +8,10 @@ ALTER TABLE `resultatsl1_reel` CHANGE `butDomicile` `butDomicile` INT(10) UNSIGN
 ALTER TABLE `resultatsl1_reel` CHANGE `penaltyDomicile` `penaltyDomicile` INT(10) UNSIGNED NULL DEFAULT NULL;
 ALTER TABLE `resultatsl1_reel` CHANGE `butVisiteur` `butVisiteur` INT(10) UNSIGNED NULL DEFAULT NULL;
 ALTER TABLE `resultatsl1_reel` CHANGE `penaltyVisiteur` `penaltyVisiteur` INT(10) UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `resultatsl1_reel` CHANGE `statut` `statut` INT(10) NOT NULL DEFAULT '0';
+ALTER TABLE `nomenclature_equipes_reelles` CHANGE `trigramme` `trigramme` CHAR(3) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
+ALTER TABLE `nomenclature_equipes_reelles` CHANGE `ville_maxi` `ville_maxi` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
+
 
 /*Script passé en "PROD" le 02/03/2018 */
 CREATE TABLE `buteur_live_journee` (
