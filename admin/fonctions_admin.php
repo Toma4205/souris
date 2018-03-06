@@ -32,6 +32,7 @@ function set_statut_match_termine_journee
 function nettoyageFichierStat
 function get_journee_format_long
 function get_csv_from_roto
+function calculer_notes_joueurs
 
 */
 
@@ -159,7 +160,7 @@ function scrapMaxi($num_journee){
 	
 	//Variables de l'algo
 	$journee=0;
-	$resultats; // Tableau contenant pour chaque ligne : ville_dom, nb_but_dom, nb_but_dom_sur_penalty, nb_but_ext, ville_ext, nb_but_ext_sur_penalty
+	$resultats = array(); // Tableau contenant pour chaque ligne : ville_dom, nb_but_dom, nb_but_dom_sur_penalty, nb_but_ext, ville_ext, nb_but_ext_sur_penalty
 	$buteurs; //Tableau contenant pour chaque ligne : ville, nom_buteur
 	$nb_buteurs=0; 
 	$i_match = 0;
@@ -192,11 +193,10 @@ function scrapMaxi($num_journee){
 							$lignes5 = explode("&gt;",$ligne4);
 							foreach ($lignes5 as $ligne5) {
 								//Debug
-								addLogEvent('Ligne '.$i.'|'.$j.'|'.$k.'|'.$m.'|'.$n.'|'.$p.' '.$ligne5);
+								//addLogEvent('Ligne '.$i.'|'.$j.'|'.$k.'|'.$m.'|'.$n.'|'.$p.' '.$ligne5);
 								
 								if($i>=1 && $j==2 && $k==0 && $m==0 && $n==0&& $p==1 && strpos($ligne5,"journ")>0){ //JOURNEE
 									$journee = substr($ligne5,0,2);
-									echo 'journee : '.$journee;
 								}
 								
 								if($i>1 && $j==2 && $k==1 && $m==0 && $n==0&& $p==0 && $journee === $journeeRecherchee){ // EQUIPE DOM
@@ -343,12 +343,13 @@ function scrapMaxi($num_journee){
 	
 	
 	//Dernier résultat ajouté
-	if(!is_null($resultats))
+	if(!empty($resultats))
 	{
 		$resultats[$i_match][]=$journeeRecherchee;
 		$resultats[$i_match][]=$statut;
-	}	
-	addLogEvent('scrapMaxi // '.print_r($resultats));
+	}else{
+		addLogEvent('Aucun résultat web MAXI pour la journee '.$journeeRecherchee);
+	}
 	$time_fin_dernier_match = null;
 	foreach($resultats as $tab_resultat)
 	{
@@ -393,7 +394,7 @@ function is_Fichier_Roto_A_Telecharger($journee)
 	
 	while ($nb_match = $req_matchs_termines_depuis_longtemps->fetch())
 	{
-		if($nb_match > 0)
+		if($nb_match['nb_match'] > 0)
 		{
 			return true;
 		}else{
@@ -463,7 +464,7 @@ function set_statut_match_termine_journee($journee, $statut, $ex_statut)
 	addLogEvent('journee => '.$journee.', statut => '.$statut.', ex_statut => '.$ex_statut);
 }
 
-//RECUPERER LE STATUT D'UN MATCH
+//RECUPERER LE STATUT D'UN MATCH A PARTIR DE LEQUIPE DOMICILE MAXI
 function getStatutMatchMaxi($nom_ville_maxi_dom, $journee)
 {
 	addLogEvent('FONCTION getStatutMatchMaxi');
@@ -497,7 +498,7 @@ function getStatutMatchMaxi($nom_ville_maxi_dom, $journee)
 	return $statut;
 }
 
-//RECUPERER LE STATUT D'UN MATCH A PARTIR DU TRIGRAMME DOMICILE
+//RECUPERER LE STATUT D'UN MATCH A PARTIR DU TRIGRAMME EQUIPE
 function getStatutMatch($trigramme_dom, $journee)
 {
 	addLogEvent('FONCTION getStatutMatch');
@@ -513,7 +514,7 @@ function getStatutMatch($trigramme_dom, $journee)
 		echo $e;
 	}
 	$statut = null;
-	$req_statut_match=$bdd->prepare('SELECT rr.statut FROM resultatsl1_reel rr WHERE rr.equipeDomicile = :equipeDomicile AND SUBSTRING(rr.journee,5,2) = :journee;');
+	$req_statut_match=$bdd->prepare('SELECT rr.statut FROM resultatsl1_reel rr WHERE :equipeDomicile IN (rr.equipeDomicile, rr.equipeVisiteur) AND SUBSTRING(rr.journee,5,2) = :journee;');
 	
 	$req_statut_match->execute(array('equipeDomicile' => $trigramme_dom, 'journee' => $journee));
 	
@@ -524,7 +525,7 @@ function getStatutMatch($trigramme_dom, $journee)
 	
 	$req_statut_match->closeCursor();
 
-	addLogEvent('ville_maxi => '.$trigramme_dom.', journee => '.$journee);
+	addLogEvent('Equipe => '.$trigramme_dom.', journee => '.$journee);
 	addLogEvent('STATUT => '.$statut);
 
 	return $statut;
@@ -744,6 +745,7 @@ function annuler_match_restants($num_journee)
 //Récupère le fichier CSV from ROTO
 function get_csv_from_roto($num_journee_avec_annee)
 {
+	addLogEvent('FONCTION get_csv_from_roto');
 	$url_part1 = "https://www.rotowire.com/soccer/player_stats.xls?pos=A&league=FRAN&season=";
 	$url_option_saison = substr($num_journee_avec_annee,0,4);
 	$url_part2 = "&start=";
@@ -775,11 +777,13 @@ function get_csv_from_roto($num_journee_avec_annee)
 //Exploite le fichier CSV ($path) CORRESPONDANT A LA JOURNEE
 function scrapRoto($num_journee_avec_annee, $path)
 {	
+	addLogEvent('FONCTION num_journee_avec_annee');
 	$resultatsJournee = buildTableauJournee($num_journee_avec_annee);
 	nettoyageFichierStat($path);
 		
 	//Calcul des statistiques complémentaires
 	$erreur_sur_fichier = 1;
+	$row=0;
 	if (($handle = @fopen($path, "r")) !== FALSE) {
 		$erreur_sur_fichier = 0;
 		while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
@@ -1352,15 +1356,8 @@ function scrapRoto($num_journee_avec_annee, $path)
 			$supprimerStatsAncienne->execute (array('journee' => $num_journee_avec_annee));
 			$supprimerStatsAncienne->closeCursor();
 			$premiereLigne=0;
-			foreach($tableau as $ligneDeStats)
-			{
-				if($premiereLigne==0){
-					$premiereLigne++;
-				}else{
-					$statut_tmp = getStatutMatch(substr(trim($ligneDeStats[0]),-3),substr($num_journee_avec_annee,-2));
-					if($statut_tmp >= 1 && $statut_tmp <= 3) //Insert uniquement si match terminé depuis plus de 10 minutes
-					{
-						$req = $bdd->prepare('INSERT IGNORE INTO joueur_stats(
+			
+			$req = $bdd->prepare('INSERT IGNORE INTO joueur_stats(
 						id,
 						journee,
 						a_joue,
@@ -1578,6 +1575,15 @@ function scrapRoto($num_journee_avec_annee, $path)
 						:bonus_victoire,
 						:coup_franc_rate,
 						NULL)');
+			
+			foreach($tableau as $ligneDeStats)
+			{
+				if($premiereLigne==0){
+					$premiereLigne++;
+				}else{
+					$statut_tmp = getStatutMatch(substr(trim($ligneDeStats[0]),-3),substr($num_journee_avec_annee,-2));
+					if($statut_tmp >= 1 && $statut_tmp <= 3) //Insert uniquement si match terminé depuis plus de 10 minutes
+					{
 						$colonne=0;
 						$req->execute(array(
 							'id' => $ligneDeStats[$colonne++],
@@ -1807,6 +1813,7 @@ function isCleanSheetNul($ligne,$team,$tableauScore,$dataJoueur) {
 //Fonction de collecte des résultats de la journéé
 //A partir du CSV resultatsL1.csv
 function buildTableauJournee($idJournee) {
+	addLogEvent('FONCTION buildTableauJournee');
 	$resultatsJourneeTab = null;
 	require_once(__DIR__ . '/../modele/connexionSQL.php');
 	try
@@ -1842,12 +1849,64 @@ function buildTableauJournee($idJournee) {
 	return $resultatsJourneeTab;
 }
 
+//Calcule les notes de tous les joueurs ayant une note à NULL
+function calculer_notes_joueurs()
+{
+	addLogEvent('FONCTION calculer_notes_joueurs');
+	require_once(__DIR__ . '/../modele/connexionSQL.php');
+		try
+		{
+			// Récupération de la connexion
+			$bdd = ConnexionBDD::getInstance();
+		}
+		catch (Exception $e)
+		{
+			die('Erreur : ' . $e->getMessage());
+			echo $e;
+		}
+		
+		$req = $bdd->query('SELECT t1.position, t2.* FROM joueur_reel t1, joueur_stats t2 WHERE t2.id IN (t1.cle_roto_primaire, t1.cle_roto_secondaire) AND t2.note IS NULL');
+		$req_regleCalcul = $bdd->prepare('SELECT * FROM nomenclature_reglescalculnote WHERE position = :position');
+		$req_scoreToNote = $bdd->prepare('SELECT note FROM nomenclature_scoretonote WHERE ScoreObtenu = :scoreObtenu AND Position = :position');
+		$upd_note = $bdd->prepare('UPDATE joueur_stats SET note = :note WHERE id = :id AND journee = :journee');
+		
+		while ($donnees = $req->fetch())
+		{
+			$scoreCalcule = 0;
+			if($donnees['a_joue'] == '0'){
+				$noteObtenue = 0;
+				addLogEvent($donnees['id'].' n\' a pas joué sur la journee '.$donnees['journee'].' et obtient la note de '.$noteObtenue);
+				$upd_note->execute(array('note' => $noteObtenue,'id' => $donnees['id'],'journee' => $donnees['journee']));
+			}else{
+				$req_regleCalcul->execute(array('position' => $donnees['position']));
+				while ($tableauReglesCalcul = $req_regleCalcul->fetch())
+				{
+					$scoreCalcule += $donnees[$tableauReglesCalcul['StatName']] * $tableauReglesCalcul['Ponderation'];
+				}
+				
+				$req_scoreToNote->execute(array('scoreObtenu' => round($scoreCalcule,2),'position' => $donnees['position']));
+				$noteObtenue=$req_scoreToNote->fetch(PDO::FETCH_ASSOC);
+				addLogEvent($donnees['id'].' sur la journee '.$donnees['journee'].' obtient la note de '.$noteObtenue['note']);
+				$upd_note->execute(array('note' => $noteObtenue['note'],'id' => $donnees['id'],'journee' => $donnees['journee']));
+			}
+			
+		}
+		$req->closeCursor();
+		$req_regleCalcul->closeCursor();
+		$req_scoreToNote->closeCursor();
+		$upd_note->closeCursor();
+}
+
+
 //RESTE A FAIRE 
 function nettoyageFichierStat()
 {
 	//Virer les doublons sur le même poste
 	
 }
+
+
+
 
 
 ?>

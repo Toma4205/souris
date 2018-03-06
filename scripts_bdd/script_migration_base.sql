@@ -1,5 +1,3 @@
-
-
 /*Script passé en "PROD" le 04/03/2018 */
 UPDATE joueur_reel SET cle_roto_secondaire = 'NkunkuChristopherPSG' WHERE id = 456;
 
