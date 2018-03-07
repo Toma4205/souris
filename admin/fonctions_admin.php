@@ -39,7 +39,22 @@ function raz_table_joueur_compo_equipe_sur_journee
 function mise_a_jour_stat_classement
 
 */
+/////////////////CONNEXION BASE
+///// Utilisation du mot clé "global" pour avoir accès à la bdd dans toutes les fonctions
+require_once(__DIR__ . '/../modele/connexionSQL.php');
+	try
+	{
+		// Récupération de la connexion
+		$bdd = ConnexionBDD::getInstance();
+	}
+	catch (Exception $e)
+	{
+		die('Erreur : ' . $e->getMessage());
+		echo $e;
+		addLogEvent($e);
+	}
 
+//////////////////
 
 //Fonction d'écriture des logs dans un fichier
 function addLogEvent($event)
@@ -71,17 +86,7 @@ function get_journee_format_long($journee_short)
 
 //Retourne le statut d'une journée selon la table calendrier_reel
 function getStatutJournee($num_journee){
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-	}
+	global $bdd;
 	$reqStatutJournee = $bdd->prepare('SELECT statut FROM calendrier_reel WHERE num_journee = :num_journee');
 	$reqStatutJournee->execute(array('num_journee' => $num_journee));
 
@@ -98,17 +103,7 @@ function getStatutJournee($num_journee){
 //Retourne le statut d'une journée selon la table calendrier_reel
 function setStatutJournee($num_journee,$statut){
 	addLogEvent('FUNCTION setStatutJournee');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-	}
+	global $bdd;
 	$updStatutJournee = $bdd->prepare('UPDATE calendrier_reel SET statut = :statut WHERE num_journee = :num_journee');
 	$updStatutJournee->execute(array('num_journee' => $num_journee, 'statut' => $statut));
 	
@@ -118,17 +113,7 @@ function setStatutJournee($num_journee,$statut){
 //Passage du statut d'une journée de 0 à 1 dans calendrier réel
 //Passage du score à 0 pour calendrier ligue sur cette meme journée
 function initializeJournee($num_journee){
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-	}
+	global $bdd;
 	
 	$upd_initializeStatutJournee=$bdd->prepare('UPDATE calendrier_reel SET statut = 1 WHERE num_journee = :num_journee;');
 	$upd_initializeScoreJournee=$bdd->prepare('UPDATE calendrier_ligue SET score_dom = 0, score_ext = 0 WHERE num_journee_cal_reel = :num_journee;');
@@ -380,17 +365,7 @@ function scrapMaxi($num_journee){
 function is_Fichier_Roto_A_Telecharger($journee)
 {
 	addLogEvent('FONCTION is_Fichier_Roto_A_Telecharger');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-	}
+	global $bdd;
 	$req_matchs_termines_depuis_longtemps=$bdd->prepare('SELECT count(*) AS \'nb_match\' FROM resultatsl1_reel WHERE UNIX_TIMESTAMP()-statut > 600 AND statut > 3 AND SUBSTRING(journee,5,2) = :journee;');
 	
 	$req_matchs_termines_depuis_longtemps->execute(array('journee' => $journee));
@@ -413,17 +388,7 @@ function is_Fichier_Roto_A_Telecharger($journee)
 function setStatutMatch($nom_ville_maxi_dom, $journee, $statut, $ex_statut)
 {
 	addLogEvent('FONCTION setStatutMatch');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-	}
+	global $bdd;
 	
 	if($ex_statut<4)
 	{
@@ -443,17 +408,7 @@ function setStatutMatch($nom_ville_maxi_dom, $journee, $statut, $ex_statut)
 function set_statut_match_termine_journee($journee, $statut, $ex_statut)
 {
 	addLogEvent('FONCTION set_statut_match_journee');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-	}
+	global $bdd;
 	
 	if($ex_statut<4)
 	{
@@ -472,17 +427,7 @@ function set_statut_match_termine_journee($journee, $statut, $ex_statut)
 function getStatutMatchMaxi($nom_ville_maxi_dom, $journee)
 {
 	addLogEvent('FONCTION getStatutMatchMaxi');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-	}
+	global $bdd;
 	$statut = null;
 	$req_statut_match=$bdd->prepare('SELECT rr.statut FROM resultatsl1_reel rr, nomenclature_equipes_reelles ner WHERE rr.equipeDomicile = ner.trigramme AND ner.ville_maxi = :ville_maxi AND SUBSTRING(rr.journee,5,2) = :journee;');
 	
@@ -506,17 +451,7 @@ function getStatutMatchMaxi($nom_ville_maxi_dom, $journee)
 function getStatutMatch($trigramme_dom, $journee)
 {
 	addLogEvent('FONCTION getStatutMatch');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-	}
+	global $bdd;
 	$statut = null;
 	$req_statut_match=$bdd->prepare('SELECT rr.statut FROM resultatsl1_reel rr WHERE :equipeDomicile IN (rr.equipeDomicile, rr.equipeVisiteur) AND SUBSTRING(rr.journee,5,2) = :journee;');
 	
@@ -540,17 +475,7 @@ function getStatutMatch($trigramme_dom, $journee)
 //FORMAT TABLEAU : NOM_VILLE_MAXI_DOM, NB_BUT_DOM, NB_PENALTY_DOM, NB_BUT_EXT, NOM_VILLE_MAXI_EXT, NB_PENALTY_EXT, JOURNEE, STATUT_MATCH
 function setScoreMatch($tab_resultat){
 	addLogEvent('FONCTION UPDATE SCORE EN BASE setScoreMatch');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-	}
+	global $bdd;
 	
 	
 	$upd_score_match=$bdd->prepare('UPDATE resultatsl1_reel rr, nomenclature_equipes_reelles ner SET rr.butDomicile = :butDomicile, rr.winOrLoseDomicile = :winOrLoseDomicile, rr.penaltyDomicile = :penaltyDomicile, rr.butVisiteur = :butVisiteur, rr.winOrLoseVisiteur = :winOrLoseVisiteur, rr.penaltyVisiteur = :penaltyVisiteur WHERE rr.equipeDomicile = ner.trigramme AND ner.ville_maxi = :ville_maxi AND SUBSTRING(rr.journee,5,2) = :journee AND rr.statut = 0;');
@@ -593,17 +518,7 @@ function maj_table_live_buteur($tab_buteurs){
 }
 
 function nettoyageTableButeurLive(){
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-	}
+	global $bdd;
 	addLogEvent('FONCTION nettoyageTableButeurLive');
 	$trc_nettoyageTableButeurLive=$bdd->prepare('TRUNCATE TABLE buteur_live_journee');
 	$trc_nettoyageTableButeurLive->execute();
@@ -613,17 +528,7 @@ function nettoyageTableButeurLive(){
 //AJOUT EN BASE D'UN BUTEUR LIVE
 //FORMAT TABLEAU EN ENTREE : VILLE_MAXI, ID_JOUEUR_MAXI, IS_PENALTY, IS_CSC, JOURNEE
 function setButeurLive($buteur){
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-	}
+	global $bdd;
 	$ins_buteur_live=$bdd->prepare('INSERT INTO buteur_live_journee (
 									journee,
 									id_joueur_maxi,
@@ -649,17 +554,7 @@ function setButeurLive($buteur){
 
 //Fait matcher les buteurs_reels avec les id_reel déjà en table
 function associer_buteur_live_joueur_reel(){
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-	}
+	global $bdd;
 	
 	$upd_matching_buteur_id_reel=$bdd->prepare('UPDATE buteur_live_journee blj, joueur_reel jr, nomenclature_equipes_reelles ner
 												SET blj.id_joueur_reel = jr.id 
@@ -673,17 +568,7 @@ function associer_buteur_live_joueur_reel(){
 //Ecrit dans le fichier LOG le nom_maxi de chaque buteur n'ayant pas trouvé de correspondance dans la table joueur_reel
 function afficher_log_buteur_sans_matching(){
 	addLogEvent('FONCTION afficher_log_buteur_sans_matching');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-	}
+	global $bdd;
 	$req_buteurs_sans_matching=$bdd->prepare('SELECT id_joueur_maxi FROM buteur_live_journee WHERE id_joueur_reel IS NULL ;');
 	$req_buteurs_sans_matching->execute();
 	
@@ -698,17 +583,7 @@ function afficher_log_buteur_sans_matching(){
 //Renvoie le nombre de match ayant un statut à 1 sur une journée déterminée
 function get_nb_match_termine_par_journee($num_journee){
 	addLogEvent('FONCTION get_nb_match_termine_par_journee');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-	}
+	global $bdd;
 	
 	$req_nb_match_termine_journee=$bdd->prepare('SELECT COUNT(*) AS \'nb_match_termine\' FROM resultatsl1_reel WHERE SUBSTRING(journee,5,2) = :journee AND statut = 1;');
 	$req_nb_match_termine_journee->execute(array('journee' => $num_journee));
@@ -722,28 +597,16 @@ function get_nb_match_termine_par_journee($num_journee){
 }
 
 
-//Annule tous les matchs avec un statut à 1
+//Annule tous les matchs avec un statut encore à 0 sur une journee déterminée
 function annuler_match_restants($num_journee)
 {
 	addLogEvent('FONCTION annuler_match_restants');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-	}
+	global $bdd;
 	
-	//En cours
-	//$upd_annule_match_restant_journee=$bdd->prepare('UPDATE resultatsl1_reel SET WHERE SUBSTRING(journee,5,2) = :journee ;');
+	$upd_annule_match_restant_journee=$bdd->prepare('UPDATE resultatsl1_reel SET butDomicile = 0, winOrLoseDomicile = \'ANNULE\', penaltyDomicile = 0, butVisiteur = 0, winOrLoseVisiteur = \'ANNULE\', penaltyVisiteur = 0 WHERE SUBSTRING(journee,5,2) = :journee AND statut = 0;');
 	$upd_annule_match_restant_journee->execute(array('journee' => $num_journee));
 	
 	$upd_annule_match_restant_journee->closeCursor();
-
 }
 
 //Récupère le fichier CSV from ROTO
@@ -1343,17 +1206,7 @@ function scrapRoto($num_journee_avec_annee, $path)
 
 	//Import en BDD des statistiques
 	if($erreur_sur_fichier == 0){
-		require_once(__DIR__ . '/../modele/connexionSQL.php');
-			try
-			{
-				// Récupération de la connexion
-				$bdd = ConnexionBDD::getInstance();
-			}
-			catch (Exception $e)
-			{
-				die('Erreur : ' . $e->getMessage());
-				echo $e;
-			}
+		global $bdd;
 			
 			
 			$supprimerStatsAncienne = $bdd->prepare('DELETE FROM joueur_stats WHERE journee = :journee');
@@ -1819,17 +1672,7 @@ function isCleanSheetNul($ligne,$team,$tableauScore,$dataJoueur) {
 function buildTableauJournee($idJournee) {
 	addLogEvent('FONCTION buildTableauJournee');
 	$resultatsJourneeTab = null;
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-	}
+	global $bdd;
 	$req = $bdd->prepare('SELECT * FROM resultatsl1_reel WHERE journee = :journee');
 	$req->execute(array('journee' => $idJournee));
 	$ligne=0;
@@ -1857,17 +1700,7 @@ function buildTableauJournee($idJournee) {
 function calculer_notes_joueurs()
 {
 	addLogEvent('FONCTION calculer_notes_joueurs');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-		try
-		{
-			// Récupération de la connexion
-			$bdd = ConnexionBDD::getInstance();
-		}
-		catch (Exception $e)
-		{
-			die('Erreur : ' . $e->getMessage());
-			echo $e;
-		}
+	global $bdd;
 		
 		$req = $bdd->query('SELECT t1.position, t2.* FROM joueur_reel t1, joueur_stats t2 WHERE t2.id IN (t1.cle_roto_primaire, t1.cle_roto_secondaire) AND t2.note IS NULL');
 		$req_regleCalcul = $bdd->prepare('SELECT * FROM nomenclature_reglescalculnote WHERE position = :position');
@@ -1905,18 +1738,7 @@ function calculer_notes_joueurs()
 function get_effectifs_ligue_journee($constante_num_journee_cal_reel,$constanteConfrontationLigue)
 {
 	addLogEvent('FONCTION get_effectifs_ligue_journee');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	$req_effectifs = $bdd->prepare('SELECT t1.id, t3.id_compo, t2.id_equipe, t1.id_equipe_dom, t1.id_equipe_ext, t3.id_joueur_reel, t4.cle_roto_primaire, t3.capitaine, t4.position, t3.numero , t2.code_tactique, t2.code_bonus_malus AS \'code_bonus_malus_equipe\', t3.numero_remplacement, t3.id_joueur_reel_remplacant, t3.note_min_remplacement FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel;');
 	$req_effectifs->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue));
@@ -1930,18 +1752,7 @@ function get_effectifs_ligue_journee($constante_num_journee_cal_reel,$constanteC
 function get_effectifs_titulaires_ligue_journee($constante_num_journee_cal_reel,$constanteConfrontationLigue)
 {
 	addLogEvent('FONCTION get_effectifs_titulaires_ligue_journee');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	$req_effectifnote = $bdd->prepare('SELECT t3.id_compo, t2.id_equipe, t1.id_equipe_dom, t1.id_equipe_ext, t3.id_joueur_reel, t4.cle_roto_primaire, t3.capitaine, t4.position, t3.numero , t3.note, t3.note_bonus, t2.code_bonus_malus AS \'code_bonus_malus_equipe\', t3.numero_remplacement, t3.id_joueur_reel_remplacant, t3.note_min_remplacement FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero < 12 ;');
 	$req_effectifnote->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue));
@@ -1955,18 +1766,7 @@ function get_effectifs_titulaires_ligue_journee($constante_num_journee_cal_reel,
 function get_effectifs_remplacant_ligue_journee_equipe($constante_num_journee_cal_reel,$constanteConfrontationLigue,$id_equipe)
 {
 	addLogEvent('FONCTION get_effectifs_remplacant_ligue_journee_equipe');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	$req_remplacant = $bdd->prepare('SELECT  t3.id_joueur_reel, t4.cle_roto_primaire,  t4.position, t3.numero, t3.note, t3.note_bonus, t3.numero_definitif FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero > 11 AND t2.id_equipe = :id_equipe AND t3.numero_definitif IS NULL ORDER By t3.numero ;');
 	$req_remplacant->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue, 'id_equipe' => $id_equipe));
@@ -1980,18 +1780,7 @@ function get_effectifs_remplacant_ligue_journee_equipe($constante_num_journee_ca
 function get_effectifs_non_remplace_ligue_journee($constante_num_journee_cal_reel,$constanteConfrontationLigue)
 {
 	addLogEvent('FONCTION get_effectifs_non_remplace_ligue_journee');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	$req_effectif_nonRemplace = $bdd->prepare('SELECT t3.id_compo, t2.id_equipe, t3.id_joueur_reel, t4.cle_roto_primaire, t4.position, t3.numero, t3.note, t3.numero_definitif FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero < 12 AND t3.numero_definitif IS NULL AND t3.note IS NULL ORDER BY id_compo, t3.numero ASC ;');
 	$req_effectif_nonRemplace->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue));
@@ -2007,18 +1796,7 @@ function get_effectifs_non_remplace_ligue_journee($constante_num_journee_cal_ree
 function get_confrontations_par_journee($constante_num_journee_cal_reel,$constanteConfrontationLigue)
 {
 	addLogEvent('FONCTION get_confrontations_par_journee');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	$req_listeConfrontationParJournee = $bdd->prepare('SELECT id_cal_ligue, t2.id
 				FROM calendrier_ligue t1, compo_equipe t2
@@ -2038,18 +1816,7 @@ function get_confrontations_par_journee($constante_num_journee_cal_reel,$constan
 function get_attaquants_non_remplace_ligue_journee($constante_num_journee_cal_reel,$constanteConfrontationLigue)
 {
 	addLogEvent('FONCTION get_attaquants_non_remplace_ligue_journee');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	$req_attaquant_nonRemplace = $bdd->prepare('SELECT t3.id_compo, t2.id_equipe, t3.id_joueur_reel, t4.cle_roto_primaire, t4.position, t3.numero, t3.note, t3.note_bonus, t3.numero_definitif FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero < 12 AND t3.numero_definitif IS NULL AND t3.note IS NULL AND t4.position = \'Forward\' ORDER BY id_compo, t3.numero ASC ;');
 	$req_attaquant_nonRemplace->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue));
@@ -2063,18 +1830,7 @@ function get_attaquants_non_remplace_ligue_journee($constante_num_journee_cal_re
 function get_joueurAvecRemplacementTactiqueActif($constante_num_journee_cal_reel,$constanteConfrontationLigue)
 {
 	addLogEvent('FONCTION get_joueurAvecRemplacementTactiqueActif');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	$req_joueurAvecRemplacementTactiqueActif= $bdd->prepare('SELECT DISTINCT t3.id_joueur_reel, t3.id_compo, t4.cle_roto_primaire, t3.numero, t3.id_joueur_reel_remplacant FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero < 12 AND t3.numero_definitif IS NULL AND t3.note IS NOT NULL AND t3.note < t3.note_min_remplacement AND t3.id_joueur_reel_remplacant IN (SELECT t3.id_joueur_reel FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero > 11 AND t3.numero_definitif IS NULL AND t3.note IS NOT NULL) ;');
 
@@ -2091,18 +1847,7 @@ function get_joueurAvecRemplacementTactiqueActif($constante_num_journee_cal_reel
 function get_joueurRestants($constante_num_journee_cal_reel,$constanteConfrontationLigue)
 {
 	addLogEvent('FONCTION get_joueurRestants');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	$req_joueursRestants= $bdd->prepare('SELECT t3.id_compo, t3.id_joueur_reel, t4.cle_roto_primaire, t3.note, t3.numero, t3.numero_definitif FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero < 12 AND t3.numero_definitif IS NULL AND t3.note IS NOT NULL ;');
 
@@ -2117,18 +1862,7 @@ function get_joueurRestants($constante_num_journee_cal_reel,$constanteConfrontat
 function get_effectif_malus_bonus($constante_num_journee_cal_reel,$constanteConfrontationLigue)
 {
 	addLogEvent('FONCTION get_effectif_malus_bonus');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	$req_malus_bonus= $bdd->prepare('SELECT t2.id, t1.id_equipe, t2.id_equipe_dom, t2.id_equipe_ext, t1.code_bonus_malus
 			FROM compo_equipe t1, calendrier_ligue t2 WHERE t2.id_ligue = :id_ligue AND t2.num_journee_cal_reel = :num_journee_cal_reel AND t2.id = t1.id_cal_ligue ;');
@@ -2143,18 +1877,7 @@ function get_effectif_malus_bonus($constante_num_journee_cal_reel,$constanteConf
 function get_note_joueur_journee($id_joueur_reel, $constante_num_journee_cal_reel,$id_compo)
 {
 	addLogEvent('FONCTION get_note_joueur_journee');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	$req_noteDuJoueurJournee = $bdd->prepare('SELECT t1.note, t2.id_compo FROM joueur_stats t1, joueur_compo_equipe t2, joueur_reel t3 WHERE t2.id_joueur_reel = :id_joueur_reel AND t1.journee = :journee AND t2.id_joueur_reel = t3.id AND t1.id IN (t3.cle_roto_primaire, t3.cle_roto_secondaire) AND t2.id_compo = :id_compo;');
 	$req_noteDuJoueurJournee->execute(array('id_joueur_reel' => $id_joueur_reel, 'journee' => $constanteJourneeReelle, 'id_compo' => $id_compo));
@@ -2168,18 +1891,7 @@ function get_note_joueur_journee($id_joueur_reel, $constante_num_journee_cal_ree
 function get_victoire_ou_defaite_capitaine($id_joueur_reel, $constante_num_journee_cal_reel)
 {
 	addLogEvent('FONCTION get_victoire_ou_defaite_capitaine');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	$req_victoireOuDefaiteCapitaine = $bdd->prepare('SELECT t3.malus_defaite + 2*t3.bonus_victoire AS \'victoireOuDefaite\' FROM joueur_reel t1, joueur_stats t3 WHERE t1.id = :id AND t3.id IN (t1.cle_roto_primaire, t1.cle_roto_secondaire) AND t3.journee = :journee ;');
 	$req_victoireOuDefaiteCapitaine->execute(array('id' => $id_joueur_reel, 'journee' => $constanteJourneeReelle));
@@ -2193,18 +1905,7 @@ function get_victoire_ou_defaite_capitaine($id_joueur_reel, $constante_num_journ
 function get_nb_defenseur($code_tactique)
 {
 	addLogEvent('FONCTION get_nb_defenseur');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	$req_nbDefenseur = $bdd->prepare('SELECT nb_def FROM nomenclature_tactique WHERE code = :code_tactique ;');
 	$req_nbDefenseur->execute(array('code_tactique' => $code_tactique));
@@ -2218,18 +1919,7 @@ function get_nb_defenseur($code_tactique)
 function update_note_joueur_compo($note,$id_compo,$id_joueur_reel)
 {
 	addLogEvent('FONCTION update_note_joueur_compo');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	$upd_noteJoueurCompo = $bdd->prepare('UPDATE joueur_compo_equipe SET note = :note WHERE id_compo = :id_compo AND id_joueur_reel = :id_joueur_reel ;');
 	$upd_noteJoueurCompo->execute(array('note' => $note, 'id_compo' => $id_compo, 'id_joueur_reel' => $id_joueur_reel));
@@ -2240,18 +1930,7 @@ function update_note_joueur_compo($note,$id_compo,$id_joueur_reel)
 function update_note_bonus_joueur_compo($note,$id_compo,$id_joueur_reel)
 {
 	addLogEvent('FONCTION update_note_bonus_joueur_compo');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	$upd_noteBonus = $bdd->prepare('UPDATE joueur_compo_equipe SET note_bonus = :note WHERE id_compo = :id_compo AND id_joueur_reel = :id_joueur_reel ;');
 	$upd_noteBonus->execute(array('note' => $note, 'id_compo' => $id_compo, 'id_joueur_reel' => $id_joueur_reel));
@@ -2262,18 +1941,7 @@ function update_note_bonus_joueur_compo($note,$id_compo,$id_joueur_reel)
 function update_numero_definitif($numero_definitif,$id_compo,$id_joueur_reel)
 {
 	addLogEvent('FONCTION update_numero_definitif');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 			//On update le numéro définitif
 	$upd_numeroDefinitif = $bdd->prepare('UPDATE joueur_compo_equipe SET numero_definitif = :numero_definitif WHERE id_compo = :id_compo AND id_joueur_reel = :id_joueur_reel ;');
@@ -2285,18 +1953,7 @@ function update_numero_definitif($numero_definitif,$id_compo,$id_joueur_reel)
 function update_note_gardien($note,$id_compo)
 {
 	addLogEvent('FONCTION update_note_gardien');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	//MALUS FUMIGENE Update note gardien
 	$upd_note_gardien = $bdd->prepare('UPDATE joueur_compo_equipe SET note = :note WHERE id_compo = :id_compo AND numero_definitif = 1 ;');
@@ -2309,18 +1966,7 @@ function update_note_gardien($note,$id_compo)
 function update_note_famille($note,$constante_num_journee_cal_reel, $id_joueur_reel)
 {
 	addLogEvent('FONCTION update_note_famille');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	//BONUS FAMILLE STADE
 	$upd_noteFamille = $bdd->prepare('UPDATE compo_equipe t1, calendrier_ligue t2, joueur_compo_equipe t3 SET t3.note = :note WHERE t2.num_journee_cal_reel =  :num_journee_cal_reel AND t2.id = t1.id_cal_ligue AND t1.id = t3.id_compo AND t3.numero_definitif IS NOT NULL AND t3.id_joueur_reel = :id_joueur_reel and t3.note <= 9 ;');
@@ -2334,18 +1980,7 @@ function update_note_famille($note,$constante_num_journee_cal_reel, $id_joueur_r
 function get_note_gardien_equipe($id_equipe, $constante_num_journee_cal_reel)
 {
 	addLogEvent('FONCTION get_note_gardien_equipe');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 	
 	$req_note_gardien = $bdd->prepare('SELECT t2.id_compo, t2.note, t2.note_bonus, t2.id_joueur_reel FROM compo_equipe t1, joueur_compo_equipe t2, calendrier_ligue t3 WHERE t1.id_equipe = :id_equipe AND t2.id_compo = t1.id AND t2.numero_definitif = 1 AND t3.id = t1.id_cal_ligue AND t1.id = t2.id_compo AND t3.num_journee_cal_reel = :num_journee_cal_reel ;');
 	$req_note_gardien->execute(array('id_equipe' => $id_equipe,'num_journee_cal_reel' => $constante_num_journee_cal_reel));
@@ -2360,18 +1995,7 @@ function get_note_gardien_equipe($id_equipe, $constante_num_journee_cal_reel)
 function get_joueur_concerne_bonus($constante_num_journee_cal_reel, $id_equipe, $id_cal_ligue)
 {
 	addLogEvent('FONCTION get_joueur_concerne_bonus');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 	//Requete Joueur Concerné par le bonus
 	$req_joueur_bonus = $bdd->prepare('SELECT t1.id_joueur_reel_equipe, t3.note, t3.note_bonus, t3.id_compo FROM bonus_malus t1, compo_equipe t4, calendrier_ligue t2, joueur_compo_equipe t3  WHERE t2.num_journee_cal_reel = :num_journee_cal_reel AND t2.id = t4.id_cal_ligue AND t4.id = t3.id_compo AND t3.numero_definitif IS NOT NULL AND t3.id_joueur_reel = t1.id_joueur_reel_equipe AND t1.id_equipe = :id_equipe AND t1.id_cal_ligue = :id_cal_ligue ;');
 	$req_joueur_bonus->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel,'id_equipe' => $id_equipe,'id_cal_ligue' => $id_cal_ligue));
@@ -2384,18 +2008,7 @@ function get_joueur_concerne_bonus($constante_num_journee_cal_reel, $id_equipe, 
 function get_buteurs_impactes_malus_dinarb($constante_num_journee_cal_reel)
 {
 	addLogEvent('FONCTION get_buteurs_impactes_malus_dinarb');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 	
 	$req_buteurs_impactes_par_malus_dinarb = $bdd->prepare('SELECT DISTINCT IF(t5.id_equipe = cl.id_equipe_dom, cl.id_equipe_ext, cl.id_equipe_dom) AS \'id_adversaire\', cl.id, t4.id_compo, t4.id_joueur_reel, t4.nb_but_reel FROM joueur_compo_equipe t4, compo_equipe t5, calendrier_ligue cl WHERE cl.id = t5.id_cal_ligue AND t5.id = t4.id_compo AND t4.numero_definitif IS NOT NULL AND t4.nb_but_reel > 0 AND t5.id_equipe IN(SELECT t1.id_equipe_dom FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id = t2.id_cal_ligue AND t2.code_bonus_malus = \'DIN_ARB\' AND t3.id_compo = t2.id AND t1.id_equipe_dom != t2.id_equipe UNION SELECT t1.id_equipe_ext FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id = t2.id_cal_ligue AND t2.code_bonus_malus = \'DIN_ARB\' AND t3.id_compo = t2.id AND t1.id_equipe_ext != t2.id_equipe);');
 	$req_buteurs_impactes_par_malus_dinarb->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
@@ -2409,18 +2022,7 @@ function get_buteurs_impactes_malus_dinarb($constante_num_journee_cal_reel)
 function remise_a_null_numero_definitif_compo($id_compo)
 {
 	addLogEvent('FONCTION remise_a_null_numero_definitif_compo');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	$upd_remiseANullDesNumerosDefinitifs = $bdd->prepare('UPDATE joueur_compo_equipe SET numero_definitif = NULL WHERE id_compo = :id_compo ;');
 	$upd_remiseANullDesNumerosDefinitifs->execute(array('id_compo' => $id_compo));
@@ -2431,18 +2033,7 @@ function remise_a_null_numero_definitif_compo($id_compo)
 function remise_a_null_buts_reels_compo($id_compo)
 {
 	addLogEvent('FONCTION remise_a_null_buts_reels_compo');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	$upd_remiseANullDesButsReels = $bdd->prepare('UPDATE joueur_compo_equipe SET nb_but_reel = NULL WHERE id_compo = :id_compo ;');
 	$upd_remiseANullDesButsReels->execute(array('id_compo' => $id_compo));
@@ -2453,21 +2044,10 @@ function remise_a_null_buts_reels_compo($id_compo)
 function update_but_virtuel($but,$id_compo, $id_joueur_reel)
 {
 	addLogEvent('FONCTION update_but_virtuel');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 
 	$upd_butVirtuel = $bdd->prepare('UPDATE joueur_compo_equipe SET nb_but_virtuel = :nb_but_virtuel WHERE joueur_compo_equipe.id_compo = :id_compo AND joueur_compo_equipe.id_joueur_reel = :id_joueur_reel;');
-	$upd_butVirtuel->execute(array('nb_but_virtuel' => $but, 'id_compo' => $id_compo, 'id_joueur_reel' => $id_joueur_reel]));
+	$upd_butVirtuel->execute(array('nb_but_virtuel' => $but, 'id_compo' => $id_compo, 'id_joueur_reel' => $id_joueur_reel));
 	$upd_butVirtuel->closeCursor();
 }
 
@@ -2475,18 +2055,7 @@ function update_but_virtuel($but,$id_compo, $id_joueur_reel)
 function update_buteur_impacte_malus_dinarb($id_joueur_reel_adverse,$id_equipe,$id_cal_ligue)
 {
 	addLogEvent('FONCTION update_buteur_impacte_malus_dinarb');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 	$upd_buteur_impacte_par_malus_dinarb = $bdd->prepare('UPDATE bonus_malus SET id_joueur_reel_adverse = :id_joueur_reel_adverse WHERE id_equipe = :id_equipe AND id_cal_ligue = :id_cal_ligue;');
 	$upd_buteur_impacte_par_malus_dinarb->execute(array('id_joueur_reel_adverse' => $id_joueur_reel_adverse,'id_equipe' => $id_equipe, 'id_cal_ligue' => $id_cal_ligue));
 	$upd_buteur_impacte_par_malus_dinarb->closeCursor();
@@ -2496,18 +2065,7 @@ function update_buteur_impacte_malus_dinarb($id_joueur_reel_adverse,$id_equipe,$
 function modification_but_reel_joueur($nb_but_reel, $id_compo, $id_joueur_reel)
 {
 	addLogEvent('FONCTION modification_but_reel_joueur');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 	$upd_nb_but_buteur = $bdd->prepare('UPDATE joueur_compo_equipe SET nb_but_reel = :nb_but_reel WHERE id_compo = :id_compo AND id_joueur_reel = :id_joueur_reel ;');
 	$upd_nb_but_buteur->execute(array('nb_but_reel' => $nb_but_reel, 'id_compo' => $id_compo, 'id_joueur_reel' => $id_joueur_reel));
 	$upd_nb_but_buteur->closeCursor();
@@ -2517,18 +2075,7 @@ function modification_but_reel_joueur($nb_but_reel, $id_compo, $id_joueur_reel)
 function updateButReelDuJoueur($id_compo, $journee, $id_joueur_reel)
 {
 	addLogEvent('FONCTION remise_a_null_numero_definitif_compo');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 	
 	//On compte le nombre de but réel d'un joueur sur une journée
 	$req_nbButReel=$bdd->prepare('SELECT t3.but FROM joueur_compo_equipe t1, joueur_reel t2, joueur_stats t3 WHERE t1.id_joueur_reel = t2.id AND t3.id IN (t2.cle_roto_primaire, t2.cle_roto_secondaire) AND t3.journee = :journee AND t1.id_joueur_reel = :id_joueur_reel AND t1.id_compo = :id_compo');
@@ -2563,7 +2110,7 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 	$constanteJourneeReelle = get_journee_format_long($constante_num_journee_cal_reel);
 	
 	$ligue_concernee = array();
-	if(is_null($ligue_unique)
+	if(is_null($ligue_unique))
 	{
 		$ligues_concernees = get_ligues_concernees_journee($constante_num_journee_cal_reel);
 	}else{
@@ -2693,7 +2240,7 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 
 				if($donnees['note'] == 0 || is_null($donnees['note'])){
 					$estRemplace = 0;
-					$lignesRemplacant = get_effectifs_remplacant_ligue_journee_equipe($constante_num_journee_cal_reel, $constanteConfrontationLigue,$donnees['id_equipe'])
+					$lignesRemplacant = get_effectifs_remplacant_ligue_journee_equipe($constante_num_journee_cal_reel, $constanteConfrontationLigue,$donnees['id_equipe']);
 					if (count($lignesRemplacant) == 0) {
 						//Aucun remplaçant, le joueur reste dans la compo
 						addLogEvent( 'Aucun remplaçant, le joueur '.$donnees['cle_roto_primaire'].' reste dans la compo');
@@ -3066,18 +2613,7 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 //Le parametre Ligue_unique, permet de faire tourner le script uniquement sur cette ligue, si sa valeur est null alors on cherche sur toutes les ligues
 function raz_table_joueur_compo_equipe_sur_journee($constante_num_journee_cal_reel, $ligue_unique)
 {
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 	if(is_null($ligue_unique))
 	{
 		addLogEvent('FONCTION raz_table_joueur_compo_equipe_sur_journee - Toutes les ligues');
@@ -3096,18 +2632,7 @@ function raz_table_joueur_compo_equipe_sur_journee($constante_num_journee_cal_re
 function get_ligues_concernees_journee($constante_num_journee_cal_reel)
 {
 	addLogEvent('FONCTION get_ligues_concernees_journee');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 	
 	$req_ligues_concernees = $bdd->prepare('SELECT distinct id_ligue FROM calendrier_ligue WHERE num_journee_cal_reel = :num_journee_cal_reel;');
 	$req_ligues_concernees->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
@@ -3122,18 +2647,7 @@ function get_ligues_concernees_journee($constante_num_journee_cal_reel)
 function get_compo_definitive($id_compo)
 {
 	addLogEvent('FONCTION get_compo_definitive');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 	
 	$req_compoDefinitive = $bdd->prepare('SELECT t1.id_joueur_reel, t2.cle_roto_primaire, t2.position, t1.numero_definitif , t1.note, t1.nb_but_reel, t4.nb_def, t4.nb_mil, t4.nb_att FROM joueur_compo_equipe t1, joueur_reel t2, compo_equipe t3, nomenclature_tactique t4 WHERE t1.id_compo = :id_compo AND t1.id_joueur_reel = t2.id AND t1.numero_definitif > 0 AND t1.numero_definitif < 12 AND t1.numero_definitif IS NOT NULL AND t3.id = t1.id_compo AND t3.code_tactique = t4.code ORDER BY t1.numero_definitif ASC;');
 	$req_compoDefinitive->execute(array('id_compo' => $id_compo));
@@ -3376,18 +2890,7 @@ function calculButVirtuel($equipeA,$equipeB){
 function nettoyage_joueur_compo_equipe()
 {
 	addLogEvent('FONCTION nettoyage_joueur_compo_equipe');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 	
 	$upd_pas_de_note_remplacant = $bdd->prepare('UPDATE joueur_compo_equipe SET note = NULL WHERE numero > 11 AND numero_definitif IS NULL;');
 	$upd_pas_de_note_remplacant->execute();
@@ -3402,18 +2905,7 @@ function nettoyage_joueur_compo_equipe()
 function impactCSC($journee, $short_journee)
 {
 	addLogEvent('FONCTION impactCSC');
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 	
 	//Attention id_journee vs num_journee_cal_reel
 	$upd_csc = $bdd->prepare('UPDATE compo_equipe ce, joueur_compo_equipe jce, joueur_stats js, joueur_reel jr, calendrier_ligue cl SET jce.nb_csc = js.csc WHERE jce.id_compo = ce.id  AND jr.id = jce.id_joueur_reel AND js.id IN (jr.cle_roto_primaire, jr.cle_roto_secondaire) AND ce.id_cal_ligue = cl.id AND js.journee = :journee AND cl.num_journee_cal_reel = :short_journee AND js.csc > 0 AND jce.numero_definitif > 0 AND jce.numero_definitif < 12;');
@@ -3428,18 +2920,7 @@ function mise_a_jour_stat_classement($constante_num_journee_cal_reel)
 {
 	addLogEvent('FONCTION mise_a_jour_stat_classement');
 	$constanteJourneeReelle = get_journee_format_long($constante_num_journee_cal_reel);
-	require_once(__DIR__ . '/../modele/connexionSQL.php');
-	try
-	{
-		// Récupération de la connexion
-		$bdd = ConnexionBDD::getInstance();
-	}
-	catch (Exception $e)
-	{
-		die('Erreur : ' . $e->getMessage());
-		echo $e;
-		addLogEvent($e);
-	}
+	global $bdd;
 	
 	//SCORE DOM => TABLE calendrier_ligue
 
