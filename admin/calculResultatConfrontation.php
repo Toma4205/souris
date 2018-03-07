@@ -397,7 +397,7 @@
 
 // BOUCLE MAJEURE
 	if (count($ligues_concernees) == 0) {
-		addLogEvent(  'Aucune ligue sur la journee '.$constante_num_journee_cal_reel);
+		addLogEvent('Aucune ligue sur la journee '.$constante_num_journee_cal_reel);
 	} else {
 		foreach ($ligues_concernees as $ligue_concernee) {
 			$constanteConfrontationLigue = $ligue_concernee['id_ligue'];
