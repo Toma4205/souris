@@ -36,6 +36,7 @@ function calculer_notes_joueurs
 function calculer_confrontations_journee
 function get_ligues_concernees_journee
 function raz_table_joueur_compo_equipe_sur_journee
+function mise_a_jour_stat_classement
 
 */
 
