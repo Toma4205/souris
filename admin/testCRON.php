@@ -114,7 +114,7 @@ foreach($calendrier_reel as $ligne_calendrier_reel)
 			//Rien à Faire
 			addLogEvent('CRON RAS');
 		}
-	//CONDITIONS : Nous sommes entre 6h et 7h après la date de fin d'une journée de L1
+	//CONDITIONS : Nous sommes à plus de 6h après la date de fin d'une journée de L1
 	}elseif(strtotime("now -6 hours")-strtotime($ligne_calendrier_reel['fin'])>=0 && $statut == 2){
 		addLogEvent( 'Nous avons terminé '.$ligne_calendrier_reel['num_journee'].' depuis plus de 6h');
 		get_csv_from_roto($ligne_calendrier_reel['num_journee']);
