@@ -59,17 +59,16 @@ require_once(__DIR__ . '/../modele/connexionSQL.php');
 //Fonction d'écriture des logs dans un fichier
 function addLogEvent($event)
 {
-    date_default_timezone_set('Europe/Paris');
+  date_default_timezone_set('Europe/Paris');
 	$time = date("D, d M Y H:i:s");
-    $time = "[".$time."] ";
-	
-	
+  $time = "[".$time."] ";
+
 	$year_month = date("YF");
 	$fichier = __DIR__ . '/logs/'.$year_month.'.log';
-	
-    $event = $time.$event."\n";
- 
-    file_put_contents($fichier, $event, FILE_APPEND);
+
+  $event = $time.$event."\n";
+
+  file_put_contents($fichier, $event, FILE_APPEND);
 }
 
 //Retourne la journee au format YYYYJJ
@@ -90,14 +89,7 @@ function getStatutJournee($num_journee){
 	$reqStatutJournee = $bdd->prepare('SELECT statut FROM calendrier_reel WHERE num_journee = :num_journee');
 	$reqStatutJournee->execute(array('num_journee' => $num_journee));
 
-	while ($statutJournee = $reqStatutJournee->fetch())
-	{
-		$statut = $statutJournee['statut'];
-	}
-	
-	$reqStatutJournee->closeCursor();
-	addLogEvent('FUNCTION getStatutJournee');
-	return $statut;
+	return $reqStatutJournee->fetchColumn();
 }
 
 //Retourne le statut d'une journée selon la table calendrier_reel
@@ -106,7 +98,7 @@ function setStatutJournee($num_journee,$statut){
 	global $bdd;
 	$updStatutJournee = $bdd->prepare('UPDATE calendrier_reel SET statut = :statut WHERE num_journee = :num_journee');
 	$updStatutJournee->execute(array('num_journee' => $num_journee, 'statut' => $statut));
-	
+
 	$updStatutJournee->closeCursor();
 }
 
@@ -114,14 +106,14 @@ function setStatutJournee($num_journee,$statut){
 //Passage du score à 0 pour calendrier ligue sur cette meme journée
 function initializeJournee($num_journee){
 	global $bdd;
-	
+
 	$upd_initializeStatutJournee=$bdd->prepare('UPDATE calendrier_reel SET statut = 1 WHERE num_journee = :num_journee;');
 	$upd_initializeScoreJournee=$bdd->prepare('UPDATE calendrier_ligue SET score_dom = 0, score_ext = 0 WHERE num_journee_cal_reel = :num_journee;');
 
 	$upd_initializeStatutJournee->execute(array('num_journee' => $num_journee));
 	$upd_initializeStatutJournee->closeCursor();
 	addLogEvent('Initialisation du statut à 1 pour la journée '.$num_journee);
-	
+
 	$upd_initializeScoreJournee->execute(array('num_journee' => $num_journee));
 	$upd_initializeScoreJournee->closeCursor();
 	addLogEvent('Initialisation des scores à 0 pour la journée '.$num_journee);
@@ -139,33 +131,33 @@ function scrapMaxi($num_journee){
 	curl_setopt($curl_handle, CURLOPT_USERAGENT, 'Your application name');
 	$query = curl_exec($curl_handle);
 	curl_close($curl_handle);
-		
+
 	$debutTableau = 'id=lastres';
 	$pos1 = strstr($query, $debutTableau);
 	$finTableau = 'Tous les r';
 	$pos2 = strpos($pos1, $finTableau	);
-	
+
 	$journeeRecherchee=$num_journee;
-	
+
 	//Variables de l'algo
 	$journee=0;
 	$resultats = array(); // Tableau contenant pour chaque ligne : ville_dom, nb_but_dom, nb_but_dom_sur_penalty, nb_but_ext, ville_ext, nb_but_ext_sur_penalty
 	$buteurs; //Tableau contenant pour chaque ligne : ville, nom_buteur
-	$nb_buteurs=0; 
+	$nb_buteurs=0;
 	$i_match = 0;
 	$statut = 1; //0 pas terminé et 1 terminé
 	$equipeDOM;
 	$equipeEXT;
 	$tab_id_csc = array();
-	
-	
+
+
 		$lignes = explode("&lt;tr", htmlspecialchars(substr($pos1,0,$pos2),ENT_HTML401,'ISO-8859-1', true));
 		$i = 0;
-		foreach ($lignes as $ligne) { 
+		foreach ($lignes as $ligne) {
 			$j=0;
 			//echo $ligne;
 			$lignes1 = explode("&lt;td",$ligne);
-			foreach ($lignes1 as $ligne1) { 
+			foreach ($lignes1 as $ligne1) {
 				$k=0;
 				if($j == 4 || $j == 2){
 					$nb_penalty = 0;
@@ -183,17 +175,17 @@ function scrapMaxi($num_journee){
 							foreach ($lignes5 as $ligne5) {
 								//Debug
 								//addLogEvent('Ligne '.$i.'|'.$j.'|'.$k.'|'.$m.'|'.$n.'|'.$p.' '.$ligne5);
-								
+
 								if($i>=1 && $j==2 && $k==0 && $m==0 && $n==0&& $p==1 && strpos($ligne5,"journ")>0){ //JOURNEE
 									$journee = substr($ligne5,0,2);
 								}
-								
+
 								if($i>1 && $j==2 && $k==1 && $m==0 && $n==0&& $p==0 && $journee === $journeeRecherchee){ // EQUIPE DOM
 									$resultats[$i_match][]=$ligne5;
 									$equipeDOM = $ligne5;
-									
+
 								}
-								
+
 								if($i>1 && $j==2 && $k==1 && $m==1 && $n==1 && $p>=1 && $journee === $journeeRecherchee){ //CALCUL PENALTY DOM
 									$pos = strpos($ligne5,", sp");
 									$cibletexte = $ligne5;
@@ -208,7 +200,7 @@ function scrapMaxi($num_journee){
 									}else{
 										$nb_penalty++;
 										$cibletexte = substr($ligne5,0,$pos);
-										
+
 									}
 									$pos = strpos($ligne5,"'&lt;"); //COLLECTE BUTEUR
 									$pos1 = strpos($ligne5,"', sp&lt;"); //COLLECTE BUTEUR penalty
@@ -216,11 +208,11 @@ function scrapMaxi($num_journee){
 									if ($pos === false && $pos1 === false && $pos2 === false) {
 										//pas de penalty
 									}else{
-										
-										$posEspace = strrpos($cibletexte," "); 
+
+										$posEspace = strrpos($cibletexte," ");
 										$lastRow = end($resultats);
 										$buteurs[$nb_buteurs][0]= $lastRow[0];
-																		
+
 										$buteurs[$nb_buteurs][1]= substr($ligne5,0,$posEspace);
 										if($pos1 === false){
 											$buteurs[$nb_buteurs][2]= 0; //but sans penalty
@@ -235,12 +227,12 @@ function scrapMaxi($num_journee){
 											$buteurs[$nb_buteurs][3]= 1; //but sur csc
 											$buteurs[$nb_buteurs][4] = $journee;
 											$tab_id_csc[] = $nb_buteurs; // On garde le numéro de ligne du joueur pour mettre son equipeEXT
-										}									
+										}
 										$nb_buteurs++;
-									}	
-									
+									}
+
 								}
-								
+
 								if($i>1 && $j==4 && $k==1 && $m==1 && $n==1 && $p>=1 && $journee === $journeeRecherchee){ //CALCUL PENALTY EXT
 									$pos = strpos($ligne5, ", sp");
 									$cibletexte = $ligne5;
@@ -261,7 +253,7 @@ function scrapMaxi($num_journee){
 										//pas de penalty
 									}else{
 										$resultats[$i_match][]=$nb_penalty;
-										
+
 									}
 									$pos = strpos($ligne5,"'&lt;"); //COLLECTE BUTEUR
 									$pos1 = strpos($ligne5,"', sp&lt;"); //COLLECTE BUTEUR penalty
@@ -269,7 +261,7 @@ function scrapMaxi($num_journee){
 									if ($pos === false && $pos1 === false && $pos2 === false) {
 										//pas de penalty
 									}else{
-										$posEspace = strrpos($cibletexte," "); 
+										$posEspace = strrpos($cibletexte," ");
 										$lastRow = end($resultats);
 										$buteurs[$nb_buteurs][0]= $lastRow[4];
 										$buteurs[$nb_buteurs][1]= substr($ligne5,0,$posEspace);
@@ -289,16 +281,16 @@ function scrapMaxi($num_journee){
 											$buteurs[$nb_buteurs][4] = $journee;
 											$buteurs[$nb_buteurs][5] = $equipeDOM;
 										}
-										
+
 										$nb_buteurs++;
 									}
 								}
-								
+
 								if($i>1 && $j==3 && $k==1 && $m==0 && $n==0&& $p==0 && $journee === $journeeRecherchee){ //SCORE DOM et EXT (ajouts penalty DOM)
 									$resultats[$i_match][]=substr($ligne5,0,1);
 									$resultats[$i_match][]=$nb_penalty;
 									$resultats[$i_match][]=substr($ligne5,-1);
-									
+
 								}
 								if($i>1 && $j==4 && $k==1 && $m==0 && $n==0&& $p==0 && $journee === $journeeRecherchee){
 									$resultats[$i_match][]=$ligne5;
@@ -308,9 +300,9 @@ function scrapMaxi($num_journee){
 											$buteurs[$id_csc][5] = $equipeEXT;
 										}
 									}
-									$tab_id_csc = null;									
-								}							
-								
+									$tab_id_csc = null;
+								}
+
 								$p++;
 							}
 							$n++;
@@ -318,7 +310,7 @@ function scrapMaxi($num_journee){
 						$m++;
 					}
 					$k++;
-					
+
 				}
 				$j++;
 			}
@@ -327,10 +319,10 @@ function scrapMaxi($num_journee){
 				$resultats[$i_match][]=$journee;
 				$resultats[$i_match][]=$statut;
 				$i_match++;
-			}			
+			}
 		}
-	
-	
+
+
 	//Dernier résultat ajouté
 	if(!empty($resultats))
 	{
@@ -347,17 +339,17 @@ function scrapMaxi($num_journee){
 			//VERIF Le match vient de se terminer ?
 			addLogEvent('scrapMaxi // condition '.$tab_resultat[0].' et '.$tab_resultat[6]);
 			if(getStatutMatchMaxi($tab_resultat[0],$tab_resultat[6])==0){
-			
+
 				addLogEvent('scrapMaxi // condition OK');
 				setScoreMatch($tab_resultat);
 				setStatutMatch($tab_resultat[0],$tab_resultat[6],strtotime("now"),0);
 				$time_fin_dernier_match = strtotime("now");
 			}
-		}			
+		}
 	}
 	//Inutile pour l'instant
 	//maj_table_live_buteur($buteurs);
-	
+
 	return $time_fin_dernier_match;
 }
 
@@ -367,10 +359,10 @@ function is_Fichier_Roto_A_Telecharger($journee)
 	addLogEvent('FONCTION is_Fichier_Roto_A_Telecharger');
 	global $bdd;
 	$req_matchs_termines_depuis_longtemps=$bdd->prepare('SELECT count(*) AS \'nb_match\' FROM resultatsl1_reel WHERE UNIX_TIMESTAMP()-statut > 600 AND statut > 3 AND SUBSTRING(journee,5,2) = :journee;');
-	
+
 	$req_matchs_termines_depuis_longtemps->execute(array('journee' => $journee));
-	
-	
+
+
 	while ($nb_match = $req_matchs_termines_depuis_longtemps->fetch())
 	{
 		if($nb_match['nb_match'] > 0)
@@ -389,7 +381,7 @@ function setStatutMatch($nom_ville_maxi_dom, $journee, $statut, $ex_statut)
 {
 	addLogEvent('FONCTION setStatutMatch');
 	global $bdd;
-	
+
 	if($ex_statut<4)
 	{
 		$upd_statut_match=$bdd->prepare('UPDATE resultatsl1_reel rr, nomenclature_equipes_reelles ner SET rr.statut = :statut WHERE rr.equipeDomicile = ner.trigramme AND ner.ville_maxi = :ville_maxi AND SUBSTRING(rr.journee,5,2) = :journee AND rr.statut = :ex_statut;');
@@ -409,7 +401,7 @@ function set_statut_match_termine_journee($journee, $statut, $ex_statut)
 {
 	addLogEvent('FONCTION set_statut_match_journee');
 	global $bdd;
-	
+
 	if($ex_statut<4)
 	{
 		$upd_statut_all_match=$bdd->prepare('UPDATE resultatsl1_reel rr SET rr.statut = :statut WHERE SUBSTRING(rr.journee,5,2) = :journee AND rr.statut = :ex_statut;');
@@ -430,17 +422,17 @@ function getStatutMatchMaxi($nom_ville_maxi_dom, $journee)
 	global $bdd;
 	$statut = null;
 	$req_statut_match=$bdd->prepare('SELECT rr.statut FROM resultatsl1_reel rr, nomenclature_equipes_reelles ner WHERE rr.equipeDomicile = ner.trigramme AND ner.ville_maxi = :ville_maxi AND SUBSTRING(rr.journee,5,2) = :journee;');
-	
+
 	$req_statut_match->execute(array('ville_maxi' => $nom_ville_maxi_dom, 'journee' => $journee));
-	
+
 	while ($statutsMatch = $req_statut_match->fetch())
 	{
 		$statut = $statutsMatch['statut'];
 	}
-	
+
 	$req_statut_match->closeCursor();
 
-	
+
 	addLogEvent('ville_maxi => '.$nom_ville_maxi_dom.', journee => '.$journee);
 	addLogEvent('STATUT => '.$statut);
 
@@ -454,14 +446,14 @@ function getStatutMatch($trigramme_dom, $journee)
 	global $bdd;
 	$statut = null;
 	$req_statut_match=$bdd->prepare('SELECT rr.statut FROM resultatsl1_reel rr WHERE :equipeDomicile IN (rr.equipeDomicile, rr.equipeVisiteur) AND SUBSTRING(rr.journee,5,2) = :journee;');
-	
+
 	$req_statut_match->execute(array('equipeDomicile' => $trigramme_dom, 'journee' => $journee));
-	
+
 	while ($statutsMatch = $req_statut_match->fetch())
 	{
 		$statut = $statutsMatch['statut'];
 	}
-	
+
 	$req_statut_match->closeCursor();
 
 	addLogEvent('Equipe => '.$trigramme_dom.', journee => '.$journee);
@@ -471,15 +463,15 @@ function getStatutMatch($trigramme_dom, $journee)
 }
 
 
-//A PARTIR DU TABLEAU DE SCRAP => REMPLIR LA TABLE resultatl1reel 
+//A PARTIR DU TABLEAU DE SCRAP => REMPLIR LA TABLE resultatl1reel
 //FORMAT TABLEAU : NOM_VILLE_MAXI_DOM, NB_BUT_DOM, NB_PENALTY_DOM, NB_BUT_EXT, NOM_VILLE_MAXI_EXT, NB_PENALTY_EXT, JOURNEE, STATUT_MATCH
 function setScoreMatch($tab_resultat){
 	addLogEvent('FONCTION UPDATE SCORE EN BASE setScoreMatch');
 	global $bdd;
-	
-	
+
+
 	$upd_score_match=$bdd->prepare('UPDATE resultatsl1_reel rr, nomenclature_equipes_reelles ner SET rr.butDomicile = :butDomicile, rr.winOrLoseDomicile = :winOrLoseDomicile, rr.penaltyDomicile = :penaltyDomicile, rr.butVisiteur = :butVisiteur, rr.winOrLoseVisiteur = :winOrLoseVisiteur, rr.penaltyVisiteur = :penaltyVisiteur WHERE rr.equipeDomicile = ner.trigramme AND ner.ville_maxi = :ville_maxi AND SUBSTRING(rr.journee,5,2) = :journee AND rr.statut = 0;');
-	
+
 	if($tab_resultat[1]>$tab_resultat[3]){
 		$statusDOM = 'W';
 		$statusEXT = 'L';
@@ -490,12 +482,12 @@ function setScoreMatch($tab_resultat){
 		$statusDOM = 'D';
 		$statusEXT = 'D';
 	}
-	
+
 	$upd_score_match->execute(array('butDomicile' => $tab_resultat[1], 'winOrLoseDomicile' => $statusDOM, 'penaltyDomicile' => $tab_resultat[2],'butVisiteur' => $tab_resultat[3],'winOrLoseVisiteur' => $statusEXT,'penaltyVisiteur' => $tab_resultat[5],'ville_maxi' => $tab_resultat[0],'journee' => $tab_resultat[6]));
-	
+
 	$upd_score_match->closeCursor();
-	
-	
+
+
 	addLogEvent('butDomicile => '.$tab_resultat[1].', winOrLoseDomicile => '.$statusDOM.', penaltyDomicile => '.$tab_resultat[2].',butVisiteur => '.$tab_resultat[3].',winOrLoseVisiteur => '.$statusEXT.',penaltyVisiteur => '.$tab_resultat[5].',ville_maxi => '.$tab_resultat[0].',journee => '.$tab_resultat[6]);
 
 }
@@ -504,10 +496,10 @@ function setScoreMatch($tab_resultat){
 //FORMAT TABLEAU EN ENTREE : VILLE_MAXI, ID_JOUEUR_MAXI, IS_PENALTY, IS_CSC, JOURNEE
 function maj_table_live_buteur($tab_buteurs){
 	addLogEvent('FONCTION maj_table_live_buteur');
-	
+
 	//On vide la table
 	nettoyageTableButeurLive();
-	
+
 	//On rempli la table avec les infos brutes
 	foreach($tab_buteurs as $buteur){
 		addLogEvent('INFO BRUTE : '.$buteur[0].' - '.$buteur[1].' PENAL? '.$buteur[2].' CSC? '.$buteur[3].' Journee : '.$buteur[4].' Pour l\'équipe : '.$buteur[5]);
@@ -547,7 +539,7 @@ function setButeurLive($buteur){
 	}else{
 		$ins_buteur_live->execute(array('journee' => $buteur[4], 'id_joueur_maxi' => $buteur[1], 'ville_maxi' => $buteur[0], 'sur_penalty' => $buteur[2], 'sur_csc' => $buteur[3]));
 	}
-	
+
 	$ins_buteur_live->closeCursor();
 	addLogEvent('FONCTION setButeurLive');
 }
@@ -555,11 +547,11 @@ function setButeurLive($buteur){
 //Fait matcher les buteurs_reels avec les id_reel déjà en table
 function associer_buteur_live_joueur_reel(){
 	global $bdd;
-	
+
 	$upd_matching_buteur_id_reel=$bdd->prepare('UPDATE buteur_live_journee blj, joueur_reel jr, nomenclature_equipes_reelles ner
-												SET blj.id_joueur_reel = jr.id 
+												SET blj.id_joueur_reel = jr.id
 												WHERE blj.id_joueur_reel IS NULL AND jr.equipe = ner.trigramme AND ner.ville_maxi = blj.ville_maxi AND (LOCATE(TRIM(jr.nom),TRIM(blj.id_joueur_maxi))>0 OR LOCATE(RIGHT(TRIM(blj.id_joueur_maxi),4),TRIM(jr.nom))>0)');
-	
+
 	$upd_matching_buteur_id_reel->execute();
 	$upd_matching_buteur_id_reel->closeCursor();
 	addLogEvent('FONCTION associer_buteur_live_joueur_reel');
@@ -571,23 +563,23 @@ function afficher_log_buteur_sans_matching(){
 	global $bdd;
 	$req_buteurs_sans_matching=$bdd->prepare('SELECT id_joueur_maxi FROM buteur_live_journee WHERE id_joueur_reel IS NULL ;');
 	$req_buteurs_sans_matching->execute();
-	
+
 	while ($buteur_maxi = $req_buteurs_sans_matching->fetch())
 	{
 		addLogEvent('Aucun joueur reel trouvé pour le buteur maxi : '.$buteur_maxi['id_joueur_maxi']);
 	}
-	
-	$req_buteurs_sans_matching->closeCursor();	
+
+	$req_buteurs_sans_matching->closeCursor();
 }
 
 //Renvoie le nombre de match ayant un statut à 1 sur une journée déterminée
 function get_nb_match_termine_par_journee($num_journee){
 	addLogEvent('FONCTION get_nb_match_termine_par_journee');
 	global $bdd;
-	
+
 	$req_nb_match_termine_journee=$bdd->prepare('SELECT COUNT(*) AS \'nb_match_termine\' FROM resultatsl1_reel WHERE SUBSTRING(journee,5,2) = :journee AND statut = 1;');
 	$req_nb_match_termine_journee->execute(array('journee' => $num_journee));
-	
+
 	while ($nb_match = $req_nb_match_termine_journee->fetch())
 	{
 		addLogEvent('Matchs terminés sur la journée '.$num_journee.' : '.$nb_match['nb_match_termine']);
@@ -602,10 +594,10 @@ function annuler_match_restants($num_journee)
 {
 	addLogEvent('FONCTION annuler_match_restants');
 	global $bdd;
-	
+
 	$upd_annule_match_restant_journee=$bdd->prepare('UPDATE resultatsl1_reel SET butDomicile = 0, winOrLoseDomicile = \'ANNULE\', penaltyDomicile = 0, butVisiteur = 0, winOrLoseVisiteur = \'ANNULE\', penaltyVisiteur = 0 WHERE SUBSTRING(journee,5,2) = :journee AND statut = 0;');
 	$upd_annule_match_restant_journee->execute(array('journee' => $num_journee));
-	
+
 	$upd_annule_match_restant_journee->closeCursor();
 }
 
@@ -619,35 +611,35 @@ function get_csv_from_roto($num_journee_avec_annee)
 	$url_option_journee = substr($num_journee_avec_annee,-2);
 	$url_part3 = "&end=";
 	$url_part4 = "&gp=GP&min=MIN&st=ST&on=ON&off=OFF&y=Y&yr=YR&r=R&g=G&a=A&s=S&sog=SOG&cr=CR&acr=ACR&cc=CC&blk=BLK&int=INT&tkl=TKL&tklw=TKLW&fc=FC&fs=FS&pkg=PKG&pkm=PKM&pkc=PKC&crn=CRN&p=P&ap=AP&acro=ACRO&bcc=BCC&aw=AW&dr=DR&dsp=DSP&dw=DW&cl=CL&ecl=ECL&own=OWN&touch=TOUCH&gc=GC&cs=CS&sv=SV&pkf=PKF&pksv=PKSV&aks=AKS&punch=PUNCH&ibs=IBS&obs=OBS&ibsog=IBSOG&obsog=OBSOG&ibg=IBG&obg=OBG&fks=FKS&fksog=FKSOG&fkg=FKG&tbox=TBOX&fkcr=FKCR&fkacr=FKACR&crncr=CRNCR&br=BR&crnw=CRNW&pksvd=PKSVD&ibsv=IBSV&obsv=OBSV&pk=PK&sa=SA";
-		
+
 	$url_definitif = $url_part1.$url_option_saison.$url_part2.$url_option_journee.$url_part3.$url_option_journee.$url_part4;
-	
-	
+
+
 	//Téléchargement du fichier journee au format CSV
 	//Id et MDP de connexion
 	login("https://www.rotowire.com/users/loginnow.htm?link=%2Findex.php","username=xzw32&p1=rotowiremotdepasse&Submit=Login");
-	
+
 	$output = grab_page($url_definitif);
 	$lignes1 = str_replace("\t\r\n","\n",$output);
 	$lignes1 = str_replace("\r","\n",$lignes1);
 	$lignes1 = str_replace("\t",";",$lignes1);
-	
+
 	$path = __DIR__.'/rotostats/'.$url_option_saison.$url_option_journee.".csv";
 	$fp = fopen ($path, 'w');
 	fwrite($fp,$lignes1);
 	fclose($fp);
-	
+
 	//Exploitation automatique du fichier
 	scrapRoto($num_journee_avec_annee, $path);
 }
 
 //Exploite le fichier CSV ($path) CORRESPONDANT A LA JOURNEE
 function scrapRoto($num_journee_avec_annee, $path)
-{	
+{
 	addLogEvent('FONCTION num_journee_avec_annee');
 	$resultatsJournee = buildTableauJournee($num_journee_avec_annee);
 	nettoyageFichierStat($path);
-		
+
 	//Calcul des statistiques complémentaires
 	$erreur_sur_fichier = 1;
 	$row=0;
@@ -664,7 +656,7 @@ function scrapRoto($num_journee_avec_annee, $path)
 				$tableau[$row][0] = str_replace(' ','_',rtrim(ltrim($data[0])).rtrim(ltrim($data[1])).$data[2]);
 				$tableau[$row][1] = $num_journee_avec_annee;
 			}
-			
+
 			for ($c=0; $c < $num; $c++) {
 				if($c>6){
 					$tableau[$row][] = str_replace(' ','',$data[$c]);
@@ -672,7 +664,7 @@ function scrapRoto($num_journee_avec_annee, $path)
 				}
 			}
 		}
-			
+
 		if($row==0) {
 			$tableau[$row][] = '6ButPrisSansPenal';
 			$tableau[$row][] = '5ButPrisSansPenal';
@@ -756,7 +748,7 @@ function scrapRoto($num_journee_avec_annee, $path)
 			$tableauEnTete[] = '100BallonsTouch';
 			$tableauEnTete[] = 'BonusVict';
 			$tableauEnTete[] = 'CoupFrancRate';
-									
+
 		}else {
 			$i = butsEncaissesSanSPenalty($row,$data[2],$resultatsJournee,$data);
 			if ($i==1) {
@@ -809,7 +801,7 @@ function scrapRoto($num_journee_avec_annee, $path)
 				$tableau[$row][] = 0;//'2ButPrisSansPenal';
 				$tableau[$row][] = 0;//'1ButPrisSansPenal';
 			}
-						
+
 			if($data[14]==1)
 			{
 					if($data[8]<60){
@@ -845,7 +837,7 @@ function scrapRoto($num_journee_avec_annee, $path)
 				$tableau[$row][] = 0;//'CRouge85';
 			}
 			$tableau[$row][] = ($data[21]-$data[22]);//'CentreRate';
-			
+
 			//echo '## '.count($tableau[$row]).' ##';
 			//echo 'Calculs CleanSheet W : ';
 			if(isCleanSheet($row,$data[2],$resultatsJournee,$data)){
@@ -853,13 +845,13 @@ function scrapRoto($num_journee_avec_annee, $path)
 			}else{
 				$tableau[$row][] = 0; //'Clean60';
 			}
-			
+
 			if(isCleanSheetNul($row,$data[2],$resultatsJournee,$data)){
 				$tableau[$row][] = 1; //'Clean60D';
 			}else{
 				$tableau[$row][] = 0; //'Clean60D';
 			}
-			
+
 
 			if(ecartScore($row,$data[2],$resultatsJournee,$data)<=-5){
 				$tableau[$row][] = 1; //'Ecart-5';
@@ -926,7 +918,7 @@ function scrapRoto($num_journee_avec_annee, $path)
 				$tableau[$row][] = 0; //'Ecart+3';
 				$tableau[$row][] = 0; //'Ecart+4';
 			}
-			
+
 			//echo '## '.count($tableau[$row]).' ##';
 			//echo 'Calculs GrossOccazRate : ';
 			if($data[41]-$data[15]<0){
@@ -934,15 +926,15 @@ function scrapRoto($num_journee_avec_annee, $path)
 			}else{
 				$tableau[$row][] = $data[41]-$data[15] ;
 			}
-			
+
 			//echo '## '.count($tableau[$row]).' ##';
 			//echo 'Calculs MalusDefaite : ';
 			if(testVictoire($row,$data[2],$resultatsJournee,$data)=='L'){
 				$tableau[$row][] = 1;
 			}else{
-				$tableau[$row][] = 0;	
+				$tableau[$row][] = 0;
 			}
-			
+
 			//echo '## '.count($tableau[$row]).' ##';
 			//echo 'Calculs % passes réussies :';
 			if($data[30]>=30){
@@ -1052,7 +1044,7 @@ function scrapRoto($num_journee_avec_annee, $path)
 					$tableau[$row][] = 0 ;//'25PassOK90';
 					$tableau[$row][] = 0 ;//'25PassOK95';
 					$tableau[$row][] = 0 ;//'25PassOK100';
-					
+
 				}elseif(100*$data[29]/$data[30]<=40){
 					$tableau[$row][] = 0 ;//'15PassOK30';
 					$tableau[$row][] = 1 ;//'15PassOK40';
@@ -1066,7 +1058,7 @@ function scrapRoto($num_journee_avec_annee, $path)
 					$tableau[$row][] = 0 ;//'25PassOK90';
 					$tableau[$row][] = 0 ;//'25PassOK95';
 					$tableau[$row][] = 0 ;//'25PassOK100';
-					
+
 				}elseif(100*$data[29]/$data[30]<50){
 					$tableau[$row][] = 0 ;//'15PassOK30';
 					$tableau[$row][] = 0 ;//'15PassOK40';
@@ -1080,7 +1072,7 @@ function scrapRoto($num_journee_avec_annee, $path)
 					$tableau[$row][] = 0 ;//'25PassOK90';
 					$tableau[$row][] = 0 ;//'25PassOK95';
 					$tableau[$row][] = 0 ;//'25PassOK100';
-					
+
 				}elseif(100*$data[29]/$data[30]<90){
 					$tableau[$row][] = 0 ;//'15PassOK30';
 					$tableau[$row][] = 0 ;//'15PassOK40';
@@ -1094,7 +1086,7 @@ function scrapRoto($num_journee_avec_annee, $path)
 					$tableau[$row][] = 0 ;//'25PassOK90';
 					$tableau[$row][] = 0 ;//'25PassOK95';
 					$tableau[$row][] = 0 ;//'25PassOK100';
-		
+
 				}elseif(100*$data[29]/$data[30]<=95){
 					$tableau[$row][] = 0 ;//'15PassOK30';
 					$tableau[$row][] = 0 ;//'15PassOK40';
@@ -1108,7 +1100,7 @@ function scrapRoto($num_journee_avec_annee, $path)
 					$tableau[$row][] = 0 ;//'25PassOK90';
 					$tableau[$row][] = 0 ;//'25PassOK95';
 					$tableau[$row][] = 0 ;//'25PassOK100';
-			
+
 				}elseif(100*$data[29]/$data[30]<=100){
 					$tableau[$row][] = 0 ;//'15PassOK30';
 					$tableau[$row][] = 0 ;//'15PassOK40';
@@ -1122,7 +1114,7 @@ function scrapRoto($num_journee_avec_annee, $path)
 					$tableau[$row][] = 0 ;//'25PassOK90';
 					$tableau[$row][] = 0 ;//'25PassOK95';
 					$tableau[$row][] = 0 ;//'25PassOK100';
-					
+
 				}else{
 					$tableau[$row][] = 0 ;//'15PassOK30';
 					$tableau[$row][] = 0 ;//'15PassOK40';
@@ -1136,7 +1128,7 @@ function scrapRoto($num_journee_avec_annee, $path)
 					$tableau[$row][] = 0 ;//'25PassOK90';
 					$tableau[$row][] = 0 ;//'25PassOK95';
 					$tableau[$row][] = 0 ;//'25PassOK100';
-					
+
 				}
 			}else{
 				$tableau[$row][] = 0 ;//'15PassOK30';
@@ -1151,18 +1143,18 @@ function scrapRoto($num_journee_avec_annee, $path)
 				$tableau[$row][] = 0 ;//'25PassOK90';
 				$tableau[$row][] = 0 ;//'25PassOK95';
 				$tableau[$row][] = 0 ;//'25PassOK100';
-			
+
 			}
-			
+
 			//echo '## '.count($tableau[$row]).' ##';
 			//echo 'Calculs tacle lost';
 			$tableau[$row][] = $data[25] - $data[26];//'TackleLost';
-			
+
 			//echo '## '.count($tableau[$row]).' ##';
 			//echo 'Calculs TirPasCadre';
 			$tableau[$row][] = $data[18] - $data[19];//'TirPasCadre';
 			//echo 'Tirs PAS CADRE : '.$tableau[$row][107].' ////////';
-			
+
 			//echo '## '.count($tableau[$row]).' ##';
 			//echo 'Calculs ballons touchés';
 			if($data[37]>=100){
@@ -1182,38 +1174,38 @@ function scrapRoto($num_journee_avec_annee, $path)
 				$tableau[$row][] = 0 ;//'90BallonsTouch';
 				$tableau[$row][] = 0 ;//'100BallonsTouch';
 			}
-			
+
 			//echo '## '.count($tableau[$row]).' ##';
 			//echo 'Calculs BonusVictoire : ';
 			if(testVictoire($row,$data[2],$resultatsJournee,$data)=='W'){
 				$tableau[$row][] = 1;
 			}else{
-				$tableau[$row][] = 0;	
+				$tableau[$row][] = 0;
 			}
-			
+
 			//echo '## '.count($tableau[$row]).' ##';
 			//echo 'Calculs CoupFrancRate : ';
-			$tableau[$row][] = ($data[56]-$data[57]);//'CoupFrancRate';	
-		
+			$tableau[$row][] = ($data[56]-$data[57]);//'CoupFrancRate';
+
 			}
-				
+
 			//echo "<br />\n";
 			$row++;
 		}
 		fclose($handle);
-		
+
 	}
 
 	//Import en BDD des statistiques
 	if($erreur_sur_fichier == 0){
 		global $bdd;
-			
-			
+
+
 			$supprimerStatsAncienne = $bdd->prepare('DELETE FROM joueur_stats WHERE journee = :journee');
 			$supprimerStatsAncienne->execute (array('journee' => $num_journee_avec_annee));
 			$supprimerStatsAncienne->closeCursor();
 			$premiereLigne=0;
-			
+
 			$req = $bdd->prepare('INSERT IGNORE INTO joueur_stats(
 						id,
 						journee,
@@ -1432,7 +1424,7 @@ function scrapRoto($num_journee_avec_annee, $path)
 						:bonus_victoire,
 						:coup_franc_rate,
 						NULL)');
-			
+
 			foreach($tableau as $ligneDeStats)
 			{
 				if($premiereLigne==0){
@@ -1583,12 +1575,12 @@ function login($url,$data){
 		return curl_exec ($login);
 		ob_end_clean();
 		curl_close ($login);
-		unset($login);    
+		unset($login);
 }
 
 //Fonction de récupération d'une page
 function grab_page($site){
-		
+
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
@@ -1611,7 +1603,7 @@ function recursive_array_search($needle,$haystack) {
 		}
 	}
 	return false;
-}   
+}
 
 //Renvoie le nb de but encaissés par une équipe sans compter les penaltys
 function butsEncaissesSanSPenalty($ligne,$team,$tableauScore,$dataJoueur) {
@@ -1619,7 +1611,7 @@ function butsEncaissesSanSPenalty($ligne,$team,$tableauScore,$dataJoueur) {
 	if($tableauScore[$position][0]==$dataJoueur[2]){
 			return ($tableauScore[$position][7]-$tableauScore[$position][9]);
 	}else{
-		
+
 		return ($tableauScore[$position][2]-$tableauScore[$position][4]);
 	}
 }
@@ -1630,7 +1622,7 @@ function ecartScore($ligne,$team,$tableauScore,$dataJoueur) {
 	//echo $tableauScore[$position][0].' == '.$dataJoueur[2];
 	if($tableauScore[$position][0]==$dataJoueur[2]){
 		//echo ' ____ '.($tableauScore[$position][2]-$tableauScore[$position][7]).' ____ ';
-		return ($tableauScore[$position][2]-$tableauScore[$position][7]);	
+		return ($tableauScore[$position][2]-$tableauScore[$position][7]);
 	}else{
 		//echo ' ____ '.($tableauScore[$position][7]-$tableauScore[$position][2]).' ____ ';
 		return ($tableauScore[$position][7]-$tableauScore[$position][2]);
@@ -1691,7 +1683,7 @@ function buildTableauJournee($idJournee) {
 		$ligne++;
 	}
 	$req->closeCursor();
-	
+
 	//print_r($resultatsJourneeTab);
 	return $resultatsJourneeTab;
 }
@@ -1701,12 +1693,12 @@ function calculer_notes_joueurs()
 {
 	addLogEvent('FONCTION calculer_notes_joueurs');
 	global $bdd;
-		
+
 		$req = $bdd->query('SELECT t1.position, t2.* FROM joueur_reel t1, joueur_stats t2 WHERE t2.id IN (t1.cle_roto_primaire, t1.cle_roto_secondaire) AND t2.note IS NULL');
 		$req_regleCalcul = $bdd->prepare('SELECT * FROM nomenclature_reglescalculnote WHERE position = :position');
 		$req_scoreToNote = $bdd->prepare('SELECT note FROM nomenclature_scoretonote WHERE ScoreObtenu = :scoreObtenu AND Position = :position');
 		$upd_note = $bdd->prepare('UPDATE joueur_stats SET note = :note WHERE id = :id AND journee = :journee');
-		
+
 		while ($donnees = $req->fetch())
 		{
 			$scoreCalcule = 0;
@@ -1720,13 +1712,13 @@ function calculer_notes_joueurs()
 				{
 					$scoreCalcule += $donnees[$tableauReglesCalcul['StatName']] * $tableauReglesCalcul['Ponderation'];
 				}
-				
+
 				$req_scoreToNote->execute(array('scoreObtenu' => round($scoreCalcule,2),'position' => $donnees['position']));
 				$noteObtenue=$req_scoreToNote->fetch(PDO::FETCH_ASSOC);
 				addLogEvent($donnees['id'].' sur la journee '.$donnees['journee'].' obtient la note de '.$noteObtenue['note']);
 				$upd_note->execute(array('note' => $noteObtenue['note'],'id' => $donnees['id'],'journee' => $donnees['journee']));
 			}
-			
+
 		}
 		$req->closeCursor();
 		$req_regleCalcul->closeCursor();
@@ -1742,7 +1734,7 @@ function get_effectifs_ligue_journee($constante_num_journee_cal_reel,$constanteC
 
 	$req_effectifs = $bdd->prepare('SELECT t1.id, t3.id_compo, t2.id_equipe, t1.id_equipe_dom, t1.id_equipe_ext, t3.id_joueur_reel, t4.cle_roto_primaire, t3.capitaine, t4.position, t3.numero , t2.code_tactique, t2.code_bonus_malus AS \'code_bonus_malus_equipe\', t3.numero_remplacement, t3.id_joueur_reel_remplacant, t3.note_min_remplacement FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel;');
 	$req_effectifs->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue));
-	
+
 	$tab_effectif = $req_effectifs->fetchAll();
 	$req_effectifs->closeCursor();
 	return $tab_effectif;
@@ -1756,7 +1748,7 @@ function get_effectifs_titulaires_ligue_journee($constante_num_journee_cal_reel,
 
 	$req_effectifnote = $bdd->prepare('SELECT t3.id_compo, t2.id_equipe, t1.id_equipe_dom, t1.id_equipe_ext, t3.id_joueur_reel, t4.cle_roto_primaire, t3.capitaine, t4.position, t3.numero , t3.note, t3.note_bonus, t2.code_bonus_malus AS \'code_bonus_malus_equipe\', t3.numero_remplacement, t3.id_joueur_reel_remplacant, t3.note_min_remplacement FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero < 12 ;');
 	$req_effectifnote->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue));
-	
+
 	$tab_effectif = $req_effectifnote->fetchAll();
 	$req_effectifnote->closeCursor();
 	return $tab_effectif;
@@ -1770,7 +1762,7 @@ function get_effectifs_remplacant_ligue_journee_equipe($constante_num_journee_ca
 
 	$req_remplacant = $bdd->prepare('SELECT  t3.id_joueur_reel, t4.cle_roto_primaire,  t4.position, t3.numero, t3.note, t3.note_bonus, t3.numero_definitif FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero > 11 AND t2.id_equipe = :id_equipe AND t3.numero_definitif IS NULL ORDER By t3.numero ;');
 	$req_remplacant->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue, 'id_equipe' => $id_equipe));
-	
+
 	$tab_effectif = $req_remplacant->fetchAll();
 	$req_remplacant->closeCursor();
 	return $tab_effectif;
@@ -1784,14 +1776,14 @@ function get_effectifs_non_remplace_ligue_journee($constante_num_journee_cal_ree
 
 	$req_effectif_nonRemplace = $bdd->prepare('SELECT t3.id_compo, t2.id_equipe, t3.id_joueur_reel, t4.cle_roto_primaire, t4.position, t3.numero, t3.note, t3.numero_definitif FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero < 12 AND t3.numero_definitif IS NULL AND t3.note IS NULL ORDER BY id_compo, t3.numero ASC ;');
 	$req_effectif_nonRemplace->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue));
-	
+
 	$tab_effectif = $req_effectif_nonRemplace->fetchAll();
 	$req_effectif_nonRemplace->closeCursor();
 	return $tab_effectif;
 }
 
 
-				
+
 //Récupère les confrontations d'une journée sur une ligue - Renvoie sous forme de tableau
 function get_confrontations_par_journee($constante_num_journee_cal_reel,$constanteConfrontationLigue)
 {
@@ -1804,11 +1796,11 @@ function get_confrontations_par_journee($constante_num_journee_cal_reel,$constan
 				UNION SELECT id_cal_ligue, t2.id
 				FROM calendrier_ligue t1, compo_equipe t2
 				WHERE t1.id_ligue = :id_ligue AND t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id = t2.id_cal_ligue AND t1.id_equipe_ext = t2.id_equipe ORDER BY id_cal_ligue ;');
-				
+
 	$req_listeConfrontationParJournee->execute(array('id_ligue' => $constanteConfrontationLigue, 'num_journee_cal_reel' => $constante_num_journee_cal_reel));
 	$tab_confrontation = $req_listeConfrontationParJournee->fetchAll();
 	$req_listeConfrontationParJournee->closeCursor();
-	
+
 	return $tab_confrontation;
 }
 
@@ -1820,7 +1812,7 @@ function get_attaquants_non_remplace_ligue_journee($constante_num_journee_cal_re
 
 	$req_attaquant_nonRemplace = $bdd->prepare('SELECT t3.id_compo, t2.id_equipe, t3.id_joueur_reel, t4.cle_roto_primaire, t4.position, t3.numero, t3.note, t3.note_bonus, t3.numero_definitif FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero < 12 AND t3.numero_definitif IS NULL AND t3.note IS NULL AND t4.position = \'Forward\' ORDER BY id_compo, t3.numero ASC ;');
 	$req_attaquant_nonRemplace->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue));
-	
+
 	$tab_effectif = $req_attaquant_nonRemplace->fetchAll();
 	$req_attaquant_nonRemplace->closeCursor();
 	return $tab_effectif;
@@ -1836,7 +1828,7 @@ function get_joueurAvecRemplacementTactiqueActif($constante_num_journee_cal_reel
 
 	//constante 17 pour le test uniquement
 	$req_joueurAvecRemplacementTactiqueActif->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue));
-	
+
 	$tab_effectif = $req_joueurAvecRemplacementTactiqueActif->fetchAll();
 	$req_joueurAvecRemplacementTactiqueActif->closeCursor();
 	return $tab_effectif;
@@ -1852,7 +1844,7 @@ function get_joueurRestants($constante_num_journee_cal_reel,$constanteConfrontat
 	$req_joueursRestants= $bdd->prepare('SELECT t3.id_compo, t3.id_joueur_reel, t4.cle_roto_primaire, t3.note, t3.numero, t3.numero_definitif FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero < 12 AND t3.numero_definitif IS NULL AND t3.note IS NOT NULL ;');
 
 	$req_joueursRestants->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue));
-	
+
 	$tab_effectif = $req_joueursRestants->fetchAll();
 	$req_joueursRestants->closeCursor();
 	return $tab_effectif;
@@ -1874,28 +1866,30 @@ function get_effectif_malus_bonus($constante_num_journee_cal_reel,$constanteConf
 }
 
 //Récupère la note d'un joueur sur une journee - Renvoie sous forme de tableau
-function get_note_joueur_journee($id_joueur_reel, $constante_num_journee_cal_reel,$id_compo)
+function get_note_joueur_journee($id_joueur_reel, $constanteJourneeReelle, $id_compo)
 {
 	addLogEvent('FONCTION get_note_joueur_journee');
 	global $bdd;
 
-	$req_noteDuJoueurJournee = $bdd->prepare('SELECT t1.note, t2.id_compo FROM joueur_stats t1, joueur_compo_equipe t2, joueur_reel t3 WHERE t2.id_joueur_reel = :id_joueur_reel AND t1.journee = :journee AND t2.id_joueur_reel = t3.id AND t1.id IN (t3.cle_roto_primaire, t3.cle_roto_secondaire) AND t2.id_compo = :id_compo;');
+	$req_noteDuJoueurJournee = $bdd->prepare('SELECT t1.note, t2.id_compo
+		FROM joueur_stats t1, joueur_compo_equipe t2, joueur_reel t3
+		WHERE t2.id_joueur_reel = :id_joueur_reel AND t1.journee = :journee AND t2.id_joueur_reel = t3.id AND t1.id IN (t3.cle_roto_primaire, t3.cle_roto_secondaire) AND t2.id_compo = :id_compo;');
 	$req_noteDuJoueurJournee->execute(array('id_joueur_reel' => $id_joueur_reel, 'journee' => $constanteJourneeReelle, 'id_compo' => $id_compo));
-	
+
 	$tab_note = $req_noteDuJoueurJournee->fetchAll();
 	$req_noteDuJoueurJournee->closeCursor();
 	return $tab_note;
 }
 
 //Vérifie si le capitaine a gagné ou perdu  - Renvoie sous forme de tableau //Renvoie 0 si NUL, 1 si Defaite et 2 si Victoire
-function get_victoire_ou_defaite_capitaine($id_joueur_reel, $constante_num_journee_cal_reel)
+function get_victoire_ou_defaite_capitaine($id_joueur_reel, $constanteJourneeReelle)
 {
 	addLogEvent('FONCTION get_victoire_ou_defaite_capitaine');
 	global $bdd;
 
 	$req_victoireOuDefaiteCapitaine = $bdd->prepare('SELECT t3.malus_defaite + 2*t3.bonus_victoire AS \'victoireOuDefaite\' FROM joueur_reel t1, joueur_stats t3 WHERE t1.id = :id AND t3.id IN (t1.cle_roto_primaire, t1.cle_roto_secondaire) AND t3.journee = :journee ;');
 	$req_victoireOuDefaiteCapitaine->execute(array('id' => $id_joueur_reel, 'journee' => $constanteJourneeReelle));
-	
+
 	$tab_victoire_ou_defaite = $req_victoireOuDefaiteCapitaine->fetchAll();
 	$req_victoireOuDefaiteCapitaine->closeCursor();
 	return $tab_victoire_ou_defaite;
@@ -1909,7 +1903,7 @@ function get_nb_defenseur($code_tactique)
 
 	$req_nbDefenseur = $bdd->prepare('SELECT nb_def FROM nomenclature_tactique WHERE code = :code_tactique ;');
 	$req_nbDefenseur->execute(array('code_tactique' => $code_tactique));
-	
+
 	$tab_nb_defenseur = $req_nbDefenseur->fetchAll();
 	$req_nbDefenseur->closeCursor();
 	return $tab_nb_defenseur;
@@ -1961,7 +1955,7 @@ function update_note_gardien($note,$id_compo)
 	$upd_note_gardien->closeCursor();
 }
 
-		
+
 //Change la note du joueur ciblé par le bonus Famille
 function update_note_famille($note,$constante_num_journee_cal_reel, $id_joueur_reel)
 {
@@ -1975,16 +1969,16 @@ function update_note_famille($note,$constante_num_journee_cal_reel, $id_joueur_r
 }
 
 
-		
+
 //Requete note gardien d'une équipe
 function get_note_gardien_equipe($id_equipe, $constante_num_journee_cal_reel)
 {
 	addLogEvent('FONCTION get_note_gardien_equipe');
 	global $bdd;
-	
+
 	$req_note_gardien = $bdd->prepare('SELECT t2.id_compo, t2.note, t2.note_bonus, t2.id_joueur_reel FROM compo_equipe t1, joueur_compo_equipe t2, calendrier_ligue t3 WHERE t1.id_equipe = :id_equipe AND t2.id_compo = t1.id AND t2.numero_definitif = 1 AND t3.id = t1.id_cal_ligue AND t1.id = t2.id_compo AND t3.num_journee_cal_reel = :num_journee_cal_reel ;');
 	$req_note_gardien->execute(array('id_equipe' => $id_equipe,'num_journee_cal_reel' => $constante_num_journee_cal_reel));
-	
+
 	$tab_note = $req_note_gardien->fetchAll();
 	$req_note_gardien->closeCursor();
 	return $tab_note;
@@ -1999,22 +1993,22 @@ function get_joueur_concerne_bonus($constante_num_journee_cal_reel, $id_equipe, 
 	//Requete Joueur Concerné par le bonus
 	$req_joueur_bonus = $bdd->prepare('SELECT t1.id_joueur_reel_equipe, t3.note, t3.note_bonus, t3.id_compo FROM bonus_malus t1, compo_equipe t4, calendrier_ligue t2, joueur_compo_equipe t3  WHERE t2.num_journee_cal_reel = :num_journee_cal_reel AND t2.id = t4.id_cal_ligue AND t4.id = t3.id_compo AND t3.numero_definitif IS NOT NULL AND t3.id_joueur_reel = t1.id_joueur_reel_equipe AND t1.id_equipe = :id_equipe AND t1.id_cal_ligue = :id_cal_ligue ;');
 	$req_joueur_bonus->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel,'id_equipe' => $id_equipe,'id_cal_ligue' => $id_cal_ligue));
-	
+
 	$tab_joueur = $req_joueur_bonus->fetchAll();
 	$req_joueur_bonus->closeCursor();
-	return $tab_joueur;	
+	return $tab_joueur;
 }
 
 function get_buteurs_impactes_malus_dinarb($constante_num_journee_cal_reel)
 {
 	addLogEvent('FONCTION get_buteurs_impactes_malus_dinarb');
 	global $bdd;
-	
+
 	$req_buteurs_impactes_par_malus_dinarb = $bdd->prepare('SELECT DISTINCT IF(t5.id_equipe = cl.id_equipe_dom, cl.id_equipe_ext, cl.id_equipe_dom) AS \'id_adversaire\', cl.id, t4.id_compo, t4.id_joueur_reel, t4.nb_but_reel FROM joueur_compo_equipe t4, compo_equipe t5, calendrier_ligue cl WHERE cl.id = t5.id_cal_ligue AND t5.id = t4.id_compo AND t4.numero_definitif IS NOT NULL AND t4.nb_but_reel > 0 AND t5.id_equipe IN(SELECT t1.id_equipe_dom FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id = t2.id_cal_ligue AND t2.code_bonus_malus = \'DIN_ARB\' AND t3.id_compo = t2.id AND t1.id_equipe_dom != t2.id_equipe UNION SELECT t1.id_equipe_ext FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id = t2.id_cal_ligue AND t2.code_bonus_malus = \'DIN_ARB\' AND t3.id_compo = t2.id AND t1.id_equipe_ext != t2.id_equipe);');
 	$req_buteurs_impactes_par_malus_dinarb->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
 	$tab_joueur = $req_buteurs_impactes_par_malus_dinarb->fetchAll();
 	$req_buteurs_impactes_par_malus_dinarb->closeCursor();
-	return $tab_joueur;	
+	return $tab_joueur;
 }
 
 
@@ -2076,7 +2070,7 @@ function updateButReelDuJoueur($id_compo, $journee, $id_joueur_reel)
 {
 	addLogEvent('FONCTION remise_a_null_numero_definitif_compo');
 	global $bdd;
-	
+
 	//On compte le nombre de but réel d'un joueur sur une journée
 	$req_nbButReel=$bdd->prepare('SELECT t3.but FROM joueur_compo_equipe t1, joueur_reel t2, joueur_stats t3 WHERE t1.id_joueur_reel = t2.id AND t3.id IN (t2.cle_roto_primaire, t2.cle_roto_secondaire) AND t3.journee = :journee AND t1.id_joueur_reel = :id_joueur_reel AND t1.id_compo = :id_compo');
 
@@ -2102,23 +2096,27 @@ function updateButReelDuJoueur($id_compo, $journee, $id_joueur_reel)
 	$req_nbButReel->closeCursor();
 }
 
-//Calcul les buts et buts virtuels des confrontations ayant lieu sur la journée
-//Le parametre Ligue_unique, permet de faire tourner le script uniquement sur cette ligue, si sa valeur est null alors on cherche sur toutes les ligues
-function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue_unique)
+// Calcul les buts et buts virtuels des confrontations ayant lieu sur la journée
+// $ligue_unique : permet de faire tourner le script uniquement sur cette ligue, si sa valeur est null alors on cherche sur toutes les ligues
+// $maj_stats_classement : permet de définir si la maj du classement et des stats doivent être faites.
+function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue_unique, $maj_stats_classement)
 {
 	addLogEvent('FONCTION calculer_confrontations_journee');
+	global $bdd;
+
 	$constanteJourneeReelle = get_journee_format_long($constante_num_journee_cal_reel);
-	
+	$req_ligues_concernees = $bdd->prepare('SELECT distinct id_ligue FROM calendrier_ligue WHERE num_journee_cal_reel = :num_journee_cal_reel;');
+
 	$ligue_concernee = array();
 	if(is_null($ligue_unique))
 	{
-		$ligues_concernees = get_ligues_concernees_journee($constante_num_journee_cal_reel);
+		$ligues_concernees = get_ligues_concernees_journee($constante_num_journee_cal_reel, $req_ligues_concernees);
 	}else{
 		$ligues_concernees['id_ligue'] = $ligue_unique;
 	}
-	
+
 	raz_table_joueur_compo_equipe_sur_journee($constante_num_journee_cal_reel,$ligue_unique);
-	
+
 	if (count($ligues_concernees) == 0 || empty($ligues_concernees)) {
 		addLogEvent('Aucune ligue sur la journee '.$constante_num_journee_cal_reel);
 	} else {
@@ -2310,14 +2308,14 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 
 							//On update. Le numéro définitif du joueur remplacé devient 0 pour montrer qu'il a été remplacé
 							update_numero_definitif(0,$donneesEffectifNonRemplace['id_compo'],$donneesEffectifNonRemplace['id_joueur_reel']);
-							
+
 							//On update. La note du joueur remplaçant baisse de 1 car le poste est différent
 							if($ligneRemplacant['note']-1<0.5){
 								$nouvelleNote = 0.5;
 							}else{
 								$nouvelleNote = $ligneRemplacant['note']-1;
 							}
-							
+
 							update_note_joueur_compo($nouvelleNote, $donneesEffectifNonRemplace['id_compo'], $ligneRemplacant['id_joueur_reel']);
 							update_note_bonus_joueur_compo($ligneRemplacant['note_bonus']-1,$donneesEffectifNonRemplace['id_compo'],$ligneRemplacant['id_joueur_reel']);
 							addLogEvent( 'Note - 1 ');
@@ -2327,7 +2325,7 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 						//Si il n'existe pas de remplacement d'un défenseur pour un milieu alors le joueur ne peut pas être remplacé
 						addLogEvent( 'Aucun défenseur pour remplacer le milieu '.$donneesEffectifNonRemplace['cle_roto_primaire'].' reste dans la compo');
 						//On update. Le numéro définitif devient le numéro initialement prévu
-						update_numero_definitif($donneesEffectifNonRemplace['numero'],$donneesEffectifNonRemplace['id_compo'],$donneesEffectifNonRemplace['id_joueur_reel']);				
+						update_numero_definitif($donneesEffectifNonRemplace['numero'],$donneesEffectifNonRemplace['id_compo'],$donneesEffectifNonRemplace['id_joueur_reel']);
 					}
 				}
 			}
@@ -2350,7 +2348,7 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 					//Aucun remplaçant, le joueur reste dans la compo
 					addLogEvent( 'Aucun remplaçant, le joueur '.$donneesAttaquantNonRemplace['cle_roto_primaire'].' reste dans la compo');
 					//On update. Le numéro définitif devient le numéro initialement prévu
-					update_numero_definitif($donneesAttaquantNonRemplace['numero'],$donneesAttaquantNonRemplace['id_compo'],$donneesAttaquantNonRemplace['id_joueur_reel']);	
+					update_numero_definitif($donneesAttaquantNonRemplace['numero'],$donneesAttaquantNonRemplace['id_compo'],$donneesAttaquantNonRemplace['id_joueur_reel']);
 				}else{
 					foreach ($lignesRemplacant as $ligneRemplacant) {
 						if($donneesAttaquantNonRemplace['position'] == 'Forward' && $ligneRemplacant['position'] == 'Defender'&& $ligneRemplacant['note']>0 && $estRemplace == 0 ){
@@ -2402,11 +2400,11 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 				addLogEvent( 'Remplacement Tactique de '.$donneesRemplacementTactique['cle_roto_primaire'].' par le joueur avec l\'id : '.$donneesRemplacementTactique['id_joueur_reel_remplacant']) ;
 				//On update. Le numéro définitif du joueur remplaçant devient le numéro du joueur remplacé
 				update_numero_definitif($donneesRemplacementTactique['numero'],$donneesRemplacementTactique['id_compo'],$donneesRemplacementTactique['id_joueur_reel_remplacant']);
-				
+
 				//On regarde le nombre de but réel marqué par ce joueur sur cette journée et on update
 				updateButReelDuJoueur($donneesRemplacementTactique['id_compo'], $constanteJourneeReelle, $donneesRemplacementTactique['id_joueur_reel_remplacant']);
 
-				//On update. Le numéro définitif du joueur remplacé devient 0 pour montrer qu'il a été remplacé 
+				//On update. Le numéro définitif du joueur remplacé devient 0 pour montrer qu'il a été remplacé
 				update_numero_definitif(0,$donneesRemplacementTactique['id_compo'],$donneesRemplacementTactique['id_joueur_reel_remplacant']);
 			}
 
@@ -2468,10 +2466,10 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 										if($noteGardienAdverse['note'] == 1){
 											$noteUpdateGardien = 0.5 ;
 										}
-										
+
 										update_note_gardien($noteUpdateGardien,$noteGardienAdverse['id_compo']);
 										addLogEvent( 'FUMIGENE: Malus de -1 sur le gardien de la compo '.$noteGardienAdverse['id_compo']);
-										
+
 										update_note_bonus_joueur_compo($noteGardienAdverse['note_bonus']-1,$noteGardienAdverse['id_compo'],$noteGardienAdverse['id_joueur_reel']);
 										addLogEvent( 'MAJ note bonus '.$note_bonus.' ' );
 									}
@@ -2492,10 +2490,10 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 										if($noteGardienAdverse['note'] == 1){
 											$noteUpdateGardien = 0.5 ;
 										}
-										
+
 										update_note_gardien($noteUpdateGardien,$noteGardienAdverse['id_compo']);
 										addLogEvent( 'FUMIGENE: Malus de -1 sur le gardien de la compo '.$noteGardienAdverse['id_compo']);
-										
+
 										update_note_bonus_joueur_compo($noteGardienAdverse['note_bonus']-1,$noteGardienAdverse['id_compo'],$noteGardienAdverse['id_joueur_reel']);
 										addLogEvent( 'MAJ note bonus '.$note_bonus.' ' );
 									}
@@ -2583,7 +2581,7 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 			addLogEvent( ' ************************ MALUS DIN_ARB - BOUCLE 8 **************************');
 			$id_compo_deja_affecte=-1;
 			$upd_buteur_impacte_par_malus_dinarb = $bdd->prepare('UPDATE bonus_malus SET id_joueur_reel_adverse = :id_joueur_reel_adverse WHERE id_equipe = :id_equipe AND id_cal_ligue = :id_cal_ligue;');
-			
+
 			$tab_buteurs = get_buteurs_impactes_malus_dinarb($constante_num_journee_cal_reel);
 			foreach($tab_buteurs as $listeButeursImpactesMalusDinArb)
 			{
@@ -2603,10 +2601,14 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 			//Application des malus équipe de l'adversaire (MAJ Note)
 		}	//FIN DE BOUCLE FOR EACH SUR LA LIGUE
 	}	//FIN DU IF SUR LA LIGUE
-	
+
 	addLogEvent( ' ************************ NETTOYAGE DES NUMEROS DEFINITIFS A ZERO ET DES NOTES DES REMPLACANTS **************************');;
 	nettoyage_joueur_compo_equipe();
 	impactCSC($constanteJourneeReelle, $constante_num_journee_cal_reel);
+
+	if ($maj_stats_classement) {
+		mise_a_jour_stat_classement($constante_num_journee_cal_reel, $constanteJourneeReelle, $req_ligues_concernees);
+	}
 }
 
 //Remet à NULL les stats de la table JOUEUR COMPO EQUIPE
@@ -2622,24 +2624,22 @@ function raz_table_joueur_compo_equipe_sur_journee($constante_num_journee_cal_re
 	}else{
 		addLogEvent('FONCTION raz_table_joueur_compo_equipe_sur_journee - Uniquement la ligue n°'.$ligue_unique);
 		$upd_remise_a_zero_jce = $bdd->prepare('UPDATE joueur_compo_equipe, calendrier_ligue, compo_equipe SET joueur_compo_equipe.note = NULL, joueur_compo_equipe.note_bonus = NULL, joueur_compo_equipe.nb_but_reel = NULL, joueur_compo_equipe.nb_but_virtuel = NULL, joueur_compo_equipe.numero_definitif = NULL WHERE calendrier_ligue.num_journee_cal_reel = :num_journee_cal_reel AND calendrier_ligue.id = compo_equipe.id_cal_ligue AND compo_equipe.id = joueur_compo_equipe.id_compo AND calendrier_ligue.id_ligue = :id_ligue;');
-		$upd_remise_a_zero_jce->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $ligue_unique));		
+		$upd_remise_a_zero_jce->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $ligue_unique));
 	}
-	
+
 	$upd_remise_a_zero_jce->closeCursor();
 }
 
 //Renvoie un tableau contenant les id_ligues touchés par une journée
-function get_ligues_concernees_journee($constante_num_journee_cal_reel)
+function get_ligues_concernees_journee($constante_num_journee_cal_reel, $req_ligues_concernees)
 {
 	addLogEvent('FONCTION get_ligues_concernees_journee');
 	global $bdd;
-	
-	$req_ligues_concernees = $bdd->prepare('SELECT distinct id_ligue FROM calendrier_ligue WHERE num_journee_cal_reel = :num_journee_cal_reel;');
+
 	$req_ligues_concernees->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
-	
 	$tab_ligues_concernees = $req_ligues_concernees->fetchAll();
 	$req_ligues_concernees->closeCursor();
-	
+
 	return $tab_ligues_concernees;
 }
 
@@ -2648,14 +2648,14 @@ function get_compo_definitive($id_compo)
 {
 	addLogEvent('FONCTION get_compo_definitive');
 	global $bdd;
-	
+
 	$req_compoDefinitive = $bdd->prepare('SELECT t1.id_joueur_reel, t2.cle_roto_primaire, t2.position, t1.numero_definitif , t1.note, t1.nb_but_reel, t4.nb_def, t4.nb_mil, t4.nb_att FROM joueur_compo_equipe t1, joueur_reel t2, compo_equipe t3, nomenclature_tactique t4 WHERE t1.id_compo = :id_compo AND t1.id_joueur_reel = t2.id AND t1.numero_definitif > 0 AND t1.numero_definitif < 12 AND t1.numero_definitif IS NOT NULL AND t3.id = t1.id_compo AND t3.code_tactique = t4.code ORDER BY t1.numero_definitif ASC;');
 	$req_compoDefinitive->execute(array('id_compo' => $id_compo));
-	
+
 	$tab_compo_definitive = $req_compoDefinitive->fetchAll();
 	$req_compoDefinitive->closeCursor();
-	
-	return $tab_compo_definitive;	
+
+	return $tab_compo_definitive;
 }
 
 function calculButVirtuel($equipeA,$equipeB){
@@ -2891,7 +2891,7 @@ function nettoyage_joueur_compo_equipe()
 {
 	addLogEvent('FONCTION nettoyage_joueur_compo_equipe');
 	global $bdd;
-	
+
 	$upd_pas_de_note_remplacant = $bdd->prepare('UPDATE joueur_compo_equipe SET note = NULL WHERE numero > 11 AND numero_definitif IS NULL;');
 	$upd_pas_de_note_remplacant->execute();
 	$upd_pas_de_note_remplacant->closeCursor();
@@ -2906,7 +2906,7 @@ function impactCSC($journee, $short_journee)
 {
 	addLogEvent('FONCTION impactCSC');
 	global $bdd;
-	
+
 	//Attention id_journee vs num_journee_cal_reel
 	$upd_csc = $bdd->prepare('UPDATE compo_equipe ce, joueur_compo_equipe jce, joueur_stats js, joueur_reel jr, calendrier_ligue cl SET jce.nb_csc = js.csc WHERE jce.id_compo = ce.id  AND jr.id = jce.id_joueur_reel AND js.id IN (jr.cle_roto_primaire, jr.cle_roto_secondaire) AND ce.id_cal_ligue = cl.id AND js.journee = :journee AND cl.num_journee_cal_reel = :short_journee AND js.csc > 0 AND jce.numero_definitif > 0 AND jce.numero_definitif < 12;');
 
@@ -2916,12 +2916,11 @@ function impactCSC($journee, $short_journee)
 
 //Met à jour les stats et le classement des ligues ayant lieu sur la journée
 //A FAIRE : Le parametre Ligue_unique, permet de faire tourner le script uniquement sur cette ligue, si sa valeur est null alors on cherche sur toutes les ligues
-function mise_a_jour_stat_classement($constante_num_journee_cal_reel)
+function mise_a_jour_stat_classement($constante_num_journee_cal_reel, $constanteJourneeReelle, $req_ligues_concernees)
 {
 	addLogEvent('FONCTION mise_a_jour_stat_classement');
-	$constanteJourneeReelle = get_journee_format_long($constante_num_journee_cal_reel);
 	global $bdd;
-	
+
 	//SCORE DOM => TABLE calendrier_ligue
 
 	$req_score_dom = $bdd->prepare('SELECT t1.id, SUM(IFNULL(t3.nb_but_reel,0)) + SUM(IFNULL(t3.nb_but_virtuel,0)) AS \'score_domicile\', SUM(IFNULL(t3.nb_csc,0)) AS \'csc_concedes\' FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t3.numero_definitif IS NOT NULL AND t2.id_equipe = t1.id_equipe_dom  GROUP BY t3.id_compo;');
@@ -3095,46 +3094,38 @@ function mise_a_jour_stat_classement($constante_num_journee_cal_reel)
 	$upd_nb_joue->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
 	$upd_nb_joue->closeCursor();
 
-
-
-
 	//NB BONUS => TABLE EQUIPE
 	$req_nb_bonus = $bdd->prepare('UPDATE equipe e, calendrier_ligue cl, compo_equipe ce SET e.nb_bonus = e.nb_bonus+1 WHERE ce.code_bonus_malus iS NOT NULL AND cl.num_journee_cal_reel = :num_journee_cal_reel AND e.id_ligue = cl.id_ligue AND e.id = ce.id_equipe AND cl.id = ce.id_cal_ligue;');
-
-
 	$req_nb_bonus->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
 	$req_nb_bonus->closeCursor();
 
 	//NB MALUS => TABLE EQUIPE à faire
-
-
 	$upd_nb_malus = $bdd->prepare('UPDATE equipe e, (SELECT cl.id_equipe_ext AS \'equipe_victime\', cl.id_ligue from compo_equipe ce, calendrier_ligue cl WHERE ce.code_bonus_malus IS NOT NULL AND ce.id_cal_ligue = cl.id AND cl.num_journee_cal_reel = :num_journee_cal_reel AND ce.id_equipe = cl.id_equipe_dom UNION SELECT cl1.id_equipe_dom AS \'equipe_victime\', cl1.id_ligue from compo_equipe ce1, calendrier_ligue cl1 WHERE ce1.code_bonus_malus IS NOT NULL AND ce1.id_cal_ligue = cl1.id AND cl1.num_journee_cal_reel = :num_journee_cal_reel AND ce1.id_equipe = cl1.id_equipe_ext) t1 SET e.nb_malus = e.nb_malus+1 WHERE e.id_ligue = t1.id_ligue AND e.id = t1.equipe_victime;');
-
 	$upd_nb_malus->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
 	$upd_nb_malus->closeCursor();
 
-
 	//CLASSEMENT => TABLE EQUIPE
 	$req_ligues_concernees->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
-	$req_set_rank = $bdd->prepare('SET @rank :=0;');
-	$req_classement_ligue = $bdd->prepare('SELECT tmp.id_ligue, tmp.id, @rank := @rank+1 as \'rank\'
-		FROM (Select e.id_ligue, e.id, (e.nb_victoire*3)+(e.nb_nul*2)+(e.nb_but_pour/100)-(e.nb_but_contre/100) as \'points\' from equipe e
-		WHERE e.id_ligue = :id_ligue) tmp
+	$req_classement_ligue = $bdd->prepare('SELECT tmp.id
+		FROM (
+			SELECT e.id_ligue, e.id, ((e.nb_victoire*3)+e.nb_nul) as \'points\', CAST(e.nb_but_pour AS SIGNED)-CAST(e.nb_but_contre AS SIGNED) as \'diff\'
+			FROM equipe e
+			WHERE e.id_ligue = :id_ligue) tmp
 		GROUP BY tmp.id_ligue, tmp.id
-		ORDER BY tmp.points DESC;');
+		ORDER BY tmp.points DESC, tmp.diff DESC;');
 
 	$upd_classement_ligue = $bdd->prepare('UPDATE equipe SET classement = :classement WHERE id_ligue = :id_ligue and id = :id;');
 
 	while ($listeLiguesConcernees = $req_ligues_concernees->fetch())
 	{
-		$req_set_rank->execute();
 		$req_classement_ligue->execute(array('id_ligue' => $listeLiguesConcernees['id_ligue']));
+		$rang = 1;
 		while ($classementCalcule = $req_classement_ligue->fetch())
 		{
-			$upd_classement_ligue->execute(array('classement' => $classementCalcule['rank'], 'id_ligue' => $classementCalcule['id_ligue'], 'id' => $classementCalcule['id']));
+			$upd_classement_ligue->execute(array('classement' => $rang, 'id_ligue' => $listeLiguesConcernees['id_ligue'], 'id' => $classementCalcule['id']));
 			$upd_classement_ligue->closeCursor();
+			$rang++;
 		}
-		$req_set_rank->closeCursor();
 		$req_classement_ligue->closeCursor();
 	}
 	$req_ligues_concernees->closeCursor();
@@ -3142,15 +3133,15 @@ function mise_a_jour_stat_classement($constante_num_journee_cal_reel)
 	$upd_statut_journee = $bdd->prepare('UPDATE calendrier_reel SET statut = 2 WHERE num_journee = :num_journee_cal_reel;');
 	$upd_statut_journee->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
 	$upd_statut_journee->closeCursor();
-	
+
 	addLogEvent('Fin script');
 }
 
-//RESTE A FAIRE 
+//RESTE A FAIRE
 function nettoyageFichierStat()
 {
 	//Virer les doublons sur le même poste
-	
+
 }
 
 
