@@ -2,7 +2,7 @@
 // Afficahge des buteurs dans le detail_match_bandeau
 function afficherButeur($joueurs, $joueursAdv, $codeBonusAdv, $nomJoueur, $statut)
 {
-  if ($statut == ConstantesAppli::STATUT_CAL_TERMINE)
+  if ($statut >= ConstantesAppli::STATUT_CAL_TERMINE)
   {
     if ($joueurs != null) {
       foreach ($joueurs as $cle => $value)
