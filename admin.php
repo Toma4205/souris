@@ -1,6 +1,9 @@
 <?php
 
-if (isset($_POST['initJournee']))
+if (isset($_POST['lancerCron']))
+{
+	include_once('./admin/testCRON.php');
+} elseif (isset($_POST['initJournee']))
 {
 	include_once('./admin/initDebutJournee.php');
 } elseif (isset($_POST['majScoreJourneeEnCours']))
@@ -24,6 +27,9 @@ if (isset($_POST['initJournee']))
 <html>
 <body>
 	<h1>Page Administrateur</h1>
+		<p>
+			<a class="bouton" href="#titreLancerCron">Lancer CRON</a>
+		</p>
 		<p>
 			<a class="bouton" href="#titreScrapValeur">Vérification Prix des Joueurs</a>
 		</p>
@@ -57,6 +63,12 @@ if (isset($_POST['initJournee']))
 		<p>
 			<a class="bouton" href="#titreMajFinLigue">Maj fin ligue</a>
 		</p>
+
+	<HR size=2 align=center width="100%">
+	<h2 id="titreLancerCron">Lancer CRON</h2>
+	<form method="post" id="lancerCron" action="">
+			<input type="submit" name="lancerCron" value="J'me lance" />
+	</form>
 
 	<HR size=2 align=center width="100%">
 	<h2 id="titreScrapValeur">Vérification Prix des Joueurs</h2>
@@ -465,7 +477,7 @@ if (isset($_POST['initJournee']))
 
 <HR size=2 align=center width="100%">
 <h2 id="titreInitDebutJournee">Initialiser le début de journée</h2>
-<form method="post" id="initDebutJournee"  action="">
+<form method="post" id="initDebutJournee" action="">
 	<?php
 	if (isset($messageInitDebutJournee))
 	{
@@ -479,7 +491,7 @@ if (isset($_POST['initJournee']))
 
 <HR size=2 align=center width="100%">
 <h2 id="titreMajScoreJourneeEnCours">Maj buteurs/scores journée en cours</h2>
-<form method="post" id="majScoreJourneeEnCours"  action="">
+<form method="post" id="majScoreJourneeEnCours" action="">
 	<?php
 	if (isset($messageMajScoreJourneeEnCours))
 	{
@@ -493,7 +505,7 @@ if (isset($_POST['initJournee']))
 
 <HR size=2 align=center width="100%">
 <h2 id="titreMajMoyenneJoueur">Maj des moyennes des joueurs</h2>
-<form method="post" id="majMoyenneJoueur"  action="">
+<form method="post" id="majMoyenneJoueur" action="">
 	<?php
 	if (isset($messageMajMoyenneJoueur))
 	{
@@ -507,7 +519,7 @@ if (isset($_POST['initJournee']))
 
 <HR size=2 align=center width="100%">
 <h2 id="titreMajFinLigue">Maj fin ligue</h2>
-<form method="post" id="majFinLigue"  action="">
+<form method="post" id="majFinLigue" action="">
 	<?php
 	if (isset($messageMajFinLigue))
 	{
