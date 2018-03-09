@@ -123,12 +123,52 @@ if (isset($match)) {
         </div>
         <!-- DEF -->
         <div class="detail_match_terrain_ligne">
+			<div class="detail_match_terrain_position_centre">
+				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_psg.png" />
+				<div>Kurzawa</div>
+			</div>
+			<div class="detail_match_terrain_position_centre">
+				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_psg.png" />
+				<div>Marquinos</div>
+			</div>
+			<div class="detail_match_terrain_position_centre">
+				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_nte.png" />
+				<div>Diego Carlos</div>
+			</div>
+			<div class="detail_match_terrain_position_centre">
+				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_nte.png" />
+				<div>Sidibé</div>
+			</div>
         </div>
         <!-- MIL -->
         <div class="detail_match_terrain_ligne">
+			<div class="detail_match_terrain_position_centre">
+				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_psg.png" />
+				<div>Rabiot</div>
+			</div>
+			<div class="detail_match_terrain_position_centre">
+				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_nic.png" />
+				<div>Seri</div>
+			</div>
+			<div class="detail_match_terrain_position_centre">
+				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_eti.png" />
+				<div>Cabella</div>
+			</div>
         </div>
         <!-- ATT -->
         <div class="detail_match_terrain_ligne">
+			<div class="detail_match_terrain_position_centre">
+				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_psg.png" />
+				<div>Neymar</div>
+			</div>
+			<div class="detail_match_terrain_position_centre">
+				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_lyo.png" />
+				<div>Mariano</div>
+			</div>
+			<div class="detail_match_terrain_position_centre">
+				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_dij.png" />
+				<div>Tavares</div>
+			</div>
         </div>
       </div>
       <div class="detail_match_terrain_ext">

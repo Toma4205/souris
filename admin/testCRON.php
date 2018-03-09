@@ -104,7 +104,7 @@ foreach($calendrier_reel as $ligne_calendrier_reel)
 				addLogEvent('CRON DES MATCHS SEMBLENT ANNULES');
 				annuler_match_restants($ligne_calendrier_reel['num_journee']);
 				set_statut_match_termine_journee($ligne_calendrier_reel['num_journee'],1,0);
-				get_csv_from_roto($ligne_calendrier_reel['num_journee']);
+				get_csv_from_roto(get_journee_format_long($ligne_calendrier_reel['num_journee']));
 				calculer_notes_joueurs();
 				setStatutJournee($ligne_calendrier_reel['num_journee'],2);
 				calculer_confrontations_journee($ligne_calendrier_reel['num_journee'], null, FALSE);
@@ -117,7 +117,7 @@ foreach($calendrier_reel as $ligne_calendrier_reel)
 	//CONDITIONS : Nous sommes à plus de 6h après la date de fin d'une journée de L1
 	}elseif(strtotime("now -6 hours")-strtotime($ligne_calendrier_reel['fin'])>=0 && $statut == 2){
 		addLogEvent( 'Nous avons terminé '.$ligne_calendrier_reel['num_journee'].' depuis plus de 6h');
-		get_csv_from_roto($ligne_calendrier_reel['num_journee']);
+		get_csv_from_roto(get_journee_format_long($ligne_calendrier_reel['num_journee']));
 		calculer_notes_joueurs();
 		calculer_confrontations_journee($ligne_calendrier_reel['num_journee'], null, TRUE);
 		setStatutJournee($ligne_calendrier_reel['num_journee'],3);

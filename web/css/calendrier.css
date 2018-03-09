@@ -106,31 +106,37 @@
   padding: 1rem 0;
 }
 .detail_match_terrain_conteneur_img {
-  width: 500px;
-  height: 500px;
+  max-width: 100%;
+  height: 50%;
   margin: auto;
   background: url("../img/football_fied.png") no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  display : flex;
 }
 .detail_match_terrain_dom, .detail_match_terrain_ext {
-  height: 50%;
-  width: 400px;
-  margin-left: 10px;
+  width: 50%;
+  height: 100%;
+  margin-left: 5px;
+  margin-right: 5px;
+  display : flex;
 }
 .detail_match_terrain_ligne {
-  height: 25%;
+  width: 25%;
   font-size: .8rem;
+  display : flex;
+  flex-direction : column;
+  justify-content : center;
 }
 .detail_match_terrain_position_centre {
-  width:10%;
+  width:100%;
   margin: auto;
 }
 .detail_match_terrain_maillot {
-  height: 60%;
-  width: 100%;
+  height: 85%;
+  width: 60%;
 }
 
 
