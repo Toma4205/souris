@@ -3518,11 +3518,13 @@ function mise_a_jour_stat_classement($constante_num_journee_cal_reel, $constante
 	$req_ligues_concernees->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
 	$req_classement_ligue = $bdd->prepare('SELECT tmp.id
 		FROM (
-			SELECT e.id_ligue, e.id, ((e.nb_victoire*3)+e.nb_nul) as \'points\', CAST(e.nb_but_pour AS SIGNED)-CAST(e.nb_but_contre AS SIGNED) as \'diff\'
+			SELECT e.id_ligue, e.id, ((e.nb_victoire*3)+e.nb_nul) as \'points\',
+			CAST(e.nb_but_pour AS SIGNED)-CAST(e.nb_but_contre AS SIGNED) as \'diff_but\',
+			CAST(e.nb_bonus AS SIGNED)-CAST(e.nb_malus AS SIGNED) as \'diff_bonus\'
 			FROM equipe e
 			WHERE e.id_ligue = :id_ligue) tmp
 		GROUP BY tmp.id_ligue, tmp.id
-		ORDER BY tmp.points DESC, tmp.diff DESC;');
+		ORDER BY tmp.points DESC, tmp.diff_but DESC, tmp.diff_bonus DESC;');
 
 	$upd_classement_ligue = $bdd->prepare('UPDATE equipe SET classement = :classement WHERE id_ligue = :id_ligue and id = :id;');
 
