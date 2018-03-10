@@ -85,6 +85,7 @@ foreach($calendrier_reel as $ligne_calendrier_reel)
 				set_statut_match_termine_journee($ligne_calendrier_reel['num_journee'],1,4);
 				get_csv_from_roto(get_journee_format_long($ligne_calendrier_reel['num_journee']));
 				calculer_notes_joueurs();
+				maj_scores_journee_en_cours($ligne_calendrier_reel['num_journee']);
 			}
 
 			//Test pour savoir si tous les matchs de la journée sont terminés depuis plus de 10 minutes (statut = 1)
