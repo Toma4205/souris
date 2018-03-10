@@ -7,7 +7,9 @@ function afficherButeur($joueurs, $joueursAdv, $codeBonusAdv, $nomJoueur, $statu
     if ($joueurs != null) {
       foreach ($joueurs as $cle => $value)
       {
-        if ($value->numeroDefinitif() != null && ($value->nbButReel() > 0 || $value->nbButVirtuel() > 0))
+        if ($value->numeroDefinitif() != null && (
+          ($value->nbButReel() > 0 || $value->nbButVirtuel() > 0)
+          || ($codeBonusAdv == ConstantesAppli::BONUS_MALUS_DIN_ARB  && $nomJoueur == $value->nom())))
         {
           $total = $value->nbButReel() + $value->nbButVirtuel();
           echo '<li';
@@ -16,12 +18,13 @@ function afficherButeur($joueurs, $joueursAdv, $codeBonusAdv, $nomJoueur, $statu
           }
           echo '>' . $value->nom();
           for ($index = 1; $index <= $total; $index++) {
-            if ($index == 1 && $codeBonusAdv == ConstantesAppli::BONUS_MALUS_DIN_ARB  && $nomJoueur == $value->nom()) {
-              echo '<img class="but" src="web/img/but_annule.png" alt="But" width="10px" height="10px"/>';
-            } else {
-              echo '<img class="but" src="web/img/but.png" alt="But" width="10px" height="10px"/>';
-            }
+             echo '<img class="but" src="web/img/but.png" alt="But" width="10px" height="10px"/>';
           }
+
+          if ($codeBonusAdv == ConstantesAppli::BONUS_MALUS_DIN_ARB  && $nomJoueur == $value->nom()) {
+            echo '<img class="but" src="web/img/but_annule.png" alt="But" width="10px" height="10px"/>';
+          }
+
           echo '</li>';
         }
       }

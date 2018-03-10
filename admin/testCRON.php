@@ -59,7 +59,7 @@ foreach($calendrier_reel as $ligne_calendrier_reel)
 	// = PENDANT UNE JOURNEE DE L1
 	if(strtotime("now")-strtotime($ligne_calendrier_reel['debut']) >= 0 && strtotime("now")-strtotime($ligne_calendrier_reel['fin'])<=0 && $now['hours'] >= 13)
 	{
-		addLogEvent( 'Nous sommes dans la '.$ligne_calendrier_reel['num_journee'].' - statut '.$statut);
+		addLogEvent( 'Journée '.$ligne_calendrier_reel['num_journee'].' en cours.');
 		if($statut == 0)
 		{
 			//L'INIT n'a pas été fait alors faire le SCRIPT ZERO

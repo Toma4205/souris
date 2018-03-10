@@ -39,6 +39,13 @@ function raz_table_joueur_compo_equipe_sur_journee
 function mise_a_jour_stat_classement
 
 */
+
+require_once(__DIR__ . '/../modele/connexionSQL.php');
+require_once(__DIR__ . '/../modele/joueurequipe/joueurEquipe.php');
+require_once(__DIR__ . '/../modele/compoequipe/compoEquipe.php');
+require_once(__DIR__ . '/../modele/compoequipe/joueurCompoEquipe.php');
+require_once(__DIR__ . '/../controleur/constantesAppli.php');
+
 /////////////////CONNEXION BASE
 ///// Utilisation du mot clé "global" pour avoir accès à la bdd dans toutes les fonctions
 require_once(__DIR__ . '/../modele/connexionSQL.php');
@@ -102,21 +109,232 @@ function setStatutJournee($num_journee,$statut){
 	$updStatutJournee->closeCursor();
 }
 
-//Passage du statut d'une journée de 0 à 1 dans calendrier réel
-//Passage du score à 0 pour calendrier ligue sur cette meme journée
-function initializeJournee($num_journee){
+function getEquipeSansCompo($numJournee)
+{
 	global $bdd;
 
-	$upd_initializeStatutJournee=$bdd->prepare('UPDATE calendrier_reel SET statut = 1 WHERE num_journee = :num_journee;');
-	$upd_initializeScoreJournee=$bdd->prepare('UPDATE calendrier_ligue SET score_dom = 0, score_ext = 0 WHERE num_journee_cal_reel = :num_journee;');
+  $q = $bdd->prepare('SELECT cl.id_equipe_dom as id FROM calendrier_ligue cl
+    WHERE cl.num_journee_cal_reel = :num AND NOT EXISTS (
+      SELECT ce.id FROM compo_equipe ce
+      WHERE ce.id_equipe = cl.id_equipe_dom AND ce.id_cal_ligue = cl.id)');
+  $q->execute([':num' => $numJournee]);
 
-	$upd_initializeStatutJournee->execute(array('num_journee' => $num_journee));
-	$upd_initializeStatutJournee->closeCursor();
-	addLogEvent('Initialisation du statut à 1 pour la journée '.$num_journee);
+  $equipes = [];
+  while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+  {
+    $equipes[] = $donnees['id'];
+  }
+  $q->closeCursor();
 
-	$upd_initializeScoreJournee->execute(array('num_journee' => $num_journee));
-	$upd_initializeScoreJournee->closeCursor();
-	addLogEvent('Initialisation des scores à 0 pour la journée '.$num_journee);
+  $q = $bdd->prepare('SELECT cl.id_equipe_ext as id FROM calendrier_ligue cl
+    WHERE cl.num_journee_cal_reel = :num AND NOT EXISTS (
+      SELECT ce.id FROM compo_equipe ce
+      WHERE ce.id_equipe = cl.id_equipe_ext AND ce.id_cal_ligue = cl.id)');
+  $q->execute([':num' => $numJournee]);
+
+  while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+  {
+    $equipes[] = $donnees['id'];
+  }
+  $q->closeCursor();
+
+  return $equipes;
+}
+
+function getCompoEquipePrecedente($idEquipe, $numJournee)
+{
+	global $bdd;
+
+  $q = $bdd->prepare('SELECT ce.* FROM compo_equipe ce
+    WHERE ce.id_cal_ligue = (SELECT cl.id FROM calendrier_ligue cl
+      WHERE cl.num_journee_cal_reel = :num
+      AND (cl.id_equipe_dom = :id OR cl.id_equipe_ext = :id))');
+  $q->execute([':num' => $numJournee, ':id' => $idEquipe]);
+
+  $donnees = $q->fetch(PDO::FETCH_ASSOC);
+  $q->closeCursor();
+
+  // Si la compo n'est pas trouvée
+  if (is_bool($donnees))
+  {
+    return null;
+  }
+  else
+  {
+    return new CompoEquipe($donnees);
+  }
+}
+
+function getTitulairesByCompo($idCompo)
+{
+	global $bdd;
+
+  $q = $bdd->prepare('SELECT * FROM joueur_compo_equipe
+    WHERE numero < 12
+    AND id_compo = :id');
+  $q->execute([':id' => $idCompo]);
+
+  $joueurs = [];
+  while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+  {
+    $joueurs[] = new JoueurCompoEquipe($donnees);
+  }
+  $q->closeCursor();
+
+  return $joueurs;
+}
+
+function getCalLigueByEquipeEtJournee($idEquipe, $numJournee)
+{
+	global $bdd;
+
+  $q = $bdd->prepare('SELECT id FROM calendrier_ligue
+    WHERE num_journee_cal_reel = :num
+    AND (id_equipe_dom = :id OR id_equipe_ext = :id)');
+  $q->execute([':num' => $numJournee, ':id' => $idEquipe]);
+
+  return $q->fetchColumn();
+}
+
+function creerCompoCommePrecedente($compo, $idEquipe, $idCalLigue, $joueurs)
+{
+	global $bdd;
+
+  $q = $bdd->prepare('INSERT INTO compo_equipe(id_cal_ligue, id_equipe, code_tactique)
+      VALUES(:calLigue, :equipe, :tactique)');
+  $q->bindValue(':calLigue', $idCalLigue);
+  $q->bindValue(':equipe', $idEquipe);
+  $q->bindValue(':tactique', $compo->codeTactique());
+
+  $q->execute();
+
+  $idCompo = $bdd->lastInsertId();
+
+  foreach($joueurs as $cle => $joueur)
+  {
+    $q = $bdd->prepare('INSERT INTO joueur_compo_equipe(id_compo, id_joueur_reel, numero, capitaine)
+        VALUES(:idCompo, :idJoueur, :num, :cap)');
+    $q->bindValue(':idCompo', $idCompo);
+    $q->bindValue(':idJoueur', $joueur->idJoueurReel());
+    $q->bindValue(':num', $joueur->numero());
+    $q->bindValue(':cap', $joueur->capitaine());
+
+    $q->execute();
+  }
+
+  return $idCompo;
+}
+
+function getJoueurEquipeByEquipe($idEquipe)
+{
+	global $bdd;
+
+  $q = $bdd->prepare('SELECT je.*, j.position, j.id
+    FROM joueur_equipe je
+    JOIN joueur_reel j ON je.id_joueur_reel = j.id
+    WHERE id_equipe = :id');
+  $q->execute([':id' => $idEquipe]);
+
+  $joueurs = [];
+  while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+  {
+    $joueurs[] = new JoueurEquipe($donnees);
+  }
+  $q->closeCursor();
+
+  return $joueurs;
+}
+
+function creerPremiereCompo($idEquipe, $idCalLigue, $joueurs)
+{
+	global $bdd;
+
+  $q = $bdd->prepare('INSERT INTO compo_equipe(id_cal_ligue, id_equipe, code_tactique)
+      VALUES(:calLigue, :equipe, :tactique)');
+  $q->bindValue(':calLigue', $idCalLigue);
+  $q->bindValue(':equipe', $idEquipe);
+  $q->bindValue(':tactique', ConstantesAppli::TACTIQUE_DEFAUT);
+
+  $q->execute();
+
+  $idCompo = $bdd->lastInsertId();
+
+  $nbGB = 0;
+  $nbDef = 0;
+  $nbMil = 0;
+  $nbAtt = 0;
+  foreach($joueurs as $cle => $joueur)
+  {
+    $numero = 1;
+    if ($joueur->position() == ConstantesAppli::GARDIEN && $nbGB < 1) {
+      $nbGB++;
+    } elseif ($joueur->position() == ConstantesAppli::DEFENSEUR && $nbDef < 4) {
+      $nbDef++;
+      $numero += $nbDef;
+    } elseif ($joueur->position() == ConstantesAppli::MILIEU && $nbMil < 4) {
+      $nbMil++;
+      $numero += 4 + $nbMil;
+    } elseif ($joueur->position() == ConstantesAppli::ATTAQUANT && $nbAtt < 2) {
+      $nbAtt++;
+      $numero += 8 + $nbAtt;
+    } else {
+      $numero = 0;
+    }
+
+    if ($numero > 0) {
+      $q = $bdd->prepare('INSERT INTO joueur_compo_equipe(id_compo, id_joueur_reel, numero, capitaine)
+          VALUES(:idCompo, :idJoueur, :num, 0)');
+      $q->bindValue(':idCompo', $idCompo);
+      $q->bindValue(':idJoueur', $joueur->id());
+      $q->bindValue(':num', $numero);
+
+      $q->execute();
+    }
+  }
+
+  return $idCompo;
+}
+
+//Passage du statut d'une journée de 0 à 1 dans calendrier réel
+//Passage du score à 0 pour calendrier ligue sur cette meme journée
+//Création des compo non saisies
+function initializeJournee($numJournee){
+	global $bdd;
+
+	$equipes = getEquipeSansCompo($numJournee);
+  if (sizeof($equipes) > 0) {
+
+		addLogEvent(sizeof($equipes) . ' compo manquantes.');
+
+    foreach($equipes as $cle => $idEquipe)
+    {
+      $idCalLigue = getCalLigueByEquipeEtJournee($idEquipe, $numJournee);
+      $compo = getCompoEquipePrecedente($idEquipe, $numJournee - 1);
+
+      if ($compo != null) {
+        $joueurs = getTitulairesByCompo($compo->id());
+        $idCompo = creerCompoCommePrecedente($compo, $idEquipe, $idCalLigue, $joueurs);
+      } else {
+        $joueurs = getJoueurEquipeByEquipe($idEquipe);
+        $idCompo = creerPremiereCompo($idEquipe, $idCalLigue, $joueurs);
+      }
+
+			addLogEvent('Création compo' . $idCompo . ' pour le match ' . $idCalLigue . ' pour l\'équipe ' . $idEquipe);
+    }
+  } else {
+		addLogEvent('Aucune compo manquante.');
+  }
+
+  // On passe le statut de la journée à "en cours" = 1
+  $q = $bdd->prepare('UPDATE calendrier_reel SET statut = 1 WHERE num_journee = :num');
+  $q->execute([':num' => $numJournee]);
+
+  // On initialise les scores des matchs à 0-0
+  $q = $bdd->prepare('UPDATE calendrier_ligue SET score_dom = 0, score_ext = 0
+    WHERE num_journee_cal_reel = :num');
+  $q->execute([':num' => $numJournee]);
+
+	addLogEvent('Initialisation de la journée réussie.');
 }
 
 
@@ -1999,13 +2217,26 @@ function get_joueur_concerne_bonus($constante_num_journee_cal_reel, $id_equipe, 
 	return $tab_joueur;
 }
 
-function get_buteurs_impactes_malus_dinarb($constante_num_journee_cal_reel)
+function get_buteurs_impactes_malus_dinarb($constante_num_journee_cal_reel, $idLigue)
 {
 	addLogEvent('FONCTION get_buteurs_impactes_malus_dinarb');
 	global $bdd;
 
-	$req_buteurs_impactes_par_malus_dinarb = $bdd->prepare('SELECT DISTINCT IF(t5.id_equipe = cl.id_equipe_dom, cl.id_equipe_ext, cl.id_equipe_dom) AS \'id_adversaire\', cl.id, t4.id_compo, t4.id_joueur_reel, t4.nb_but_reel FROM joueur_compo_equipe t4, compo_equipe t5, calendrier_ligue cl WHERE cl.id = t5.id_cal_ligue AND t5.id = t4.id_compo AND t4.numero_definitif IS NOT NULL AND t4.nb_but_reel > 0 AND t5.id_equipe IN(SELECT t1.id_equipe_dom FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id = t2.id_cal_ligue AND t2.code_bonus_malus = \'DIN_ARB\' AND t3.id_compo = t2.id AND t1.id_equipe_dom != t2.id_equipe UNION SELECT t1.id_equipe_ext FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id = t2.id_cal_ligue AND t2.code_bonus_malus = \'DIN_ARB\' AND t3.id_compo = t2.id AND t1.id_equipe_ext != t2.id_equipe);');
-	$req_buteurs_impactes_par_malus_dinarb->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
+	$req_buteurs_impactes_par_malus_dinarb = $bdd->prepare('SELECT IF(t5.id_equipe = cl.id_equipe_dom,
+		cl.id_equipe_ext, cl.id_equipe_dom) AS \'id_adversaire\', cl.id, t4.id_compo, t4.id_joueur_reel, t4.nb_but_reel
+		FROM joueur_compo_equipe t4, compo_equipe t5, calendrier_ligue cl
+		WHERE cl.id = t5.id_cal_ligue AND t5.id = t4.id_compo AND t4.numero_definitif IS NOT NULL
+		AND t4.nb_but_reel > 0 AND cl.num_journee_cal_reel = :num_journee_cal_reel AND cl.id_ligue = :idLigue
+		AND t5.id_equipe IN(
+			SELECT t1.id_equipe_dom
+			FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3
+			WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :idLigue AND t1.id = t2.id_cal_ligue
+			AND t2.code_bonus_malus = \'DIN_ARB\' AND t3.id_compo = t2.id AND t1.id_equipe_dom != t2.id_equipe
+			UNION SELECT t1.id_equipe_ext
+			FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3
+			WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :idLigue AND t1.id = t2.id_cal_ligue
+			AND t2.code_bonus_malus = \'DIN_ARB\' AND t3.id_compo = t2.id AND t1.id_equipe_ext != t2.id_equipe);');
+	$req_buteurs_impactes_par_malus_dinarb->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'idLigue' => $idLigue));
 	$tab_joueur = $req_buteurs_impactes_par_malus_dinarb->fetchAll();
 	$req_buteurs_impactes_par_malus_dinarb->closeCursor();
 	return $tab_joueur;
@@ -2582,20 +2813,18 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 			$id_compo_deja_affecte=-1;
 			$upd_buteur_impacte_par_malus_dinarb = $bdd->prepare('UPDATE bonus_malus SET id_joueur_reel_adverse = :id_joueur_reel_adverse WHERE id_equipe = :id_equipe AND id_cal_ligue = :id_cal_ligue;');
 
-			$tab_buteurs = get_buteurs_impactes_malus_dinarb($constante_num_journee_cal_reel);
+			$tab_buteurs = get_buteurs_impactes_malus_dinarb($constante_num_journee_cal_reel, $constanteConfrontationLigue);
 			foreach($tab_buteurs as $listeButeursImpactesMalusDinArb)
 			{
 				if($listeButeursImpactesMalusDinArb['id_compo'] != $id_compo_deja_affecte)
 				{
-						//Update -1 sur le but réel d'un joueur
-						if($listeButeursImpactesMalusDinArb['nb_but_reel'] == 1){
-							modification_but_reel_joueur(NULL,$listeButeursImpactesMalusDinArb['id_compo'],$listeButeursImpactesMalusDinArb['id_joueur_reel']);
-						}else{
-							modification_but_reel_joueur(NULL,$listeButeursImpactesMalusDinArb['id_compo'],$listeButeursImpactesMalusDinArb['id_joueur_reel']);
-						}
-					update_buteur_impacte_malus_dinarb($listeButeursImpactesMalusDinArb['id_joueur_reel'],$listeButeursImpactesMalusDinArb['id_aversaire'],$listeButeursImpactesMalusDinArb['id']);
 					$id_compo_deja_affecte = $listeButeursImpactesMalusDinArb['id_compo'];
-					addLogEvent( 'Joueur avec id : '.$listeButeursImpactesMalusDinArb['id_joueur_reel'].' perd 1 but réel [MALUS DIN ARB]');
+
+					//Update -1 sur le but réel d'un joueur
+					modification_but_reel_joueur($listeButeursImpactesMalusDinArb['nb_but_reel'] - 1,$id_compo_deja_affecte,$listeButeursImpactesMalusDinArb['id_joueur_reel']);
+					update_buteur_impacte_malus_dinarb($listeButeursImpactesMalusDinArb['id_joueur_reel'],$listeButeursImpactesMalusDinArb['id_aversaire'],$listeButeursImpactesMalusDinArb['id']);
+
+					addLogEvent('Joueur avec id : '.$listeButeursImpactesMalusDinArb['id_joueur_reel'].' perd 1 but réel [MALUS DIN ARB] (compo=' . $id_compo_deja_affecte . ')');
 				}
 			}
 			//Application des malus équipe de l'adversaire (MAJ Note)
