@@ -2940,6 +2940,87 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 	}
 }
 
+function getLiguesATraiter($numJournee)
+{
+	global $bdd;
+
+  $q = $bdd->prepare('SELECT DISTINCT(id_ligue) FROM calendrier_ligue WHERE num_journee_cal_reel = :num');
+  $q->execute([':num' => $numJournee]);
+
+  $ligues = [];
+  while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+  {
+    $ligues[] = $donnees['id_ligue'];
+  }
+  $q->closeCursor();
+
+  return $ligues;
+}
+
+function getEquipesParLigue($idLigue)
+{
+	global $bdd;
+
+  $q = $bdd->prepare('SELECT id FROM equipe WHERE id_ligue = :id');
+  $q->execute([':id' => $idLigue]);
+
+  $equipes = [];
+  while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+  {
+    $equipes[] = $donnees['id'];
+  }
+  $q->closeCursor();
+
+  return $equipes;
+}
+
+function majMoyenneEquipe($idEquipe)
+{
+	global $bdd;
+
+  $q = $bdd->prepare('SELECT id_joueur_reel as idJoueur, (SUM(note)/count(*)) as moyenne
+    FROM joueur_compo_equipe
+    WHERE id_compo IN (SELECT id FROM compo_equipe WHERE id_equipe = :id)
+    AND numero_definitif IS NOT NULL
+    GROUP BY id_joueur_reel');
+  $q->execute([':id' => $idEquipe]);
+
+  while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+  {
+    $q2 = $bdd->prepare('UPDATE joueur_equipe SET moy_note = :moy
+      WHERE id_equipe = :idEquipe AND id_joueur_reel = :idJoueur');
+    $q2->bindValue(':moy', $donnees['moyenne']);
+    $q2->bindValue(':idJoueur', $donnees['idJoueur']);
+    $q2->bindValue(':idEquipe', $idEquipe);
+
+    $q2->execute();
+  }
+  $q->closeCursor();
+}
+
+function maj_moyennes_joueurs($numJournee)
+{
+	$ligues = getLiguesATraiter($numJournee);
+  if ($ligues != null) {
+    addLogEvent(sizeof($ligues) . ' ligue(s) à traiter pour maj des moyennes des joueurs.');
+
+    foreach($ligues as $cle => $idLigue)
+    {
+      $equipes = getEquipesParLigue($idLigue);
+
+      addLogEvent(sizeof($equipes) . ' équipes pour la ligue ' . $idLigue . '.');
+
+      foreach($equipes as $cle2 => $idEquipe)
+      {
+        majMoyenneEquipe($idEquipe);
+      }
+    }
+		addLogEvent('Fin maj des moyennes des joueurs OK.');
+  } else {
+    addLogEvent('Aucune ligue à traiter pour la maj des moyennes des joueurs pour cette journée !');
+  }
+}
+
 //Remet à NULL les stats de la table JOUEUR COMPO EQUIPE
 //Le parametre Ligue_unique, permet de faire tourner le script uniquement sur cette ligue, si sa valeur est null alors on cherche sur toutes les ligues
 function raz_table_joueur_compo_equipe_sur_journee($constante_num_journee_cal_reel, $ligue_unique)

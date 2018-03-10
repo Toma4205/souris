@@ -121,6 +121,7 @@ foreach($calendrier_reel as $ligne_calendrier_reel)
 		get_csv_from_roto(get_journee_format_long($ligne_calendrier_reel['num_journee']));
 		calculer_notes_joueurs();
 		calculer_confrontations_journee($ligne_calendrier_reel['num_journee'], null, TRUE);
+		maj_moyennes_joueurs($ligne_calendrier_reel['num_journee']);
 		setStatutJournee($ligne_calendrier_reel['num_journee'],3);
 	}else{
 		// Hors CRON
