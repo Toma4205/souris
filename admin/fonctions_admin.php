@@ -864,7 +864,7 @@ function get_csv_from_roto($num_journee_avec_annee)
 //Exploite le fichier CSV ($path) CORRESPONDANT A LA JOURNEE
 function scrapRoto($num_journee_avec_annee, $path)
 {
-	addLogEvent('FONCTION num_journee_avec_annee');
+	addLogEvent('FONCTION scrapRoto');
 	$resultatsJournee = buildTableauJournee($num_journee_avec_annee);
 	nettoyageFichierStat($path);
 

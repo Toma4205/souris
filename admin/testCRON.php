@@ -67,7 +67,9 @@ if ($tabJournee !== null)
 		{
 			//L'INIT n'a pas été fait alors faire le SCRIPT ZERO
 			initializeJournee($numJournee);
-		}elseif($statut == 1)
+			$statut == 1;
+		}
+		if($statut == 1)
 		{
 				//EN SUSPENS LE LIVE
 				/*4 - maj_table_live_buteur
