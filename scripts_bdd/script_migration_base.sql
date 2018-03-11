@@ -1,3 +1,6 @@
+/*Script passé en "PROD" le 11/03/2018 */
+ALTER TABLE `calendrier_reel` ADD `date_heure_fin` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `date_heure_debut`;
+
 /*Script passé en "PROD" le 04/03/2018 */
 UPDATE joueur_reel SET cle_roto_secondaire = 'NkunkuChristopherPSG' WHERE id = 456;
 

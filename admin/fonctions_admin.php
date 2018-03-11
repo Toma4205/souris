@@ -78,6 +78,16 @@ function addLogEvent($event)
   file_put_contents($fichier, $event, FILE_APPEND);
 }
 
+function getJourneeRecente()
+{
+	global $bdd;
+
+	$q = $bdd->prepare('SELECT * FROM calendrier_reel
+		WHERE date_heure_debut <= NOW() ORDER BY date_heure_debut DESC LIMIT 1');
+	$q->execute();
+	return $q->fetchAll();
+}
+
 //Retourne la journee au format YYYYJJ
 function get_journee_format_long($journee_short)
 {
@@ -574,19 +584,18 @@ function scrapMaxi($num_journee){
 //
 function is_Fichier_Roto_A_Telecharger($journee)
 {
-	addLogEvent('FONCTION is_Fichier_Roto_A_Telecharger');
 	global $bdd;
 	$req_matchs_termines_depuis_longtemps=$bdd->prepare('SELECT count(*) AS \'nb_match\' FROM resultatsl1_reel WHERE UNIX_TIMESTAMP()-statut > 600 AND statut > 3 AND SUBSTRING(journee,5,2) = :journee;');
-
 	$req_matchs_termines_depuis_longtemps->execute(array('journee' => $journee));
-
 
 	while ($nb_match = $req_matchs_termines_depuis_longtemps->fetch())
 	{
 		if($nb_match['nb_match'] > 0)
 		{
+			addLogEvent('FONCTION is_Fichier_Roto_A_Telecharger => oui');
 			return true;
 		}else{
+			addLogEvent('FONCTION is_Fichier_Roto_A_Telecharger => non');
 			return false;
 		}
 	}

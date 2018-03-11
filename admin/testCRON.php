@@ -1,6 +1,6 @@
 <?php
 include('fonctions_admin.php');
-
+/*
 $calendrier_reel = array(
 array('num_journee'=>'01','debut'=>'2017-11-24 20:45:00','fin'=>'2017-11-24 20:45:00 +2 days 5 hours'),
 array('num_journee'=>'02','debut'=>'2017-11-24 20:45:00','fin'=>'2017-11-24 20:45:00 +2 days 5 hours'),
@@ -40,30 +40,33 @@ array('num_journee'=>'35','debut'=>'2018-04-28 20:00:00','fin'=>'2018-04-28 20:0
 array('num_journee'=>'36','debut'=>'2018-05-06 20:00:00','fin'=>'2018-05-06 20:00:00 +2 days 5 hours'),
 array('num_journee'=>'37','debut'=>'2018-05-12 20:00:00','fin'=>'2018-05-12 20:00:00 +2 days 5 hours'),
 array('num_journee'=>'38','debut'=>'2018-05-19 20:00:00','fin'=>'2018-05-19 20:00:00 +2 days 5 hours'));
-
+*/
 
 date_default_timezone_set('Europe/Paris');
 $now = getdate();
 $time_fin_dernier_match = null ;
 
 addLogEvent('LANCEMENT DU SCRIPT CRON');
-foreach($calendrier_reel as $ligne_calendrier_reel)
+
+$tabJournee = getJourneeRecente();
+
+if ($tabJournee !== null)
 {
-	$statut = getStatutJournee($ligne_calendrier_reel['num_journee']);
+	$journee = $tabJournee['0'];
+	$numJournee = $journee['num_journee'];
+	$statut = $journee['statut'];
 
-	addLogEvent('Début traitement journée ' . $ligne_calendrier_reel['num_journee'] . ' (statut=' . $statut . ')');
+	addLogEvent('Début traitement journée ' . $numJournee . ' (statut=' . $statut . ')');
 
-	$jour_debut = date("l", strtotime($ligne_calendrier_reel['debut']));
-
-	//CONDITIONS : l'heure de début de journée est passée ET l'heure de fin de journée n'est pas encore passée ET il est entre 13h ET 23H59
+	//CONDITIONS : l'heure de début de journée est passée ET l'heure de fin de journée n'est pas encore passée
 	// = PENDANT UNE JOURNEE DE L1
-	if(strtotime("now")-strtotime($ligne_calendrier_reel['debut']) >= 0 && strtotime("now")-strtotime($ligne_calendrier_reel['fin'])<=0 && $now['hours'] >= 13)
+	if(strtotime("now")-strtotime($journee['date_heure_debut']) >= 0 && strtotime("now")-strtotime($journee['date_heure_fin'])<=0)
 	{
-		addLogEvent( 'Journée '.$ligne_calendrier_reel['num_journee'].' en cours.');
+		addLogEvent( 'Journée '.$numJournee.' en cours.');
 		if($statut == 0)
 		{
 			//L'INIT n'a pas été fait alors faire le SCRIPT ZERO
-			initializeJournee($ligne_calendrier_reel['num_journee']);
+			initializeJournee($numJournee);
 		}elseif($statut == 1)
 		{
 				//EN SUSPENS LE LIVE
@@ -74,41 +77,41 @@ foreach($calendrier_reel as $ligne_calendrier_reel)
 					4.4 - afficher_log_buteur_sans_matching*/
 
 			//SCRAP MAXI DES SCORES DES MATCHS TERMINES
-			$time_tmp = scrapMaxi($ligne_calendrier_reel['num_journee']);
+			$time_tmp = scrapMaxi($numJournee);
 			if(!is_null($time_tmp)){
 				$time_fin_dernier_match = $time_tmp;
 			}
 
 			//Test la nécessité de télécharger un fichier roto
-			if(is_Fichier_Roto_A_Telecharger($ligne_calendrier_reel['num_journee']))
+			if(is_Fichier_Roto_A_Telecharger($numJournee))
 			{
-				set_statut_match_termine_journee($ligne_calendrier_reel['num_journee'],1,4);
-				get_csv_from_roto(get_journee_format_long($ligne_calendrier_reel['num_journee']));
+				set_statut_match_termine_journee($numJournee,1,4);
+				get_csv_from_roto(get_journee_format_long($numJournee));
 				calculer_notes_joueurs();
-				maj_scores_journee_en_cours($ligne_calendrier_reel['num_journee']);
+				maj_scores_journee_en_cours($numJournee);
 			}
 
 			//Test pour savoir si tous les matchs de la journée sont terminés depuis plus de 10 minutes (statut = 1)
-			if(get_nb_match_termine_par_journee($ligne_calendrier_reel['num_journee']) < 10)
+			if(get_nb_match_termine_par_journee($numJournee) < 10)
 			{
 				addLogEvent('CRON tous les matchs ne sont pas terminés');
 				//Tous les matchs de la journée n'ont pas encore été joué
 			}else{
 				addLogEvent('CRON tous les matchs OK, Statut journee = 2');
-				setStatutJournee($ligne_calendrier_reel['num_journee'],2);
-				calculer_confrontations_journee($ligne_calendrier_reel['num_journee'], null, FALSE);
+				setStatutJournee($numJournee,2);
+				calculer_confrontations_journee($numJournee, null, FALSE);
 			}
 
 			//SI on atteint la fin de la journée et que tous les status des matchs ne sont pas à 1 alors les matchs restants sont considérés comme "Annulés";
-			if(strtotime("now - 10 minutes")-strtotime($ligne_calendrier_reel['fin'])>=0 && get_nb_match_termine_par_journee($ligne_calendrier_reel['num_journee']) < 10)
+			if(strtotime("now - 10 minutes")-strtotime($journee['date_heure_fin'])>=0 && get_nb_match_termine_par_journee($numJournee) < 10)
 			{
 				addLogEvent('CRON DES MATCHS SEMBLENT ANNULES');
-				annuler_match_restants($ligne_calendrier_reel['num_journee']);
-				set_statut_match_termine_journee($ligne_calendrier_reel['num_journee'],1,0);
-				get_csv_from_roto(get_journee_format_long($ligne_calendrier_reel['num_journee']));
+				annuler_match_restants($numJournee);
+				set_statut_match_termine_journee($numJournee,1,0);
+				get_csv_from_roto(get_journee_format_long($numJournee));
 				calculer_notes_joueurs();
-				setStatutJournee($ligne_calendrier_reel['num_journee'],2);
-				calculer_confrontations_journee($ligne_calendrier_reel['num_journee'], null, FALSE);
+				setStatutJournee($numJournee,2);
+				calculer_confrontations_journee($numJournee, null, FALSE);
 			}
 		}else
 		{
@@ -116,17 +119,20 @@ foreach($calendrier_reel as $ligne_calendrier_reel)
 			addLogEvent('CRON RAS');
 		}
 	//CONDITIONS : Nous sommes à plus de 6h après la date de fin d'une journée de L1
-	}elseif(strtotime("now -6 hours")-strtotime($ligne_calendrier_reel['fin'])>=0 && $statut == 2){
-		addLogEvent( 'Nous avons terminé '.$ligne_calendrier_reel['num_journee'].' depuis plus de 6h');
-		get_csv_from_roto(get_journee_format_long($ligne_calendrier_reel['num_journee']));
+	}elseif(strtotime("now -6 hours")-strtotime($journee['date_heure_fin'])>=0 && $statut == 2){
+		addLogEvent( 'Nous avons terminé '.$numJournee.' depuis plus de 6h');
+		get_csv_from_roto(get_journee_format_long($numJournee));
 		calculer_notes_joueurs();
-		calculer_confrontations_journee($ligne_calendrier_reel['num_journee'], null, TRUE);
-		maj_moyennes_joueurs($ligne_calendrier_reel['num_journee']);
-		setStatutJournee($ligne_calendrier_reel['num_journee'],3);
+		calculer_confrontations_journee($numJournee, null, TRUE);
+		maj_moyennes_joueurs($numJournee);
+		setStatutJournee($numJournee,3);
 	}else{
 		// Hors CRON
 		addLogEvent('HORS HORAIRES DU SCRIPT');
 	}
+}
+else {
+	addLogEvent('Aucune journée trouvée en BDD.');
 }
 
 ?>
