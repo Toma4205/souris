@@ -124,7 +124,7 @@ if ($tabJournee !== null)
 		get_csv_from_roto(get_journee_format_long($numJournee));
 		calculer_notes_joueurs();
 		calculer_confrontations_journee($numJournee, null, TRUE);
-		maj_moyennes_joueurs($numJournee);
+		maj_ligues_fin_journee($numJournee);
 		setStatutJournee($numJournee,3);
 	}else{
 		// Hors CRON

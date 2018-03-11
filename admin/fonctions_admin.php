@@ -44,6 +44,7 @@ require_once(__DIR__ . '/../modele/connexionSQL.php');
 require_once(__DIR__ . '/../modele/joueurequipe/joueurEquipe.php');
 require_once(__DIR__ . '/../modele/compoequipe/compoEquipe.php');
 require_once(__DIR__ . '/../modele/compoequipe/joueurCompoEquipe.php');
+require_once(__DIR__ . '/../modele/ligue/etatLigue.php');
 require_once(__DIR__ . '/../controleur/constantesAppli.php');
 
 /////////////////CONNEXION BASE
@@ -3007,11 +3008,32 @@ function majMoyenneEquipe($idEquipe)
   $q->closeCursor();
 }
 
-function maj_moyennes_joueurs($numJournee)
+function getNbMatchJournee($idLigue, $numJournee)
+{
+	global $bdd;
+
+	$q = $bdd->prepare('SELECT COUNT(*) FROM calendrier_ligue
+		WHERE id_ligue = :id AND num_journee_cal_reel = :num');
+	$q->execute([':id' => $idLigue, ':num' => $numJournee]);
+
+	return $q->fetchColumn();
+}
+
+function majEtatLigue($idLigue, $etat)
+{
+	global $bdd;
+
+	$q = $bdd->prepare('UPDATE ligue SET etat = :etat WHERE id = :id');
+	$q->execute([':etat' => $etat, ':id' => $idLigue]);
+}
+
+function maj_ligues_fin_journee($numJournee)
 {
 	$ligues = getLiguesATraiter($numJournee);
   if ($ligues != null) {
-    addLogEvent(sizeof($ligues) . ' ligue(s) à traiter pour maj des moyennes des joueurs.');
+    addLogEvent(sizeof($ligues) . ' ligue(s) à traiter pour cette fin de journée.');
+
+		$prochainNumJournee = intVal($numJournee) + 1;
 
     foreach($ligues as $cle => $idLigue)
     {
@@ -3019,14 +3041,22 @@ function maj_moyennes_joueurs($numJournee)
 
       addLogEvent(sizeof($equipes) . ' équipes pour la ligue ' . $idLigue . '.');
 
+			// Maj des moyennes des joueurs
       foreach($equipes as $cle2 => $idEquipe)
       {
         majMoyenneEquipe($idEquipe);
       }
+
+			// Vérification du statut de la ligue
+			if (getNbMatchJournee($idLigue, $prochainNumJournee) == 0)
+			{
+				majEtatLigue($idLigue, EtatLigue::TERMINEE);
+				addLogEvent('La ligue passe au statut 3 (TERMINEE).');
+			}
     }
-		addLogEvent('Fin maj des moyennes des joueurs OK.');
+		addLogEvent('Fin traitement des ligues OK.');
   } else {
-    addLogEvent('Aucune ligue à traiter pour la maj des moyennes des joueurs pour cette journée !');
+    addLogEvent('Aucune ligue à traiter pour cette fin de journée !');
   }
 }
 
