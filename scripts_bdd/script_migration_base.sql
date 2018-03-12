@@ -1,3 +1,6 @@
+/*Script passé en "PROD" le 12/03/2018 */
+ALTER TABLE `calendrier_reel` CHANGE `date_heure_debut` `date_heure_debut` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
 /*Script passé en "PROD" le 11/03/2018 */
 ALTER TABLE `calendrier_reel` ADD `date_heure_fin` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `date_heure_debut`;
 

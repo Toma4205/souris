@@ -49,34 +49,33 @@ $time_fin_dernier_match = null ;
 addLogEvent('LANCEMENT DU SCRIPT CRON');
 
 $tabJournee = getJourneeRecente();
-
 if ($tabJournee !== null)
 {
 	$journee = $tabJournee['0'];
 	$numJournee = $journee['num_journee'];
+	$numJourneeLong = get_journee_format_long($numJournee);
 	$statut = $journee['statut'];
 
 	addLogEvent('Début traitement journée ' . $numJournee . ' (statut=' . $statut . ')');
+	if ($statut == 0) {
+		if (strtotime("now")-strtotime($journee['date_heure_debut']) >= 0) {
+			addLogEvent('Date de début dépassée (' . $journee['date_heure_debut'] . ') => initialisation de la journée.');
 
-	//CONDITIONS : l'heure de début de journée est passée ET l'heure de fin de journée n'est pas encore passée
-	// = PENDANT UNE JOURNEE DE L1
-	if(strtotime("now")-strtotime($journee['date_heure_debut']) >= 0 && strtotime("now")-strtotime($journee['date_heure_fin'])<=0)
-	{
-		addLogEvent( 'Journée '.$numJournee.' en cours.');
-		if($statut == 0)
-		{
 			//L'INIT n'a pas été fait alors faire le SCRIPT ZERO
 			initializeJournee($numJournee);
 			$statut == 1;
+
+		} else {
+			addLogEvent('Date de début non atteinte (' . $journee['date_heure_debut'] . ') => RAS.');
 		}
-		if($statut == 1)
-		{
-				//EN SUSPENS LE LIVE
-				/*4 - maj_table_live_buteur
-					4.1 - nettoyageTableButeurLive
-					4.2 - setButeurLive
-					4.3 - associer_buteur_live_joueur_reel
-					4.4 - afficher_log_buteur_sans_matching*/
+	}
+	if ($statut == 1) {
+			//EN SUSPENS LE LIVE
+		/*4 - maj_table_live_buteur
+			4.1 - nettoyageTableButeurLive
+			4.2 - setButeurLive
+			4.3 - associer_buteur_live_joueur_reel
+			4.4 - afficher_log_buteur_sans_matching*/
 
 			//SCRAP MAXI DES SCORES DES MATCHS TERMINES
 			$time_tmp = scrapMaxi($numJournee);
@@ -88,7 +87,7 @@ if ($tabJournee !== null)
 			if(is_Fichier_Roto_A_Telecharger($numJournee))
 			{
 				set_statut_match_termine_journee($numJournee,1,4);
-				get_csv_from_roto(get_journee_format_long($numJournee));
+				get_csv_from_roto($numJourneeLong);
 				calculer_notes_joueurs();
 				maj_scores_journee_en_cours($numJournee);
 			}
@@ -96,41 +95,45 @@ if ($tabJournee !== null)
 			//Test pour savoir si tous les matchs de la journée sont terminés depuis plus de 10 minutes (statut = 1)
 			if(get_nb_match_termine_par_journee($numJournee) < 10)
 			{
-				addLogEvent('CRON tous les matchs ne sont pas terminés');
+				addLogEvent('CRON tous les matchs ne sont pas terminés.');
 				//Tous les matchs de la journée n'ont pas encore été joué
 			}else{
-				addLogEvent('CRON tous les matchs OK, Statut journee = 2');
+				addLogEvent('CRON tous les matchs OK, Statut journee = 2.');
 				setStatutJournee($numJournee,2);
 				calculer_confrontations_journee($numJournee, null, FALSE);
+				$statut = 2;
 			}
 
+			// TODO MPL - TVE revoir ordre de ces appels
 			//SI on atteint la fin de la journée et que tous les status des matchs ne sont pas à 1 alors les matchs restants sont considérés comme "Annulés";
 			if(strtotime("now - 10 minutes")-strtotime($journee['date_heure_fin'])>=0 && get_nb_match_termine_par_journee($numJournee) < 10)
 			{
 				addLogEvent('CRON DES MATCHS SEMBLENT ANNULES');
 				annuler_match_restants($numJournee);
 				set_statut_match_termine_journee($numJournee,1,0);
-				get_csv_from_roto(get_journee_format_long($numJournee));
+				get_csv_from_roto($numJourneeLong);
 				calculer_notes_joueurs();
 				setStatutJournee($numJournee,2);
 				calculer_confrontations_journee($numJournee, null, FALSE);
+				$statut = 2;
 			}
-		}else
-		{
-			//Rien à Faire
-			addLogEvent('CRON RAS');
+	}
+	if ($statut == 2) {
+		if (strtotime("now -6 hours")-strtotime($journee['date_heure_fin'])>=0) {
+			addLogEvent('Nous avons terminé '.$numJournee.' depuis plus de 6h => mise à jour des ligues.');
+
+			get_csv_from_roto($numJourneeLong);
+			calculer_notes_joueurs();
+			calculer_confrontations_journee($numJournee, null, TRUE);
+			maj_ligues_fin_journee($numJournee);
+			setStatutJournee($numJournee,3);
+			$statut = 3;
+		} else {
+			addLogEvent('Délai d\'attente pour clôture de la journée non atteint => RAS.');
 		}
-	//CONDITIONS : Nous sommes à plus de 6h après la date de fin d'une journée de L1
-	}elseif(strtotime("now -6 hours")-strtotime($journee['date_heure_fin'])>=0 && $statut == 2){
-		addLogEvent( 'Nous avons terminé '.$numJournee.' depuis plus de 6h');
-		get_csv_from_roto(get_journee_format_long($numJournee));
-		calculer_notes_joueurs();
-		calculer_confrontations_journee($numJournee, null, TRUE);
-		maj_ligues_fin_journee($numJournee);
-		setStatutJournee($numJournee,3);
-	}else{
-		// Hors CRON
-		addLogEvent('HORS HORAIRES DU SCRIPT');
+	}
+	if ($statut == 3) {
+		addLogEvent('Journée clôturée => RAS.');
 	}
 }
 else {

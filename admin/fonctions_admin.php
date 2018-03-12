@@ -833,32 +833,40 @@ function annuler_match_restants($num_journee)
 function get_csv_from_roto($num_journee_avec_annee)
 {
 	addLogEvent('FONCTION get_csv_from_roto');
-	$url_part1 = "https://www.rotowire.com/soccer/player_stats.xls?pos=A&league=FRAN&season=";
-	$url_option_saison = substr($num_journee_avec_annee,0,4);
-	$url_part2 = "&start=";
-	$url_option_journee = substr($num_journee_avec_annee,-2);
-	$url_part3 = "&end=";
-	$url_part4 = "&gp=GP&min=MIN&st=ST&on=ON&off=OFF&y=Y&yr=YR&r=R&g=G&a=A&s=S&sog=SOG&cr=CR&acr=ACR&cc=CC&blk=BLK&int=INT&tkl=TKL&tklw=TKLW&fc=FC&fs=FS&pkg=PKG&pkm=PKM&pkc=PKC&crn=CRN&p=P&ap=AP&acro=ACRO&bcc=BCC&aw=AW&dr=DR&dsp=DSP&dw=DW&cl=CL&ecl=ECL&own=OWN&touch=TOUCH&gc=GC&cs=CS&sv=SV&pkf=PKF&pksv=PKSV&aks=AKS&punch=PUNCH&ibs=IBS&obs=OBS&ibsog=IBSOG&obsog=OBSOG&ibg=IBG&obg=OBG&fks=FKS&fksog=FKSOG&fkg=FKG&tbox=TBOX&fkcr=FKCR&fkacr=FKACR&crncr=CRNCR&br=BR&crnw=CRNW&pksvd=PKSVD&ibsv=IBSV&obsv=OBSV&pk=PK&sa=SA";
 
-	$url_definitif = $url_part1.$url_option_saison.$url_part2.$url_option_journee.$url_part3.$url_option_journee.$url_part4;
+	$pathFichierManuel = __DIR__.'/rotostats/'.$num_journee_avec_annee."_M.csv";
+	if (file_exists($pathFichierManuel)) {
+		addLogEvent('Exploitation du fichier manuel : ' . $pathFichierManuel);
+		scrapRoto($num_journee_avec_annee, $pathFichierManuel);
+	} else {
+		addLogEvent('Pas de fichier manuel pour la journée ' . $num_journee_avec_annee . ' => on appelle le fournisseur.');
 
+		$url_part1 = "https://www.rotowire.com/soccer/player_stats.xls?pos=A&league=FRAN&season=";
+		$url_option_saison = substr($num_journee_avec_annee,0,4);
+		$url_part2 = "&start=";
+		$url_option_journee = substr($num_journee_avec_annee,-2);
+		$url_part3 = "&end=";
+		$url_part4 = "&gp=GP&min=MIN&st=ST&on=ON&off=OFF&y=Y&yr=YR&r=R&g=G&a=A&s=S&sog=SOG&cr=CR&acr=ACR&cc=CC&blk=BLK&int=INT&tkl=TKL&tklw=TKLW&fc=FC&fs=FS&pkg=PKG&pkm=PKM&pkc=PKC&crn=CRN&p=P&ap=AP&acro=ACRO&bcc=BCC&aw=AW&dr=DR&dsp=DSP&dw=DW&cl=CL&ecl=ECL&own=OWN&touch=TOUCH&gc=GC&cs=CS&sv=SV&pkf=PKF&pksv=PKSV&aks=AKS&punch=PUNCH&ibs=IBS&obs=OBS&ibsog=IBSOG&obsog=OBSOG&ibg=IBG&obg=OBG&fks=FKS&fksog=FKSOG&fkg=FKG&tbox=TBOX&fkcr=FKCR&fkacr=FKACR&crncr=CRNCR&br=BR&crnw=CRNW&pksvd=PKSVD&ibsv=IBSV&obsv=OBSV&pk=PK&sa=SA";
 
-	//Téléchargement du fichier journee au format CSV
-	//Id et MDP de connexion
-	login("https://www.rotowire.com/users/loginnow.htm?link=%2Findex.php","username=xzw32&p1=rotowiremotdepasse&Submit=Login");
+		$url_definitif = $url_part1.$url_option_saison.$url_part2.$url_option_journee.$url_part3.$url_option_journee.$url_part4;
 
-	$output = grab_page($url_definitif);
-	$lignes1 = str_replace("\t\r\n","\n",$output);
-	$lignes1 = str_replace("\r","\n",$lignes1);
-	$lignes1 = str_replace("\t",";",$lignes1);
+		//Téléchargement du fichier journee au format CSV
+		//Id et MDP de connexion
+		login("https://www.rotowire.com/users/loginnow.htm?link=%2Findex.php","username=xzw32&p1=rotowiremotdepasse&Submit=Login");
 
-	$path = __DIR__.'/rotostats/'.$url_option_saison.$url_option_journee.".csv";
-	$fp = fopen ($path, 'w');
-	fwrite($fp,$lignes1);
-	fclose($fp);
+		$output = grab_page($url_definitif);
+		$lignes1 = str_replace("\t\r\n","\n",$output);
+		$lignes1 = str_replace("\r","\n",$lignes1);
+		$lignes1 = str_replace("\t",";",$lignes1);
 
-	//Exploitation automatique du fichier
-	scrapRoto($num_journee_avec_annee, $path);
+		$path = __DIR__.'/rotostats/'.$url_option_saison.$url_option_journee.".csv";
+		$fp = fopen ($path, 'w');
+		fwrite($fp,$lignes1);
+		fclose($fp);
+
+		//Exploitation automatique du fichier
+		scrapRoto($num_journee_avec_annee, $path);
+	}
 }
 
 //Exploite le fichier CSV ($path) CORRESPONDANT A LA JOURNEE
