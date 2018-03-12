@@ -2341,7 +2341,7 @@ function get_buteurs_impactes_malus_dinarb($constante_num_journee_cal_reel, $idL
 	global $bdd;
 
 	$req_buteurs_impactes_par_malus_dinarb = $bdd->prepare('SELECT IF(t5.id_equipe = cl.id_equipe_dom,
-		cl.id_equipe_ext, cl.id_equipe_dom) AS \'id_adversaire\', cl.id, t4.id_compo, t4.id_joueur_reel, t4.nb_but_reel
+		cl.id_equipe_dom, cl.id_equipe_ext) AS \'id_adversaire\', cl.id, t4.id_compo, t4.id_joueur_reel, t4.nb_but_reel
 		FROM joueur_compo_equipe t4, compo_equipe t5, calendrier_ligue cl
 		WHERE cl.id = t5.id_cal_ligue AND t5.id = t4.id_compo AND t4.numero_definitif IS NOT NULL
 		AND t4.nb_but_reel > 0 AND cl.num_journee_cal_reel = :num_journee_cal_reel AND cl.id_ligue = :idLigue
@@ -2942,7 +2942,9 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 					modification_but_reel_joueur($listeButeursImpactesMalusDinArb['nb_but_reel'] - 1,$id_compo_deja_affecte,$listeButeursImpactesMalusDinArb['id_joueur_reel']);
 					update_buteur_impacte_malus_dinarb($listeButeursImpactesMalusDinArb['id_joueur_reel'],$listeButeursImpactesMalusDinArb['id_aversaire'],$listeButeursImpactesMalusDinArb['id']);
 
-					addLogEvent('Joueur avec id : '.$listeButeursImpactesMalusDinArb['id_joueur_reel'].' perd 1 but réel [MALUS DIN ARB] (compo=' . $id_compo_deja_affecte . ')');
+					addLogEvent('Joueur avec id : ' . $listeButeursImpactesMalusDinArb['id_joueur_reel']
+						. ' perd 1 but réel [MALUS DIN ARB] (match=' . $listeButeursImpactesMalusDinArb['id']
+						. ', equipe=' . $listeButeursImpactesMalusDinArb['id_aversaire'] . ', compo=' . $id_compo_deja_affecte . ')');
 				}
 			}
 			//Application des malus équipe de l'adversaire (MAJ Note)
