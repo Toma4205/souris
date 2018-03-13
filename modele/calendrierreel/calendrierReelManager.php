@@ -56,4 +56,26 @@ class CalendrierReelManager extends ManagerBase
       return new CalendrierReel($donnees);
     }
   }
+  
+  public function findMatchsByJournee($numJournee)
+  {
+    $q = $this->_bdd->prepare('SELECT rr.equipeDomicile, rr.equipeVisiteur, n.libelle as libelleDomicile, 
+        n2.libelle as libelleVisiteur 
+        FROM resultatsl1_reel rr
+        JOIN nomenclature_equipe n ON n.code = rr.equipeDomicile
+        JOIN nomenclature_equipe n2 ON n2.code = rr.equipeVisiteur
+        WHERE journee = :num');
+    // TODO MPL mettre en constante l'année
+    $q->execute([':num' => '2017'.$numJournee]);
+      
+    $matchs = [];
+    while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+  	{
+  	    $matchs[] = new CalendrierReel($donnees);
+  	}
+
+  	$q->closeCursor();
+
+    return $matchs;
+  }
 }
