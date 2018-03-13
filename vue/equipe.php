@@ -41,7 +41,7 @@ function afficherContenuSelectRempl($numPosition, $gb, $def, $mil, $att, $tabCom
 
 function afficherContenuSelectRentrant($numRempl, $def, $mil, $att, $tabRempl, $tabRentrant)
 {
-  $contenu = '<select name="rentrant_' . $numRempl . '" class="selectChoixJoueur" onchange="javascript:onSelectionRentrant(\''. $numRempl . '\');">';
+  $contenu = '<select name="rentrant_' . $numRempl . '" class="selectChoixRempl" onchange="javascript:onSelectionRentrant(\''. $numRempl . '\');">';
   if (isset($tabRentrant[$numRempl]) && $tabRentrant[$numRempl] == -1) {
     $contenu .= '<option value="-1" selected="selected">...</option>';
   } else {
@@ -58,7 +58,7 @@ function afficherContenuSelectRentrant($numRempl, $def, $mil, $att, $tabRempl, $
 
 function afficherContenuSelectSortant($numRempl, $def, $mil, $att, $tabTitu, $tabRrentrant, $tabSortant)
 {
-  $contenu = '<select name="sortant_' . $numRempl . '" class="selectChoixJoueur" onchange="javascript:onSelectionSortant(\''. $numRempl . '\');">';
+  $contenu = '<select name="sortant_' . $numRempl . '" class="selectChoixRempl" onchange="javascript:onSelectionSortant(\''. $numRempl . '\');">';
   if (isset($tabSortant[$numRempl]) && $tabSortant[$numRempl] == -1) {
     $contenu .= '<option value="-1" selected="selected">...</option>';
   } else {
@@ -223,7 +223,7 @@ if (isset($calReel) && $calLigue->id() != null)
   </div>
   <div class="conteneurRow detail_compo">
     <div class="conteneurColumn">
-      <p>Choix tactique</p>
+      <p class="cursor_pointer" title="Si 4 DEF, +0.5 pour chaque / Si 5 DEF, +1 pour chaque">Choix tactique *</p>
       <?php
         if (isset($nomenclTactique))
         {
@@ -284,7 +284,7 @@ if (isset($calReel) && $calLigue->id() != null)
         ?>
     </div>
     <div class="conteneurColumn">
-      <p>Capitaine</p>
+      <p class="cursor_pointer" title="+0.5 si équipe réelle gagne / -1 si équipe réelle perd">Capitaine *</p>
       <select name="choixCapitaine" class="selectChoixCapitaine">
           <option value="-1">...</option>
           <?php
@@ -440,8 +440,9 @@ if (isset($calReel) && $calLigue->id() != null)
         ?>
       </div>
     </div>
-    <div class="calendrier_reel_journee width_60pc">
-        <?php
+    <div class="compo_equipe_col_droite width_60pc">
+        <section id="calendrier_reel">
+            <?php
             if (isset($matchsCalReel)) {
                 echo '<div class="detail_effectif calendrier_reel_journee_bloc">';
                 echo '<div class="calendrier_reel_journee_titre">Calendrier L1 journée '.$calReel->numJournee().'</div>';
@@ -455,31 +456,30 @@ if (isset($calReel) && $calLigue->id() != null)
             } else {
                 echo '<p>Aucun calendrier réel trouvé en base pour la journée ' . $calLigue->numJournee() . '</p>';
             }
-        ?>
-    </div>
-  </div>
-  <section id="divRemplacement" class="conteneurColumn">
-    <p id="remplacement">Remplacements <span class="italic normal">(si note strictement inférieure)</span></p>
-    <?php
-      $tabTitu = [];
-      $tabRempl = [];
-      $tabGB = [];
-      foreach ($gb as $joueur)
-      {
-        $tabGB[] = $joueur->id();
-      }
+            ?>
+        </section>
+        <section id="divRemplacement" class="section_remplacement conteneurColumn">
+            <div id="remplacement" class="detail_effectif_titre text_align_left">Remplacements <span class="italic normal">(si note strictement inférieure)</span></div>
+            <?php
+            $tabTitu = [];
+            $tabRempl = [];
+            $tabGB = [];
+            foreach ($gb as $joueur)
+            {
+                $tabGB[] = $joueur->id();
+            }
 
-      foreach ($tabCompo as $numero => $joueur)
-      {
-        if ($numero > 1) {
-          $cleGB = array_search($joueur, $tabGB);
-          if ($numero <= 11) {
-            $tabTitu[$numero] = $joueur;
-          } elseif ($cleGB == 0) {
-            $tabRempl[$numero] = $joueur;
-          }
+            foreach ($tabCompo as $numero => $joueur)
+            {
+                if ($numero > 1) {
+                $cleGB = array_search($joueur, $tabGB);
+                if ($numero <= 11) {
+                    $tabTitu[$numero] = $joueur;
+                } elseif ($cleGB == 0) {
+                    $tabRempl[$numero] = $joueur;
+                }
+            }
         }
-      }
 
       if (isset($gb))
       {
@@ -494,18 +494,19 @@ if (isset($calReel) && $calLigue->id() != null)
           echo '<div>';
           afficherContenuSelectSortant($numRemplacement, $def, $mil, $att, $tabTitu, $tabRentrant, $tabSortant);
 
-          $value = '';
-          if (isset($tabNote[$numRemplacement])) {
-            $value = 'value="' . $tabNote[$numRemplacement] . '" ';
-          }
-          echo '<input class="width_25px margin_left_5px" type="text" name="note_' . $numRemplacement . '"
-            onchange="javascript:verifierNote(' . $numRemplacement . ');" maxlength="3" ' . $value . '/>';
-          echo '</div>';
-          echo '</div>';
-        }
-      }
-    ?>
-  </section>
+                $value = '';
+                if (isset($tabNote[$numRemplacement])) {
+                    $value = 'value="' . $tabNote[$numRemplacement] . '" ';
+                }
+                echo '<input class="width_25px margin_left_5px" type="text" name="note_' . $numRemplacement . '" onchange="javascript:verifierNote(' . $numRemplacement . ');" maxlength="3" ' . $value . '/>';
+                echo '</div>';
+                echo '</div>';
+                }
+            }
+            ?>
+        </section>
+    </div>
+  </div>
   <div>
     <input type="submit" value="Valider la compo" name="enregistrer"
       onclick="return controlerBonus();" class="marginBottom width_200px" />
