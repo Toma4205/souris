@@ -163,6 +163,17 @@ function ajouterOptionSortant($numPosition, $joueurs, $tabTitu, $tabRrentrant, $
   return $contenu;
 }
 
+function afficherMatchCalendrierReel($match)
+{
+    echo '<li class="detail_calendrier_reel_match conteneurRow">';
+    echo '<div class="width_10pc"><img src="web/img/maillot/shirt_' . strtolower($match->equipeDomicile()) . '.png" alt="' . $match->equipeDomicile() . '" width="20px" height="20px" /></div>';
+    echo '<div class="width_35pc text_align_right">'.$match->libelleDomicile().'</div>';
+    echo '<div class="width_10pc font_size_point8rem">vs</div>';
+    echo '<div class="width_35pc text_align_left">'.$match->libelleVisiteur().'</div>';
+    echo '<div class="width_10pc"><img src="web/img/maillot/shirt_' . strtolower($match->equipeVisiteur()) . '.png" alt="' . $match->equipeVisiteur() . '" width="20px" height="20px" /></div>';
+    echo '</li>';
+}
+
 if (isset($calReel) && $calLigue->id() != null)
 {
 ?>
@@ -429,8 +440,22 @@ if (isset($calReel) && $calLigue->id() != null)
         ?>
       </div>
     </div>
-    <div id="calendrier_reel_journee" class="width_60pc">
-        <p>Calendrier réel à venir...</p>
+    <div class="calendrier_reel_journee width_60pc">
+        <?php
+            if (isset($matchsCalReel)) {
+                echo '<div class="detail_effectif">';
+                echo '<div class="calendrier_reel_journee_titre">Calendrier journée '.$calReel->numJournee().'</div>';
+                echo '<ul>';
+                foreach($matchsCalReel as $match)
+                {
+                    afficherMatchCalendrierReel($match);
+                }
+                echo '</ul>';
+                echo '</div>';
+            } else {
+                echo '<p>Aucun calendrier réel trouvé en base pour la journée ' . $calLigue->numJournee() . '</p>';
+            }
+        ?>
     </div>
   </div>
   <section id="divRemplacement" class="conteneurColumn">
