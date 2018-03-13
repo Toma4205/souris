@@ -12,8 +12,9 @@ class CalendrierReelManager extends ManagerBase
   public function findNumJourneeEnCours()
   {
     $q = $this->_bdd->prepare('SELECT num_journee FROM calendrier_reel
-      WHERE statut = :statut');
-    $q->execute(['statut' => ConstantesAppli::STATUT_CAL_EN_COURS]);
+      WHERE statut = :statut OR statut = :statut2');
+    $q->execute(['statut' => ConstantesAppli::STATUT_CAL_EN_COURS,
+      'statut2' => ConstantesAppli::STATUT_CAL_TERMINE]);
     return $q->fetchColumn();
   }
 
@@ -56,18 +57,18 @@ class CalendrierReelManager extends ManagerBase
       return new CalendrierReel($donnees);
     }
   }
-  
+
   public function findMatchsByJournee($numJournee)
   {
-    $q = $this->_bdd->prepare('SELECT rr.equipeDomicile, rr.equipeVisiteur, n.libelle as libelleDomicile, 
-        n2.libelle as libelleVisiteur 
+    $q = $this->_bdd->prepare('SELECT rr.equipeDomicile, rr.equipeVisiteur, n.libelle as libelleDomicile,
+        n2.libelle as libelleVisiteur
         FROM resultatsl1_reel rr
         JOIN nomenclature_equipe n ON n.code = rr.equipeDomicile
         JOIN nomenclature_equipe n2 ON n2.code = rr.equipeVisiteur
         WHERE journee = :num');
     // TODO MPL mettre en constante l'année
     $q->execute([':num' => '2017'.$numJournee]);
-      
+
     $matchs = [];
     while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
   	{

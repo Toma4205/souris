@@ -89,7 +89,11 @@ function afficherBonusMalus($codeBonus, $libBonus, $libLongBonus, $nomJoueurEqui
       echo '<span class="float_right detail_match_equipe_joueur_note bold">' . $joueur->note() . '</span>';
     } elseif ($tabRemp != null && !isset($tabRemp[$joueur->numero()])) {
       echo '<span class="float_right detail_match_equipe_joueur_tontonpat">';
-      echo '<img src="web/img/tontonpat.png" alt="Tonton Pat\'" title="Tonton Pat\'" width="18px" height="18px"/>';
+      if ($joueur->numero() == 1) {
+        echo '<img src="web/img/jeuneclub.png" alt="Jeune du club" title="Jeune du club" width="18px" height="18px"/>';
+      } else {
+        echo '<img src="web/img/tontonpat.png" alt="Tonton Pat\'" title="Tonton Pat\'" width="18px" height="18px"/>';
+      }
       echo '</span>';
     }
 
