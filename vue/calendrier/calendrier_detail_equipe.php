@@ -73,7 +73,7 @@ function afficherBonusMalus($codeBonus, $libBonus, $nomJoueurEquipe, $nomJoueurA
     }
     echo '"><b>' . $joueur->numero() . '</b> ' . $nom;
     if ($joueur->capitaine() == 1) {
-      echo '<img src="web/img/brassard_capitaine.jpg" class="image_brassard" alt="Chef Capt\'aine" title="Chef Capt\'aine" width="18px" height="18px"/>';
+      echo '<img src="web/img/brassard_capitaine.png" class="image_brassard" alt="Chef Capt\'aine" title="Chef Capt\'aine" width="18px" height="18px"/>';
     }
     if ($joueur->note() != null) {
       echo '<span class="float_right detail_match_equipe_joueur_note_bonus_malus">';
