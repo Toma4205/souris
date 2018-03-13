@@ -190,6 +190,9 @@ div#contenu {
 .read_only {
   background-color: #c7b8b8;
 }
+.cursor_pointer {
+  cursor: pointer;
+}
 .conteneurRow {
   display: flex;
 	flex-direction: row;
@@ -343,6 +346,9 @@ p.colonne {
 }
 .selectChoixJoueur {
   width: 220px;
+}
+.selectChoixRempl {
+  width: 180px;
 }
 .selectChoixCapitaine, .selectChoixJoueurBonus, .selectChoixMiTempsBonus {
   width: 65px;
