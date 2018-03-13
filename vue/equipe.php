@@ -378,9 +378,9 @@ if (isset($calReel) && $calLigue->id() != null)
           $numPosition = 2;
           if (isset($def))
           {
-            echo '<div id="divTitulaireDEF" class="detail_effectif">';
+            echo '<div class="detail_effectif">';
             echo '<div class="detail_effectif_titre">Défenseurs</div>';
-            echo '<div>';
+            echo '<div id="divTitulaireDEF">';
             for ($index = 1; $index <= $choixTactique->nbDef(); $index++)
             {
               afficherContenuSelect($numPosition . '. ', $numPosition, $def, $tabCompo);
@@ -391,9 +391,9 @@ if (isset($calReel) && $calLigue->id() != null)
           }
           if (isset($mil))
           {
-            echo '<div id="divTitulaireMIL" class="detail_effectif">';
+            echo '<div class="detail_effectif">';
             echo '<div class="detail_effectif_titre">Milieux</div>';
-            echo '<div>';
+            echo '<div id="divTitulaireMIL">';
             for ($index = 1; $index <= $choixTactique->nbMil(); $index++)
             {
               afficherContenuSelect($numPosition . '. ', $numPosition, $mil, $tabCompo);
@@ -404,9 +404,9 @@ if (isset($calReel) && $calLigue->id() != null)
           }
           if (isset($att))
           {
-            echo '<div id="divTitulaireATT" class="detail_effectif">';
+            echo '<div class="detail_effectif">';
             echo '<div class="detail_effectif_titre">Attaquants</div>';
-            echo '<div>';
+            echo '<div id="divTitulaireATT">';
             for ($index = 1; $index <= $choixTactique->nbAtt(); $index++)
             {
               afficherContenuSelect($numPosition . '. ', $numPosition, $att, $tabCompo);
