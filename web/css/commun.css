@@ -177,6 +177,12 @@ div#contenu {
 .margin_auto_vertical {
   margin: auto 0 !important;
 }
+.text_align_left {
+  text-align: left !important;
+}
+.text_align_right {
+  text-align: right !important;
+}
 .erreur {
   color:red;
   font-weight: bold;
@@ -359,9 +365,6 @@ p.colonne {
   margin: 0;
   padding-top: 5px;
   font-weight: bold;
-}
-#contenuCompoEquipe div, #divRemplacant {
-  padding: 5px;
 }
 #titulaire, #remplacant, #remplacement, #capitaine {
   border-bottom: solid #141b4D;
