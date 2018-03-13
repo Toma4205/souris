@@ -75,6 +75,19 @@
   color: #4a61d4;
   margin-bottom: .5rem;
 }
+.calendrier_reel_journee {
+  padding: 0 1rem;
+}
+.calendrier_reel_journee_titre {
+  border-bottom: 2px solid #141b4D;
+  font-style: italic;
+  color: #4a61d4;
+  margin-bottom: .5rem;
+  text-align: center;
+}
+.detail_calendrier_reel_match {
+    
+}
 
 #messageErreurBonus {
   font-size: .8rem;
