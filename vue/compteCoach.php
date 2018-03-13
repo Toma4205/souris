@@ -104,6 +104,7 @@ require_once("vue/commun/enteteflex.php");
             <th>Nom</th>
             <th>Classement</th>
             <?php if ($numJourneeEnCours != null){echo '<th>Score en cours</th>';} ?>
+            <th>Etat</th>
             <th>Action</th>
             <th></th>
           </tr>
@@ -140,6 +141,12 @@ require_once("vue/commun/enteteflex.php");
                 } else {
                   echo '<td></td>';
                 }
+              }
+
+              if ($value->etat() == EtatLigue::EN_COURS) {
+                echo '<td>En cours</td>';
+              } else {
+                echo '<td>Terminé</td>';
               }
 
               echo '<td><input type="submit" value="Rejoindre" name="rejoindre[' . $value->id() . ']" /></td>';

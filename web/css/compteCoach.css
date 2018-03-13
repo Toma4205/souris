@@ -27,3 +27,6 @@
   cursor: pointer;
   color: #00cdcd;
 }
+.tableBase tbody {
+  font-size: .8rem;
+}
