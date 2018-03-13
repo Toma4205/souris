@@ -443,7 +443,7 @@ if (isset($calReel) && $calLigue->id() != null)
     <div class="calendrier_reel_journee width_60pc">
         <?php
             if (isset($matchsCalReel)) {
-                echo '<div class="detail_effectif">';
+                echo '<div class="detail_effectif calendrier_reel_journee_bloc">';
                 echo '<div class="calendrier_reel_journee_titre">Calendrier L1 journée '.$calReel->numJournee().'</div>';
                 echo '<ul>';
                 foreach($matchsCalReel as $match)
