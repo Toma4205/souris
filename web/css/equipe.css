@@ -75,6 +75,9 @@
   color: #4a61d4;
   margin-bottom: .5rem;
 }
+.calendrier_reel_journee_bloc {
+  background-color: #dcebf5;
+}
 .calendrier_reel_journee {
   padding: 0 1rem;
 }
