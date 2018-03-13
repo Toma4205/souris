@@ -46,8 +46,14 @@
 .width_6pc {
   width: 6% !important;
 }
+.width_10pc {
+  width: 10% !important;
+}
 .width_25pc {
   width: 25% !important;
+}
+.width_35pc {
+  width: 35% !important;
 }
 .width_47pc {
   width: 47% !important;
@@ -73,4 +79,7 @@
 }
 .font_size_20px {
   font-size: 20px;
+}
+.font_size_point8rem {
+  font-size: .8rem;
 }
