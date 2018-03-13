@@ -349,14 +349,6 @@ p.colonne {
 .selectChoixJoueurREMPL {
   width: 250px;
 }
-.spanChoixJoueur {
-  width: 60px;
-  display: inline-block;
-}
-.spanChoixRempl {
-  width: 85px;
-  display: inline-block;
-}
 .signeRemplacement {
   margin: 0 5px;
 }
