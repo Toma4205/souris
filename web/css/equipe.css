@@ -75,11 +75,11 @@
   color: #4a61d4;
   margin-bottom: .5rem;
 }
+.compo_equipe_col_droite {
+  padding: 0 1rem;
+}
 .calendrier_reel_journee_bloc {
   background-color: #dcebf5;
-}
-.calendrier_reel_journee {
-  padding: 0 1rem;
 }
 .calendrier_reel_journee_titre {
   border-bottom: 2px solid #141b4D;
@@ -90,6 +90,9 @@
 }
 .detail_calendrier_reel_match {
     
+}
+.section_remplacement {
+  padding: 1rem 0;
 }
 
 #messageErreurBonus {
