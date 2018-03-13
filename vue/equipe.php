@@ -22,7 +22,7 @@ function afficherContenuSelect($libSelect, $nameSelect, $joueurs, $tabCompo)
 
 function afficherContenuSelectRempl($numPosition, $gb, $def, $mil, $att, $tabCompo)
 {
-  $contenu = '<p><span class="spanChoixRempl">' . $numPosition . '. REMPL';
+  $contenu = '<p><span class="spanChoixJoueur">' . $numPosition . '. ';
   $contenu .= '</span><select name="' . $numPosition . '" class="selectChoixJoueurREMPL" onchange="javascript:onSelectionRempl(\''. $numPosition . '\');">';
   if (isset($tabCompo[$numPosition]) && $tabCompo[$numPosition] == -1) {
     $contenu .= '<option value="-1" selected="selected">...</option>';
@@ -210,7 +210,7 @@ if (isset($calReel) && $calLigue->id() != null)
       <?php if ($avecJourneeSuiv){echo '>';} ?>
     </div>
   </div>
-  <div class="conteneurRow">
+  <div class="conteneurRow detail_compo">
     <div class="conteneurColumn">
       <p>Choix tactique</p>
       <?php
@@ -349,48 +349,59 @@ if (isset($calReel) && $calLigue->id() != null)
     </div>
   </div>
   <div id="rowCompoEquipe" class="conteneurRow">
-    <div id="contenuCompoEquipe" class="conteneurColumnGauche">
+    <div id="contenuCompoEquipe" class="conteneurColumnGauche width_40pc">
       <div id="divTitulaire">
-        <p id="titulaire">Titulaires</p>
       <?php
         if ($ligue->modeExpert() != TRUE)
         {
           if (isset($gb))
           {
+            echo '<div class="detail_effectif">';
+            echo '<div class="detail_effectif_titre">Gardien</div>';
             echo '<div>';
-            afficherContenuSelect('1. GB ', 1, $gb, $tabCompo);
+            afficherContenuSelect('1. ', 1, $gb, $tabCompo);
+            echo '</div>';
             echo '</div>';
           }
 
           $numPosition = 2;
           if (isset($def))
           {
-            echo '<div id="divTitulaireDEF">';
+            echo '<div id="divTitulaireDEF" class="detail_effectif">';
+            echo '<div class="detail_effectif_titre">Défenseurs</div>';
+            echo '<div>';
             for ($index = 1; $index <= $choixTactique->nbDef(); $index++)
             {
-              afficherContenuSelect($numPosition . '. DEF ', $numPosition, $def, $tabCompo);
+              afficherContenuSelect($numPosition . '. ', $numPosition, $def, $tabCompo);
               $numPosition++;
             }
+            echo '</div>';
             echo '</div>';
           }
           if (isset($mil))
           {
-            echo '<div id="divTitulaireMIL">';
+            echo '<div id="divTitulaireMIL" class="detail_effectif">';
+            echo '<div class="detail_effectif_titre">Milieux</div>';
+            echo '<div>';
             for ($index = 1; $index <= $choixTactique->nbMil(); $index++)
             {
-              afficherContenuSelect($numPosition . '. MIL ', $numPosition, $mil, $tabCompo);
+              afficherContenuSelect($numPosition . '. ', $numPosition, $mil, $tabCompo);
               $numPosition++;
             }
+            echo '</div>';
             echo '</div>';
           }
           if (isset($att))
           {
-            echo '<div id="divTitulaireATT">';
+            echo '<div id="divTitulaireATT" class="detail_effectif">';
+            echo '<div class="detail_effectif_titre">Attaquants</div>';
+            echo '<div>';
             for ($index = 1; $index <= $choixTactique->nbAtt(); $index++)
             {
-              afficherContenuSelect($numPosition . '. ATT ', $numPosition, $att, $tabCompo);
+              afficherContenuSelect($numPosition . '. ', $numPosition, $att, $tabCompo);
               $numPosition++;
             }
+            echo '</div>';
             echo '</div>';
           }
         }
@@ -400,21 +411,26 @@ if (isset($calReel) && $calLigue->id() != null)
         }
       ?>
       </div>
+      <div id="divRemplacant">
+        <?php
+            $numPosition = 12;
+            if (isset($gb))
+            {
+            echo '<div class="detail_effectif">';
+            echo '<div class="detail_effectif_titre">Remplaçants</div>';
+            echo '<div>';
+            for ($numPosition = 12; $numPosition <= 18; $numPosition++)
+            {
+                afficherContenuSelectRempl($numPosition, $gb, $def, $mil, $att, $tabCompo);
+            }
+            echo '</div>';
+            echo '</div>';
+            }
+        ?>
+      </div>
     </div>
-    <div id="divRemplacant">
-      <p id="remplacant">Remplaçants</p>
-      <?php
-        $numPosition = 12;
-        if (isset($gb))
-        {
-          echo '<div>';
-          for ($numPosition = 12; $numPosition <= 18; $numPosition++)
-          {
-            afficherContenuSelectRempl($numPosition, $gb, $def, $mil, $att, $tabCompo);
-          }
-          echo '</div>';
-        }
-      ?>
+    <div id="calendrier_reel_journee" class="width_60pc">
+        <p>Calendrier réel à venir...</p>
     </div>
   </div>
   <section id="divRemplacement" class="conteneurColumn">
