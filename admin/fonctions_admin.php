@@ -1,4 +1,5 @@
 <?php
+
 /* LISTE DES FONCTIONS
 
 function addLogEvent
@@ -348,240 +349,6 @@ function initializeJournee($numJournee){
 	addLogEvent('Initialisation de la journée réussie.');
 }
 
-
-function scrapMaxi($num_journee){
-	addLogEvent('FUNCTION scrapMaxi');
-	// ------------ Récupération des données sur le web -----------------------
-	$adresseMaxi = 'http://www.maxifoot.fr/resultat-ligue-1.htm';
-	$curl_handle=curl_init();
-	curl_setopt($curl_handle, CURLOPT_URL,$adresseMaxi);
-	curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
-	curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($curl_handle, CURLOPT_USERAGENT, 'Your application name');
-	$query = curl_exec($curl_handle);
-	curl_close($curl_handle);
-
-	$debutTableau = 'id=lastres';
-	$pos1 = strstr($query, $debutTableau);
-	$finTableau = 'Tous les r';
-	$pos2 = strpos($pos1, $finTableau	);
-
-	$journeeRecherchee=$num_journee;
-
-	//Variables de l'algo
-	$journee=0;
-	$resultats = array(); // Tableau contenant pour chaque ligne : ville_dom, nb_but_dom, nb_but_dom_sur_penalty, nb_but_ext, ville_ext, nb_but_ext_sur_penalty
-	$buteurs; //Tableau contenant pour chaque ligne : ville, nom_buteur
-	$nb_buteurs=0;
-	$i_match = 0;
-	$statut = 1; //0 pas terminé et 1 terminé
-	$equipeDOM;
-	$equipeEXT;
-	$tab_id_csc = array();
-
-
-		$lignes = explode("&lt;tr", htmlspecialchars(substr($pos1,0,$pos2),ENT_HTML401,'ISO-8859-1', true));
-		$i = 0;
-		foreach ($lignes as $ligne) {
-			$j=0;
-			//echo $ligne;
-			$lignes1 = explode("&lt;td",$ligne);
-			foreach ($lignes1 as $ligne1) {
-				$k=0;
-				if($j == 4 || $j == 2){
-					$nb_penalty = 0;
-				}
-				$lignes2 = explode("htm\"&gt;",$ligne1);
-				foreach ($lignes2 as $ligne2) {
-					$m=0;
-					$lignes3 = explode("&lt;/a",$ligne2);
-					foreach ($lignes3 as $ligne3) {
-						$n=0;
-						$lignes4 = explode("br&gt;&lt;span class",$ligne3);
-						foreach ($lignes4 as $ligne4) {
-							$p=0;
-							$lignes5 = explode("&gt;",$ligne4);
-							foreach ($lignes5 as $ligne5) {
-								//Debug
-								//addLogEvent('Ligne '.$i.'|'.$j.'|'.$k.'|'.$m.'|'.$n.'|'.$p.' '.$ligne5);
-
-								if($i>=1 && $j==2 && $k==0 && $m==0 && $n==0&& $p==1 && strpos($ligne5,"journ")>0){ //JOURNEE
-									$journee = substr($ligne5,0,2);
-								}
-
-								if($i>1 && $j==2 && $k==1 && $m==0 && $n==0&& $p==0 && $journee === $journeeRecherchee){ // EQUIPE DOM
-									$resultats[$i_match][]=$ligne5;
-									$equipeDOM = $ligne5;
-
-								}
-
-								if($i>1 && $j==2 && $k==1 && $m==1 && $n==1 && $p>=1 && $journee === $journeeRecherchee){ //CALCUL PENALTY DOM
-									$pos = strpos($ligne5,", sp");
-									$cibletexte = $ligne5;
-									if ($pos === false) {
-										//pas de penalty
-										$pos = strpos($ligne5,", csc");
-										if ($pos === false) {
-											//pas de csc
-										}else{
-											$cibletexte = substr($ligne5,0,$pos);
-										}
-									}else{
-										$nb_penalty++;
-										$cibletexte = substr($ligne5,0,$pos);
-
-									}
-									$pos = strpos($ligne5,"'&lt;"); //COLLECTE BUTEUR
-									$pos1 = strpos($ligne5,"', sp&lt;"); //COLLECTE BUTEUR penalty
-									$pos2 = strpos($ligne5,"', csc&lt;"); //COLLECTE BUTEUR CSC
-									if ($pos === false && $pos1 === false && $pos2 === false) {
-										//pas de penalty
-									}else{
-
-										$posEspace = strrpos($cibletexte," ");
-										$lastRow = end($resultats);
-										$buteurs[$nb_buteurs][0]= $lastRow[0];
-
-										$buteurs[$nb_buteurs][1]= substr($ligne5,0,$posEspace);
-										if($pos1 === false){
-											$buteurs[$nb_buteurs][2]= 0; //but sans penalty
-										}else{
-											$buteurs[$nb_buteurs][2]= 1; //but sur penalty
-										}
-										if($pos2 === false){
-											$buteurs[$nb_buteurs][3]= 0; //but sans csc
-											$buteurs[$nb_buteurs][4] = $journee;
-											$buteurs[$nb_buteurs][5] = $equipeDOM;
-										}else{
-											$buteurs[$nb_buteurs][3]= 1; //but sur csc
-											$buteurs[$nb_buteurs][4] = $journee;
-											$tab_id_csc[] = $nb_buteurs; // On garde le numéro de ligne du joueur pour mettre son equipeEXT
-										}
-										$nb_buteurs++;
-									}
-
-								}
-
-								if($i>1 && $j==4 && $k==1 && $m==1 && $n==1 && $p>=1 && $journee === $journeeRecherchee){ //CALCUL PENALTY EXT
-									$pos = strpos($ligne5, ", sp");
-									$cibletexte = $ligne5;
-									if ($pos === false) {
-										//pas de penalty
-										$pos = strpos($ligne5,", csc");
-										if ($pos === false) {
-											//pas de csc
-										}else{
-											$cibletexte = substr($ligne5,0,$pos);
-										}
-									}else{
-										$nb_penalty++;
-										$cibletexte = substr($ligne5,0,$pos);
-									}
-									$posSpan = strpos($ligne5, "span");
-									if ($posSpan === false) {
-										//pas de penalty
-									}else{
-										$resultats[$i_match][]=$nb_penalty;
-
-									}
-									$pos = strpos($ligne5,"'&lt;"); //COLLECTE BUTEUR
-									$pos1 = strpos($ligne5,"', sp&lt;"); //COLLECTE BUTEUR penalty
-									$pos2 = strpos($ligne5,"', csc&lt;"); //COLLECTE BUTEUR CSC
-									if ($pos === false && $pos1 === false && $pos2 === false) {
-										//pas de penalty
-									}else{
-										$posEspace = strrpos($cibletexte," ");
-										$lastRow = end($resultats);
-										$buteurs[$nb_buteurs][0]= $lastRow[4];
-										$buteurs[$nb_buteurs][1]= substr($ligne5,0,$posEspace);
-										if($pos1 === false){
-											$buteurs[$nb_buteurs][2]= 0; //but sans penalty
-										}else{
-											$buteurs[$nb_buteurs][2]= 1; //but sur penalty
-										}
-										if($pos2 === false){
-											$buteurs[$nb_buteurs][3]= 0; //but sans csc
-											$buteurs[$nb_buteurs][4] = $journee;
-											$buteurs[$nb_buteurs][5] = $equipeEXT;
-											//$tab_id_csc[] = $nb_buteurs; // On garde le numéro de ligne du joueur pour mettre son equipeEXT
-											//echo 'AJOUT tab_id_csc';
-										}else{
-											$buteurs[$nb_buteurs][3]= 1; //but sur csc
-											$buteurs[$nb_buteurs][4] = $journee;
-											$buteurs[$nb_buteurs][5] = $equipeDOM;
-										}
-
-										$nb_buteurs++;
-									}
-								}
-
-								if($i>1 && $j==3 && $k==1 && $m==0 && $n==0&& $p==0 && $journee === $journeeRecherchee){ //SCORE DOM et EXT (ajouts penalty DOM)
-									$resultats[$i_match][]=substr($ligne5,0,1);
-									$resultats[$i_match][]=$nb_penalty;
-									$resultats[$i_match][]=substr($ligne5,-1);
-
-								}
-								if($i>1 && $j==4 && $k==1 && $m==0 && $n==0&& $p==0 && $journee === $journeeRecherchee){
-									$resultats[$i_match][]=$ligne5;
-									$equipeEXT = $ligne5;
-									if(is_array($tab_id_csc)){
-										foreach($tab_id_csc as $id_csc){
-											$buteurs[$id_csc][5] = $equipeEXT;
-										}
-									}
-									$tab_id_csc = null;
-								}
-
-								$p++;
-							}
-							$n++;
-						}
-						$m++;
-					}
-					$k++;
-
-				}
-				$j++;
-			}
-			$i++;
-			if($n>1 && $journee === $journeeRecherchee){
-				$resultats[$i_match][]=$journee;
-				$resultats[$i_match][]=$statut;
-				$i_match++;
-			}
-		}
-
-
-	//Dernier résultat ajouté
-	if(!empty($resultats))
-	{
-		$resultats[$i_match][]=$journeeRecherchee;
-		$resultats[$i_match][]=$statut;
-	}else{
-		addLogEvent('Aucun résultat web MAXI pour la journee '.$journeeRecherchee);
-	}
-	$time_fin_dernier_match = null;
-	foreach($resultats as $tab_resultat)
-	{
-		addLogEvent('scrapMaxi // '.$tab_resultat[7]);
-		if($tab_resultat[7] == 1){
-			//VERIF Le match vient de se terminer ?
-			addLogEvent('scrapMaxi // condition '.$tab_resultat[0].' et '.$tab_resultat[6]);
-			if(getStatutMatchMaxi($tab_resultat[0],$tab_resultat[6])==0){
-
-				addLogEvent('scrapMaxi // condition OK');
-				setScoreMatch($tab_resultat);
-				setStatutMatch($tab_resultat[0],$tab_resultat[6],strtotime("now"),0);
-				$time_fin_dernier_match = strtotime("now");
-			}
-		}
-	}
-	//Inutile pour l'instant
-	//maj_table_live_buteur($buteurs);
-
-	return $time_fin_dernier_match;
-}
-
 //
 function is_Fichier_Roto_A_Telecharger($journee)
 {
@@ -827,46 +594,6 @@ function annuler_match_restants($num_journee)
 	$upd_annule_match_restant_journee->execute(array('journee' => $num_journee));
 
 	$upd_annule_match_restant_journee->closeCursor();
-}
-
-//Récupère le fichier CSV from ROTO
-function get_csv_from_roto($num_journee_avec_annee)
-{
-	addLogEvent('FONCTION get_csv_from_roto');
-
-	$pathFichierManuel = __DIR__.'/rotostats/'.$num_journee_avec_annee."_M.csv";
-	if (file_exists($pathFichierManuel)) {
-		addLogEvent('Exploitation du fichier manuel : ' . $pathFichierManuel);
-		scrapRoto($num_journee_avec_annee, $pathFichierManuel);
-	} else {
-		addLogEvent('Pas de fichier manuel pour la journée ' . $num_journee_avec_annee . ' => on appelle le fournisseur.');
-
-		$url_part1 = "https://www.rotowire.com/soccer/player_stats.xls?pos=A&league=FRAN&season=";
-		$url_option_saison = substr($num_journee_avec_annee,0,4);
-		$url_part2 = "&start=";
-		$url_option_journee = substr($num_journee_avec_annee,-2);
-		$url_part3 = "&end=";
-		$url_part4 = "&gp=GP&min=MIN&st=ST&on=ON&off=OFF&y=Y&yr=YR&r=R&g=G&a=A&s=S&sog=SOG&cr=CR&acr=ACR&cc=CC&blk=BLK&int=INT&tkl=TKL&tklw=TKLW&fc=FC&fs=FS&pkg=PKG&pkm=PKM&pkc=PKC&crn=CRN&p=P&ap=AP&acro=ACRO&bcc=BCC&aw=AW&dr=DR&dsp=DSP&dw=DW&cl=CL&ecl=ECL&own=OWN&touch=TOUCH&gc=GC&cs=CS&sv=SV&pkf=PKF&pksv=PKSV&aks=AKS&punch=PUNCH&ibs=IBS&obs=OBS&ibsog=IBSOG&obsog=OBSOG&ibg=IBG&obg=OBG&fks=FKS&fksog=FKSOG&fkg=FKG&tbox=TBOX&fkcr=FKCR&fkacr=FKACR&crncr=CRNCR&br=BR&crnw=CRNW&pksvd=PKSVD&ibsv=IBSV&obsv=OBSV&pk=PK&sa=SA";
-
-		$url_definitif = $url_part1.$url_option_saison.$url_part2.$url_option_journee.$url_part3.$url_option_journee.$url_part4;
-
-		//Téléchargement du fichier journee au format CSV
-		//Id et MDP de connexion
-		login("https://www.rotowire.com/users/loginnow.htm?link=%2Findex.php","username=xzw32&p1=rotowiremotdepasse&Submit=Login");
-
-		$output = grab_page($url_definitif);
-		$lignes1 = str_replace("\t\r\n","\n",$output);
-		$lignes1 = str_replace("\r","\n",$lignes1);
-		$lignes1 = str_replace("\t",";",$lignes1);
-
-		$path = __DIR__.'/rotostats/'.$url_option_saison.$url_option_journee.".csv";
-		$fp = fopen ($path, 'w');
-		fwrite($fp,$lignes1);
-		fclose($fp);
-
-		//Exploitation automatique du fichier
-		scrapRoto($num_journee_avec_annee, $path);
-	}
 }
 
 //Exploite le fichier CSV ($path) CORRESPONDANT A LA JOURNEE
@@ -3298,7 +3025,7 @@ function calculButVirtuel($equipeA,$equipeB){
 
 				}else{
 
-					if(is_null($compoDefinitive['nb_but_reel']) && ($compoDefinitive['note'] > $moyAttaqueB) && ($compoDefinitive['note']-1 > $moyMilieuB) && ($compoDefinitive['note']-1.5 > $moyDefenseB) && ($compoDefinitive['note']-2 > $moyGardienB)){
+					if(is_null($compoDefinitive['nb_but_reel']) && ($compoDefinitive['note'] >= $moyAttaqueB) && ($compoDefinitive['note']-1 >= $moyMilieuB) && ($compoDefinitive['note']-1.5 >= $moyDefenseB) && ($compoDefinitive['note']-2 >= $moyGardienB)){
 						//butVirtuel
 						addLogEvent( 'But Virtuel de '.$compoDefinitive['cle_roto_primaire']);
 						update_but_virtuel(1,$equipeA,$compoDefinitive['id_joueur_reel']);
@@ -3311,7 +3038,7 @@ function calculButVirtuel($equipeA,$equipeB){
 					if(is_null($compoDefinitive['note'])){
 
 					}else{
-						if(is_null($compoDefinitive['nb_but_reel']) && ($compoDefinitive['note'] > $moyMilieuB) && ($compoDefinitive['note']-1 > $moyDefenseB) && ($compoDefinitive['note']-1.5 > $moyGardienB)){
+						if(is_null($compoDefinitive['nb_but_reel']) && ($compoDefinitive['note'] >= $moyMilieuB) && ($compoDefinitive['note']-1 >= $moyDefenseB) && ($compoDefinitive['note']-1.5 >= $moyGardienB)){
 							//butVirtuel
 							addLogEvent( 'But Virtuel de '.$compoDefinitive['cle_roto_primaire']);
 							update_but_virtuel(1,$equipeA,$compoDefinitive['id_joueur_reel']);
@@ -3325,7 +3052,7 @@ function calculButVirtuel($equipeA,$equipeB){
 
 						}else{
 
-							if(is_null($compoDefinitive['nb_but_reel']) && ($compoDefinitive['note'] > $moyDefenseB) && ($compoDefinitive['note']-1 > $moyGardienB)){
+							if(is_null($compoDefinitive['nb_but_reel']) && ($compoDefinitive['note'] >= $moyDefenseB) && ($compoDefinitive['note']-1 >= $moyGardienB)){
 								//butVirtuel
 								addLogEvent( 'But Virtuel de '.$compoDefinitive['cle_roto_primaire']);
 								update_but_virtuel(1,$equipeA,$compoDefinitive['id_joueur_reel']);
