@@ -1,6 +1,6 @@
 <?php
 // Affichage des bonus/malus dans le detail_match
-function afficherBonusMalus($codeBonus, $libBonus, $nomJoueurEquipe, $nomJoueurAdv, $miTemps, $codeTactique)
+function afficherBonusMalus($codeBonus, $libBonus, $libLongBonus, $nomJoueurEquipe, $nomJoueurAdv, $miTemps, $codeTactique)
 {
   echo '<div class="detail_match_equipe_bonus_malus">';
   echo '<div class="detail_match_equipe_titre">Bonus</div>';
@@ -13,23 +13,23 @@ function afficherBonusMalus($codeBonus, $libBonus, $nomJoueurEquipe, $nomJoueurA
     echo '<div>';
     echo '<div class="detail_match_equipe_bonus_malus_lib">' . $libBonus . '</div>';
     if ($codeBonus == ConstantesAppli::BONUS_MALUS_FUMIGENE) {
-      echo '<img src="web/img/bonusmalus/PNG_fumigenes.png" alt="bonus dom." width="40px" height="40px"/>';
+      echo '<img src="web/img/bonusmalus/PNG_fumigenes.png" title="'.$libLongBonus.'" alt="bonus" width="40px" height="40px"/>';
     } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_DIN_ARB) {
-      echo '<img src="web/img/bonusmalus/PNG_diner.png" alt="bonus dom." width="40px" height="40px"/>';
+      echo '<img src="web/img/bonusmalus/PNG_diner.png" title="'.$libLongBonus.'" alt="bonus" width="40px" height="40px"/>';
     } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_FAM_STA) {
-      echo '<img src="web/img/bonusmalus/PNG_family.png" alt="bonus dom." width="40px" height="40px"/>';
+      echo '<img src="web/img/bonusmalus/PNG_family.png" title="'.$libLongBonus.'" alt="bonus" width="40px" height="40px"/>';
     } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_BUS) {
-      echo '<img src="web/img/bonusmalus/PNG_bus.png" alt="bonus dom." width="40px" height="40px"/>';
+      echo '<img src="web/img/bonusmalus/PNG_bus.png" title="'.$libLongBonus.'" alt="bonus" width="40px" height="40px"/>';
     } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_MAU_CRA) {
-      echo '<img src="web/img/bonusmalus/PNG_mauvaisCrampon.png" alt="bonus dom." width="40px" height="40px"/>';
+      echo '<img src="web/img/bonusmalus/PNG_mauvaisCrampon.png" title="'.$libLongBonus.'" alt="bonus" width="40px" height="40px"/>';
     } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_BOUCHER) {
-      echo '<img src="web/img/bonusmalus/PNG_butcher.png" alt="bonus dom." width="40px" height="40px"/>';
+      echo '<img src="web/img/bonusmalus/PNG_butcher.png" title="'.$libLongBonus.'" alt="bonus" width="40px" height="40px"/>';
     } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_CHA_GB) {
-      echo '<img src="web/img/bonusmalus/PNG_changementGardien.png" alt="bonus dom." width="40px" height="40px"/>';
+      echo '<img src="web/img/bonusmalus/PNG_changementGardien.png" title="'.$libLongBonus.'" alt="bonus" width="40px" height="40px"/>';
     } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_PAR_TRU) {
-      echo '<img src="web/img/bonusmalus/PNG_pari.png" alt="bonus dom." width="40px" height="40px"/>';
+      echo '<img src="web/img/bonusmalus/PNG_pari.png" title="'.$libLongBonus.'" alt="bonus" width="40px" height="40px"/>';
     } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_CON_ZZ) {
-      echo '<img src="web/img/bonusmalus/PNG_zizou.png" alt="bonus dom." width="40px" height="40px"/>';
+      echo '<img src="web/img/bonusmalus/PNG_zizou.png" title="'.$libLongBonus.'" alt="bonus" width="40px" height="40px"/>';
     }
     echo '</div>';
     echo '<div class="detail_match_equipe_bonus_malus_joueur">';
@@ -287,7 +287,7 @@ function afficherBonusMalus($codeBonus, $libBonus, $nomJoueurEquipe, $nomJoueurA
 <div class="detail_match_equipe conteneurRow">
   <div class="detail_match_equipe_g">
     <?php if (isset($compoDom)){afficherBonusMalus($compoDom->codeBonusMalus(),
-      $compoDom->libCourtBonusMalus(), $compoDom->nomJoueurReelEquipe(),
+      $compoDom->libCourtBonusMalus(), $compoDom->libLongBonusMalus(), $compoDom->nomJoueurReelEquipe(),
       $compoDom->nomJoueurReelAdverse(), $compoDom->miTemps(), $compoDom->codeTactique());} ?>
     <?php if (isset($joueursDom)){afficherTitulaires($joueursDom, $compoDom->codeTactique());} else {echo '<div>Aucune compo</div>';} ?>
     <?php if (isset($joueursDom)){afficherRemplacants($joueursDom);} ?>
@@ -295,7 +295,7 @@ function afficherBonusMalus($codeBonus, $libBonus, $nomJoueurEquipe, $nomJoueurA
   </div>
   <div class="detail_match_equipe_d">
     <?php if (isset($compoExt)){afficherBonusMalus($compoExt->codeBonusMalus(),
-      $compoExt->libCourtBonusMalus(), $compoExt->nomJoueurReelEquipe(),
+      $compoExt->libCourtBonusMalus(), $compoExt->libLongBonusMalus(), $compoExt->nomJoueurReelEquipe(),
       $compoExt->nomJoueurReelAdverse(), $compoExt->miTemps(), $compoExt->codeTactique());} ?>
     <?php if (isset($joueursExt)){afficherTitulaires($joueursExt, $compoExt->codeTactique());} else {echo '<div>Aucune compo</div>';} ?>
     <?php if (isset($joueursExt)){afficherRemplacants($joueursExt);} ?>
