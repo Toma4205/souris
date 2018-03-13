@@ -490,7 +490,7 @@ if (isset($calReel) && $calLigue->id() != null)
           echo '<div>';
           afficherContenuSelectRentrant($numRemplacement, $def, $mil, $att, $tabRempl, $tabRentrant);
           echo '</div>';
-          echo '<p class="signeRemplacement"> > </p>';
+          echo '<div class="signeRemplacement"><img src="web/img/rempl.png" alt=" > " width="20px" height="20px" /></div>';
           echo '<div>';
           afficherContenuSelectSortant($numRemplacement, $def, $mil, $att, $tabTitu, $tabRentrant, $tabSortant);
 
