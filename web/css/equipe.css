@@ -60,8 +60,28 @@
   margin: auto;
   margin-top: 0.5rem;
 }
+.detail_compo {
+  margin-bottom: 1rem;
+  border-bottom: 2px dashed #141b4D;
+}
+.detail_effectif {
+  padding: .5rem 0 !important;
+  text-align: left;
+  margin: auto;
+}
+.detail_effectif_titre {
+  border-bottom: 2px solid #141b4D;
+  font-style: italic;
+  color: #4a61d4;
+  margin-bottom: .5rem;
+}
+
 #messageErreurBonus {
   font-size: .8rem;
   font-weight: bold;
   padding: .5rem 0;
+}
+.spanChoixJoueur {
+  width: 1.7rem;
+  display: inline-block;
 }
