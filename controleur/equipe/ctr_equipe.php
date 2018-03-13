@@ -237,12 +237,13 @@ if ($calLigue->id() != null)
     }
   }
   $choixTactique = $nomenclManager->findNomenclatureTactiqueByCode($compoEquipe->codeTactique());
+  $matchsCalReel = $calReelManager->findMatchsByJournee($calReel->numJournee());
 }
 
-echo 'A supp : idCoach=' . $coach->id() . ', idLigue=' . $ligue->id() .
+/*echo 'A supp : idCoach=' . $coach->id() . ', idLigue=' . $ligue->id() .
   ', idEquipe=' . $equipe->id() . ', calReel=' . $calReel->numJournee() .
   ', calLigue=' . $calLigue->id() . ', journeePrec=' . $avecJourneePrec .
-  ', journeeSuiv=' . $avecJourneeSuiv;
+  ', journeeSuiv=' . $avecJourneeSuiv;*/
 
 include_once('vue/equipe.php');
 ?>
