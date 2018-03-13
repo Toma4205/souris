@@ -154,7 +154,7 @@ function afficherBonusMalus($codeBonus, $libBonus, $nomJoueurEquipe, $nomJoueurA
       }
       else if ($value->numeroRemplacement() != null)
       {
-          $tabRempl[$value->idJoueurReelRemplacant()] = $value->nomRemplacant() . ' remplace ' . $value->nom() . ' si note < ' . $value->noteMinRemplacement();
+          $tabRempl[$value->idJoueurReelRemplacant()] = $value->nomRemplacant() . ' <img src="web/img/rempl.png" alt=" > " width="12px" height="12px" /> ' . $value->nom() . ' si note < ' . $value->noteMinRemplacement();
       }
     }
 
