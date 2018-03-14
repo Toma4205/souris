@@ -2,32 +2,32 @@
 
 if (isset($_POST['lancerCron']))
 {
-	include_once('./admin/testCRON.php');
+	include_once('testCRON.php');
 } elseif (isset($_POST['initJournee']))
 {
-	include_once('./admin/initDebutJournee.php');
+	include_once('initDebutJournee.php');
 } elseif (isset($_POST['majScoreJourneeEnCours']))
 {
-	include_once('./admin/majScoreJourneeEnCours.php');
+	include_once('majScoreJourneeEnCours.php');
 } elseif (isset($_POST['majMoyenneJoueur']))
 {
-	include_once('./admin/majMoyenneJoueur.php');
+	include_once('majMoyenneJoueur.php');
 } elseif (isset($_POST['majFinLigue']))
 {
-	include_once('./admin/majFinLigue.php');
+	include_once('majFinLigue.php');
 } elseif (isset($_POST['majResultatsL1']))
 {
-	include_once('./admin/MAJResultatL1.php');
+	include_once('MAJResultatL1.php');
 } elseif (isset($_POST['importerStatsBDD']))
 {
-	include_once('./admin/importJourneeBDD.php');
+	include_once('importJourneeBDD.php');
 }
 
 function afficherLog()
 {
     date_default_timezone_set('Europe/Paris');
 	$year_month = date("YF");
-	$fichier = __DIR__ . '/admin/logs/'.$year_month.'.log';
+	$fichier = 'logs/'.$year_month.'.log';
 	
     //$file = './admin/logs/2018March.log';
     echo file_get_contents($fichier);
@@ -91,19 +91,19 @@ function afficherLog()
 
 	<HR size=2 align=center width="100%">
 	<h2 id="titreScrapValeur">Vérification Prix des Joueurs</h2>
-	<form method="post" id="scrapValeur" action="admin/valeursJoueurs.php" enctype="multipart/form-data">
+	<form method="post" id="scrapValeur" action="valeursJoueurs.php" enctype="multipart/form-data">
 		 <input type="submit" name="submit" value="Etudier les valeurs" />
 	</form>
 
 	<HR size=2 align=center width="100%">
 	<h2 id="titreMAJAutoResultatsEquipe">MAJ Auto des résultats des équipes (encore en test)</h2>
-	<form method="post" id="MAJAutoResultatsEquipe" action="admin/maj_auto_resultats.php" enctype="multipart/form-data">
+	<form method="post" id="MAJAutoResultatsEquipe" action="maj_auto_resultats.php" enctype="multipart/form-data">
 		 <input type="submit" name="submit" value="Mettre à jour les résultats" />
 	</form>
 
 	<HR size=2 align=center width="100%">
 	<h2 id="titreImportAutoStatsJournee">Import Auto des stats de la journée (encore en test)</h2>
-	<form method="post" id="importAutoStatsJournee" action="admin/import_auto_stats.php" enctype="multipart/form-data">
+	<form method="post" id="importAutoStatsJournee" action="import_auto_stats.php" enctype="multipart/form-data">
 		<select name="idJournee" size=1>
 				<option>201721
 				<option>201722
@@ -421,11 +421,11 @@ function afficherLog()
 		echo "<br />\n";
 		$req1->closeCursor();
 	?>
-	<form method="post" id="afficheNonNotes" action="admin/afficherJoueursNonNotes.php" enctype="multipart/form-data">
+	<form method="post" id="afficheNonNotes" action="afficherJoueursNonNotes.php" enctype="multipart/form-data">
 		 <input type="submit" name="submit" value="Qui sont les joueurs non notés ?" /><br />
 	</form>
 
-	<form method="post" id="calculNote" action="admin/calculNoteJoueurBDD.php" enctype="multipart/form-data">
+	<form method="post" id="calculNote" action="calculNoteJoueurBDD.php" enctype="multipart/form-data">
 		 <input type="submit" name="submit" value="Lancer le calcul des notes des joueurs non notés" /><br />
 	</form>
 
@@ -494,7 +494,7 @@ function afficherLog()
 			echo "<br />\n";
 			echo 'Liste des journées valides :  ';
 ?>
-	<form method="post" id="calculConfrontation" action="admin/calculResultatConfrontation.php" enctype="multipart/form-data">
+	<form method="post" id="calculConfrontation" action="calculResultatConfrontation.php" enctype="multipart/form-data">
 		<SELECT name="journeeCalculable" size="1">
 <?php
 			foreach ($journeesCalculables as $journeeCalculable) {
