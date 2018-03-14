@@ -93,7 +93,6 @@ function getJourneeRecente()
 //Retourne la journee au format YYYYJJ
 function get_journee_format_long($journee_short)
 {
-	addLogEvent('FUNCTION get_journee_format_long');
 	date_default_timezone_set('Europe/Paris');
 	if(date('n') > 6){
 		return date("Y").$journee_short;
