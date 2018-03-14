@@ -130,6 +130,11 @@ if (isset($match)) {
             return $tabCompoDef;
         }
 		
+		// TODO Il faut ajouter la note et les images ballon pour les buteurs
+		// On accède aux notes via $tabCompoDef[$position]->note()
+		// On accède aux buts via $tabCompoDef[$position]->nbButReel() 
+		// et $tabCompoDef[$position]->nbButVirtuel() 
+		// (à verifier dans classe /modele/compoequipe/joueurcompoequipe)
 		function ajouterJoueur($tabCompoDef, $position)
         {
 			echo '<div class="detail_match_terrain_position_centre">';
@@ -199,8 +204,46 @@ if (isset($match)) {
 		// FIN COMPO DOM
 		echo '</div>';
 		
+		$position = 11;
+		$tabCompoDef = getTabCompoDefinitive($joueursExt);
+		// $tabTactique[0] = nbDef, $tabTactique[1] = nbMil, $tabTactique[2] = nbAtt
+		$tabTactique = explode("-", $compoExt->codeTactique());
+		
 		// DEBUT COMPO EXT
 		echo '<div class="detail_match_terrain_ext">';
+		
+		// ATT
+		echo '<div class="detail_match_terrain_ligne">';
+		for ($i = 1; $i <= $tabTactique[2]; $i++) 
+		{
+			ajouterJoueur($tabCompoDef, $position);
+			$position--;
+		}
+		echo '</div>';
+		
+		// MIL
+		echo '<div class="detail_match_terrain_ligne">';
+		for ($i = 1; $i <= $tabTactique[1]; $i++) 
+		{
+			ajouterJoueur($tabCompoDef, $position);
+			$position--;
+		}
+		echo '</div>';
+		
+		// DEF
+		echo '<div class="detail_match_terrain_ligne">';
+		for ($i = 1; $i <= $tabTactique[0]; $i++) 
+		{
+			ajouterJoueur($tabCompoDef, $position);
+			$position--;
+		}
+		echo '</div>';
+		
+		// GB
+		echo '<div class="detail_match_terrain_ligne">';
+		ajouterJoueur($tabCompoDef, $position);
+		echo '</div>';
+		
 		// FIN COMPO EXT
 		echo '</div>';
 		
