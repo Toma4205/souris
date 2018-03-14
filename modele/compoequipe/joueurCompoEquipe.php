@@ -24,6 +24,7 @@ class JoueurCompoEquipe extends ClasseBase
   private $_position;
   private $_nomRemplacant;
   private $_prenomRemplacant;
+  private $_codeEquipe;
 
   public function __construct(array $donnees)
   {
@@ -47,6 +48,7 @@ class JoueurCompoEquipe extends ClasseBase
   public function position() { return $this->_position; }
   public function nomRemplacant() { return $this->_nomRemplacant; }
   public function prenomRemplacant() { return $this->_prenomRemplacant; }
+  public function codeEquipe() { return $this->_codeEquipe; }
 
   public function setId_joueur_reel($idJoueurReel)
   {
@@ -131,6 +133,11 @@ class JoueurCompoEquipe extends ClasseBase
   public function setPrenom_remplacant($prenom)
   {
       $this->_prenomRemplacant = $prenom;
+  }
+  
+  public function setCode_equipe($code)
+  {
+      $this->_codeEquipe = $code;
   }
 }
 ?>
