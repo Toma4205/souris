@@ -316,7 +316,7 @@ function afficherLog()
 	<?php
 		echo "<br />\n";
 		//Récupération des résultats de L1 déjà présent en base de donnée
-		require_once(__DIR__ . '/modele/connexionSQL.php');
+		require_once(__DIR__ . '/../modele/connexionSQL.php');
 		try
 		{
 			// Récupération de la connexion
