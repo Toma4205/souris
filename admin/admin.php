@@ -30,7 +30,12 @@ function afficherLog()
 	$fichier = 'logs/'.$year_month.'.log';
 	
     //$file = './admin/logs/2018March.log';
-    echo file_get_contents($fichier);
+    $data = file_get_contents($fichier);
+    $newdata = explode("\n", $data); //create array separate by new lines
+    rsort($newdata); 
+    foreach($newdata as $line){ 
+        echo $line."\n"; 
+    }
     
     return $fichier;
 }
