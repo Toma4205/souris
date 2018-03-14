@@ -138,7 +138,10 @@
   height: 65%;
   width: 35%;
 }
-
+.detail_match_terrain_tontonpat_jeuneclub {
+  height: 100%;
+  width: 40%;
+}
 
 .detail_match_equipe {
   text-align: left;
