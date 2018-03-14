@@ -1,6 +1,7 @@
 <?php
-include('fonctions_admin.php');
-include('secure_admin.php');/*
+include_once('fonctions_admin.php');
+include_once('secure_admin.php');
+/*
 $calendrier_reel = array(
 array('num_journee'=>'01','debut'=>'2017-11-24 20:45:00','fin'=>'2017-11-24 20:45:00 +2 days 5 hours'),
 array('num_journee'=>'02','debut'=>'2017-11-24 20:45:00','fin'=>'2017-11-24 20:45:00 +2 days 5 hours'),
