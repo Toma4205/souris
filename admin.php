@@ -447,6 +447,27 @@ function afficherLog()
 		}
 		$req1->closeCursor();
 	?>
+	<h5>Liste des titulaires sans correspondance dans "joueur_reel"</h5>
+	<?php
+		$req1 = $bdd->query('SELECT t1.journee, t1.id 
+		    FROM joueur_stats t1  
+		    WHERE t1.titulaire = 1 AND NOT EXISTS (
+		        SELECT t2.cle_roto_primaire 
+		        FROM joueur_reel t2
+		        WHERE t1.id IN (t2.cle_roto_primaire, t2.cle_roto_secondaire)
+		    ) ORDER BY t1.journee DESC, t1.id ASC');
+		$erreurTitulaires=$req1->fetchAll();
+		if (count($erreurTitulaires) == 0) {
+			echo "\t".'OK tous les titulaires sont bien identifiés en BDD.';
+			echo "<br />\n";
+		}else{
+			foreach ($erreurTitulaires as $titu) {
+				echo "\t".'Sur la journee '.$titu['journee'].', '.$titu['id'].' n\'a pas été identifié en BDD.';
+				echo "<br />\n";
+			}
+		}
+		$req1->closeCursor();
+	?>
 	<h5 id="titreVerifResultatsEtStats">Vérification de la saisie des résultats L1</h5>
 	<?php
 		$req1 = $bdd->query('SELECT t2.journee, count(t2.journee) FROM resultatsl1_reel t2 GROUP BY t2.journee HAVING COUNT(t2.journee) <> 10;');
