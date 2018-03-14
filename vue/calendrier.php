@@ -136,8 +136,7 @@ if (isset($match)) {
 
 			if (isset($tabCompoDef[$position]) && $tabCompoDef[$position] != null)
 			{
-				// TODO récupérer code équipe pour afficher le bon maillot
-				echo '<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_psg.png" />';
+				echo '<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_' . strtolower($tabCompoDef[$position]->codeEquipe()) . '.png" />';
 				echo '<div>' . $tabCompoDef[$position]->nom() . '</div>';
 			}
 			else
