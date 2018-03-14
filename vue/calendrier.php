@@ -111,68 +111,101 @@ if (isset($match)) {
   <!-- AFFICHAGE DU TERRAIN -->
   <!-- ********************* -->
 
-  <div class="detail_match_terrain_bloc cache">
+  <div class="detail_match_terrain_bloc">
     <div class="detail_match_terrain_conteneur_img">
-      <div class="detail_match_terrain_dom">
-        <!-- GB -->
-        <div class="detail_match_terrain_ligne">
-          <div class="detail_match_terrain_position_centre">
-            <img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_mon.png" />
-            <div>Subasic</div>
-          </div>
-        </div>
-        <!-- DEF -->
-        <div class="detail_match_terrain_ligne">
-			<div class="detail_match_terrain_position_centre">
-				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_psg.png" />
-				<div>Kurzawa</div>
-			</div>
-			<div class="detail_match_terrain_position_centre">
-				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_psg.png" />
-				<div>Marquinos</div>
-			</div>
-			<div class="detail_match_terrain_position_centre">
-				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_nte.png" />
-				<div>Diego Carlos</div>
-			</div>
-			<div class="detail_match_terrain_position_centre">
-				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_nte.png" />
-				<div>Sidibé</div>
-			</div>
-        </div>
-        <!-- MIL -->
-        <div class="detail_match_terrain_ligne">
-			<div class="detail_match_terrain_position_centre">
-				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_psg.png" />
-				<div>Rabiot</div>
-			</div>
-			<div class="detail_match_terrain_position_centre">
-				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_nic.png" />
-				<div>Seri</div>
-			</div>
-			<div class="detail_match_terrain_position_centre">
-				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_eti.png" />
-				<div>Cabella</div>
-			</div>
-        </div>
-        <!-- ATT -->
-        <div class="detail_match_terrain_ligne">
-			<div class="detail_match_terrain_position_centre">
-				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_psg.png" />
-				<div>Neymar</div>
-			</div>
-			<div class="detail_match_terrain_position_centre">
-				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_lyo.png" />
-				<div>Mariano</div>
-			</div>
-			<div class="detail_match_terrain_position_centre">
-				<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_dij.png" />
-				<div>Tavares</div>
-			</div>
-        </div>
-      </div>
-      <div class="detail_match_terrain_ext">
-      </div>
+      
+        <?php 
+        
+        function getTabCompoDefinitive($joueurs)
+        {
+            $tabCompoDef = [];
+            foreach($joueurs as $joueur)
+            {
+                if ($joueur->numeroDefinitif() != null)
+                {
+                    $tabCompoDef[$joueur->numeroDefinitif()] = $joueur;
+                }
+            }
+            
+            return $tabCompoDef;
+        }
+		
+		function ajouterJoueur($tabCompoDef, $position)
+        {
+			echo '<div class="detail_match_terrain_position_centre">';
+
+			if (isset($tabCompoDef[$position]) && $tabCompoDef[$position] != null)
+			{
+				// TODO récupérer code équipe pour afficher le bon maillot
+				echo '<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_psg.png" />';
+				echo '<div>' . $tabCompoDef[$position]->nom() . '</div>';
+			}
+			else
+			{
+				if ($position == 1)
+				{
+					// Jeune du club
+					echo '<img class="detail_match_terrain_tontonpat_jeuneclub" src="web/img/jeuneclub.png" alt="Jeune du club" title="Jeune du club" />';
+				}
+				else
+				{
+					// Tonton Pat'
+					echo '<img class="detail_match_terrain_tontonpat_jeuneclub" src="web/img/tontonpat.png" alt="Tonton Pat\'" title="Tonton Pat\'" />';
+				}
+			}
+			
+			echo '</div>';
+		}
+        
+		$position = 1;
+		$tabCompoDef = getTabCompoDefinitive($joueursDom);
+		// $tabTactique[0] = nbDef, $tabTactique[1] = nbMil, $tabTactique[2] = nbAtt
+		$tabTactique = explode("-", $compoDom->codeTactique());
+		
+		// DEBUT COMPO DOM
+		echo '<div class="detail_match_terrain_dom">';
+		
+		// GB
+		echo '<div class="detail_match_terrain_ligne">';
+		ajouterJoueur($tabCompoDef, $position);
+		echo '</div>';
+		
+		// DEF
+		echo '<div class="detail_match_terrain_ligne">';
+		for ($i = 1; $i <= $tabTactique[0]; $i++) 
+		{
+			$position++;
+			ajouterJoueur($tabCompoDef, $position);
+		}
+		echo '</div>';
+		
+		// MIL
+		echo '<div class="detail_match_terrain_ligne">';
+		for ($i = 1; $i <= $tabTactique[1]; $i++) 
+		{
+			$position++;
+			ajouterJoueur($tabCompoDef, $position);
+		}
+		echo '</div>';
+		
+		// ATT
+		echo '<div class="detail_match_terrain_ligne">';
+		for ($i = 1; $i <= $tabTactique[2]; $i++) 
+		{
+			$position++;
+			ajouterJoueur($tabCompoDef, $position);
+		}
+		echo '</div>';
+		
+		// FIN COMPO DOM
+		echo '</div>';
+		
+		// DEBUT COMPO EXT
+		echo '<div class="detail_match_terrain_ext">';
+		// FIN COMPO EXT
+		echo '</div>';
+		
+        ?>
     </div>
   </div>
 
