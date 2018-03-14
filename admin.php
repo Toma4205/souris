@@ -23,7 +23,19 @@ if (isset($_POST['lancerCron']))
 	include_once('./admin/importJourneeBDD.php');
 }
 
- ?>
+function afficherLog()
+{
+    date_default_timezone_set('Europe/Paris');
+	$year_month = date("YF");
+	$fichier = __DIR__ . '/admin/logs/'.$year_month.'.log';
+	
+    //$file = './admin/logs/2018March.log';
+    echo file_get_contents($fichier);
+    
+    return $fichier;
+}
+
+?>
 <html>
 <body>
 	<h1>Page Administrateur</h1>
@@ -68,6 +80,13 @@ if (isset($_POST['lancerCron']))
 	<h2 id="titreLancerCron">Lancer CRON</h2>
 	<form method="post" id="lancerCron" action="">
 			<input type="submit" name="lancerCron" value="J'me lance" />
+			<br/>
+			<?php 
+			    echo '<textarea style="width:900px;height:400px;" name="fichierLog">';
+			    $fichier = afficherLog(); 
+			    echo '</textarea><br/>';
+			    echo '<div>Fichier de log : ' . $fichier . '</div>';
+			?>
 	</form>
 
 	<HR size=2 align=center width="100%">
