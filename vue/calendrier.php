@@ -143,6 +143,11 @@ if (isset($match)) {
 			{
 				echo '<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_' . strtolower($tabCompoDef[$position]->codeEquipe()) . '.png" />';
 				echo '<div>' . $tabCompoDef[$position]->nom() . '</div>';
+				$total = $tabCompoDef[$position]->nbButReel() + $tabCompoDef[$position]->nbButVirtuel();
+				for ($index = 1; $index <= $total; $index++)
+				{
+            		 echo '<img class="but" src="web/img/but.png" alt="But" width="10px" height="10px"/>';
+        		}
 			}
 			else
 			{
