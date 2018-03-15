@@ -76,6 +76,14 @@ class CoachManager extends ManagerBase
       return (bool) $q->fetchColumn();
   }
 
+  public function existeByNom($nom)
+  {
+      $q = $this->_bdd->prepare('SELECT COUNT(*) FROM coach WHERE nom = :nom');
+      $q->execute([':nom' => $nom]);
+
+      return (bool) $q->fetchColumn();
+  }
+
   public function findByNom($nom, $idCoach)
   {
       $coachs = [];

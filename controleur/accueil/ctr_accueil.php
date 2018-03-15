@@ -25,6 +25,11 @@ if (isset($_POST['inscription']) && isset($_POST['nomCrea']) && isset($_POST['mo
     $messageInscr = 'Un compte existe déjà pour cette adresse mail.';
     unset($coach);
   }
+  elseif ($manager->existeByNom($coach->nom()))
+  {
+    $messageInscr = 'Un compte existe déjà avec ce nom.';
+    unset($coach);
+  }
   elseif ($_POST['motDePasseCrea'] == $_POST['confirmMotDePasseCrea'])
   {
     $manager->creerCoach($coach);
@@ -39,10 +44,6 @@ if (isset($_POST['inscription']) && isset($_POST['nomCrea']) && isset($_POST['mo
 elseif (isset($_POST['connexion']) && isset($_POST['mail']) && isset($_POST['motDePasse'])
   && !empty($_POST['mail']) && !empty($_POST['motDePasse']))
 {
-  if ('admin@mail.fr' == $_POST['mail'])
-  {
-    header('Location: admin.php');
-  }
   $coach = new Coach(['mail' => $_POST['mail'],
                       'mot_de_passe' => $_POST['motDePasse']]);
 
