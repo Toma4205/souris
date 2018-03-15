@@ -28,7 +28,7 @@ if (isset($_POST['inscription']) && isset($_POST['nomCrea']) && isset($_POST['mo
   elseif ($_POST['motDePasseCrea'] == $_POST['confirmMotDePasseCrea'])
   {
     $manager->creerCoach($coach);
-    $coach = $manager->findByNomMotDePasse($coach);
+    $coach = $manager->findByMailMotDePasse($coach);
   }
   else
   {
