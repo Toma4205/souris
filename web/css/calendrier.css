@@ -125,6 +125,7 @@
 .detail_match_terrain_ligne {
   width: 25%;
   font-size: .8rem;
+  font-weight: bold;
   display : flex;
   flex-direction : column;
   justify-content : center;

@@ -141,13 +141,20 @@ if (isset($match)) {
 
 			if (isset($tabCompoDef[$position]) && $tabCompoDef[$position] != null)
 			{
+				
 				echo '<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_' . strtolower($tabCompoDef[$position]->codeEquipe()) . '.png" />';
-				echo '<div>' . $tabCompoDef[$position]->nom() . '</div>';
+				echo '<div>' . $tabCompoDef[$position]->nom() .'</div>';
+				echo '<div> ('.$tabCompoDef[$position]->note().') </div>';
 				$total = $tabCompoDef[$position]->nbButReel() + $tabCompoDef[$position]->nbButVirtuel();
 				for ($index = 1; $index <= $total; $index++)
 				{
             		 echo '<img class="but" src="web/img/but.png" alt="But" width="10px" height="10px"/>';
         		}
+        		if ($tabCompoDef[$position]->capitaine() == 1) {
+        			echo '<div>';
+				  	echo '<img src="web/img/brassard_capitaine.png" class="image_brassard" alt="Chef Capt\'aine" title="Chef Capt\'aine" width="18px" height="18px"/>';
+				  	echo '</div>';
+				}
 			}
 			else
 			{
