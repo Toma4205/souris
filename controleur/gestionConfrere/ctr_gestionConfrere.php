@@ -34,10 +34,13 @@ elseif (isset($_POST['ajouter']))
   {
     $confrereManager->creerConfrere($coach, $cle);
   }
-
+  
   // Maj liste des confreres
   $confreres = $confrereManager->findConfreresByIdCoach($coach->id());
   $_SESSION[ConstantesSession::LISTE_CONFRERES] = $confreres;
+  
+  $coachsRech = $coachManager->findByNom($_POST['nomCoach'], $coach->id());
+  $_SESSION[ConstantesSession::LISTE_RECH_CONFRERES] = $coachsRech;
 }
 // Suppression d'un coach confrere
 elseif (isset($_POST['supprimer']))

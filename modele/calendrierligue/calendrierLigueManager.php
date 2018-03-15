@@ -145,7 +145,8 @@ class CalendrierLigueManager extends ManagerBase
       }
 
       for ($i = 0; $i < sizeof($tabJournees); $i++) {
-          foreach ($tabJournees[$i] as $match) {
+          if ($numJourneeCalReel <= 38) {
+            foreach ($tabJournees[$i] as $match) {
               $equipes = explode('v', $match);
 
               $q = $this->_bdd->prepare('INSERT INTO calendrier_ligue(id_ligue, id_equipe_dom, id_equipe_ext,
@@ -158,8 +159,9 @@ class CalendrierLigueManager extends ManagerBase
               $q->bindValue(':calReel', $numJourneeCalReel);
 
               $q->execute();
-
-              $q = $this->_bdd->prepare('INSERT INTO calendrier_ligue(id_ligue, id_equipe_dom, id_equipe_ext,
+              
+              if ($numJourneeCalReel + ($nbEquipe - 1) <= 38) {
+                  $q = $this->_bdd->prepare('INSERT INTO calendrier_ligue(id_ligue, id_equipe_dom, id_equipe_ext,
                 num_journee, num_journee_cal_reel)
                 VALUES(:idLigue, :idEquipeDom, :idEquipeExt, :journeeRetour, :calReel)');
               $q->bindValue(':idLigue', $idLigue);
@@ -169,8 +171,12 @@ class CalendrierLigueManager extends ManagerBase
               $q->bindValue(':calReel', ($numJourneeCalReel + ($nbEquipe - 1)));
 
               $q->execute();
+              }
+            }
+            $numJourneeCalReel++;
+          } else {
+              break;
           }
-          $numJourneeCalReel++;
       }
   }
 

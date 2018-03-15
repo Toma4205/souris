@@ -19,7 +19,7 @@ require_once("vue/commun/enteteflex.php");
             <input type="submit" value="Rechercher" name="rechercher" />
       </p>
       <?php
-      if(isset($_POST['nomCoach']))
+      if(isset($_POST['nomCoach']) && $_POST['nomCoach'] != null)
       {
         if (isset($coachsRech) &&sizeof($coachsRech) > 0)
         {

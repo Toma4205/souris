@@ -107,8 +107,7 @@
 }
 .detail_match_terrain_conteneur_img {
   max-width: 100%;
-  height: 340px;
-  margin: auto;
+  height: 550px;
   background: url("../img/football_fied.png") no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -126,6 +125,7 @@
 .detail_match_terrain_ligne {
   width: 25%;
   font-size: .8rem;
+  font-weight: bold;
   display : flex;
   flex-direction : column;
   justify-content : center;
@@ -135,8 +135,8 @@
   margin: auto;
 }
 .detail_match_terrain_maillot {
-  height: 30px;
-  width: 30px;
+  height: 40px;
+  width: 40px;
 }
 .detail_match_terrain_tontonpat_jeuneclub {
   height: 40px;
