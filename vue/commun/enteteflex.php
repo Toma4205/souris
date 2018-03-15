@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>CDD ou RDS</title>
+        <title>ClassiCoach</title>
         <link rel="stylesheet" href="web/css/commun.css" type="text/css">
         <link rel="stylesheet" href="web/css/taille.css" type="text/css">
         <link rel="stylesheet" href="web/css/jquery.dataTables.min.css" type="text/css">
@@ -12,7 +12,7 @@
             echo '<link rel="stylesheet" href="web/css/' . $vueCss . '" type="text/css">';
           }
          ?>
-        <link rel="icon" type="image/png" href="web/img/favicone.png" />
+        <link rel="icon" type="image/png" href="web/img/classicoach_minimalist_logo.png" />
         <script src="web/js/jquery-1.12.4.js"></script>
         <script src="web/js/jquery.dataTables.min.js"></script>
         <?php
@@ -26,7 +26,7 @@
       <div id="contenu_body">
         <header id="bandeau_appli">
             <div id="bandeau_appli_image">
-              <img src="./web/img/logo.jpg" alt="Logo du site" width="100px" height="inherit" />
+              <img src="./web/img/classicoach_petit.png" alt="ClassiCoach" width="100px" height="inherit" />
             </div>
             <p class="bandeau_appli_titre">
               <?php
