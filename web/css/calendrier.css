@@ -107,8 +107,7 @@
 }
 .detail_match_terrain_conteneur_img {
   max-width: 100%;
-  
-  margin: auto;
+  height: 550px;
   background: url("../img/football_fied.png") no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
