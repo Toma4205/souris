@@ -157,9 +157,9 @@ function getCompoEquipePrecedente($idEquipe, $numJournee)
 	global $bdd;
 
   $q = $bdd->prepare('SELECT ce.* FROM compo_equipe ce
-    WHERE ce.id_cal_ligue = (SELECT cl.id FROM calendrier_ligue cl
-      WHERE cl.num_journee_cal_reel = :num
-      AND (cl.id_equipe_dom = :id OR cl.id_equipe_ext = :id))');
+    	WHERE ce.id_equipe = :id AND ce.id_cal_ligue = (SELECT cl.id FROM calendrier_ligue cl
+      	WHERE cl.num_journee_cal_reel = :num
+      	AND (cl.id_equipe_dom = :id OR cl.id_equipe_ext = :id))');
   $q->execute([':num' => $numJournee, ':id' => $idEquipe]);
 
   $donnees = $q->fetch(PDO::FETCH_ASSOC);
@@ -323,14 +323,16 @@ function initializeJournee($numJournee){
       $compo = getCompoEquipePrecedente($idEquipe, $numJournee - 1);
 
       if ($compo != null) {
+				addLogEvent('Equipe ' . $idEquipe . ' : Compo précédente ' . $compo->id() . '.');
         $joueurs = getTitulairesByCompo($compo->id());
         $idCompo = creerCompoCommePrecedente($compo, $idEquipe, $idCalLigue, $joueurs);
       } else {
+				addLogEvent('Equipe ' . $idEquipe . ' : Première compo.');
         $joueurs = getJoueurEquipeByEquipe($idEquipe);
         $idCompo = creerPremiereCompo($idEquipe, $idCalLigue, $joueurs);
       }
 
-			addLogEvent('Création compo' . $idCompo . ' pour le match ' . $idCalLigue . ' pour l\'équipe ' . $idEquipe);
+			addLogEvent('Création compo ' . $idCompo . ' pour le match ' . $idCalLigue . ' pour l\'équipe ' . $idEquipe);
     }
   } else {
 		addLogEvent('Aucune compo manquante.');
@@ -613,7 +615,7 @@ function is_confrontation_de_journee($num_journee_avec_annee, $trigramme_dom, $t
 	addLogEvent('FONCTION is_confrontation_de_journee ERREUR => FALSE');
     return FALSE;
   }
-  
+
   $nb_confrontation = $req->fetchAll();
   if (count($nb_confrontation) == 1) {
     addLogEvent('FONCTION is_confrontation_de_journee => TRUE');
@@ -640,7 +642,7 @@ function scrapRoto($num_journee_avec_annee, $path)
 		$erreur_sur_fichier = 0;
 		while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
 			if($row == 0 || is_confrontation_de_journee($num_journee_avec_annee, $data[2], $data[3], $data[4]))
-			{	
+			{
 				$num = count($data);
 				if($row==0) {
 					$tableau[$row][0] = 'IDRECHERCHE';
