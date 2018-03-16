@@ -24,12 +24,19 @@ class EquipeManager extends ManagerBase
 
     $q->execute();
 
-    if (ConstantesAppli::BONUS_MALUS_AUCUN != $bonusMalus) {
+    if (ConstantesAppli::BONUS_MALUS_CLASSIQUE == $bonusMalus
+      || ConstantesAppli::BONUS_MALUS_FOLIE == $bonusMalus) {
       // récupération de l'id
       $idEquipe = $this->_bdd->lastInsertId();
 
       $bonusManager = new BonusMalusManager($this->db());
       $bonusManager->creerBonusMalusEquipe($idEquipe, $bonusMalus, $nbEquipe);
+    } else if (ConstantesAppli::BONUS_MALUS_PERSO == $bonusMalus) {
+      // récupération de l'id
+      $idEquipe = $this->_bdd->lastInsertId();
+
+      $bonusManager = new BonusMalusManager($this->db());
+      $bonusManager->creerBonusMalusPersoEquipe($idEquipe, $idLigue);
     }
 	}
 

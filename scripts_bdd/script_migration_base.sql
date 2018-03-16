@@ -1,5 +1,11 @@
 /*Script passé en "PROD" le 16/03/2018 */
 ALTER TABLE `coach` CHANGE `mot_de_passe` `mot_de_passe` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
+CREATE TABLE `bonus_perso_ligue` ( `code` VARCHAR(30) NOT NULL , `nb` TINYINT UNSIGNED NOT NULL , `id_ligue` INT UNSIGNED NOT NULL ) ENGINE = InnoDB;
+ALTER TABLE `bonus_perso_ligue` CHANGE `code` `code` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
+ALTER TABLE `bonus_perso_ligue` ADD PRIMARY KEY (`code`, `id_ligue`);
+ALTER TABLE `bonus_perso_ligue` ADD FOREIGN KEY (`code`) REFERENCES `nomenclature_bonus_malus`(`code`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `bonus_perso_ligue` ADD FOREIGN KEY (`id_ligue`) REFERENCES `ligue`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 
 /*Script passé en "PROD" le 12/03/2018 */
 ALTER TABLE `calendrier_reel` CHANGE `date_heure_debut` `date_heure_debut` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;

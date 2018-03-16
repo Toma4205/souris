@@ -2,5 +2,27 @@
   font-weight: bold;
   font-size: .8rem;
   font-style: italic;
-  padding-top: 1.5rem;
+  padding: 1.5rem 0;
+}
+
+#nbBonusMalusASelect {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.selection_bonus_malus {
+  text-align: left;
+  padding: .5rem;
+}
+.selection_bonus_malus_type {
+  padding: .5rem;
+}
+#table_selection_bonus_malus tbody {
+  text-align: left;
+  font-size: .8rem;
+}
+#table_selection_bonus_malus tbody td {
+  padding: .3rem;
+}
+#messageErreurValCoach, #messageErreurValCoachEtBonus {
+  padding-bottom: 1rem;
 }
