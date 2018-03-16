@@ -25,6 +25,22 @@ class NomenclatureManager extends ManagerBase
     return $nomencls;
 	}
 
+  public function findNomenclatureBonusMalus()
+  {
+    $nomencls = [];
+    $q = $this->_bdd->prepare('SELECT * FROM nomenclature_bonus_malus
+      WHERE date_debut < NOW() AND (date_fin IS NULL OR date_fin > NOW())');
+    $q->execute();
+
+    while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+		{
+			$nomencls[] = new NomenclatureBonusMalus($donnees);
+		}
+		$q->closeCursor();
+
+    return $nomencls;
+	}
+
   public function findNomenclatureTactiqueSelonMode($modeExpert)
   {
     $nomencls = [];

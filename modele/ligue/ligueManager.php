@@ -9,6 +9,20 @@ class LigueManager extends ManagerBase
     $this->setDb($bdd);
   }
 
+  public function creerBonusPersoLigue($idLigue, $tabBonus)
+  {
+    foreach($tabBonus as $bonus)
+    {
+      $q = $this->_bdd->prepare('INSERT INTO bonus_perso_ligue(code, nb, id_ligue)
+        VALUES(:code, :nb, :idLigue)');
+      $q->bindValue(':code', $bonus['code']);
+      $q->bindValue(':nb', $bonus['nb']);
+      $q->bindValue(':idLigue', $idLigue);
+
+      $q->execute();
+    }
+  }
+
   public function creerLigue($idCoach, Ligue $ligue)
   {
     // création de la ligue

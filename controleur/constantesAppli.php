@@ -16,7 +16,7 @@ class ConstantesAppli {
     const BONUS_MALUS_AUCUN = 'A';
     const BONUS_MALUS_CLASSIQUE = 'C';
     const BONUS_MALUS_FOLIE = 'F';
-    const BONUS_MALUS_MIX = 'M';
+    const BONUS_MALUS_PERSO = 'P';
 
     const BONUS_MALUS_SEL_TRI = 'SEL_TRI';
     const BONUS_MALUS_FUMIGENE = 'FUMIGENE';

@@ -52,6 +52,30 @@ class BonusMalusManager extends ManagerBase
     }
   }
 
+  public function creerBonusMalusPersoEquipe($idEquipe, $idLigue)
+  {
+    $bonus = [];
+
+    $q = $this->_bdd->prepare('SELECT * FROM bonus_perso_ligue WHERE id_ligue = :id');
+    $q->execute([':id' => $idLigue]);
+    while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+    {
+      $bonus[] = new BonusPersoLigue($donnees);
+    }
+    $q->closeCursor();
+
+    foreach($bonus as $value)
+    {
+      for ($index = 1; $index <= $value->nb(); $index++)
+      {
+        $q = $this->_bdd->prepare('INSERT INTO bonus_malus(code, id_equipe) VALUES(:code, :idEquipe)');
+        $q->bindValue(':code', $value->code());
+        $q->bindValue(':idEquipe', $idEquipe);
+        $q->execute();
+      }
+    }
+  }
+
   public function creerBonusMalusEquipe($idEquipe, $bonusMalus, int $nbEquipe)
   {
     $bonus = [];

@@ -26,7 +26,7 @@ require_once("vue/commun/enteteflex.php");
         }
         echo '"', (isset($creaLigue) && null != $creaLigue->id() ? ' disabled' : ' enabled');?>/></p>
     <p>Pack Bonus/Malus <br/>
-      <select name="bonusMalus" <?php
+      <select name="bonusMalus" onchange="javascript:onSelectionBonusMalus()" <?php
             if (isset($creaLigue) && null != $creaLigue->id())
             {
               echo ' disabled>';
@@ -39,6 +39,7 @@ require_once("vue/commun/enteteflex.php");
             $arrayBonusMalus = [];
             $arrayBonusMalus[ConstantesAppli::BONUS_MALUS_AUCUN] = 'Aucun';
             $arrayBonusMalus[ConstantesAppli::BONUS_MALUS_CLASSIQUE] = 'Classique';
+            $arrayBonusMalus[ConstantesAppli::BONUS_MALUS_PERSO] = 'Personnalisé';
             //$arrayBonusMalus[ConstantesAppli::BONUS_MALUS_FOLIE] = 'Folie';
             foreach ($arrayBonusMalus as $cle => $value)
             {
@@ -55,6 +56,8 @@ require_once("vue/commun/enteteflex.php");
          ?>
       </select>
     </p>
+    <div id="libBonusMalusPerso" class="italic font_size_point8rem cache">
+      <p>La sélection se fera à la validation des participants.</p></div>
     <p>Mode expert <br/>
       <input type="checkbox" name="modeExpert" disabled/>
     <!--  <input type="checkbox" name="modeExpert" -->
@@ -104,7 +107,7 @@ require_once("vue/commun/enteteflex.php");
       // Création ligue non validée
       if (!isset($creaLigue) || null == $creaLigue->id())
       {
-        echo '<p class="italic">Le détail des paramètres est expliqué dans le réglement.</p>';
+        echo '<p class="italic font_size_point8rem">Le détail des paramètres est expliqué dans le réglement.</p>';
         echo '<input type="submit" value="Créer" name="creationLigue" class="marginBottom" />';
       }
     ?>
@@ -205,7 +208,8 @@ require_once("vue/commun/enteteflex.php");
           if (null != $value->dateValidationLigue())
           {
             $nbOK++;
-            echo '<td><input type="checkbox" name="coachInvite[' . $index .']" value="' . $value->id() . '" onclick="javascript:gererClicValidationCoach();" /></td></tr>';
+            echo '<td><input type="checkbox" name="coachInvite[' . $index .']" value="' . $value->id() . '"
+              onclick="javascript:compterBonusASelect();" /></td></tr>';
           }
           else
           {
@@ -216,12 +220,96 @@ require_once("vue/commun/enteteflex.php");
         }
         echo '</tbody></table>';
         echo '<br/>';
-        echo '<input id="boutonValCoach" type="submit" value="Valider les participants" name="validationFinale" disabled="disabled" />';
-        echo '<div class="validation_coach_lib">Attention : cette action lance la ligue pour de bon (et le mercato).</div>';
-      }
+        if ($creaLigue->bonusMalus() != ConstantesAppli::BONUS_MALUS_PERSO) {
+          echo '<div id="messageErreurValCoach" class="erreur cache"></div>';
+          echo '<input id="boutonValCoach" type="submit" value="Valider les participants"
+            name="validationFinale" onclick="return confirmerValCoach();" />';
+        } else {
         ?>
 </section>
+<section id="sectionSelectionBonusMalus">
+  <header>Sélection des bonus/malus</header>
+  <div>
+    <div class="selection_bonus_malus">Bonus/malus à sélectionner : <span id="nbBonusMalusASelect">0</span></div>
+    <div class="conteneurRow selection_bonus_malus_type">
+      <table id="table_selection_bonus_malus" class="tableBase">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Nom</th>
+            <th></th>
+            <th>Nombre</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+            if (isset($nomenclBonusMalus) && sizeof($nomenclBonusMalus) > 0) {
+
+              function afficherSelectNbBonus($name)
+              {
+                echo '<td>';
+                echo '<select name="nb_bonus_' . $name . '">';
+                echo '<option value="0" selected="selected">0</option>';
+                echo '<option value="1">1</option>';
+                echo '<option value="2">2</option>';
+                echo '<option value="3">3</option>';
+                echo '<option value="4">4</option>';
+                echo '<option value="5">5</option>';
+                echo '</select>';
+                echo '</td>';
+              }
+
+              foreach ($nomenclBonusMalus as $bonus) {
+                $codeBonus = $bonus->code();
+                $bonusTrouve = '';
+                if ($codeBonus == ConstantesAppli::BONUS_MALUS_FUMIGENE) {
+                  $bonusTrouve = '<img src="web/img/bonusmalus/PNG_fumigenes.png" alt="bonus" width="40px" height="40px"/>';
+                } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_DIN_ARB) {
+                  $bonusTrouve = '<img src="web/img/bonusmalus/PNG_diner.png" alt="bonus" width="40px" height="40px"/>';
+                } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_FAM_STA) {
+                  $bonusTrouve = '<img src="web/img/bonusmalus/PNG_family.png" alt="bonus" width="40px" height="40px"/>';
+                } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_BUS) {
+                  $bonusTrouve = '<img src="web/img/bonusmalus/PNG_bus.png" alt="bonus" width="40px" height="40px"/>';
+                } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_MAU_CRA) {
+                  $bonusTrouve = '<img src="web/img/bonusmalus/PNG_mauvaisCrampon.png" alt="bonus" width="40px" height="40px"/>';
+                } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_BOUCHER) {
+                  $bonusTrouve = '<img src="web/img/bonusmalus/PNG_butcher.png" alt="bonus" width="40px" height="40px"/>';
+                } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_CHA_GB) {
+                  $bonusTrouve = '<img src="web/img/bonusmalus/PNG_changementGardien.png" alt="bonus" width="40px" height="40px"/>';
+                } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_PAR_TRU) {
+                  $bonusTrouve = '<img src="web/img/bonusmalus/PNG_pari.png" alt="bonus" width="40px" height="40px"/>';
+                } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_CON_ZZ) {
+                  $bonusTrouve = '<img src="web/img/bonusmalus/PNG_zizou.png" alt="bonus" width="40px" height="40px"/>';
+                }
+
+                if ($bonusTrouve != '') {
+                  echo '<tr>';
+                  echo '<td>' . $bonusTrouve . '</td>';
+                  echo '<td>' . $bonus->libelleCourt() . '</td>';
+                  echo '<td>' . $bonus->libelle() . '</td>';
+                  afficherSelectNbBonus($codeBonus);
+                  echo '</tr>';
+                }
+              }
+            } else {
+              echo 'Impossible d\'afficher les bonus/malus. Merci de nous contacter avec le nom de votre ligue.';
+            }
+          ?>
+        </tbody>
+      </table>
+      </div>
+    <br/>
+    <div id="messageErreurValCoachEtBonus" class="erreur cache"></div>
+    <input id="boutonValCoachEtBonus" type="submit" value="Valider les participants et bonus"
+      name="validationFinaleAvecBonus" onclick="return controlerBonus();" />
+  </div>
+</section>
 <?php
+        } // Fin du IF ConstantesAppli::BONUS_MALUS_PERSO
+
+        echo '<div class="validation_coach_lib">Attention : cette action lance la ligue pour de bon (et le mercato).</div>';
+
+      } // Fin du IF sizeof($coachsInvites) > 0
     }
 // Le pied de page
 require_once("vue/commun/pied_de_pageflex.php");

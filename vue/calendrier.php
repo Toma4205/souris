@@ -124,11 +124,16 @@ if (isset($match)) {
   <!-- AFFICHAGE DU TERRAIN -->
   <!-- ********************* -->
 
+  <?php
+  if ($match->statut() == ConstantesAppli::STATUT_CAL_TERMINE)
+  {
+  ?>
+
   <div class="detail_match_terrain_bloc">
     <div class="detail_match_terrain_conteneur_img">
-      
-        <?php 
-        
+
+        <?php
+
         function getTabCompoDefinitive($joueurs)
         {
             $tabCompoDef = [];
@@ -139,14 +144,14 @@ if (isset($match)) {
                     $tabCompoDef[$joueur->numeroDefinitif()] = $joueur;
                 }
             }
-            
+
             return $tabCompoDef;
         }
-		
+
 		// TODO Il faut ajouter la note et les images ballon pour les buteurs
 		// On accède aux notes via $tabCompoDef[$position]->note()
-		// On accède aux buts via $tabCompoDef[$position]->nbButReel() 
-		// et $tabCompoDef[$position]->nbButVirtuel() 
+		// On accède aux buts via $tabCompoDef[$position]->nbButReel()
+		// et $tabCompoDef[$position]->nbButVirtuel()
 		// (à verifier dans classe /modele/compoequipe/joueurcompoequipe)
 		function ajouterJoueur($tabCompoDef, $position)
         {
@@ -154,7 +159,7 @@ if (isset($match)) {
 
 			if (isset($tabCompoDef[$position]) && $tabCompoDef[$position] != null)
 			{
-				
+
 				echo '<img class="detail_match_terrain_maillot" src="web/img/maillot/shirt_' . strtolower($tabCompoDef[$position]->codeEquipe()) . '.png" />';
 				echo '<div>' . $tabCompoDef[$position]->nom() .'</div>';
 				echo '<div> ('.$tabCompoDef[$position]->note().') </div>';
@@ -182,99 +187,103 @@ if (isset($match)) {
 					echo '<img class="detail_match_terrain_tontonpat_jeuneclub" src="web/img/tontonpat.png" alt="Tonton Pat\'" title="Tonton Pat\'" />';
 				}
 			}
-			
+
 			echo '</div>';
 		}
-        
+
 		$position = 1;
 		$tabCompoDef = getTabCompoDefinitive($joueursDom);
 		// $tabTactique[0] = nbDef, $tabTactique[1] = nbMil, $tabTactique[2] = nbAtt
 		$tabTactique = explode("-", $compoDom->codeTactique());
-		
+
 		// DEBUT COMPO DOM
 		echo '<div class="detail_match_terrain_dom">';
-		
+
 		// GB
 		echo '<div class="detail_match_terrain_ligne">';
 		ajouterJoueur($tabCompoDef, $position);
 		echo '</div>';
-		
+
 		// DEF
 		echo '<div class="detail_match_terrain_ligne">';
-		for ($i = 1; $i <= $tabTactique[0]; $i++) 
+		for ($i = 1; $i <= $tabTactique[0]; $i++)
 		{
 			$position++;
 			ajouterJoueur($tabCompoDef, $position);
 		}
 		echo '</div>';
-		
+
 		// MIL
 		echo '<div class="detail_match_terrain_ligne">';
-		for ($i = 1; $i <= $tabTactique[1]; $i++) 
+		for ($i = 1; $i <= $tabTactique[1]; $i++)
 		{
 			$position++;
 			ajouterJoueur($tabCompoDef, $position);
 		}
 		echo '</div>';
-		
+
 		// ATT
 		echo '<div class="detail_match_terrain_ligne">';
-		for ($i = 1; $i <= $tabTactique[2]; $i++) 
+		for ($i = 1; $i <= $tabTactique[2]; $i++)
 		{
 			$position++;
 			ajouterJoueur($tabCompoDef, $position);
 		}
 		echo '</div>';
-		
+
 		// FIN COMPO DOM
 		echo '</div>';
-		
+
 		$position = 11;
 		$tabCompoDef = getTabCompoDefinitive($joueursExt);
 		// $tabTactique[0] = nbDef, $tabTactique[1] = nbMil, $tabTactique[2] = nbAtt
 		$tabTactique = explode("-", $compoExt->codeTactique());
-		
+
 		// DEBUT COMPO EXT
 		echo '<div class="detail_match_terrain_ext">';
-		
+
 		// ATT
 		echo '<div class="detail_match_terrain_ligne">';
-		for ($i = 1; $i <= $tabTactique[2]; $i++) 
+		for ($i = 1; $i <= $tabTactique[2]; $i++)
 		{
 			ajouterJoueur($tabCompoDef, $position);
 			$position--;
 		}
 		echo '</div>';
-		
+
 		// MIL
 		echo '<div class="detail_match_terrain_ligne">';
-		for ($i = 1; $i <= $tabTactique[1]; $i++) 
+		for ($i = 1; $i <= $tabTactique[1]; $i++)
 		{
 			ajouterJoueur($tabCompoDef, $position);
 			$position--;
 		}
 		echo '</div>';
-		
+
 		// DEF
 		echo '<div class="detail_match_terrain_ligne">';
-		for ($i = 1; $i <= $tabTactique[0]; $i++) 
+		for ($i = 1; $i <= $tabTactique[0]; $i++)
 		{
 			ajouterJoueur($tabCompoDef, $position);
 			$position--;
 		}
 		echo '</div>';
-		
+
 		// GB
 		echo '<div class="detail_match_terrain_ligne">';
 		ajouterJoueur($tabCompoDef, $position);
 		echo '</div>';
-		
+
 		// FIN COMPO EXT
 		echo '</div>';
-		
+
         ?>
     </div>
   </div>
+
+  <?php
+  }
+  ?>
 
   <!-- ********************* -->
   <!-- AFFICHAGE DES EQUIPES -->

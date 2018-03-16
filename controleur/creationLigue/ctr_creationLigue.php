@@ -4,6 +4,7 @@ $coachManager = new CoachManager($bdd);
 $ligueManager = new LigueManager($bdd);
 $equipeManager = new EquipeManager($bdd);
 $joueurReelManager = new JoueurReelManager($bdd);
+$nomenclManager = new NomenclatureManager($bdd);
 
 // ***************************************
 // ***** DEBUT PARTIE CREATION LIGUE *****
@@ -74,10 +75,34 @@ elseif (isset($_POST['validationFinale']))
     $messageValid = 'Vous devez sélectionner au moins un coach !';
   }
 }
+elseif (isset($_POST['validationFinaleAvecBonus']))
+{
+  $tabBonus = [];
+  foreach ($_POST as $name => $valeur)
+  {
+    if (substr($name, 0, 9) == 'nb_bonus_' && $valeur > 0) {
+      $tabBonus[] = ['code' => substr($name, 9), 'nb' => $valeur];
+    }
+  }
+
+  $ligueManager->creerBonusPersoLigue($creaLigue->id(), $tabBonus);
+
+  if (isset($_POST['coachInvite']))
+  {
+    $ligueManager->validerParticipants($creaLigue->id(), $_POST['coachInvite']);
+    $creaLigue->setEtat(EtatLigue::MERCATO);
+    $_SESSION[ConstantesSession::LIGUE_CREA] = $creaLigue;
+  }
+  else
+  {
+    $messageValid = 'Vous devez sélectionner au moins un coach !';
+  }
+}
 
 // Si la ligue est en cours de création, on cherche les confrères et les coachs déjà invités
 if (isset($creaLigue) && $creaLigue->etat() == EtatLigue::CREATION)
 {
+  $nomenclBonusMalus = $nomenclManager->findNomenclatureBonusMalus();
   $confreres = $_SESSION[ConstantesSession::LISTE_CONFRERES];
   $coachsInvites = $coachManager->findCoachsInvitesByIdLigue($creaLigue->id());
 }
