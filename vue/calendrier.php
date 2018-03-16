@@ -92,6 +92,19 @@ if (isset($calendriers))
 </div>
 <?php
 } // Fin foreach calendriers
+
+// Recherche équipe exempt de la dernière journée
+if (sizeof($equipes) % 2 == 1) {
+    foreach ($equipes as $idEqu => $equ) {
+        if (!in_array($idEqu, $tabIdEquipeParJournee)) {
+            echo '<div class="detail_journee_cal_match conteneurRow">';
+            echo 'Exempt : ' . $equ->nom();
+            echo '</div>';
+            break;
+        }
+    }
+}
+
 // Fermeture du div de la dernière journée
 echo '</div>';
 ?>
