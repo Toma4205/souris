@@ -23,7 +23,8 @@ if (!isset($_SESSION[ConstantesSession::EQUIPE_CREA])) {
         <?php
           if ($tourMercato > 1)
           {
-            echo '<input type="submit" id="clotureMercato" value="Fermer mon mercato" name="clotureMercato" />';
+            echo '<input type="submit" id="clotureMercato" value="Fermer mon mercato"
+              name="clotureMercato" onclick="return confirmerFermerMercato();"/>';
           }
          ?>
   </p>

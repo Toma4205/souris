@@ -278,3 +278,8 @@ function getHTMLLigneDivAchat(tr)
   + ' <img src="./web/img/croix.jpg" alt="Supprimer" width="15px" height="15px" onclick="javascript:supprimerAchatJoueur(\'' + tr.attr('id') + '\');" />'
   + '</span></p>';
 }
+
+function confirmerFermerMercato()
+{
+  return confirm('Tu es sûr de vouloir fermer ton mercato ?');
+}
