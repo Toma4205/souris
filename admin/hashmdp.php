@@ -1,4 +1,5 @@
 <?php
+//Utilisation une seule fois
 	require_once(__DIR__ . '/../modele/connexionSQL.php');
 		try
 		{
