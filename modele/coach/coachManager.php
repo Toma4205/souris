@@ -11,10 +11,13 @@ class CoachManager extends ManagerBase
 
   public function creerCoach(Coach $coach)
   {
+    // Hachage du mot de passe
+    $pass_hache = password_hash($coach->motDePasse(), PASSWORD_DEFAULT);
+
     $q = $this->_bdd->prepare('INSERT INTO coach(nom, mot_de_passe, mail, date_creation, date_maj)
       VALUES(:nom, :motDePasse, :mail, NOW(), NOW())');
     $q->bindValue(':nom', $coach->nom());
-    $q->bindValue(':motDePasse', $coach->motDePasse());
+    $q->bindValue(':motDePasse', $pass_hache);
     $q->bindValue(':mail', $coach->mail());
 
     $q->execute();
@@ -22,9 +25,12 @@ class CoachManager extends ManagerBase
 
   public function majMdpCoach(int $id, $mdp)
   {
+    // Hachage du mot de passe
+    $pass_hache = password_hash($mdp, PASSWORD_DEFAULT);
+
     $q = $this->_bdd->prepare('UPDATE coach SET mot_de_passe = :mdp, date_maj = NOW()
         WHERE id = :id');
-    $q->bindValue(':mdp', $mdp);
+    $q->bindValue(':mdp',  $pass_hache);
     $q->bindValue(':id', $id);
 
     $q->execute();
@@ -46,10 +52,41 @@ class CoachManager extends ManagerBase
 
   public function findByMailMotDePasse(Coach $coach)
   {
+    
+    //  Récupération de l'utilisateur et de son pass hashé
+    $req = $this->_bdd->prepare('SELECT * FROM coach WHERE mail = :mail');
+    $req->execute(array(
+        'mail' => $coach->mail()));
+    $resultat = $req->fetch();
+
+    // Comparaison du pass envoyé via le formulaire avec la base
+    $isPasswordCorrect = password_verify($coach->motDePasse(), $resultat['mot_de_passe']);
+    $req->closeCursor();
+
+    if (!$resultat)
+    {
+        return $coach;
+    }
+    else
+    {
+        if ($isPasswordCorrect) {
+          return new Coach($resultat);
+        }else {
+            return $coach;
+        }
+    }
+
+
+
+    /* ANCIEN ALGO NON SECURISE
+    // Hachage du mot de passe
+    $pass_hache = password_hash($coach->motDePasse(), PASSWORD_DEFAULT);
+    echo $pass_hache;
+
     $q = $this->_bdd->prepare('SELECT *
             FROM coach
             WHERE mail = :mail AND mot_de_passe = :motDePasse');
-    $q->execute([':mail' => $coach->mail(), ':motDePasse' => $coach->motDePasse()]);
+    $q->execute([':mail' => $coach->mail(), ':motDePasse' =>  $pass_hache]);
 
     // TODO MPL récupération du fil actu et des ligues en même temps
 
@@ -65,7 +102,7 @@ class CoachManager extends ManagerBase
     else
     {
       return new Coach($donnees);
-    }
+    }*/
   }
 
   public function existeByMail($mail)

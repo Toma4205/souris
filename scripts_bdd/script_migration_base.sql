@@ -1,3 +1,6 @@
+/*Script passé en "PROD" le 16/03/2018 */
+ALTER TABLE `coach` CHANGE `mot_de_passe` `mot_de_passe` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
+
 /*Script passé en "PROD" le 12/03/2018 */
 ALTER TABLE `calendrier_reel` CHANGE `date_heure_debut` `date_heure_debut` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
