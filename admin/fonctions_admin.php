@@ -595,6 +595,37 @@ function annuler_match_restants($num_journee)
 	$upd_annule_match_restant_journee->closeCursor();
 }
 
+//Renvoie True si la confrontation de deux équipes est bien arrivée durant la journée
+//$home_away vaut H si $trigramme_dom a joué à dimicile et A sinon
+function is_confrontation_de_journee($num_journee_avec_annee, $trigramme_dom, $trigramme_ext, $home_away)
+{
+  addLogEvent('FONCTION is_confrontation_de_journee '.$num_journee_avec_annee.' : '.$trigramme_dom.' vs '.$trigramme_ext.' ? ');
+  global $bdd;
+  $req=$bdd->prepare('SELECT * FROM resultatsl1_reel WHERE journee = :journee AND equipeDomicile = :equipeDomicile AND equipeVisiteur = :equipeVisiteur;');
+  if($home_away == 'H')
+  {
+	 $req->execute(array('journee'=>$num_journee_avec_annee, 'equipeDomicile' => $trigramme_dom, 'equipeVisiteur' => $trigramme_ext));
+  }elseif($home_away == 'A')
+  {
+	  $req->execute(array('journee'=>$num_journee_avec_annee, 'equipeDomicile' => $trigramme_ext, 'equipeVisiteur' => $trigramme_dom));
+  }else
+  {
+	addLogEvent('FONCTION is_confrontation_de_journee ERREUR => FALSE');
+    return FALSE;
+  }
+  
+  $nb_confrontation = $req->fetchAll();
+  if (count($nb_confrontation) == 1) {
+    addLogEvent('FONCTION is_confrontation_de_journee => TRUE');
+    return TRUE;
+  }else{
+    addLogEvent('FONCTION is_confrontation_de_journee => FALSE');
+    return FALSE;
+  }
+  $req->closeCursor();
+}
+
+
 //Exploite le fichier CSV ($path) CORRESPONDANT A LA JOURNEE
 function scrapRoto($num_journee_avec_annee, $path)
 {
@@ -608,376 +639,496 @@ function scrapRoto($num_journee_avec_annee, $path)
 	if (($handle = @fopen($path, "r")) !== FALSE) {
 		$erreur_sur_fichier = 0;
 		while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
-			$num = count($data);
-			if($row==0) {
-				$tableau[$row][0] = 'IDRECHERCHE';
-				$tableau[$row][1] = 'JOURNEE';
-				$tableauEnTete[0] = 'IDRECHERCHE';
-				$tableauEnTete[1] = 'JOURNEE';
-			}else {
-				$tableau[$row][0] = str_replace(' ','_',rtrim(ltrim($data[0])).rtrim(ltrim($data[1])).$data[2]);
-				$tableau[$row][1] = $num_journee_avec_annee;
-			}
-
-			for ($c=0; $c < $num; $c++) {
-				if($c>6){
-					$tableau[$row][] = str_replace(' ','',$data[$c]);
-					if($row==0){$tableauEnTete[] = str_replace(' ','',$data[$c]);
+			if($row == 0 || is_confrontation_de_journee($num_journee_avec_annee, $data[2], $data[3], $data[4]))
+			{	
+				$num = count($data);
+				if($row==0) {
+					$tableau[$row][0] = 'IDRECHERCHE';
+					$tableau[$row][1] = 'JOURNEE';
+					$tableauEnTete[0] = 'IDRECHERCHE';
+					$tableauEnTete[1] = 'JOURNEE';
+				}else {
+					$tableau[$row][0] = str_replace(' ','_',rtrim(ltrim($data[0])).rtrim(ltrim($data[1])).$data[2]);
+					$tableau[$row][1] = $num_journee_avec_annee;
 				}
-			}
-		}
 
-		if($row==0) {
-			$tableau[$row][] = '6ButPrisSansPenal';
-			$tableau[$row][] = '5ButPrisSansPenal';
-			$tableau[$row][] = '4ButPrisSansPenal';
-			$tableau[$row][] = '3ButPrisSansPenal';
-			$tableau[$row][] = '2ButPrisSansPenal';
-			$tableau[$row][] = '1ButPrisSansPenal';
-			$tableau[$row][] = 'CRouge60';
-			$tableau[$row][] = 'CRouge75';
-			$tableau[$row][] = 'CRouge80';
-			$tableau[$row][] = 'CRouge85';
-			$tableau[$row][] = 'CentreRate';
-			$tableau[$row][] = 'Clean60';
-			$tableau[$row][] = 'Clean60D';
-			$tableau[$row][] = 'Ecart-5';
-			$tableau[$row][] = 'Ecart-4';
-			$tableau[$row][] = 'Ecart-3';
-			$tableau[$row][] = 'Ecart-2';
-			$tableau[$row][] = 'Ecart+2';
-			$tableau[$row][] = 'Ecart+3';
-			$tableau[$row][] = 'Ecart+4';
-			$tableau[$row][] = 'GrossOccazRate';
-			$tableau[$row][] = 'MalusDefaite';
-			$tableau[$row][] = '15PassOK30';
-			$tableau[$row][] = '15PassOK40';
-			$tableau[$row][] = '15PassOK50';
-			$tableau[$row][] = '15PassOK90';
-			$tableau[$row][] = '15PassOK95';
-			$tableau[$row][] = '15PassOK100';
-			$tableau[$row][] = '25PassOK30';
-			$tableau[$row][] = '25PassOK40';
-			$tableau[$row][] = '25PassOK50';
-			$tableau[$row][] = '25PassOK90';
-			$tableau[$row][] = '25PassOK95';
-			$tableau[$row][] = '25PassOK100';
-			$tableau[$row][] = 'TackleLost';
-			$tableau[$row][] = 'TirPasCadre';
-			$tableau[$row][] = '80BallonsTouch';
-			$tableau[$row][] = '90BallonsTouch';
-			$tableau[$row][] = '100BallonsTouch';
-			$tableau[$row][] = 'BonusVict';
-			$tableau[$row][] = 'CoupFrancRate';
-			$tableauEnTete[] = '6ButPrisSansPenal';
-			$tableauEnTete[] = '5ButPrisSansPenal';
-			$tableauEnTete[] = '4ButPrisSansPenal';
-			$tableauEnTete[] = '3ButPrisSansPenal';
-			$tableauEnTete[] = '2ButPrisSansPenal';
-			$tableauEnTete[] = '1ButPrisSansPenal';
-			$tableauEnTete[] = 'CRouge60';
-			$tableauEnTete[] = 'CRouge75';
-			$tableauEnTete[] = 'CRouge80';
-			$tableauEnTete[] = 'CRouge85';
-			$tableauEnTete[] = 'CentreRate';
-			$tableauEnTete[] = 'Clean60';
-			$tableauEnTete[] = 'Clean60D';
-			$tableauEnTete[] = 'Ecart-5';
-			$tableauEnTete[] = 'Ecart-4';
-			$tableauEnTete[] = 'Ecart-3';
-			$tableauEnTete[] = 'Ecart-2';
-			$tableauEnTete[] = 'Ecart+2';
-			$tableauEnTete[] = 'Ecart+3';
-			$tableauEnTete[] = 'Ecart+4';
-			$tableauEnTete[] = 'GrossOccazRate';
-			$tableauEnTete[] = 'MalusDefaite';
-			$tableauEnTete[] = '15PassOK30';
-			$tableauEnTete[] = '15PassOK40';
-			$tableauEnTete[] = '15PassOK50';
-			$tableauEnTete[] = '15PassOK90';
-			$tableauEnTete[] = '15PassOK95';
-			$tableauEnTete[] = '15PassOK100';
-			$tableauEnTete[] = '25PassOK30';
-			$tableauEnTete[] = '25PassOK40';
-			$tableauEnTete[] = '25PassOK50';
-			$tableauEnTete[] = '25PassOK90';
-			$tableauEnTete[] = '25PassOK95';
-			$tableauEnTete[] = '25PassOK100';
-			$tableauEnTete[] = 'TackleLost';
-			$tableauEnTete[] = 'TirPasCadre';
-			$tableauEnTete[] = '80BallonsTouch';
-			$tableauEnTete[] = '90BallonsTouch';
-			$tableauEnTete[] = '100BallonsTouch';
-			$tableauEnTete[] = 'BonusVict';
-			$tableauEnTete[] = 'CoupFrancRate';
-
-		}else {
-			$i = butsEncaissesSanSPenalty($row,$data[2],$resultatsJournee,$data);
-			if ($i==1) {
-				$tableau[$row][] = 0;//'6ButPrisSansPenal';
-				$tableau[$row][] = 0;//'5ButPrisSansPenal';
-				$tableau[$row][] = 0;//'4ButPrisSansPenal';
-				$tableau[$row][] = 0;//'3ButPrisSansPenal';
-				$tableau[$row][] = 0;//'2ButPrisSansPenal';
-				$tableau[$row][] = 1;//'1ButPrisSansPenal';
-			} elseif ($i == 2) {
-				$tableau[$row][] = 0;//'6ButPrisSansPenal';
-				$tableau[$row][] = 0;//'5ButPrisSansPenal';
-				$tableau[$row][] = 0;//'4ButPrisSansPenal';
-				$tableau[$row][] = 0;//'3ButPrisSansPenal';
-				$tableau[$row][] = 1;//'2ButPrisSansPenal';
-				$tableau[$row][] = 0;//'1ButPrisSansPenal';
-			} elseif ($i == 3) {
-				$tableau[$row][] = 0;//'6ButPrisSansPenal';
-				$tableau[$row][] = 0;//'5ButPrisSansPenal';
-				$tableau[$row][] = 0;//'4ButPrisSansPenal';
-				$tableau[$row][] = 1;//'3ButPrisSansPenal';
-				$tableau[$row][] = 0;//'2ButPrisSansPenal';
-				$tableau[$row][] = 0;//'1ButPrisSansPenal';
-			} elseif ($i == 4) {
-				$tableau[$row][] = 0;//'6ButPrisSansPenal';
-				$tableau[$row][] = 0;//'5ButPrisSansPenal';
-				$tableau[$row][] = 1;//'4ButPrisSansPenal';
-				$tableau[$row][] = 0;//'3ButPrisSansPenal';
-				$tableau[$row][] = 0;//'2ButPrisSansPenal';
-				$tableau[$row][] = 0;//'1ButPrisSansPenal';
-			} elseif ($i == 5) {
-				$tableau[$row][] = 0;//'6ButPrisSansPenal';
-				$tableau[$row][] = 1;//'5ButPrisSansPenal';
-				$tableau[$row][] = 0;//'4ButPrisSansPenal';
-				$tableau[$row][] = 0;//'3ButPrisSansPenal';
-				$tableau[$row][] = 0;//'2ButPrisSansPenal';
-				$tableau[$row][] = 0;//'1ButPrisSansPenal';
-			} elseif ($i >= 6) {
-				$tableau[$row][] = 1;//'6ButPrisSansPenal';
-				$tableau[$row][] = 0;//'5ButPrisSansPenal';
-				$tableau[$row][] = 0;//'4ButPrisSansPenal';
-				$tableau[$row][] = 0;//'3ButPrisSansPenal';
-				$tableau[$row][] = 0;//'2ButPrisSansPenal';
-				$tableau[$row][] = 0;//'1ButPrisSansPenal';
-			} else {
-				$tableau[$row][] = 0;//'6ButPrisSansPenal';
-				$tableau[$row][] = 0;//'5ButPrisSansPenal';
-				$tableau[$row][] = 0;//'4ButPrisSansPenal';
-				$tableau[$row][] = 0;//'3ButPrisSansPenal';
-				$tableau[$row][] = 0;//'2ButPrisSansPenal';
-				$tableau[$row][] = 0;//'1ButPrisSansPenal';
-			}
-
-			if($data[14]==1)
-			{
-					if($data[8]<60){
-						$tableau[$row][] = 1;//'CRouge60';
-						$tableau[$row][] = 0;//'CRouge75';
-						$tableau[$row][] = 0;//'CRouge80';
-						$tableau[$row][] = 0;//'CRouge85';
-					}elseif($data[8]<75){
-						$tableau[$row][] = 0;//'CRouge60';
-						$tableau[$row][] = 1;//'CRouge75';
-						$tableau[$row][] = 0;//'CRouge80';
-						$tableau[$row][] = 0;//'CRouge85';
-					}elseif($data[8]<80){
-						$tableau[$row][] = 0;//'CRouge60';
-						$tableau[$row][] = 0;//'CRouge75';
-						$tableau[$row][] = 1;//'CRouge80';
-						$tableau[$row][] = 0;//'CRouge85';
-					}elseif($data[8]<85){
-						$tableau[$row][] = 0;//'CRouge60';
-						$tableau[$row][] = 0;//'CRouge75';
-						$tableau[$row][] = 0;//'CRouge80';
-						$tableau[$row][] = 1;//'CRouge85';
-					}else{
-						$tableau[$row][] = 0;//'CRouge60';
-						$tableau[$row][] = 0;//'CRouge75';
-						$tableau[$row][] = 0;//'CRouge80';
-						$tableau[$row][] = 0;//'CRouge85';
+				for ($c=0; $c < $num; $c++)
+				{
+					if($c>6)
+					{
+						$tableau[$row][] = str_replace(' ','',$data[$c]);
+						if($row==0)
+						{
+							$tableauEnTete[] = str_replace(' ','',$data[$c]);
+						}
 					}
-			}else{
-				$tableau[$row][] = 0;//'CRouge60';
-				$tableau[$row][] = 0;//'CRouge75';
-				$tableau[$row][] = 0;//'CRouge80';
-				$tableau[$row][] = 0;//'CRouge85';
-			}
-			$tableau[$row][] = ($data[21]-$data[22]);//'CentreRate';
+				}
 
-			//echo '## '.count($tableau[$row]).' ##';
-			//echo 'Calculs CleanSheet W : ';
-			if(isCleanSheet($row,$data[2],$resultatsJournee,$data)){
-				$tableau[$row][] = 1; //'Clean60';
-			}else{
-				$tableau[$row][] = 0; //'Clean60';
-			}
+			if($row==0) {
+				$tableau[$row][] = '6ButPrisSansPenal';
+				$tableau[$row][] = '5ButPrisSansPenal';
+				$tableau[$row][] = '4ButPrisSansPenal';
+				$tableau[$row][] = '3ButPrisSansPenal';
+				$tableau[$row][] = '2ButPrisSansPenal';
+				$tableau[$row][] = '1ButPrisSansPenal';
+				$tableau[$row][] = 'CRouge60';
+				$tableau[$row][] = 'CRouge75';
+				$tableau[$row][] = 'CRouge80';
+				$tableau[$row][] = 'CRouge85';
+				$tableau[$row][] = 'CentreRate';
+				$tableau[$row][] = 'Clean60';
+				$tableau[$row][] = 'Clean60D';
+				$tableau[$row][] = 'Ecart-5';
+				$tableau[$row][] = 'Ecart-4';
+				$tableau[$row][] = 'Ecart-3';
+				$tableau[$row][] = 'Ecart-2';
+				$tableau[$row][] = 'Ecart+2';
+				$tableau[$row][] = 'Ecart+3';
+				$tableau[$row][] = 'Ecart+4';
+				$tableau[$row][] = 'GrossOccazRate';
+				$tableau[$row][] = 'MalusDefaite';
+				$tableau[$row][] = '15PassOK30';
+				$tableau[$row][] = '15PassOK40';
+				$tableau[$row][] = '15PassOK50';
+				$tableau[$row][] = '15PassOK90';
+				$tableau[$row][] = '15PassOK95';
+				$tableau[$row][] = '15PassOK100';
+				$tableau[$row][] = '25PassOK30';
+				$tableau[$row][] = '25PassOK40';
+				$tableau[$row][] = '25PassOK50';
+				$tableau[$row][] = '25PassOK90';
+				$tableau[$row][] = '25PassOK95';
+				$tableau[$row][] = '25PassOK100';
+				$tableau[$row][] = 'TackleLost';
+				$tableau[$row][] = 'TirPasCadre';
+				$tableau[$row][] = '80BallonsTouch';
+				$tableau[$row][] = '90BallonsTouch';
+				$tableau[$row][] = '100BallonsTouch';
+				$tableau[$row][] = 'BonusVict';
+				$tableau[$row][] = 'CoupFrancRate';
+				$tableauEnTete[] = '6ButPrisSansPenal';
+				$tableauEnTete[] = '5ButPrisSansPenal';
+				$tableauEnTete[] = '4ButPrisSansPenal';
+				$tableauEnTete[] = '3ButPrisSansPenal';
+				$tableauEnTete[] = '2ButPrisSansPenal';
+				$tableauEnTete[] = '1ButPrisSansPenal';
+				$tableauEnTete[] = 'CRouge60';
+				$tableauEnTete[] = 'CRouge75';
+				$tableauEnTete[] = 'CRouge80';
+				$tableauEnTete[] = 'CRouge85';
+				$tableauEnTete[] = 'CentreRate';
+				$tableauEnTete[] = 'Clean60';
+				$tableauEnTete[] = 'Clean60D';
+				$tableauEnTete[] = 'Ecart-5';
+				$tableauEnTete[] = 'Ecart-4';
+				$tableauEnTete[] = 'Ecart-3';
+				$tableauEnTete[] = 'Ecart-2';
+				$tableauEnTete[] = 'Ecart+2';
+				$tableauEnTete[] = 'Ecart+3';
+				$tableauEnTete[] = 'Ecart+4';
+				$tableauEnTete[] = 'GrossOccazRate';
+				$tableauEnTete[] = 'MalusDefaite';
+				$tableauEnTete[] = '15PassOK30';
+				$tableauEnTete[] = '15PassOK40';
+				$tableauEnTete[] = '15PassOK50';
+				$tableauEnTete[] = '15PassOK90';
+				$tableauEnTete[] = '15PassOK95';
+				$tableauEnTete[] = '15PassOK100';
+				$tableauEnTete[] = '25PassOK30';
+				$tableauEnTete[] = '25PassOK40';
+				$tableauEnTete[] = '25PassOK50';
+				$tableauEnTete[] = '25PassOK90';
+				$tableauEnTete[] = '25PassOK95';
+				$tableauEnTete[] = '25PassOK100';
+				$tableauEnTete[] = 'TackleLost';
+				$tableauEnTete[] = 'TirPasCadre';
+				$tableauEnTete[] = '80BallonsTouch';
+				$tableauEnTete[] = '90BallonsTouch';
+				$tableauEnTete[] = '100BallonsTouch';
+				$tableauEnTete[] = 'BonusVict';
+				$tableauEnTete[] = 'CoupFrancRate';
 
-			if(isCleanSheetNul($row,$data[2],$resultatsJournee,$data)){
-				$tableau[$row][] = 1; //'Clean60D';
-			}else{
-				$tableau[$row][] = 0; //'Clean60D';
-			}
+			}else {
+				$i = butsEncaissesSanSPenalty($row,$data[2],$resultatsJournee,$data);
+				if ($i==1) {
+					$tableau[$row][] = 0;//'6ButPrisSansPenal';
+					$tableau[$row][] = 0;//'5ButPrisSansPenal';
+					$tableau[$row][] = 0;//'4ButPrisSansPenal';
+					$tableau[$row][] = 0;//'3ButPrisSansPenal';
+					$tableau[$row][] = 0;//'2ButPrisSansPenal';
+					$tableau[$row][] = 1;//'1ButPrisSansPenal';
+				} elseif ($i == 2) {
+					$tableau[$row][] = 0;//'6ButPrisSansPenal';
+					$tableau[$row][] = 0;//'5ButPrisSansPenal';
+					$tableau[$row][] = 0;//'4ButPrisSansPenal';
+					$tableau[$row][] = 0;//'3ButPrisSansPenal';
+					$tableau[$row][] = 1;//'2ButPrisSansPenal';
+					$tableau[$row][] = 0;//'1ButPrisSansPenal';
+				} elseif ($i == 3) {
+					$tableau[$row][] = 0;//'6ButPrisSansPenal';
+					$tableau[$row][] = 0;//'5ButPrisSansPenal';
+					$tableau[$row][] = 0;//'4ButPrisSansPenal';
+					$tableau[$row][] = 1;//'3ButPrisSansPenal';
+					$tableau[$row][] = 0;//'2ButPrisSansPenal';
+					$tableau[$row][] = 0;//'1ButPrisSansPenal';
+				} elseif ($i == 4) {
+					$tableau[$row][] = 0;//'6ButPrisSansPenal';
+					$tableau[$row][] = 0;//'5ButPrisSansPenal';
+					$tableau[$row][] = 1;//'4ButPrisSansPenal';
+					$tableau[$row][] = 0;//'3ButPrisSansPenal';
+					$tableau[$row][] = 0;//'2ButPrisSansPenal';
+					$tableau[$row][] = 0;//'1ButPrisSansPenal';
+				} elseif ($i == 5) {
+					$tableau[$row][] = 0;//'6ButPrisSansPenal';
+					$tableau[$row][] = 1;//'5ButPrisSansPenal';
+					$tableau[$row][] = 0;//'4ButPrisSansPenal';
+					$tableau[$row][] = 0;//'3ButPrisSansPenal';
+					$tableau[$row][] = 0;//'2ButPrisSansPenal';
+					$tableau[$row][] = 0;//'1ButPrisSansPenal';
+				} elseif ($i >= 6) {
+					$tableau[$row][] = 1;//'6ButPrisSansPenal';
+					$tableau[$row][] = 0;//'5ButPrisSansPenal';
+					$tableau[$row][] = 0;//'4ButPrisSansPenal';
+					$tableau[$row][] = 0;//'3ButPrisSansPenal';
+					$tableau[$row][] = 0;//'2ButPrisSansPenal';
+					$tableau[$row][] = 0;//'1ButPrisSansPenal';
+				} else {
+					$tableau[$row][] = 0;//'6ButPrisSansPenal';
+					$tableau[$row][] = 0;//'5ButPrisSansPenal';
+					$tableau[$row][] = 0;//'4ButPrisSansPenal';
+					$tableau[$row][] = 0;//'3ButPrisSansPenal';
+					$tableau[$row][] = 0;//'2ButPrisSansPenal';
+					$tableau[$row][] = 0;//'1ButPrisSansPenal';
+				}
+
+				if($data[14]==1)
+				{
+						if($data[8]<60){
+							$tableau[$row][] = 1;//'CRouge60';
+							$tableau[$row][] = 0;//'CRouge75';
+							$tableau[$row][] = 0;//'CRouge80';
+							$tableau[$row][] = 0;//'CRouge85';
+						}elseif($data[8]<75){
+							$tableau[$row][] = 0;//'CRouge60';
+							$tableau[$row][] = 1;//'CRouge75';
+							$tableau[$row][] = 0;//'CRouge80';
+							$tableau[$row][] = 0;//'CRouge85';
+						}elseif($data[8]<80){
+							$tableau[$row][] = 0;//'CRouge60';
+							$tableau[$row][] = 0;//'CRouge75';
+							$tableau[$row][] = 1;//'CRouge80';
+							$tableau[$row][] = 0;//'CRouge85';
+						}elseif($data[8]<85){
+							$tableau[$row][] = 0;//'CRouge60';
+							$tableau[$row][] = 0;//'CRouge75';
+							$tableau[$row][] = 0;//'CRouge80';
+							$tableau[$row][] = 1;//'CRouge85';
+						}else{
+							$tableau[$row][] = 0;//'CRouge60';
+							$tableau[$row][] = 0;//'CRouge75';
+							$tableau[$row][] = 0;//'CRouge80';
+							$tableau[$row][] = 0;//'CRouge85';
+						}
+				}else{
+					$tableau[$row][] = 0;//'CRouge60';
+					$tableau[$row][] = 0;//'CRouge75';
+					$tableau[$row][] = 0;//'CRouge80';
+					$tableau[$row][] = 0;//'CRouge85';
+				}
+				$tableau[$row][] = ($data[21]-$data[22]);//'CentreRate';
+
+				//echo '## '.count($tableau[$row]).' ##';
+				//echo 'Calculs CleanSheet W : ';
+				if(isCleanSheet($row,$data[2],$resultatsJournee,$data)){
+					$tableau[$row][] = 1; //'Clean60';
+				}else{
+					$tableau[$row][] = 0; //'Clean60';
+				}
+
+				if(isCleanSheetNul($row,$data[2],$resultatsJournee,$data)){
+					$tableau[$row][] = 1; //'Clean60D';
+				}else{
+					$tableau[$row][] = 0; //'Clean60D';
+				}
 
 
-			if(ecartScore($row,$data[2],$resultatsJournee,$data)<=-5){
-				$tableau[$row][] = 1; //'Ecart-5';
-				$tableau[$row][] = 0; //'Ecart-4';
-				$tableau[$row][] = 0; //'Ecart-3';
-				$tableau[$row][] = 0; //'Ecart-2';
-				$tableau[$row][] = 0; //'Ecart+2';
-				$tableau[$row][] = 0; //'Ecart+3';
-				$tableau[$row][] = 0; //'Ecart+4';
-			}elseif(ecartScore($row,$data[2],$resultatsJournee,$data)==-4){
-				$tableau[$row][] = 0; //'Ecart-5';
-				$tableau[$row][] = 1; //'Ecart-4';
-				$tableau[$row][] = 0; //'Ecart-3';
-				$tableau[$row][] = 0; //'Ecart-2';
-				$tableau[$row][] = 0; //'Ecart+2';
-				$tableau[$row][] = 0; //'Ecart+3';
-				$tableau[$row][] = 0; //'Ecart+4';
-			}elseif(ecartScore($row,$data[2],$resultatsJournee,$data)==-3){
-				$tableau[$row][] = 0; //'Ecart-5';
-				$tableau[$row][] = 0; //'Ecart-4';
-				$tableau[$row][] = 1; //'Ecart-3';
-				$tableau[$row][] = 0; //'Ecart-2';
-				$tableau[$row][] = 0; //'Ecart+2';
-				$tableau[$row][] = 0; //'Ecart+3';
-				$tableau[$row][] = 0; //'Ecart+4';
-			}elseif(ecartScore($row,$data[2],$resultatsJournee,$data)==-2){
-				$tableau[$row][] = 0; //'Ecart-5';
-				$tableau[$row][] = 0; //'Ecart-4';
-				$tableau[$row][] = 0; //'Ecart-3';
-				$tableau[$row][] = 1; //'Ecart-2';
-				$tableau[$row][] = 0; //'Ecart+2';
-				$tableau[$row][] = 0; //'Ecart+3';
-				$tableau[$row][] = 0; //'Ecart+4';
-			}elseif(ecartScore($row,$data[2],$resultatsJournee,$data)==2){
-				$tableau[$row][] = 0; //'Ecart-5';
-				$tableau[$row][] = 0; //'Ecart-4';
-				$tableau[$row][] = 0; //'Ecart-3';
-				$tableau[$row][] = 0; //'Ecart-2';
-				$tableau[$row][] = 1; //'Ecart+2';
-				$tableau[$row][] = 0; //'Ecart+3';
-				$tableau[$row][] = 0; //'Ecart+4';
-			}elseif(ecartScore($row,$data[2],$resultatsJournee,$data)==3){
-				$tableau[$row][] = 0; //'Ecart-5';
-				$tableau[$row][] = 0; //'Ecart-4';
-				$tableau[$row][] = 0; //'Ecart-3';
-				$tableau[$row][] = 0; //'Ecart-2';
-				$tableau[$row][] = 0; //'Ecart+2';
-				$tableau[$row][] = 1; //'Ecart+3';
-				$tableau[$row][] = 0; //'Ecart+4';
-			}elseif(ecartScore($row,$data[2],$resultatsJournee,$data)>=4){
-				$tableau[$row][] = 0; //'Ecart-5';
-				$tableau[$row][] = 0; //'Ecart-4';
-				$tableau[$row][] = 0; //'Ecart-3';
-				$tableau[$row][] = 0; //'Ecart-2';
-				$tableau[$row][] = 0; //'Ecart+2';
-				$tableau[$row][] = 0; //'Ecart+3';
-				$tableau[$row][] = 1; //'Ecart+4';
-			}else{
-				$tableau[$row][] = 0; //'Ecart-5';
-				$tableau[$row][] = 0; //'Ecart-4';
-				$tableau[$row][] = 0; //'Ecart-3';
-				$tableau[$row][] = 0; //'Ecart-2';
-				$tableau[$row][] = 0; //'Ecart+2';
-				$tableau[$row][] = 0; //'Ecart+3';
-				$tableau[$row][] = 0; //'Ecart+4';
-			}
+				if(ecartScore($row,$data[2],$resultatsJournee,$data)<=-5){
+					$tableau[$row][] = 1; //'Ecart-5';
+					$tableau[$row][] = 0; //'Ecart-4';
+					$tableau[$row][] = 0; //'Ecart-3';
+					$tableau[$row][] = 0; //'Ecart-2';
+					$tableau[$row][] = 0; //'Ecart+2';
+					$tableau[$row][] = 0; //'Ecart+3';
+					$tableau[$row][] = 0; //'Ecart+4';
+				}elseif(ecartScore($row,$data[2],$resultatsJournee,$data)==-4){
+					$tableau[$row][] = 0; //'Ecart-5';
+					$tableau[$row][] = 1; //'Ecart-4';
+					$tableau[$row][] = 0; //'Ecart-3';
+					$tableau[$row][] = 0; //'Ecart-2';
+					$tableau[$row][] = 0; //'Ecart+2';
+					$tableau[$row][] = 0; //'Ecart+3';
+					$tableau[$row][] = 0; //'Ecart+4';
+				}elseif(ecartScore($row,$data[2],$resultatsJournee,$data)==-3){
+					$tableau[$row][] = 0; //'Ecart-5';
+					$tableau[$row][] = 0; //'Ecart-4';
+					$tableau[$row][] = 1; //'Ecart-3';
+					$tableau[$row][] = 0; //'Ecart-2';
+					$tableau[$row][] = 0; //'Ecart+2';
+					$tableau[$row][] = 0; //'Ecart+3';
+					$tableau[$row][] = 0; //'Ecart+4';
+				}elseif(ecartScore($row,$data[2],$resultatsJournee,$data)==-2){
+					$tableau[$row][] = 0; //'Ecart-5';
+					$tableau[$row][] = 0; //'Ecart-4';
+					$tableau[$row][] = 0; //'Ecart-3';
+					$tableau[$row][] = 1; //'Ecart-2';
+					$tableau[$row][] = 0; //'Ecart+2';
+					$tableau[$row][] = 0; //'Ecart+3';
+					$tableau[$row][] = 0; //'Ecart+4';
+				}elseif(ecartScore($row,$data[2],$resultatsJournee,$data)==2){
+					$tableau[$row][] = 0; //'Ecart-5';
+					$tableau[$row][] = 0; //'Ecart-4';
+					$tableau[$row][] = 0; //'Ecart-3';
+					$tableau[$row][] = 0; //'Ecart-2';
+					$tableau[$row][] = 1; //'Ecart+2';
+					$tableau[$row][] = 0; //'Ecart+3';
+					$tableau[$row][] = 0; //'Ecart+4';
+				}elseif(ecartScore($row,$data[2],$resultatsJournee,$data)==3){
+					$tableau[$row][] = 0; //'Ecart-5';
+					$tableau[$row][] = 0; //'Ecart-4';
+					$tableau[$row][] = 0; //'Ecart-3';
+					$tableau[$row][] = 0; //'Ecart-2';
+					$tableau[$row][] = 0; //'Ecart+2';
+					$tableau[$row][] = 1; //'Ecart+3';
+					$tableau[$row][] = 0; //'Ecart+4';
+				}elseif(ecartScore($row,$data[2],$resultatsJournee,$data)>=4){
+					$tableau[$row][] = 0; //'Ecart-5';
+					$tableau[$row][] = 0; //'Ecart-4';
+					$tableau[$row][] = 0; //'Ecart-3';
+					$tableau[$row][] = 0; //'Ecart-2';
+					$tableau[$row][] = 0; //'Ecart+2';
+					$tableau[$row][] = 0; //'Ecart+3';
+					$tableau[$row][] = 1; //'Ecart+4';
+				}else{
+					$tableau[$row][] = 0; //'Ecart-5';
+					$tableau[$row][] = 0; //'Ecart-4';
+					$tableau[$row][] = 0; //'Ecart-3';
+					$tableau[$row][] = 0; //'Ecart-2';
+					$tableau[$row][] = 0; //'Ecart+2';
+					$tableau[$row][] = 0; //'Ecart+3';
+					$tableau[$row][] = 0; //'Ecart+4';
+				}
 
-			//echo '## '.count($tableau[$row]).' ##';
-			//echo 'Calculs GrossOccazRate : ';
-			if($data[41]-$data[15]<0){
-				$tableau[$row][] = 0 ;
-			}else{
-				$tableau[$row][] = $data[41]-$data[15] ;
-			}
+				//echo '## '.count($tableau[$row]).' ##';
+				//echo 'Calculs GrossOccazRate : ';
+				if($data[41]-$data[15]<0){
+					$tableau[$row][] = 0 ;
+				}else{
+					$tableau[$row][] = $data[41]-$data[15] ;
+				}
 
-			//echo '## '.count($tableau[$row]).' ##';
-			//echo 'Calculs MalusDefaite : ';
-			if(testVictoire($row,$data[2],$resultatsJournee,$data)=='L'){
-				$tableau[$row][] = 1;
-			}else{
-				$tableau[$row][] = 0;
-			}
+				//echo '## '.count($tableau[$row]).' ##';
+				//echo 'Calculs MalusDefaite : ';
+				if(testVictoire($row,$data[2],$resultatsJournee,$data)=='L'){
+					$tableau[$row][] = 1;
+				}else{
+					$tableau[$row][] = 0;
+				}
 
-			//echo '## '.count($tableau[$row]).' ##';
-			//echo 'Calculs % passes réussies :';
-			if($data[30]>=30){
-				if(100*$data[29]/$data[30]<=30){
-					$tableau[$row][] = 1 ;//'15PassOK30';
-					$tableau[$row][] = 0 ;//'15PassOK40';
-					$tableau[$row][] = 0 ;//'15PassOK50';
-					$tableau[$row][] = 0 ;//'15PassOK90';
-					$tableau[$row][] = 0 ;//'15PassOK95';
-					$tableau[$row][] = 0 ;//'15PassOK100';
-					$tableau[$row][] = 1 ;//'25PassOK30';
-					$tableau[$row][] = 0 ;//'25PassOK40';
-					$tableau[$row][] = 0 ;//'25PassOK50';
-					$tableau[$row][] = 0 ;//'25PassOK90';
-					$tableau[$row][] = 0 ;//'25PassOK95';
-					$tableau[$row][] = 0 ;//'25PassOK100';
-				}elseif(100*$data[29]/$data[30]<=40){
-					$tableau[$row][] = 0 ;//'15PassOK30';
-					$tableau[$row][] = 1 ;//'15PassOK40';
-					$tableau[$row][] = 0 ;//'15PassOK50';
-					$tableau[$row][] = 0 ;//'15PassOK90';
-					$tableau[$row][] = 0 ;//'15PassOK95';
-					$tableau[$row][] = 0 ;//'15PassOK100';
-					$tableau[$row][] = 0 ;//'25PassOK30';
-					$tableau[$row][] = 1 ;//'25PassOK40';
-					$tableau[$row][] = 0 ;//'25PassOK50';
-					$tableau[$row][] = 0 ;//'25PassOK90';
-					$tableau[$row][] = 0 ;//'25PassOK95';
-					$tableau[$row][] = 0 ;//'25PassOK100';
-				}elseif(100*$data[29]/$data[30]<50){
-					$tableau[$row][] = 0 ;//'15PassOK30';
-					$tableau[$row][] = 0 ;//'15PassOK40';
-					$tableau[$row][] = 1 ;//'15PassOK50';
-					$tableau[$row][] = 0 ;//'15PassOK90';
-					$tableau[$row][] = 0 ;//'15PassOK95';
-					$tableau[$row][] = 0 ;//'15PassOK100';
-					$tableau[$row][] = 0 ;//'25PassOK30';
-					$tableau[$row][] = 0 ;//'25PassOK40';
-					$tableau[$row][] = 1 ;//'25PassOK50';
-					$tableau[$row][] = 0 ;//'25PassOK90';
-					$tableau[$row][] = 0 ;//'25PassOK95';
-					$tableau[$row][] = 0 ;//'25PassOK100';
-				}elseif(100*$data[29]/$data[30]<90){
-					$tableau[$row][] = 0 ;//'15PassOK30';
-					$tableau[$row][] = 0 ;//'15PassOK40';
-					$tableau[$row][] = 0 ;//'15PassOK50';
-					$tableau[$row][] = 1 ;//'15PassOK90';
-					$tableau[$row][] = 0 ;//'15PassOK95';
-					$tableau[$row][] = 0 ;//'15PassOK100';
-					$tableau[$row][] = 0 ;//'25PassOK30';
-					$tableau[$row][] = 0 ;//'25PassOK40';
-					$tableau[$row][] = 0 ;//'25PassOK50';
-					$tableau[$row][] = 1 ;//'25PassOK90';
-					$tableau[$row][] = 0 ;//'25PassOK95';
-					$tableau[$row][] = 0 ;//'25PassOK100';
-				}elseif(100*$data[29]/$data[30]<=95){
-					$tableau[$row][] = 0 ;//'15PassOK30';
-					$tableau[$row][] = 0 ;//'15PassOK40';
-					$tableau[$row][] = 0 ;//'15PassOK50';
-					$tableau[$row][] = 0 ;//'15PassOK90';
-					$tableau[$row][] = 1 ;//'15PassOK95';
-					$tableau[$row][] = 0 ;//'15PassOK100';
-					$tableau[$row][] = 0 ;//'25PassOK30';
-					$tableau[$row][] = 0 ;//'25PassOK40';
-					$tableau[$row][] = 0 ;//'25PassOK50';
-					$tableau[$row][] = 0 ;//'25PassOK90';
-					$tableau[$row][] = 1 ;//'25PassOK95';
-					$tableau[$row][] = 0 ;//'25PassOK100';
-				}elseif(100*$data[29]/$data[30]<=100){
-					$tableau[$row][] = 0 ;//'15PassOK30';
-					$tableau[$row][] = 0 ;//'15PassOK40';
-					$tableau[$row][] = 0 ;//'15PassOK50';
-					$tableau[$row][] = 0 ;//'15PassOK90';
-					$tableau[$row][] = 0 ;//'15PassOK95';
-					$tableau[$row][] = 1 ;//'15PassOK100';
-					$tableau[$row][] = 0 ;//'25PassOK30';
-					$tableau[$row][] = 0 ;//'25PassOK40';
-					$tableau[$row][] = 0 ;//'25PassOK50';
-					$tableau[$row][] = 0 ;//'25PassOK90';
-					$tableau[$row][] = 0 ;//'25PassOK95';
-					$tableau[$row][] = 1 ;//'25PassOK100';
+				//echo '## '.count($tableau[$row]).' ##';
+				//echo 'Calculs % passes réussies :';
+				if($data[30]>=30){
+					if(100*$data[29]/$data[30]<=30){
+						$tableau[$row][] = 1 ;//'15PassOK30';
+						$tableau[$row][] = 0 ;//'15PassOK40';
+						$tableau[$row][] = 0 ;//'15PassOK50';
+						$tableau[$row][] = 0 ;//'15PassOK90';
+						$tableau[$row][] = 0 ;//'15PassOK95';
+						$tableau[$row][] = 0 ;//'15PassOK100';
+						$tableau[$row][] = 1 ;//'25PassOK30';
+						$tableau[$row][] = 0 ;//'25PassOK40';
+						$tableau[$row][] = 0 ;//'25PassOK50';
+						$tableau[$row][] = 0 ;//'25PassOK90';
+						$tableau[$row][] = 0 ;//'25PassOK95';
+						$tableau[$row][] = 0 ;//'25PassOK100';
+					}elseif(100*$data[29]/$data[30]<=40){
+						$tableau[$row][] = 0 ;//'15PassOK30';
+						$tableau[$row][] = 1 ;//'15PassOK40';
+						$tableau[$row][] = 0 ;//'15PassOK50';
+						$tableau[$row][] = 0 ;//'15PassOK90';
+						$tableau[$row][] = 0 ;//'15PassOK95';
+						$tableau[$row][] = 0 ;//'15PassOK100';
+						$tableau[$row][] = 0 ;//'25PassOK30';
+						$tableau[$row][] = 1 ;//'25PassOK40';
+						$tableau[$row][] = 0 ;//'25PassOK50';
+						$tableau[$row][] = 0 ;//'25PassOK90';
+						$tableau[$row][] = 0 ;//'25PassOK95';
+						$tableau[$row][] = 0 ;//'25PassOK100';
+					}elseif(100*$data[29]/$data[30]<50){
+						$tableau[$row][] = 0 ;//'15PassOK30';
+						$tableau[$row][] = 0 ;//'15PassOK40';
+						$tableau[$row][] = 1 ;//'15PassOK50';
+						$tableau[$row][] = 0 ;//'15PassOK90';
+						$tableau[$row][] = 0 ;//'15PassOK95';
+						$tableau[$row][] = 0 ;//'15PassOK100';
+						$tableau[$row][] = 0 ;//'25PassOK30';
+						$tableau[$row][] = 0 ;//'25PassOK40';
+						$tableau[$row][] = 1 ;//'25PassOK50';
+						$tableau[$row][] = 0 ;//'25PassOK90';
+						$tableau[$row][] = 0 ;//'25PassOK95';
+						$tableau[$row][] = 0 ;//'25PassOK100';
+					}elseif(100*$data[29]/$data[30]<90){
+						$tableau[$row][] = 0 ;//'15PassOK30';
+						$tableau[$row][] = 0 ;//'15PassOK40';
+						$tableau[$row][] = 0 ;//'15PassOK50';
+						$tableau[$row][] = 1 ;//'15PassOK90';
+						$tableau[$row][] = 0 ;//'15PassOK95';
+						$tableau[$row][] = 0 ;//'15PassOK100';
+						$tableau[$row][] = 0 ;//'25PassOK30';
+						$tableau[$row][] = 0 ;//'25PassOK40';
+						$tableau[$row][] = 0 ;//'25PassOK50';
+						$tableau[$row][] = 1 ;//'25PassOK90';
+						$tableau[$row][] = 0 ;//'25PassOK95';
+						$tableau[$row][] = 0 ;//'25PassOK100';
+					}elseif(100*$data[29]/$data[30]<=95){
+						$tableau[$row][] = 0 ;//'15PassOK30';
+						$tableau[$row][] = 0 ;//'15PassOK40';
+						$tableau[$row][] = 0 ;//'15PassOK50';
+						$tableau[$row][] = 0 ;//'15PassOK90';
+						$tableau[$row][] = 1 ;//'15PassOK95';
+						$tableau[$row][] = 0 ;//'15PassOK100';
+						$tableau[$row][] = 0 ;//'25PassOK30';
+						$tableau[$row][] = 0 ;//'25PassOK40';
+						$tableau[$row][] = 0 ;//'25PassOK50';
+						$tableau[$row][] = 0 ;//'25PassOK90';
+						$tableau[$row][] = 1 ;//'25PassOK95';
+						$tableau[$row][] = 0 ;//'25PassOK100';
+					}elseif(100*$data[29]/$data[30]<=100){
+						$tableau[$row][] = 0 ;//'15PassOK30';
+						$tableau[$row][] = 0 ;//'15PassOK40';
+						$tableau[$row][] = 0 ;//'15PassOK50';
+						$tableau[$row][] = 0 ;//'15PassOK90';
+						$tableau[$row][] = 0 ;//'15PassOK95';
+						$tableau[$row][] = 1 ;//'15PassOK100';
+						$tableau[$row][] = 0 ;//'25PassOK30';
+						$tableau[$row][] = 0 ;//'25PassOK40';
+						$tableau[$row][] = 0 ;//'25PassOK50';
+						$tableau[$row][] = 0 ;//'25PassOK90';
+						$tableau[$row][] = 0 ;//'25PassOK95';
+						$tableau[$row][] = 1 ;//'25PassOK100';
+					}else{
+						$tableau[$row][] = 0 ;//'15PassOK30';
+						$tableau[$row][] = 0 ;//'15PassOK40';
+						$tableau[$row][] = 0 ;//'15PassOK50';
+						$tableau[$row][] = 0 ;//'15PassOK90';
+						$tableau[$row][] = 0 ;//'15PassOK95';
+						$tableau[$row][] = 0 ;//'15PassOK100';
+						$tableau[$row][] = 0 ;//'25PassOK30';
+						$tableau[$row][] = 0 ;//'25PassOK40';
+						$tableau[$row][] = 0 ;//'25PassOK50';
+						$tableau[$row][] = 0 ;//'25PassOK90';
+						$tableau[$row][] = 0 ;//'25PassOK95';
+						$tableau[$row][] = 0 ;//'25PassOK100';
+					}
+				}elseif($data[30]>=15){
+					if(100*$data[29]/$data[30]<=30){
+						$tableau[$row][] = 1 ;//'15PassOK30';
+						$tableau[$row][] = 0 ;//'15PassOK40';
+						$tableau[$row][] = 0 ;//'15PassOK50';
+						$tableau[$row][] = 0 ;//'15PassOK90';
+						$tableau[$row][] = 0 ;//'15PassOK95';
+						$tableau[$row][] = 0 ;//'15PassOK100';
+						$tableau[$row][] = 0 ;//'25PassOK30';
+						$tableau[$row][] = 0 ;//'25PassOK40';
+						$tableau[$row][] = 0 ;//'25PassOK50';
+						$tableau[$row][] = 0 ;//'25PassOK90';
+						$tableau[$row][] = 0 ;//'25PassOK95';
+						$tableau[$row][] = 0 ;//'25PassOK100';
+
+					}elseif(100*$data[29]/$data[30]<=40){
+						$tableau[$row][] = 0 ;//'15PassOK30';
+						$tableau[$row][] = 1 ;//'15PassOK40';
+						$tableau[$row][] = 0 ;//'15PassOK50';
+						$tableau[$row][] = 0 ;//'15PassOK90';
+						$tableau[$row][] = 0 ;//'15PassOK95';
+						$tableau[$row][] = 0 ;//'15PassOK100';
+						$tableau[$row][] = 0 ;//'25PassOK30';
+						$tableau[$row][] = 0 ;//'25PassOK40';
+						$tableau[$row][] = 0 ;//'25PassOK50';
+						$tableau[$row][] = 0 ;//'25PassOK90';
+						$tableau[$row][] = 0 ;//'25PassOK95';
+						$tableau[$row][] = 0 ;//'25PassOK100';
+
+					}elseif(100*$data[29]/$data[30]<50){
+						$tableau[$row][] = 0 ;//'15PassOK30';
+						$tableau[$row][] = 0 ;//'15PassOK40';
+						$tableau[$row][] = 1 ;//'15PassOK50';
+						$tableau[$row][] = 0 ;//'15PassOK90';
+						$tableau[$row][] = 0 ;//'15PassOK95';
+						$tableau[$row][] = 0 ;//'15PassOK100';
+						$tableau[$row][] = 0 ;//'25PassOK30';
+						$tableau[$row][] = 0 ;//'25PassOK40';
+						$tableau[$row][] = 0 ;//'25PassOK50';
+						$tableau[$row][] = 0 ;//'25PassOK90';
+						$tableau[$row][] = 0 ;//'25PassOK95';
+						$tableau[$row][] = 0 ;//'25PassOK100';
+
+					}elseif(100*$data[29]/$data[30]<90){
+						$tableau[$row][] = 0 ;//'15PassOK30';
+						$tableau[$row][] = 0 ;//'15PassOK40';
+						$tableau[$row][] = 0 ;//'15PassOK50';
+						$tableau[$row][] = 1 ;//'15PassOK90';
+						$tableau[$row][] = 0 ;//'15PassOK95';
+						$tableau[$row][] = 0 ;//'15PassOK100';
+						$tableau[$row][] = 0 ;//'25PassOK30';
+						$tableau[$row][] = 0 ;//'25PassOK40';
+						$tableau[$row][] = 0 ;//'25PassOK50';
+						$tableau[$row][] = 0 ;//'25PassOK90';
+						$tableau[$row][] = 0 ;//'25PassOK95';
+						$tableau[$row][] = 0 ;//'25PassOK100';
+
+					}elseif(100*$data[29]/$data[30]<=95){
+						$tableau[$row][] = 0 ;//'15PassOK30';
+						$tableau[$row][] = 0 ;//'15PassOK40';
+						$tableau[$row][] = 0 ;//'15PassOK50';
+						$tableau[$row][] = 0 ;//'15PassOK90';
+						$tableau[$row][] = 1 ;//'15PassOK95';
+						$tableau[$row][] = 0 ;//'15PassOK100';
+						$tableau[$row][] = 0 ;//'25PassOK30';
+						$tableau[$row][] = 0 ;//'25PassOK40';
+						$tableau[$row][] = 0 ;//'25PassOK50';
+						$tableau[$row][] = 0 ;//'25PassOK90';
+						$tableau[$row][] = 0 ;//'25PassOK95';
+						$tableau[$row][] = 0 ;//'25PassOK100';
+
+					}elseif(100*$data[29]/$data[30]<=100){
+						$tableau[$row][] = 0 ;//'15PassOK30';
+						$tableau[$row][] = 0 ;//'15PassOK40';
+						$tableau[$row][] = 0 ;//'15PassOK50';
+						$tableau[$row][] = 0 ;//'15PassOK90';
+						$tableau[$row][] = 0 ;//'15PassOK95';
+						$tableau[$row][] = 1 ;//'15PassOK100';
+						$tableau[$row][] = 0 ;//'25PassOK30';
+						$tableau[$row][] = 0 ;//'25PassOK40';
+						$tableau[$row][] = 0 ;//'25PassOK50';
+						$tableau[$row][] = 0 ;//'25PassOK90';
+						$tableau[$row][] = 0 ;//'25PassOK95';
+						$tableau[$row][] = 0 ;//'25PassOK100';
+
+					}else{
+						$tableau[$row][] = 0 ;//'15PassOK30';
+						$tableau[$row][] = 0 ;//'15PassOK40';
+						$tableau[$row][] = 0 ;//'15PassOK50';
+						$tableau[$row][] = 0 ;//'15PassOK90';
+						$tableau[$row][] = 0 ;//'15PassOK95';
+						$tableau[$row][] = 0 ;//'15PassOK100';
+						$tableau[$row][] = 0 ;//'25PassOK30';
+						$tableau[$row][] = 0 ;//'25PassOK40';
+						$tableau[$row][] = 0 ;//'25PassOK50';
+						$tableau[$row][] = 0 ;//'25PassOK90';
+						$tableau[$row][] = 0 ;//'25PassOK95';
+						$tableau[$row][] = 0 ;//'25PassOK100';
+
+					}
 				}else{
 					$tableau[$row][] = 0 ;//'15PassOK30';
 					$tableau[$row][] = 0 ;//'15PassOK40';
@@ -991,168 +1142,58 @@ function scrapRoto($num_journee_avec_annee, $path)
 					$tableau[$row][] = 0 ;//'25PassOK90';
 					$tableau[$row][] = 0 ;//'25PassOK95';
 					$tableau[$row][] = 0 ;//'25PassOK100';
+
 				}
-			}elseif($data[30]>=15){
-				if(100*$data[29]/$data[30]<=30){
-					$tableau[$row][] = 1 ;//'15PassOK30';
-					$tableau[$row][] = 0 ;//'15PassOK40';
-					$tableau[$row][] = 0 ;//'15PassOK50';
-					$tableau[$row][] = 0 ;//'15PassOK90';
-					$tableau[$row][] = 0 ;//'15PassOK95';
-					$tableau[$row][] = 0 ;//'15PassOK100';
-					$tableau[$row][] = 0 ;//'25PassOK30';
-					$tableau[$row][] = 0 ;//'25PassOK40';
-					$tableau[$row][] = 0 ;//'25PassOK50';
-					$tableau[$row][] = 0 ;//'25PassOK90';
-					$tableau[$row][] = 0 ;//'25PassOK95';
-					$tableau[$row][] = 0 ;//'25PassOK100';
 
-				}elseif(100*$data[29]/$data[30]<=40){
-					$tableau[$row][] = 0 ;//'15PassOK30';
-					$tableau[$row][] = 1 ;//'15PassOK40';
-					$tableau[$row][] = 0 ;//'15PassOK50';
-					$tableau[$row][] = 0 ;//'15PassOK90';
-					$tableau[$row][] = 0 ;//'15PassOK95';
-					$tableau[$row][] = 0 ;//'15PassOK100';
-					$tableau[$row][] = 0 ;//'25PassOK30';
-					$tableau[$row][] = 0 ;//'25PassOK40';
-					$tableau[$row][] = 0 ;//'25PassOK50';
-					$tableau[$row][] = 0 ;//'25PassOK90';
-					$tableau[$row][] = 0 ;//'25PassOK95';
-					$tableau[$row][] = 0 ;//'25PassOK100';
+				//echo '## '.count($tableau[$row]).' ##';
+				//echo 'Calculs tacle lost';
+				$tableau[$row][] = $data[25] - $data[26];//'TackleLost';
 
-				}elseif(100*$data[29]/$data[30]<50){
-					$tableau[$row][] = 0 ;//'15PassOK30';
-					$tableau[$row][] = 0 ;//'15PassOK40';
-					$tableau[$row][] = 1 ;//'15PassOK50';
-					$tableau[$row][] = 0 ;//'15PassOK90';
-					$tableau[$row][] = 0 ;//'15PassOK95';
-					$tableau[$row][] = 0 ;//'15PassOK100';
-					$tableau[$row][] = 0 ;//'25PassOK30';
-					$tableau[$row][] = 0 ;//'25PassOK40';
-					$tableau[$row][] = 0 ;//'25PassOK50';
-					$tableau[$row][] = 0 ;//'25PassOK90';
-					$tableau[$row][] = 0 ;//'25PassOK95';
-					$tableau[$row][] = 0 ;//'25PassOK100';
+				//echo '## '.count($tableau[$row]).' ##';
+				//echo 'Calculs TirPasCadre';
+				$tableau[$row][] = $data[18] - $data[19];//'TirPasCadre';
+				//echo 'Tirs PAS CADRE : '.$tableau[$row][107].' ////////';
 
-				}elseif(100*$data[29]/$data[30]<90){
-					$tableau[$row][] = 0 ;//'15PassOK30';
-					$tableau[$row][] = 0 ;//'15PassOK40';
-					$tableau[$row][] = 0 ;//'15PassOK50';
-					$tableau[$row][] = 1 ;//'15PassOK90';
-					$tableau[$row][] = 0 ;//'15PassOK95';
-					$tableau[$row][] = 0 ;//'15PassOK100';
-					$tableau[$row][] = 0 ;//'25PassOK30';
-					$tableau[$row][] = 0 ;//'25PassOK40';
-					$tableau[$row][] = 0 ;//'25PassOK50';
-					$tableau[$row][] = 0 ;//'25PassOK90';
-					$tableau[$row][] = 0 ;//'25PassOK95';
-					$tableau[$row][] = 0 ;//'25PassOK100';
-
-				}elseif(100*$data[29]/$data[30]<=95){
-					$tableau[$row][] = 0 ;//'15PassOK30';
-					$tableau[$row][] = 0 ;//'15PassOK40';
-					$tableau[$row][] = 0 ;//'15PassOK50';
-					$tableau[$row][] = 0 ;//'15PassOK90';
-					$tableau[$row][] = 1 ;//'15PassOK95';
-					$tableau[$row][] = 0 ;//'15PassOK100';
-					$tableau[$row][] = 0 ;//'25PassOK30';
-					$tableau[$row][] = 0 ;//'25PassOK40';
-					$tableau[$row][] = 0 ;//'25PassOK50';
-					$tableau[$row][] = 0 ;//'25PassOK90';
-					$tableau[$row][] = 0 ;//'25PassOK95';
-					$tableau[$row][] = 0 ;//'25PassOK100';
-
-				}elseif(100*$data[29]/$data[30]<=100){
-					$tableau[$row][] = 0 ;//'15PassOK30';
-					$tableau[$row][] = 0 ;//'15PassOK40';
-					$tableau[$row][] = 0 ;//'15PassOK50';
-					$tableau[$row][] = 0 ;//'15PassOK90';
-					$tableau[$row][] = 0 ;//'15PassOK95';
-					$tableau[$row][] = 1 ;//'15PassOK100';
-					$tableau[$row][] = 0 ;//'25PassOK30';
-					$tableau[$row][] = 0 ;//'25PassOK40';
-					$tableau[$row][] = 0 ;//'25PassOK50';
-					$tableau[$row][] = 0 ;//'25PassOK90';
-					$tableau[$row][] = 0 ;//'25PassOK95';
-					$tableau[$row][] = 0 ;//'25PassOK100';
-
+				//echo '## '.count($tableau[$row]).' ##';
+				//echo 'Calculs ballons touchés';
+				if($data[37]>=100){
+					$tableau[$row][] = 0 ;//'80BallonsTouch';
+					$tableau[$row][] = 0 ;//'90BallonsTouch';
+					$tableau[$row][] = 1 ;//'100BallonsTouch';
+				}elseif($data[37]>=90){
+					$tableau[$row][] = 0 ;//'80BallonsTouch';
+					$tableau[$row][] = 1 ;//'90BallonsTouch';
+					$tableau[$row][] = 0 ;//'100BallonsTouch';
+				}elseif($data[37]>=80){
+					$tableau[$row][] = 1 ;//'80BallonsTouch';
+					$tableau[$row][] = 0 ;//'90BallonsTouch';
+					$tableau[$row][] = 0 ;//'100BallonsTouch';
 				}else{
-					$tableau[$row][] = 0 ;//'15PassOK30';
-					$tableau[$row][] = 0 ;//'15PassOK40';
-					$tableau[$row][] = 0 ;//'15PassOK50';
-					$tableau[$row][] = 0 ;//'15PassOK90';
-					$tableau[$row][] = 0 ;//'15PassOK95';
-					$tableau[$row][] = 0 ;//'15PassOK100';
-					$tableau[$row][] = 0 ;//'25PassOK30';
-					$tableau[$row][] = 0 ;//'25PassOK40';
-					$tableau[$row][] = 0 ;//'25PassOK50';
-					$tableau[$row][] = 0 ;//'25PassOK90';
-					$tableau[$row][] = 0 ;//'25PassOK95';
-					$tableau[$row][] = 0 ;//'25PassOK100';
+					$tableau[$row][] = 0 ;//'80BallonsTouch';
+					$tableau[$row][] = 0 ;//'90BallonsTouch';
+					$tableau[$row][] = 0 ;//'100BallonsTouch';
+				}
+
+				//echo '## '.count($tableau[$row]).' ##';
+				//echo 'Calculs BonusVictoire : ';
+				if(testVictoire($row,$data[2],$resultatsJournee,$data)=='W'){
+					$tableau[$row][] = 1;
+				}else{
+					$tableau[$row][] = 0;
+				}
+
+				//echo '## '.count($tableau[$row]).' ##';
+				//echo 'Calculs CoupFrancRate : ';
+				$tableau[$row][] = ($data[56]-$data[57]);//'CoupFrancRate';
 
 				}
+
+				//echo "<br />\n";
+				$row++;
 			}else{
-				$tableau[$row][] = 0 ;//'15PassOK30';
-				$tableau[$row][] = 0 ;//'15PassOK40';
-				$tableau[$row][] = 0 ;//'15PassOK50';
-				$tableau[$row][] = 0 ;//'15PassOK90';
-				$tableau[$row][] = 0 ;//'15PassOK95';
-				$tableau[$row][] = 0 ;//'15PassOK100';
-				$tableau[$row][] = 0 ;//'25PassOK30';
-				$tableau[$row][] = 0 ;//'25PassOK40';
-				$tableau[$row][] = 0 ;//'25PassOK50';
-				$tableau[$row][] = 0 ;//'25PassOK90';
-				$tableau[$row][] = 0 ;//'25PassOK95';
-				$tableau[$row][] = 0 ;//'25PassOK100';
-
+				addLogEvent('Ligne de stats sur mauvaise journée '.$data[2].' vs '.$data[3]);
+				$row++;
 			}
-
-			//echo '## '.count($tableau[$row]).' ##';
-			//echo 'Calculs tacle lost';
-			$tableau[$row][] = $data[25] - $data[26];//'TackleLost';
-
-			//echo '## '.count($tableau[$row]).' ##';
-			//echo 'Calculs TirPasCadre';
-			$tableau[$row][] = $data[18] - $data[19];//'TirPasCadre';
-			//echo 'Tirs PAS CADRE : '.$tableau[$row][107].' ////////';
-
-			//echo '## '.count($tableau[$row]).' ##';
-			//echo 'Calculs ballons touchés';
-			if($data[37]>=100){
-				$tableau[$row][] = 0 ;//'80BallonsTouch';
-				$tableau[$row][] = 0 ;//'90BallonsTouch';
-				$tableau[$row][] = 1 ;//'100BallonsTouch';
-			}elseif($data[37]>=90){
-				$tableau[$row][] = 0 ;//'80BallonsTouch';
-				$tableau[$row][] = 1 ;//'90BallonsTouch';
-				$tableau[$row][] = 0 ;//'100BallonsTouch';
-			}elseif($data[37]>=80){
-				$tableau[$row][] = 1 ;//'80BallonsTouch';
-				$tableau[$row][] = 0 ;//'90BallonsTouch';
-				$tableau[$row][] = 0 ;//'100BallonsTouch';
-			}else{
-				$tableau[$row][] = 0 ;//'80BallonsTouch';
-				$tableau[$row][] = 0 ;//'90BallonsTouch';
-				$tableau[$row][] = 0 ;//'100BallonsTouch';
-			}
-
-			//echo '## '.count($tableau[$row]).' ##';
-			//echo 'Calculs BonusVictoire : ';
-			if(testVictoire($row,$data[2],$resultatsJournee,$data)=='W'){
-				$tableau[$row][] = 1;
-			}else{
-				$tableau[$row][] = 0;
-			}
-
-			//echo '## '.count($tableau[$row]).' ##';
-			//echo 'Calculs CoupFrancRate : ';
-			$tableau[$row][] = ($data[56]-$data[57]);//'CoupFrancRate';
-
-			}
-
-			//echo "<br />\n";
-			$row++;
 		}
 		fclose($handle);
 
