@@ -183,9 +183,10 @@ elseif ($calLigue->id() != null)
 
 $avecJourneePrec = false;
 $avecJourneeSuiv = false;
+$numJournee = '';
 if ($calLigue->id() != null)
 {
-  if ($calLigue->numJournee() > $calLigueManager->findProchaineJourneeByEquipe($equipe->id())->numJournee()) {
+  if ($calLigue->numJournee() > $calLigueManager->findProchaineJourneeByLigue($ligue->id())) {
     $avecJourneePrec = true;
   }
   if ($calLigueManager->findJourneeMaxByLigue($ligue->id()) > $calLigue->numJournee()) {
@@ -238,6 +239,17 @@ if ($calLigue->id() != null)
   }
   $choixTactique = $nomenclManager->findNomenclatureTactiqueByCode($compoEquipe->codeTactique());
   $matchsCalReel = $calReelManager->findMatchsByJournee($calReel->numJournee());
+  $numJournee = $calLigue->numJournee();
+}
+elseif (isset($calReel) && $ligue->etat() == EtatLigue::EN_COURS)
+{
+  $numJournee = $calLigueManager->findNumJourneeByLigueCalReel($ligue->id(), $calReel->numJournee());
+  if ($numJournee > $calLigueManager->findProchaineJourneeByLigue($ligue->id())) {
+    $avecJourneePrec = true;
+  }
+  if ($calLigueManager->findJourneeMaxByLigue($ligue->id()) > $numJournee) {
+      $avecJourneeSuiv = true;
+  }
 }
 
 /*echo 'A supp : idCoach=' . $coach->id() . ', idLigue=' . $ligue->id() .

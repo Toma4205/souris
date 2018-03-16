@@ -174,7 +174,7 @@ function afficherMatchCalendrierReel($match)
     echo '</li>';
 }
 
-if (isset($calReel) && $calLigue->id() != null)
+if (isset($calReel) && $ligue->etat() == EtatLigue::EN_COURS)
 {
 ?>
 <section>
@@ -187,17 +187,21 @@ if (isset($calReel) && $calLigue->id() != null)
     </div>
     <div class="detail_match_bandeau_col_g">
       <div class="detail_match_bandeau_equipe">
+        <?php if ($calLigue->id() != null) { ?>
         <div><?php echo $calLigue->nomEquipeDom(); ?></div>
         <div class="detail_match_bandeau_equipe_coach">Coach : <?php echo $equipeDom->nomCoach(); ?></div>
         <div class="detail_match_bandeau_equipe_logo">
           <img src="web/img/coach/<?php echo $tabNomenclStyleCoach[$equipeDom->codeStyleCoach()]; ?>" alt="Logo équipe dom." width="80px" height="80px"/>
         </div>
+        <?php } ?>
       </div>
     </div>
     <div class="detail_match_bandeau_col_c">
-      <div class="detail_match_bandeau_journee">Journée <?php echo $calLigue->numJournee(); ?></div>
+      <div class="detail_match_bandeau_journee">Journée <?php echo $numJournee; ?></div>
+      <?php if ($calLigue->id() != null) { ?>
       <div class="detail_match_bandeau_ville">Lieu : <?php echo $equipeDom->ville(); ?></div>
       <div class="detail_match_bandeau_stade">Stade "<?php echo $equipeDom->stade(); ?>"</div>
+      <?php } ?>
       <div class="detail_match_bandeau_date">
         <?php
           $dateDebut = date_create($calReel->dateHeureDebut());
@@ -208,11 +212,13 @@ if (isset($calReel) && $calLigue->id() != null)
     </div>
     <div class="detail_match_bandeau_col_d">
       <div class="detail_match_bandeau_equipe">
+        <?php if ($calLigue->id() != null) { ?>
         <div><?php echo $calLigue->nomEquipeExt(); ?></div>
         <div class="detail_match_bandeau_equipe_coach">Coach : <?php echo $equipeExt->nomCoach(); ?></div>
         <div class="detail_match_bandeau_equipe_logo">
           <img src="web/img/coach/<?php echo $tabNomenclStyleCoach[$equipeExt->codeStyleCoach()]; ?>" alt="Logo équipe ext." width="80px" height="80px"/>
         </div>
+        <?php } ?>
       </div>
     </div>
     <div class="detail_match_bandeau_journee_suiv"
@@ -221,6 +227,12 @@ if (isset($calReel) && $calLigue->id() != null)
       <?php if ($avecJourneeSuiv){echo '>';} ?>
     </div>
   </div>
+  <?php
+
+  if ($calLigue->id() != null)
+  {
+
+   ?>
   <div class="conteneurRow detail_compo">
     <div class="conteneurColumn">
       <p class="cursor_pointer" title="Si 4 DEF, +0.5 pour chaque / Si 5 DEF, +1 pour chaque">Choix tactique *</p>
@@ -512,6 +524,13 @@ if (isset($calReel) && $calLigue->id() != null)
       onclick="return controlerBonus();" class="marginBottom width_200px" />
   </div>
   <div id="messageErreurBonus" class="cache">Jean-Michel à moitié... Ta saisie du bonus/malus est incomplète !</div>
+  <?php
+  }
+  else
+  {
+    echo '<p>Pas de match pour toi pour cette journée.</p>';
+  }
+   ?>
 </section>
 <?php
 }
@@ -519,14 +538,11 @@ elseif ($ligue->etat() == EtatLigue::TERMINEE)
 {
   echo '<p>Ligue terminée !</p>';
 }
-elseif (!isset($calReel))
+else
 {
   echo '<p>Plus de match de championnat !</p>';
 }
-elseif ($ligue->etat() == EtatLigue::EN_COURS)
-{
-  echo '<p>Pas de match pour toi pour cette journée.</p>';
-}
+
 // Le pied de page
 require_once("vue/commun/pied_de_pageflex.php");
 ?>

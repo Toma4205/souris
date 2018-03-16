@@ -25,6 +25,17 @@ class CalendrierLigueManager extends ManagerBase
       return new CalendrierLigue($donnees);
   }
 
+  public function findProchaineJourneeByLigue($idLigue)
+  {
+      $q = $this->_bdd->prepare('SELECT c.num_journee
+        FROM calendrier_ligue c
+        WHERE c.id_ligue = :id AND c.score_dom IS NULL
+        ORDER BY c.num_journee ASC LIMIT 1');
+      $q->execute([':id' => $idLigue]);
+
+      return $q->fetchColumn();
+  }
+
   public function findJourneeMaxByLigue($idLigue)
   {
     $q = $this->_bdd->prepare('SELECT MAX(num_journee) FROM calendrier_ligue WHERE id_ligue = :id');
@@ -54,6 +65,17 @@ class CalendrierLigueManager extends ManagerBase
       {
         return new CalendrierLigue($donnees);
       }
+  }
+
+  public function findNumJourneeByLigueCalReel($idLigue, $numJournee)
+  {
+      $q = $this->_bdd->prepare('SELECT c.num_journee
+        FROM calendrier_ligue c
+        WHERE c.id_ligue = :id
+        AND c.num_journee_cal_reel = :cal LIMIT 1');
+      $q->execute([':id' => $idLigue, ':cal' => $numJournee]);
+
+      return $q->fetchColumn();
   }
 
   public function findCalendrierByLigue($idLigue)
@@ -159,7 +181,7 @@ class CalendrierLigueManager extends ManagerBase
               $q->bindValue(':calReel', $numJourneeCalReel);
 
               $q->execute();
-              
+
               if ($numJourneeCalReel + ($nbEquipe - 1) <= 38) {
                   $q = $this->_bdd->prepare('INSERT INTO calendrier_ligue(id_ligue, id_equipe_dom, id_equipe_ext,
                 num_journee, num_journee_cal_reel)
