@@ -2,7 +2,7 @@
 
 if (isset($_POST['lancerCron']))
 {
-	include_once('testCRON.php');
+	include_once(__DIR__ .'/../testCRON.php');
 } elseif (isset($_POST['initJournee']))
 {
 	include_once('initDebutJournee.php');
