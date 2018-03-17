@@ -202,8 +202,20 @@ function onSelectionRentrant(numRentrant) {
     // On cache les sortants
     $('#' + DIV_REMPLACEMENT + ' select[name="' + nameSortant + '"] option[value="-1"]').prop('selected', true);
     $('#' + DIV_REMPLACEMENT + ' select[name="' + nameSortant + '"] option[value!="-1"]').each(function() {
-      $(this).addClass('cache');
+      if (!$(this).hasClass('cache')) {
+        $(this).addClass('cache');
+      }
     });
+    // on affiche éventuellement le sortant dans les autres sortants du même poste
+    if (tabSortant[nameSortant] != undefined) {
+      $('#' + DIV_REMPLACEMENT + ' select[name!="' + selectName + '"][name^="' + NAME_RENTRANT + '"]').each(function() {
+        var valRentrant = $(this).find(":selected").val();
+        if (valRentrant != -1 && isEntrantMemePosteSortant(val, valRentrant)) {
+          var nameSortant2 = NAME_SORTANT + $(this).attr('name').substr($(this).attr('name').length - 1);
+          $('#' + DIV_REMPLACEMENT + ' select[name="' + nameSortant2 + '"] option[value="' + tabSortant[nameSortant] + '"]').removeClass('cache');
+        }
+      });
+    }
 
     // On affiche l'ancien rentrant dans les autres select
     $('#' + DIV_REMPLACEMENT + ' select[name!="' + selectName + '"][name^="' + NAME_RENTRANT + '"] option[value="' + tabRentrant[selectName] + '"]').each(function() {
@@ -242,6 +254,8 @@ function onSelectionRentrant(numRentrant) {
 function onSelectionSortant(numSortant) {
   var selectName = NAME_SORTANT + numSortant;
   var val = $('#' + DIV_REMPLACEMENT + ' select[name="' + selectName + '"]').val();
+  var numRemplacement = selectName.substr(selectName.length - 1)
+  var nameRentrant = NAME_RENTRANT + numRemplacement;
 
   // Si un joueur est sélectionné, on stocke sa valeur
   // + on le cache dans les autres sortans
@@ -251,6 +265,18 @@ function onSelectionSortant(numSortant) {
         $(this).addClass('cache')
       }
     });
+
+    // Si un joueur était déjà sélectionné on l'affiche dans les autres sortans
+    if (tabSortant[selectName] != undefined) {
+      $('#' + DIV_REMPLACEMENT + ' select[name!="' + nameRentrant + '"][name^="' + NAME_RENTRANT + '"]').each(function() {
+        var valRentrant = $(this).find(":selected").val();
+        if (valRentrant != -1 && isEntrantMemePosteSortant(val, valRentrant)) {
+          var nameSortant = NAME_SORTANT + $(this).attr('name').substr($(this).attr('name').length - 1);
+          $('#' + DIV_REMPLACEMENT + ' select[name="' + nameSortant + '"] option[value="' + tabSortant[selectName] + '"]').removeClass('cache');
+        }
+      });
+    }
+
     tabSortant[selectName] = val;
   } else if (tabSortant[selectName] != undefined) {
     $('#' + DIV_REMPLACEMENT + ' select[name!="' + selectName + '"][name^="' + NAME_SORTANT + '"] option[value="' + tabSortant[selectName] + '"]').each(function() {
@@ -260,6 +286,18 @@ function onSelectionSortant(numSortant) {
     });
     delete tabSortant[selectName];
   }
+}
+
+function isEntrantMemePosteSortant(valSortant, valRentrant) {
+  var egalite = false;
+  if ((valSortant in tabJoueurDEF && valRentrant in tabJoueurDEF)
+  || (valSortant in tabJoueurMIL && valRentrant in tabJoueurMIL)
+  || (valSortant in tabJoueurATT && valRentrant in tabJoueurATT))
+  {
+    egalite = true;
+  }
+
+  return egalite;
 }
 
 function verifierNote(numRemplacement) {
