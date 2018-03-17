@@ -523,7 +523,7 @@ if (isset($calReel) && $ligue->etat() == EtatLigue::EN_COURS)
             ?>
         </section>
         <section id="divRemplacement" class="section_remplacement conteneurColumn">
-            <div id="remplacement" class="detail_effectif_titre text_align_left">Remplacements <span class="italic normal">(si note strictement inférieure)</span></div>
+            <div id="remplacement" class="detail_effectif_titre text_align_left">Remplacements <span class="detail_effectif_rempl_lib normal">(Joueur de gauche remplace Joueur de droite si note < X)</span></div>
             <?php
             $tabTitu = [];
             $tabRempl = [];

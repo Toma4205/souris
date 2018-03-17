@@ -103,6 +103,9 @@
   color: #4a61d4;
   margin-bottom: .5rem;
 }
+.detail_effectif_rempl_lib {
+  font-size: .7rem;
+}
 .compo_equipe_col_droite {
   padding: 0 1rem;
 }
