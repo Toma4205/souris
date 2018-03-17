@@ -15,6 +15,7 @@ class BonusMalus extends ClasseBase
   private $_miTemps;
 
   // Champs tables jointes
+  private $_libelleCourt;
   private $_libelle;
 
   public function __construct(array $donnees)
@@ -29,6 +30,7 @@ class BonusMalus extends ClasseBase
   public function idJoueurReelAdverse() { return $this->_idJoueurReelAdverse; }
   public function miTemps() { return $this->_miTemps; }
   public function libelle() { return $this->_libelle; }
+  public function libelleCourt() { return $this->_libelleCourt; }
 
   public function setId($id)
   {
@@ -63,6 +65,11 @@ class BonusMalus extends ClasseBase
   public function setLibelle($libelle)
   {
       $this->_libelle = $libelle;
+  }
+
+  public function setLibelle_court($libelle)
+  {
+      $this->_libelleCourt = $libelle;
   }
 }
 ?>

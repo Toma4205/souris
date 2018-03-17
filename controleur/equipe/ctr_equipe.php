@@ -65,9 +65,8 @@ if (isset($_POST['changerTactique']))
 }
 elseif (isset($_POST['enregistrer']))
 {
-  // TODO MPL Cas où bonus supprimé
   $compoEquipe->setCode_tactique($_POST['choixTactique']);
-  if ($_POST['choixBonus'] != -1)
+  if ($_POST['choixBonus'] != '')
   {
     $compoEquipe->setCode_bonus_malus($_POST['choixBonus']);
 
@@ -252,10 +251,10 @@ elseif (isset($calReel) && $ligue->etat() == EtatLigue::EN_COURS)
   }
 }
 
-/*echo 'A supp : idCoach=' . $coach->id() . ', idLigue=' . $ligue->id() .
-  ', idEquipe=' . $equipe->id() . ', calReel=' . $calReel->numJournee() .
+echo 'A supp : idCoach=' . $coach->id() . ', idLigue=' . $ligue->id() .
+  ', idEquipe=' . $equipe->id() . ', bonus=' . $compoEquipe->codeBonusMalus() . ', calReel=' . $calReel->numJournee() .
   ', calLigue=' . $calLigue->id() . ', journeePrec=' . $avecJourneePrec .
-  ', journeeSuiv=' . $avecJourneeSuiv;*/
+  ', journeeSuiv=' . $avecJourneeSuiv;
 
 include_once('vue/equipe.php');
 ?>

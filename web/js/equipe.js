@@ -17,7 +17,7 @@ var NAME_SORTANT = 'sortant_';
 var NAME_NOTE = 'note_';
 
 $(document).ready(function() {
-  onSelectionBonusMalus('choixBonus');
+  selectBonusMalus($('#choixBonus').val());
   initTabJoueurSelonPoste(DIV_TIT_DEF, tabJoueurDEF);
   initTabJoueurSelonPoste(DIV_TIT_MIL, tabJoueurMIL);
   initTabJoueurSelonPoste(DIV_TIT_ATT, tabJoueurATT);
@@ -56,8 +56,28 @@ function controlerBonus() {
   return formOK;
 }
 
-function onSelectionBonusMalus(selectName) {
-  var val = $('select[name="' + selectName + '"]').find(":selected").val();
+function suppSelectBonusMalus() {
+  $('#choixBonus').val('');
+  $('#imgSuppBonus').addClass('cache');
+
+  // Gestion de la css
+  $('.detail_compo_bonus_malus_bloc').each(function() {
+    if ($(this).hasClass('detail_compo_bonus_malus_bloc_select')) {
+      $(this).removeClass('detail_compo_bonus_malus_bloc_select');
+    }
+  });
+
+  cacherAfficherSelectByName('choixJoueurBonus', true);
+  cacherAfficherSelectByName('choixMiTempsBonus', true);
+  cacherAfficherSelectByName('choixJoueurAdvBonus', true);
+}
+
+function selectBonusMalus(val) {
+  $('#choixBonus').val(val);
+  if (val != '' && $('#imgSuppBonus').hasClass('cache')) {
+    $('#imgSuppBonus').removeClass('cache');
+  }
+
   if (val == 'MAU_CRA' || val == 'BOUCHER') {
     // Affichage joueur adv
     cacherAfficherSelectByName('choixJoueurAdvBonus', false);
@@ -93,9 +113,16 @@ function onSelectionBonusMalus(selectName) {
     cacherAfficherSelectByName('choixMiTempsBonus', true);
   }
 
-  if (!$('#messageErreurBonus').hasClass('cache')) {
-    $('#messageErreurBonus').addClass('cache');
-  }
+  // Gestion de la css
+  $('.detail_compo_bonus_malus_bloc').each(function() {
+    if ($(this).attr('id') == val) {
+      if (!$(this).hasClass('detail_compo_bonus_malus_bloc_select')) {
+        $(this).addClass('detail_compo_bonus_malus_bloc_select');
+      }
+    } else if ($(this).hasClass('detail_compo_bonus_malus_bloc_select')) {
+      $(this).removeClass('detail_compo_bonus_malus_bloc_select');
+    }
+  });
 }
 
 function cacherAfficherSelectByName(select, cacher) {

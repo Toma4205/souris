@@ -61,8 +61,36 @@
   margin-top: 0.5rem;
 }
 .detail_compo {
-  margin-bottom: 1rem;
+  margin: 1rem 0;
   border-bottom: 2px dashed #141b4D;
+}
+.detail_compo_titre {
+  font-weight: bold;
+  color: #4a61d4;
+}
+.detail_compo_bonus_malus_supp {
+  cursor: pointer;
+  margin-left: 1rem;
+}
+.detail_compo_bonus_malus_div {
+  padding: 0;
+  margin: .5rem 0;
+}
+.detail_compo_bonus_malus_row {
+  margin-bottom: .5rem;
+}
+.detail_compo_bonus_malus_lib {
+  font-size: .8rem;
+  font-style: italic;
+  color: #141b4D;
+  line-height: 1rem;
+}
+.detail_compo_bonus_malus_bloc {
+  padding: 0 .5rem;
+  cursor: pointer;
+}
+.detail_compo_bonus_malus_bloc_select {
+  background-color: #9fa9f1;
 }
 .detail_effectif {
   padding: .5rem 0 !important;
@@ -89,7 +117,7 @@
   text-align: center;
 }
 .detail_calendrier_reel_match {
-    
+
 }
 .section_remplacement {
   padding: 1rem 0;

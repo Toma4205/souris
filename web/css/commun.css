@@ -187,6 +187,12 @@ div#contenu {
   color:red;
   font-weight: bold;
 }
+.message_ingo {
+  font-style: italic;
+  font-size: .7rem;
+  padding: 0;
+  margin: .5rem 0;
+}
 .read_only {
   background-color: #c7b8b8;
 }
