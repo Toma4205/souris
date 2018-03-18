@@ -9,6 +9,31 @@ class EquipeManager extends ManagerBase
     $this->setDb($bdd);
   }
 
+  public function findEquipeEnAttenteMercato($idLigue, $tour)
+  {
+    $equipes = [];
+    $q = $this->_bdd->prepare('SELECT c.nom as nom_coach, e.nom
+      FROM coach c
+      JOIN coach_ligue cl ON cl.id_coach = c.id AND cl.id_ligue = :id
+      LEFT JOIN equipe e ON e.id_coach = c.id AND e.id_ligue = :id
+      WHERE e.nom IS NULL OR (e.fin_mercato = FALSE AND e.id NOT IN (
+        SELECT DISTINCT(je.id_equipe)
+        FROM joueur_equipe je
+        WHERE je.id_ligue = :id
+        AND je.tour_mercato = :tour
+      ))');
+    $q->execute([':id' => $idLigue, ':tour' => $tour]);
+
+    while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+    {
+      $equipes[] = new Equipe($donnees);
+    }
+
+    $q->closeCursor();
+
+    return $equipes;
+  }
+
   public function creerEquipe(Equipe $equipe, $idCoach, $idLigue, $bonusMalus, $nbEquipe)
   {
 		$q = $this->_bdd->prepare('INSERT INTO equipe(id_coach, id_ligue, nom, ville, stade, code_style_coach, budget_restant,

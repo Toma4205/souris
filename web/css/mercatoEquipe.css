@@ -1,0 +1,13 @@
+.equipe_attente_mercato {
+  padding: .5rem;
+  width: 50%;
+  margin: auto;
+  text-align: left;
+}
+.equipe_attente_mercato_lib {
+  font-style: italic;
+  padding-bottom: 1rem;
+}
+.detail_equipe_attente_mercato {
+  padding-bottom: .3rem;
+}

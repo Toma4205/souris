@@ -110,6 +110,10 @@ if (isset($equipe))
   } else {
     $joueursAchetes = $joueurEquipeManager->findMercatoEnCoursByEquipe($equipe->id(), $tourMercato);
   }
+
+  if ($tourValide) {
+    $equipesEnAttente = $equipeManager->findEquipeEnAttenteMercato($creaLigue->id(), $tourMercato);
+  }
 }
 
 include_once('vue/mercatoEquipe.php');
