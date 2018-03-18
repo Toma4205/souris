@@ -478,6 +478,9 @@ header.menuClassement p {
 #tableMercato tr td:nth-child(3) {
   text-align: left;
 }
+#tableMercato tbody tr {
+  cursor: pointer;
+}
 #tableMercato tr td:first-child img {
   padding-right: .3rem;
 }

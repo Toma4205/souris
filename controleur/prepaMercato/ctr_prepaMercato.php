@@ -21,12 +21,16 @@ elseif (isset($_POST['validationMercato']))
   }
 }
 
-$budgetRestant = ConstantesAppli::BUDGET_INIT;
-
 // Rech joueurs enregistrés
 $joueursPrepaMercato = $joueurPrepaMercatoManager->findByCoach($coach->id());
 // Rech joueurs réels
 $joueursReels = $joueurReelManager->findAll();
+
+$budgetRestant = ConstantesAppli::BUDGET_INIT;
+foreach ($joueursPrepaMercato as $joueur)
+{
+  $budgetRestant -= $joueur->prixAchat();
+}
 
 // TODO MPL voir s'il est possible de stocker qqpart cette nomenclature
 $equipes = $nomenclEquipeManager->findNomenclatureEquipe();

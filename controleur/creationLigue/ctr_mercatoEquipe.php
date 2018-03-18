@@ -28,14 +28,18 @@ $equipe = $equipeManager->findEquipeByCoachEtLigue($coach->id(), $creaLigue->id(
 // Validation du tour du Mercato
 if (isset($_POST['validationMercato']))
 {
+  $budget = $equipe->budgetRestant();
   foreach ($_POST as $cle => $prixAchat)
   {
     if (substr($cle, 0, 5) === "name_")
     {
       $idJoueur = substr($cle, 5);
       $joueurEquipeManager->creerJoueurEquipe($creaLigue->id(), $equipe->id(), $idJoueur, $prixAchat, $tourMercato);
+      $budget -= $prixAchat;
     }
   }
+  $equipeManager->majBudgetRestant($equipe->id(), $budget);
+  $equipe->setBudget_restant($budget);
 
   if ($joueurEquipeManager->isTourMercatoTermine($creaLigue->id(), $tourMercato))
   {

@@ -9,6 +9,15 @@ class EquipeManager extends ManagerBase
     $this->setDb($bdd);
   }
 
+  public function majBudgetRestant($idEquipe, $budget)
+  {
+    $q = $this->_bdd->prepare('UPDATE equipe SET budget_restant = :budget WHERE id = :id');
+    $q->bindValue(':id', $idEquipe);
+    $q->bindValue(':budget', $budget);
+
+    $q->execute();
+  }
+
   public function findEquipeEnAttenteMercato($idLigue, $tour)
   {
     $equipes = [];
