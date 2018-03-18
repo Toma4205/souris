@@ -62,6 +62,8 @@ if ($tabJournee !== null)
 		if (strtotime("now")-strtotime($journee['date_heure_debut']) >= 0) {
 			addLogEvent('Date de début dépassée (' . $journee['date_heure_debut'] . ') => initialisation de la journée.');
 
+			exec('mysqldump --user=souris --password=souris --host=localhost id3559928_souris > /scripts_bdd/dump/dump_avant_journee' . $numJournee . '.sql');
+
 			//L'INIT n'a pas été fait alors faire le SCRIPT ZERO
 			initializeJournee($numJournee);
 			$statut == 1;
