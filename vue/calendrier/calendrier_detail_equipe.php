@@ -10,7 +10,7 @@ function afficherBonusMalus($codeBonus, $libBonus, $libLongBonus, $nomJoueurEqui
   if ($codeBonus != null) {
     $avecBonus = true;
     echo '<div class="margin_auto conteneurRow">';
-    echo '<div>';
+    echo '<div class="conteneurColumn">';
     echo '<div class="detail_match_equipe_bonus_malus_lib">' . $libBonus . '</div>';
     if ($codeBonus == ConstantesAppli::BONUS_MALUS_FUMIGENE) {
       echo '<img src="web/img/bonusmalus/PNG_fumigenes.png" title="'.$libLongBonus.'" alt="bonus" width="40px" height="40px"/>';
