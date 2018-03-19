@@ -41,23 +41,23 @@ section header {
   margin: 1em 0;
 }
 input[type="submit"] {
-  background: #919699;
-  background-image: -webkit-linear-gradient(top, #919699, #bec7cc);
-  background-image: -moz-linear-gradient(top, #919699, #bec7cc);
-  background-image: -ms-linear-gradient(top, #919699, #bec7cc);
-  background-image: -o-linear-gradient(top, #919699, #bec7cc);
-  background-image: linear-gradient(to bottom, #919699, #bec7cc);
+  background: #141b4D;
+  background-image: -webkit-linear-gradient(top, #141b4D, #4a61d4);
+  background-image: -moz-linear-gradient(top, #141b4D, #4a61d4);
+  background-image: -ms-linear-gradient(top, #141b4D, #4a61d4);
+  background-image: -o-linear-gradient(top, #141b4D, #4a61d4);
+  background-image: linear-gradient(to bottom, #141b4D, #4a61d4);
   -webkit-border-radius: 28;
   -moz-border-radius: 28;
   border-radius: 28px;
-  color: #514a52;
+  color: white;
   font-size: 15px;
   font-weight: bold;
   font-variant: small-caps;
   padding: 5px;
 }
 input[type="submit"]:hover {
-  background: #949799;
+  background: #141b4D;
   text-decoration: none;
   cursor: pointer;
 }
