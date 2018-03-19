@@ -125,7 +125,7 @@ if (isset($match)) {
   <!-- ********************* -->
 
   <?php
-  if ($match->statut() == ConstantesAppli::STATUT_CAL_TERMINE)
+  if ($match->statut() >= ConstantesAppli::STATUT_CAL_TERMINE)
   {
   ?>
 
