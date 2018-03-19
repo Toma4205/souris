@@ -199,6 +199,14 @@ div#contenu {
 .cursor_pointer {
   cursor: pointer;
 }
+.bloc_formulaire {
+  padding-bottom: 1rem;
+}
+.titre_formulaire {
+  font-style: italic;
+  color: #4a61d4;
+  text-align: left;
+}
 .conteneurRow {
   display: flex;
 	flex-direction: row;
