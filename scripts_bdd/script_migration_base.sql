@@ -1,3 +1,14 @@
+/*Script passé en "PROD" le 20/03/2018*/
+ALTER TABLE `joueur_reel` ADD `etat` VARCHAR(3) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER `position_secondaire`;
+ALTER TABLE `nomenclature_equipes_reelles` ADD `ville_roto` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `ville_maxi`;
+ALTER TABLE `resultatsl1_reel` CHANGE `butDomicile` `butDomicile` INT(10) UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `resultatsl1_reel` CHANGE `penaltyDomicile` `penaltyDomicile` INT(10) UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `resultatsl1_reel` CHANGE `butVisiteur` `butVisiteur` INT(10) UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `resultatsl1_reel` CHANGE `penaltyVisiteur` `penaltyVisiteur` INT(10) UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `resultatsl1_reel` CHANGE `statut` `statut` INT(10) NOT NULL DEFAULT '0';
+ALTER TABLE `nomenclature_equipes_reelles` CHANGE `trigramme` `trigramme` CHAR(3) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
+ALTER TABLE `nomenclature_equipes_reelles` CHANGE `ville_maxi` `ville_maxi` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
+
 /*Script passé en "PROD" le 16/03/2018 */
 ALTER TABLE `coach` CHANGE `mot_de_passe` `mot_de_passe` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 CREATE TABLE `bonus_perso_ligue` ( `code` VARCHAR(30) NOT NULL , `nb` TINYINT UNSIGNED NOT NULL , `id_ligue` INT UNSIGNED NOT NULL ) ENGINE = InnoDB;
@@ -15,15 +26,6 @@ ALTER TABLE `calendrier_reel` ADD `date_heure_fin` TIMESTAMP NOT NULL DEFAULT CU
 
 /*Script passé en "PROD" le 04/03/2018 */
 UPDATE joueur_reel SET cle_roto_secondaire = 'NkunkuChristopherPSG' WHERE id = 456;
-
-/*Sript PAS ENCORE PASSE EN PROD */
-ALTER TABLE `resultatsl1_reel` CHANGE `butDomicile` `butDomicile` INT(10) UNSIGNED NULL DEFAULT NULL;
-ALTER TABLE `resultatsl1_reel` CHANGE `penaltyDomicile` `penaltyDomicile` INT(10) UNSIGNED NULL DEFAULT NULL;
-ALTER TABLE `resultatsl1_reel` CHANGE `butVisiteur` `butVisiteur` INT(10) UNSIGNED NULL DEFAULT NULL;
-ALTER TABLE `resultatsl1_reel` CHANGE `penaltyVisiteur` `penaltyVisiteur` INT(10) UNSIGNED NULL DEFAULT NULL;
-ALTER TABLE `resultatsl1_reel` CHANGE `statut` `statut` INT(10) NOT NULL DEFAULT '0';
-ALTER TABLE `nomenclature_equipes_reelles` CHANGE `trigramme` `trigramme` CHAR(3) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
-ALTER TABLE `nomenclature_equipes_reelles` CHANGE `ville_maxi` `ville_maxi` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 
 
 /*Script passé en "PROD" le 02/03/2018 */
