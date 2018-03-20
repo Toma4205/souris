@@ -17,12 +17,13 @@ class JoueurEquipe extends ClasseBase
   private $_nbMatch;
   private $_totalBut;
   private $_moyNote;
-
+  
   // JoueurReel
   private $_id;
   private $_position;
   private $_nom;
   private $_prenom;
+  private $_etat;
 
   // Code/Libelle Equipe réelle
   private $_codeEquipe;
@@ -54,6 +55,7 @@ class JoueurEquipe extends ClasseBase
   public function nbMatch() { return $this->_nbMatch; }
   public function totalBut() { return $this->_totalBut; }
   public function moyNote() { return $this->_moyNote; }
+  public function etat() { return $this->_etat; }
 
   public function setId($id)
   {
@@ -148,6 +150,11 @@ class JoueurEquipe extends ClasseBase
   public function setTour_mercato($tourMercato)
   {
     $this->_tourMercato = $tourMercato;
+  }
+  
+  public function setEtat($etat)
+  {
+    $this->_etat = $etat;
   }
 }
 ?>
