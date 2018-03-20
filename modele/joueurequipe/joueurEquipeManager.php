@@ -46,7 +46,7 @@ class JoueurEquipeManager extends ManagerBase
 
 		$q = $this->_bdd->prepare('SELECT je.prix as prixAchat, je.tour_mercato,
         je.moy_note, je.nb_match, je.id_equipe, j.id, j.nom, j.prenom, j.position,
-        j.prix as prixOrigine, n.code as codeEquipe, n.libelle as libelleEquipe
+        j.prix as prixOrigine, n.code as codeEquipe, n.libelle as libelleEquipe, j.etat
         FROM joueur_equipe je
         JOIN joueur_reel j ON je.id_joueur_reel = j.id
         JOIN nomenclature_equipe n ON j.equipe = n.code
