@@ -143,7 +143,6 @@
 		
 		foreach ($lignes as $ligne) {
 			
-			
 			//Trouve le poste du joueur
 			if(stripos($ligne,'odd') > 0){
 				$pos5 = stripos($ligne,'odd');
@@ -213,6 +212,10 @@
 						}	
 				}
 				
+				$posPosition = stripos($ligne,'&lt;tr&gt;&lt;td&gt;');
+				$posPositionFin = stripos(substr($ligne,$posPosition+strlen('&lt;tr&gt;&lt;td&gt;')),'&lt');
+				$positionExpert = substr($ligne,$posPosition+strlen('&lt;tr&gt;&lt;td&gt;'),$posPositionFin);
+				
 				$joueursInfo[$j][] = $teamAbrev[$i];
 				$joueursInfo[$j][] = $prenomNomJoueur;
 				$joueursInfo[$j][] = $nom;
@@ -221,9 +224,10 @@
 				$joueursInfo[$j][] = $pays;
 				$joueursInfo[$j][] = $valeur;
 				$joueursInfo[$j][] = $postePrec;
+				$joueursInfo[$j][] = $positionExpert;
 				$j++;
-				//echo $teamAbrev[$i].';'.$prenomNomJoueur.';'.$nom.';'.$prenom.';'.$anniversaire.';'.$pays.';'.$valeur.';'.$postePrec;
-				//echo "<br />\n";
+				echo $teamAbrev[$i].';'.$prenomNomJoueur.';'.$nom.';'.$prenom.';'.$anniversaire.';'.$pays.';'.$valeur.';'.$postePrec.';'.$positionExpert;
+				echo "<br />\n";
 			}
 			$postePrec = $posteSuivant;
 		}
