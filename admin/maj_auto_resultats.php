@@ -294,7 +294,7 @@
 	//test
 	echo 'GO TEST';
 	echo "<br />\n";
-	scrapMaxi('28');
+	scrapRoto('201726',__DIR__.'/rotostats/201726.csv');
 	echo 'FIN TEST';
 	
 ?>
