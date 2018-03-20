@@ -174,6 +174,18 @@ function afficherMatchCalendrierReel($match)
     echo '</li>';
 }
 
+function afficherEtatJoueur($joueur)
+{
+	if(strlen($joueur->etat())>0)
+	{
+		echo '<li class="detail_calendrier_reel_match conteneurRow">';
+		echo '<div class="width_10pc"><img src="web/img/maillot/shirt_' . strtolower($joueur->codeEquipe()) . '.png" alt="' . $joueur->codeEquipe() . '" width="20px" height="20px" /></div>';
+		echo '<div class="width_35pc text_align_left">'.$joueur->nom().' '.$joueur->prenom().' : '.$joueur->etat().'</div>';
+		echo '</li>';
+	}
+}
+
+
 if (isset($calReel) && $ligue->etat() == EtatLigue::EN_COURS)
 {
 ?>
@@ -505,6 +517,23 @@ if (isset($calReel) && $ligue->etat() == EtatLigue::EN_COURS)
       </div>
     </div>
     <div class="compo_equipe_col_droite width_60pc">
+		<section id="actualite_joueurs">
+			<?php
+            if (isset($joueurs)) {
+                echo '<div class="detail_effectif calendrier_reel_journee_bloc">';
+                echo '<div class="calendrier_reel_journee_titre">Actualité - Infirmerie</div>';
+                echo '<ul>';
+                foreach($joueurs as $joueur)
+                {
+                    afficherEtatJoueur($joueur);
+                }
+                echo '</ul>';
+                echo '</div>';
+            } else {
+                echo '<p>Aucun calendrier réel trouvé en base pour la journée ' . $calLigue->numJournee() . '</p>';
+            }
+            ?>
+		</section>
         <section id="calendrier_reel">
             <?php
             if (isset($matchsCalReel)) {
