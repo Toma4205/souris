@@ -38,6 +38,8 @@ function calculer_confrontations_journee
 function get_ligues_concernees_journee
 function raz_table_joueur_compo_equipe_sur_journee
 function mise_a_jour_stat_classement
+function clear_etat_joueur_reel
+function maj_etat_joueur_reel
 
 */
 
@@ -3370,6 +3372,30 @@ function nettoyageFichierStat()
 
 }
 
+//Mise à null de la colonne ETAT dans la table joueur réèl
+function clear_etat_joueur_reel()
+{
+	addLogEvent('FUNCTION clear_etat_joueur_reel');
+	global $bdd;
+	$upd_clear_etat_joueur_reel = $bdd->prepare('UPDATE joueur_reel SET etat = NULL;');
+	$upd_clear_etat_joueur_reel->execute();
+	$upd_clear_etat_joueur_reel->closeCursor();
+}
+
+//Mets à jour la colonne etat pour les joueurs concernés
+function maj_etat_joueur_reel($equipe,$position,$nom,$etat)
+{
+	addLogEvent('FUNCTION maj_etat_joueur_reel');
+	global $bdd;
+	//cherche la dernière occurence d'un espace dans le nom
+	$pos = strrpos(trim($nom)," ");
+	$nom_unique = trim(substr(trim($nom),$pos));
+	$upd_etat_joueur_reel = $bdd->prepare('UPDATE joueur_reel jr, nomenclature_equipes_reelles ner SET jr.etat = :etat WHERE jr.position = :position AND jr.equipe = ner.trigramme AND ner.ville_roto = :ville_roto AND (LOCATE(:nom_unique,jr.cle_roto_primaire)>0 OR LOCATE(:nom_unique,jr.cle_roto_secondaire)>0);');
+	
+	$upd_etat_joueur_reel->execute(array('etat' => trim($etat), 'position' => trim($position), 'ville_roto' => trim($equipe), 'nom_unique' => $nom_unique));
+	
+	$upd_etat_joueur_reel->closeCursor();
+}
 
 
 
