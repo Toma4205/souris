@@ -562,7 +562,7 @@ if (isset($calReel) && $ligue->etat() == EtatLigue::EN_COURS)
                 echo '</div>';
 				
 				echo '<div class="detail_effectif calendrier_reel_journee_bloc">';
-				echo '<div class="calendrier_reel_journee_titre">Nerveux</div>';	
+				echo '<div class="calendrier_reel_journee_titre">Vacanciers</div>';	
                 echo '<ul>';
                 foreach($joueurs as $joueur)
                 {
