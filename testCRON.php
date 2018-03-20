@@ -49,6 +49,12 @@ $time_fin_dernier_match = null ;
 
 addLogEvent('LANCEMENT DU SCRIPT CRON');
 
+//Tous les midis : Mise à jour des états des joueurs réels
+if($now['hours'] == 12)
+{
+	get_dispo_joueur_roto();
+}
+
 $tabJournee = getJourneeRecente();
 if ($tabJournee !== null)
 {
