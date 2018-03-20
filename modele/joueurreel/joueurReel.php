@@ -11,6 +11,10 @@ class JoueurReel extends ClasseBase
   private $_equipe;
   private $_position;
   private $_prix;
+  private $_anniv;
+  private $_nationalite;
+  private $_positionExpert;
+  private $_positionSecondaire;
 
   // Libelle Equipe
   private $_libelleEquipe;
@@ -26,6 +30,10 @@ class JoueurReel extends ClasseBase
   public function equipe() { return $this->_equipe; }
   public function position() { return $this->_position; }
   public function prix() { return $this->_prix; }
+  public function anniv() { return $this->_anniv; }
+  public function nationalite() { return $this->_nationalite; }
+  public function positionExpert() { return $this->_positionExpert; }
+  public function positionSecondaire() { return $this->_positionSecondaire; }
   public function libelleEquipe() { return $this->_libelleEquipe; }
 
   public function positionIHM()
@@ -74,6 +82,26 @@ class JoueurReel extends ClasseBase
   public function setPrix($prix)
   {
       $this->_prix = $prix;
+  }
+  
+  public function setAnniv($anniv)
+  {
+      $this->_anniv = $anniv;
+  }
+  
+  public function setNationalite($nat)
+  {
+      $this->_nationalite = $nat;
+  }
+  
+  public function setPosition_expert($pos)
+  {
+      $this->_positionExpert = $pos;
+  }
+  
+  public function setPosition_secondaire($pos)
+  {
+      $this->_positionSecondaire = $pos;
   }
 
   public function setLibelleEquipe($libelleEquipe)
