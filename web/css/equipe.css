@@ -122,6 +122,13 @@
   padding: .3rem 0;
   border-bottom: 1px dashed #141b4D;
 }
+
+.detail_etat_joueur {
+  padding: .3rem 0;
+  border-bottom: 1px dashed #141b4D;
+  font-size: .7rem;
+}
+
 .section_remplacement {
   padding: 1rem 0;
 }

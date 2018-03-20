@@ -174,15 +174,19 @@ function afficherMatchCalendrierReel($match)
     echo '</li>';
 }
 
-function afficherEtatJoueur($joueur)
+function afficherEtatJoueur($joueur,$etat)
 {
-	if(strlen($joueur->etat())>0)
+	$trouve = 0;
+	if($joueur->etat() == $etat)
 	{
-		echo '<li class="detail_calendrier_reel_match conteneurRow">';
+		echo '<li class="detail_etat_joueur conteneurRow">';
 		echo '<div class="width_10pc"><img src="web/img/maillot/shirt_' . strtolower($joueur->codeEquipe()) . '.png" alt="' . $joueur->codeEquipe() . '" width="20px" height="20px" /></div>';
 		echo '<div class="width_35pc text_align_left">'.$joueur->nom().' '.$joueur->prenom().' : '.$joueur->etat().'</div>';
+		echo '<div class="width_35pc"><img src="web/img/'.$joueur->etat().'.png" alt="' . $joueur->etat() . '" width="20px" height="20px" /></div>';
 		echo '</li>';
+		$trouve = 1;
 	}
+	return $trouve;
 }
 
 
@@ -520,17 +524,62 @@ if (isset($calReel) && $ligue->etat() == EtatLigue::EN_COURS)
 		<section id="actualite_joueurs">
 			<?php
             if (isset($joueurs)) {
-                echo '<div class="detail_effectif calendrier_reel_journee_bloc">';
-                echo '<div class="calendrier_reel_journee_titre">Actualité - Infirmerie</div>';
+                $trouve = 0;
+				echo '<div class="detail_effectif calendrier_reel_journee_bloc">';
+				echo '<div class="calendrier_reel_journee_titre">Fragiles</div>';	
                 echo '<ul>';
                 foreach($joueurs as $joueur)
                 {
-                    afficherEtatJoueur($joueur);
+                    $trouve += afficherEtatJoueur($joueur,ConstantesAppli::BLESSE);
                 }
+				if($trouve == 0)
+				{
+					echo '<li class="detail_etat_joueur conteneurRow">';
+					echo '<div class="width_55pc text_align_left">Aucun joueur dans  cette catégorie</div>';
+					echo '</li>';
+				}else{
+					$trouve = 0;
+				}
+                echo '</ul>';
+                echo '</div>';
+				
+				echo '<div class="detail_effectif calendrier_reel_journee_bloc">';
+				echo '<div class="calendrier_reel_journee_titre">Nerveux</div>';	
+                echo '<ul>';
+                foreach($joueurs as $joueur)
+                {
+                    $trouve += afficherEtatJoueur($joueur,ConstantesAppli::SUSPENDU);
+                }
+				if($trouve == 0)
+				{
+					echo '<li class="detail_etat_joueur conteneurRow">';
+					echo '<div class="width_55pc text_align_left">Aucun joueur dans  cette catégorie</div>';
+					echo '</li>';
+				}else{
+					$trouve = 0;
+				}
+                echo '</ul>';
+                echo '</div>';
+				
+				echo '<div class="detail_effectif calendrier_reel_journee_bloc">';
+				echo '<div class="calendrier_reel_journee_titre">Nerveux</div>';	
+                echo '<ul>';
+                foreach($joueurs as $joueur)
+                {
+                    $trouve += afficherEtatJoueur($joueur,ConstantesAppli::INCERTAIN);
+                }
+				if($trouve == 0)
+				{
+					echo '<li class="detail_etat_joueur conteneurRow">';
+					echo '<div class="width_55pc text_align_left">Aucun joueur dans  cette catégorie</div>';
+					echo '</li>';
+				}else{
+					$trouve = 0;
+				}
                 echo '</ul>';
                 echo '</div>';
             } else {
-                echo '<p>Aucun calendrier réel trouvé en base pour la journée ' . $calLigue->numJournee() . '</p>';
+                echo '<p>Aucun joueur réel trouvé en base pour la journée</p>';
             }
             ?>
 		</section>
