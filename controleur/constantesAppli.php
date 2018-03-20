@@ -13,6 +13,10 @@ class ConstantesAppli {
     const MILIEU_IHM = 'Milieu';
     const ATTAQUANT_IHM = 'Attaquant';
 
+	const SUSPENDU = 'SUS';
+	const BLESSE = 'OUT';
+	const INCERTAIN = 'GTD';
+		
     const BONUS_MALUS_AUCUN = 'A';
     const BONUS_MALUS_CLASSIQUE = 'C';
     const BONUS_MALUS_FOLIE = 'F';
