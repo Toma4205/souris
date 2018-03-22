@@ -44,6 +44,7 @@ function maj_etat_joueur_reel
 */
 
 require_once(__DIR__ . '/../modele/connexionSQL.php');
+require_once(__DIR__ . '/../modele/equipe/equipe.php');
 require_once(__DIR__ . '/../modele/joueurequipe/joueurEquipe.php');
 require_once(__DIR__ . '/../modele/compoequipe/compoEquipe.php');
 require_once(__DIR__ . '/../modele/compoequipe/joueurCompoEquipe.php');
@@ -2746,14 +2747,16 @@ function getEquipesParLigue($idLigue)
 {
 	global $bdd;
 
-  $q = $bdd->prepare('SELECT id FROM equipe WHERE id_ligue = :id');
+  $q = $bdd->prepare('SELECT e.*, c.nom as nom_coach FROM equipe e 
+  	JOIN coach c ON c.id = e.id_coach
+  	WHERE id_ligue = :id');
   $q->execute([':id' => $idLigue]);
 
   $equipes = [];
-  while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
-  {
-    $equipes[] = $donnees['id'];
-  }
+      while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+    {
+      $equipes[] = new Equipe($donnees);
+    }
   $q->closeCursor();
 
   return $equipes;
@@ -2813,14 +2816,14 @@ function maj_ligues_fin_journee($numJournee)
       $equipes = getEquipesParLigue($idLigue);
       addLogEvent(sizeof($equipes) . ' équipes pour la ligue ' . $idLigue . '.');
 			// Maj des moyennes des joueurs
-      foreach($equipes as $cle2 => $idEquipe)
+      foreach($equipes as $equipe)
       {
-        majMoyenneEquipe($idEquipe);
+        majMoyenneEquipe($equipe->id());
       }
 			// Vérification du statut de la ligue
 			if (getNbMatchJournee($idLigue, $prochainNumJournee) == 0)
 			{
-				definirCaricaturesLigue($idLigue);
+				definirCaricaturesLigue($idLigue, $equipes);
 				
 				majEtatLigue($idLigue, EtatLigue::TERMINEE);
 				addLogEvent('La ligue passe au statut 3 (TERMINEE).');
