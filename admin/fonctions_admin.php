@@ -2831,6 +2831,7 @@ function definirCaricaturesLigue($idLigue, $equipes)
 {
 	addLogEvent('Début traitement des caricatures.');
 	
+	$tabEquipeTrophee = [];
 	$nbMalusMax = 0;
 	$nbAttaqueMin = 1000;
 	$budgetMax = 0;
@@ -2847,9 +2848,13 @@ function definirCaricaturesLigue($idLigue, $equipes)
 		if ($equipe->classement() == 1) {
 			addLogEvent('Caricature ' . CaricatureEnum::CHAMPION . ' pour l\'équipe ' . $equipe->nom() . ' (id=' . $equipe->id() . ').');
 			creerCaricature($equipe->id(), CaricatureEnum::CHAMPION, NULL, 0);
+			$tabEquipeTrophee[$equipe->id()] == 1;
 		} else if ($equipe->classement() == sizeof($equipes)) {
 			addLogEvent('Caricature ' . CaricatureEnum::SOURIS . ' pour l\'équipe ' . $equipe->nom() . ' (id=' . $equipe->id() . ').');
 			creerCaricature($equipe->id(), CaricatureEnum::SOURIS, NULL, 0);
+			$tabEquipeTrophee[$equipe->id()] == 1;
+		} else {
+			$tabEquipeTrophee[$equipe->id()] == 0;
 		}
 		
 		if ($equipe->nbMalus() > $nbMalusMax) {
@@ -2872,6 +2877,7 @@ function definirCaricaturesLigue($idLigue, $equipes)
 			if ($joueur->totalBut() > 0 && $joueur->prixAchat()/$joueur->totalBut() < ConstantesAppli::RATIO_PEPITE) {
 				addLogEvent('Caricature ' . CaricatureEnum::PEPITE . ' pour l\'équipe ' . $equipe->nom() . ' (id=' . $equipe->id() . ') et le joueur ' . $joueur->nom() . ' (id=' . $joueur->id() . ').');
 				creerCaricature($equipe->id(), CaricatureEnum::PEPITE, $joueur->id(), 0);
+				$tabEquipeTrophee[$equipe->id()] == 1;
 			}
 			if ($joueur->position() == ConstantesAppli::ATTAQUANT && $joueur->totalBut() == 0 && $joueur->prixAchat() > $prixAttSansBut) {
 				$prixAttSansBut = $joueur->prixAchat();
@@ -2896,31 +2902,42 @@ function definirCaricaturesLigue($idLigue, $equipes)
 	
 	addLogEvent('Caricature ' . CaricatureEnum::PIGEON . ' pour l\'équipe (id=' . $equipePigeon . ') et le joueur (id=' . $idJoueurPigeon . ') au prix de ' . $prixPigeon . '.');
 	creerCaricature($equipePigeon, CaricatureEnum::PIGEON, $idJoueurPigeon, $prixPigeon);
+	$tabEquipeTrophee[$equipePigeon] == 1;
 	
 	addLogEvent('Caricature ' . CaricatureEnum::DEPENSIER . ' pour l\'équipe (id=' . $equipeDepensier . ') au prix de ' . $prixDepensier . '.');
 	creerCaricature($equipeDepensier, CaricatureEnum::DEPENSIER, NULL, $prixDepensier);
-	
-	foreach($equipes as $equipe)
-    {
-		if ($equipe->nbMalus() == $nbMalusMax) {
-			addLogEvent('Caricature ' . CaricatureEnum::VICTIME . ' pour l\'équipe ' . $equipe->nom() . ' (id=' . $equipe->id() . ') avec ' . $nbMalusMax . ' malus.');
-			creerCaricature($equipe->id(), CaricatureEnum::VICTIME, NULL, $nbMalusMax);
-		}
-		if ($equipe->nbButPour() == $nbAttaqueMin) {
-			addLogEvent('Caricature ' . CaricatureEnum::PIRE_ATTAQUE . ' pour l\'équipe ' . $equipe->nom() . ' (id=' . $equipe->id() . ') avec ' . $nbAttaqueMin . ' buts.');
-			creerCaricature($equipe->id(), CaricatureEnum::PIRE_ATTAQUE, NULL, $nbAttaqueMin);
-		}
-		if ($equipe->budgetRestant() == $budgetMax) {
-			addLogEvent('Caricature ' . CaricatureEnum::ECONOME . ' pour l\'équipe ' . $equipe->nom() . ' (id=' . $equipe->id() . ') avec un budget restant de ' . $budgetMax . '.');
-			creerCaricature($equipe->id(), CaricatureEnum::ECONOME, NULL, $budgetMax);
-		}
-	}
+	$tabEquipeTrophee[$equipeDepensier] == 1;
 	
 	$joueursVoyant = getJoueursVoyantLigue($idLigue);
 	foreach($joueursVoyant as $joueur)
     {
 		addLogEvent('Caricature ' . CaricatureEnum::VOYANT . ' pour l\'équipe (id=' . $joueur['id_equipe'] . ') et le joueur (id=' . $joueur['id_joueur_reel'] . ') au tour mercato ' . $joueur['tour_mercato'] . '.');
 		creerCaricature($joueur['id_equipe'], CaricatureEnum::VOYANT, $joueur['id_joueur_reel'], $joueur['tour_mercato']);
+		$tabEquipeTrophee[$joueur['id_equipe']] == 1;
+	}
+	
+	foreach($equipes as $equipe)
+    {
+		if ($equipe->nbMalus() == $nbMalusMax) {
+			addLogEvent('Caricature ' . CaricatureEnum::VICTIME . ' pour l\'équipe ' . $equipe->nom() . ' (id=' . $equipe->id() . ') avec ' . $nbMalusMax . ' malus.');
+			creerCaricature($equipe->id(), CaricatureEnum::VICTIME, NULL, $nbMalusMax);
+			$tabEquipeTrophee[$equipe->id()] == 1;
+		}
+		if ($equipe->nbButPour() == $nbAttaqueMin) {
+			addLogEvent('Caricature ' . CaricatureEnum::PIRE_ATTAQUE . ' pour l\'équipe ' . $equipe->nom() . ' (id=' . $equipe->id() . ') avec ' . $nbAttaqueMin . ' buts.');
+			creerCaricature($equipe->id(), CaricatureEnum::PIRE_ATTAQUE, NULL, $nbAttaqueMin);
+			$tabEquipeTrophee[$equipe->id()] == 1;
+		}
+		if ($equipe->budgetRestant() == $budgetMax) {
+			addLogEvent('Caricature ' . CaricatureEnum::ECONOME . ' pour l\'équipe ' . $equipe->nom() . ' (id=' . $equipe->id() . ') avec un budget restant de ' . $budgetMax . '.');
+			creerCaricature($equipe->id(), CaricatureEnum::ECONOME, NULL, $budgetMax);
+			$tabEquipeTrophee[$equipe->id()] == 1;
+		}
+		
+		if ($tabEquipeTrophee[$equipe->id()] == 0) {
+			addLogEvent('Caricature ' . CaricatureEnum::AUC_TROPHEE . ' pour l\'équipe ' . $equipe->nom() . ' (id=' . $equipe->id() . ').');
+			creerCaricature($equipe->id(), CaricatureEnum::AUC_TROPHEE, NULL, 0);
+		}
 	}
 	
 	addLogEvent('Fin traitement des caricatures.');
