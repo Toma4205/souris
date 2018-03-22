@@ -478,6 +478,9 @@ header.menuClassement p {
 .tableBase tr td {
   padding: 3px 0;
 }
+.tableBase tbody {
+  font-size: .8rem;
+}
 #tableMercato {
   font-size: .8rem;
 }
