@@ -42,6 +42,8 @@ class ConstantesAppli {
     const STATUT_CAL_EN_COURS = 1;
     const STATUT_CAL_TERMINE = 2;
     const STATUT_CAL_CLOTURE = 3;
+
+	const RATIO_PEPITE = 1;
 }
 
  ?>
