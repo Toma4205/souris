@@ -49,6 +49,7 @@ require_once(__DIR__ . '/../modele/joueurequipe/joueurEquipe.php');
 require_once(__DIR__ . '/../modele/compoequipe/compoEquipe.php');
 require_once(__DIR__ . '/../modele/compoequipe/joueurCompoEquipe.php');
 require_once(__DIR__ . '/../modele/ligue/etatLigue.php');
+require_once(__DIR__ . '/../modele/nomenclature/caricatureEnum.php');
 require_once(__DIR__ . '/../controleur/constantesAppli.php');
 
 /////////////////CONNEXION BASE
