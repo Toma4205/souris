@@ -51,7 +51,7 @@ input[type="submit"] {
   -moz-border-radius: 28;
   border-radius: 28px;
   color: white;
-  font-size: 15px;
+  font-size: .8rem;
   font-weight: bold;
   font-variant: small-caps;
   padding: 5px;
