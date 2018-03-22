@@ -2805,26 +2805,23 @@ function majEtatLigue($idLigue, $etat)
 function maj_ligues_fin_journee($numJournee)
 {
 	$ligues = getLiguesATraiter($numJournee);
-  if ($ligues != null) {
+	if ($ligues != null) {
     addLogEvent(sizeof($ligues) . ' ligue(s) à traiter pour cette fin de journée.');
-
 		$prochainNumJournee = intVal($numJournee) + 1;
-
     foreach($ligues as $cle => $idLigue)
     {
       $equipes = getEquipesParLigue($idLigue);
-
       addLogEvent(sizeof($equipes) . ' équipes pour la ligue ' . $idLigue . '.');
-
 			// Maj des moyennes des joueurs
       foreach($equipes as $cle2 => $idEquipe)
       {
         majMoyenneEquipe($idEquipe);
       }
-
 			// Vérification du statut de la ligue
 			if (getNbMatchJournee($idLigue, $prochainNumJournee) == 0)
 			{
+				definirCaricaturesLigue($idLigue);
+				
 				majEtatLigue($idLigue, EtatLigue::TERMINEE);
 				addLogEvent('La ligue passe au statut 3 (TERMINEE).');
 			}
