@@ -69,14 +69,14 @@ if (isset($_POST["id_match"]))
           $journee = '2017' . $match->numJourneeCalReel();
 
           if (isset($joueursDom)) {
-            foreach ($joueursDom as $cle => $value) {
-              $value->setNote($joueurReelManager->getNoteTemp($value->idJoueurReel(), $journee));
+            foreach ($joueursDom as $joueur) {
+              $joueur->setNote($joueurReelManager->getNoteTemp($joueur->idJoueurReel(), $journee));
             }
           }
 
           if (isset($joueursExt)) {
-            foreach ($joueursExt as $cle => $value) {
-              $value->setNote($joueurReelManager->getNoteTemp($value->idJoueurReel(), $journee));
+            foreach ($joueursExt as $joueur) {
+              $joueur->setNote($joueurReelManager->getNoteTemp($joueur->idJoueurReel(), $journee));
             }
           }
         }

@@ -1835,6 +1835,53 @@ function maj_scores_journee_en_cours($numJournee)
 	 addLogEvent('Mise à jour des buteurs et des scores OK.');
 }
 
+function majScoreTempJourneeTerminee($numJournee)
+{
+	addLogEvent('Mise à jour des scores pour la journée Terminée OK.');
+	global $bdd;
+
+    $q = $bdd->prepare('UPDATE calendrier_ligue cl
+      SET cl.score_dom = (
+        SELECT COALESCE(SUM(jce.nb_but_reel),0) + COALESCE(SUM(jce.nb_but_virtuel),0)
+        FROM joueur_compo_equipe jce
+        JOIN compo_equipe ce ON ce.id = jce.id_compo
+        WHERE ce.id_equipe = cl.id_equipe_dom
+        AND ce.id_cal_ligue = cl.id
+      ),
+      cl.score_ext = (
+        SELECT COALESCE(SUM(jce.nb_but_reel),0) + COALESCE(SUM(jce.nb_but_virtuel),0)
+        FROM joueur_compo_equipe jce
+        JOIN compo_equipe ce ON ce.id = jce.id_compo
+        WHERE ce.id_equipe = cl.id_equipe_ext
+        AND ce.id_cal_ligue = cl.id
+      )
+      WHERE cl.num_journee_cal_reel = :numJournee');
+    $q->bindValue(':numJournee', $numJournee);
+
+    $q->execute();
+
+    // Prise en compte des CSC
+    $q = $bdd->prepare('UPDATE calendrier_ligue cl
+      SET cl.score_dom = (cl.score_dom + (
+        SELECT COALESCE(SUM(jce.nb_csc),0)
+        FROM joueur_compo_equipe jce
+        JOIN compo_equipe ce ON ce.id = jce.id_compo
+        WHERE ce.id_equipe = cl.id_equipe_ext
+        AND ce.id_cal_ligue = cl.id
+      )),
+      cl.score_ext = (cl.score_ext + (
+        SELECT COALESCE(SUM(jce.nb_csc),0)
+        FROM joueur_compo_equipe jce
+        JOIN compo_equipe ce ON ce.id = jce.id_compo
+        WHERE ce.id_equipe = cl.id_equipe_dom
+        AND ce.id_cal_ligue = cl.id
+      ))
+      WHERE cl.num_journee_cal_reel = :numJournee');
+      $q->bindValue(':numJournee', $numJournee);
+
+      $q->execute();
+}
+
 //Récupère les effectifs concernés sur une ligue et sur une journée - Renvoie sous forme de tableau
 function get_effectifs_ligue_journee($constante_num_journee_cal_reel,$constanteConfrontationLigue)
 {
@@ -2748,7 +2795,7 @@ function getEquipesParLigue($idLigue)
 {
 	global $bdd;
 
-  $q = $bdd->prepare('SELECT e.*, c.nom as nom_coach FROM equipe e 
+  $q = $bdd->prepare('SELECT e.*, c.nom as nom_coach FROM equipe e
   	JOIN coach c ON c.id = e.id_coach
   	WHERE id_ligue = :id');
   $q->execute([':id' => $idLigue]);
@@ -2807,42 +2854,42 @@ function creerCaricature($idEquipe, $code, $idJoueurReel, $total)
 	$q->bindValue(':code', $code);
 	$q->bindValue(':idJoueurReel', $idJoueurReel);
 	$q->bindValue(':total', $total);
-	
+
 	$q->execute();
 }
 
 function getJoueursVoyantLigue($idLigue)
 {
 	global $bdd;
-	
+
 	$q = $bdd->prepare('SELECT id_joueur_reel, id_equipe, tour_mercato
 		FROM joueur_equipe WHERE (nb_but_reel + nb_but_virtuel) >= (
 			SELECT MIN(temp.total) FROM (
-				SELECT (je.nb_but_reel + je.nb_but_virtuel) as total 
+				SELECT (je.nb_but_reel + je.nb_but_virtuel) as total
 				FROM joueur_equipe je WHERE je.id_ligue = :id ORDER BY total DESC LIMIT 10
 			) temp
 		) AND id_ligue = :id AND tour_mercato >= 3');
 	$q->execute([':id' => $idLigue]);
-  
+
 	return $q->fetchAll();
 }
 
 function definirCaricaturesLigue($idLigue, $equipes)
 {
 	addLogEvent('Début traitement des caricatures.');
-	
+
 	$tabEquipeTrophee = [];
 	$nbMalusMax = 0;
 	$nbAttaqueMin = 1000;
 	$budgetMax = 0;
-	
+
 	$equipePigeon = 0;
 	$prixPigeon = 0;
 	$idJoueurPigeon = 0;
-	
+
 	$equipeDepensier = 0;
 	$prixDepensier = 0;
-	
+
 	foreach($equipes as $equipe)
     {
 		if ($equipe->classement() == 1) {
@@ -2856,7 +2903,7 @@ function definirCaricaturesLigue($idLigue, $equipes)
 		} else {
 			$tabEquipeTrophee[$equipe->id()] == 0;
 		}
-		
+
 		if ($equipe->nbMalus() > $nbMalusMax) {
 			$nbMalusMax = $equipe->nbMalus();
 		}
@@ -2866,11 +2913,11 @@ function definirCaricaturesLigue($idLigue, $equipes)
 		if ($equipe->budgetRestant() > $budgetMax) {
 			$budgetMax = $equipe->budgetRestant();
 		}
-		
+
 		$prixAttSansBut = 0;
 		$idAttSansBut = 0;
 		$depensier = 0;
-		
+
 		$joueursEquipe = getJoueurEquipeByEquipe($equipe->id());
 		foreach($joueursEquipe as $joueur)
 		{
@@ -2887,27 +2934,27 @@ function definirCaricaturesLigue($idLigue, $equipes)
 				$depensier += $joueur->prixAchat();
 			}
 		}
-		
+
 		if ($prixAttSansBut > $prixPigeon) {
 			$equipePigeon = $equipe->id();
 			$prixPigeon = $prixAttSansBut;
 			$idJoueurPigeon = $idAttSansBut;
 		}
-		
+
 		if ($depensier > $prixDepensier) {
 			$equipeDepensier = $equipe->id();
 			$prixDepensier = $depensier;
 		}
 	}
-	
+
 	addLogEvent('Caricature ' . CaricatureEnum::PIGEON . ' pour l\'équipe (id=' . $equipePigeon . ') et le joueur (id=' . $idJoueurPigeon . ') au prix de ' . $prixPigeon . '.');
 	creerCaricature($equipePigeon, CaricatureEnum::PIGEON, $idJoueurPigeon, $prixPigeon);
 	$tabEquipeTrophee[$equipePigeon] == 1;
-	
+
 	addLogEvent('Caricature ' . CaricatureEnum::DEPENSIER . ' pour l\'équipe (id=' . $equipeDepensier . ') au prix de ' . $prixDepensier . '.');
 	creerCaricature($equipeDepensier, CaricatureEnum::DEPENSIER, NULL, $prixDepensier);
 	$tabEquipeTrophee[$equipeDepensier] == 1;
-	
+
 	$joueursVoyant = getJoueursVoyantLigue($idLigue);
 	foreach($joueursVoyant as $joueur)
     {
@@ -2915,7 +2962,7 @@ function definirCaricaturesLigue($idLigue, $equipes)
 		creerCaricature($joueur['id_equipe'], CaricatureEnum::VOYANT, $joueur['id_joueur_reel'], $joueur['tour_mercato']);
 		$tabEquipeTrophee[$joueur['id_equipe']] == 1;
 	}
-	
+
 	foreach($equipes as $equipe)
     {
 		if ($equipe->nbMalus() == $nbMalusMax) {
@@ -2933,13 +2980,13 @@ function definirCaricaturesLigue($idLigue, $equipes)
 			creerCaricature($equipe->id(), CaricatureEnum::ECONOME, NULL, $budgetMax);
 			$tabEquipeTrophee[$equipe->id()] == 1;
 		}
-		
+
 		if ($tabEquipeTrophee[$equipe->id()] == 0) {
 			addLogEvent('Caricature ' . CaricatureEnum::AUC_TROPHEE . ' pour l\'équipe ' . $equipe->nom() . ' (id=' . $equipe->id() . ').');
 			creerCaricature($equipe->id(), CaricatureEnum::AUC_TROPHEE, NULL, 0);
 		}
 	}
-	
+
 	addLogEvent('Fin traitement des caricatures.');
 }
 
@@ -2970,7 +3017,7 @@ function maj_ligues_fin_journee($numJournee)
 			if (getNbMatchJournee($idLigue, $prochainNumJournee) == 0)
 			{
 				definirCaricaturesLigue($idLigue, $equipes);
-				
+
 				majEtatLigue($idLigue, EtatLigue::TERMINEE);
 				addLogEvent('La ligue passe au statut 3 (TERMINEE).');
 			}
@@ -3120,13 +3167,13 @@ function calculButVirtuel($equipeA,$equipeB){
 	addLogEvent( 'TONTON Compo Dom ['.$equipeA.'] TontonPatDef = '.$tontonPatDefenseA.' TontonPatMil = '.$tontonPatMilieuA.' TontonPatAtt = '.$tontonPatAttaqueA);
 
 	$tab_compo_definitive = get_compo_definitive($equipeB);
+
 	//Boucle CALCUL MOYENNE ET TONTON PAT sur la compo visiteur
+	$moyGardienB = 1 ;
 	foreach($tab_compo_definitive as $compoDefinitive)
 	{
 		if($compoDefinitive['numero_definitif'] == 1){
-			if(is_null($compoDefinitive['note'])){
-				$moyGardienB = 1 ;
-			}else{
+			if(!is_null($compoDefinitive['note'])){
 				$moyGardienB =  $compoDefinitive['note'];
 			}
 		}else{
@@ -3537,9 +3584,9 @@ function maj_etat_joueur_reel($equipe,$position,$nom,$etat)
 	$pos = strrpos(trim($nom)," ");
 	$nom_unique = trim(substr(trim($nom),$pos));
 	$upd_etat_joueur_reel = $bdd->prepare('UPDATE joueur_reel jr, nomenclature_equipes_reelles ner SET jr.etat = :etat WHERE jr.position = :position AND jr.equipe = ner.trigramme AND ner.ville_roto = :ville_roto AND (LOCATE(:nom_unique,jr.cle_roto_primaire)>0 OR LOCATE(:nom_unique,jr.cle_roto_secondaire)>0);');
-	
+
 	$upd_etat_joueur_reel->execute(array('etat' => trim($etat), 'position' => trim($position), 'ville_roto' => trim($equipe), 'nom_unique' => $nom_unique));
-	
+
 	$upd_etat_joueur_reel->closeCursor();
 }
 

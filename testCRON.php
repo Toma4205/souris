@@ -68,7 +68,7 @@ if ($tabJournee !== null)
 		if (strtotime("now")-strtotime($journee['date_heure_debut']) >= 0) {
 			addLogEvent('Date de début dépassée (' . $journee['date_heure_debut'] . ') => initialisation de la journée.');
 			dump_pre_journee($numJournee);
-			
+
 			//L'INIT n'a pas été fait alors faire le SCRIPT ZERO
 			initializeJournee($numJournee);
 			$statut == 1;
@@ -107,8 +107,9 @@ if ($tabJournee !== null)
 				//Tous les matchs de la journée n'ont pas encore été joué
 			}else{
 				addLogEvent('CRON tous les matchs OK, Statut journee = 2.');
-				setStatutJournee($numJournee,2);
 				calculer_confrontations_journee($numJournee, null, FALSE);
+				majScoreTempJourneeTerminee($numJournee);
+				setStatutJournee($numJournee,2);
 				$statut = 2;
 			}
 
@@ -121,8 +122,9 @@ if ($tabJournee !== null)
 				set_statut_match_termine_journee($numJournee,1,0);
 				get_csv_from_roto($numJourneeLong);
 				calculer_notes_joueurs();
-				setStatutJournee($numJournee,2);
 				calculer_confrontations_journee($numJournee, null, FALSE);
+				majScoreTempJourneeTerminee($numJournee);
+				setStatutJournee($numJournee,2);
 				$statut = 2;
 			}
 	}
