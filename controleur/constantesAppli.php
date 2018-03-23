@@ -13,10 +13,10 @@ class ConstantesAppli {
     const MILIEU_IHM = 'Milieu';
     const ATTAQUANT_IHM = 'Attaquant';
 
-	const SUSPENDU = 'SUS';
-	const BLESSE = 'OUT';
-	const INCERTAIN = 'GTD';
-		
+	  const SUSPENDU = 'SUS';
+	  const BLESSE = 'OUT';
+	  const INCERTAIN = 'GTD';
+
     const BONUS_MALUS_AUCUN = 'A';
     const BONUS_MALUS_CLASSIQUE = 'C';
     const BONUS_MALUS_FOLIE = 'F';
@@ -43,7 +43,7 @@ class ConstantesAppli {
     const STATUT_CAL_TERMINE = 2;
     const STATUT_CAL_CLOTURE = 3;
 
-	const RATIO_PEPITE = 1;
+	  const RATIO_PEPITE = 1;
 }
 
  ?>
