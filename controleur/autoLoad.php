@@ -8,7 +8,8 @@ function autoload($classname)
     "modele/joueurreel/$classname.php", "modele/prepamercato/$classname.php",
     "modele/nomenclature/$classname.php", "modele/joueurequipe/$classname.php",
     "modele/calendrierligue/$classname.php", "modele/bonusmalus/$classname.php",
-    "modele/calendrierreel/$classname.php", "modele/compoequipe/$classname.php");
+    "modele/calendrierreel/$classname.php", "modele/compoequipe/$classname.php",
+    "modele/caricatureequipe/$classname.php");
 
     foreach ($sources as $source) {
           if (file_exists($source)) {

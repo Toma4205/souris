@@ -79,3 +79,32 @@
   padding: 1rem 0;
   text-align: center;
 }
+
+/*************/
+/** TROPHEES */
+/*************/
+.detail_trophee_equipe {
+  padding: 1rem 0;
+  width: 70%;
+}
+.detail_trophee_equipe_lib {
+  font-size: 1.2rem;
+  padding-bottom: .5rem;
+  border-bottom: 2px solid #141b4D;
+  color: #4a61d4;
+}
+.detail_trophee_equipe_trophee {
+  padding: .5rem;
+  text-align: left;
+  border-bottom: 1px dashed #141b4D;
+}
+.detail_trophee_equipe_trophee_lib_court {
+  font-size: .8rem;
+  font-style: italic;
+  color: #141b4D;
+  line-height: 1rem;
+}
+.detail_trophee_equipe_trophee_lib_long {
+  margin-left: 0;
+  text-align: left;
+}

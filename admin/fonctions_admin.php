@@ -2879,6 +2879,8 @@ function definirCaricaturesLigue($idLigue, $equipes)
 {
 	addLogEvent('Début traitement des caricatures.');
 
+	// TODO TONTON_PAT, PIGNON, BUT_REEL_ENC, BUT_VIRTUEL_ENC
+
 	$tabEquipeTrophee = [];
 	$nbMalusMax = 0;
 	$nbAttaqueMin = 1000;
@@ -2987,7 +2989,7 @@ function definirCaricaturesLigue($idLigue, $equipes)
 			creerCaricature($equipe->id(), CaricatureEnum::PIRE_ATTAQUE, NULL, $nbAttaqueMin);
 			$tabEquipeTrophee[$equipe->id()] = 1;
 		}
-		if ($equipe->budgetRestant() == $budgetMax) {
+		if ($equipe->budgetRestant() == $budgetMax && $budgetMax > 0) {
 			addLogEvent('Caricature ' . CaricatureEnum::ECONOME . ' pour l\'équipe ' . $equipe->nom() . ' (id=' . $equipe->id() . ') avec un budget restant de ' . $budgetMax . '.');
 			creerCaricature($equipe->id(), CaricatureEnum::ECONOME, NULL, $budgetMax);
 			$tabEquipeTrophee[$equipe->id()] = 1;

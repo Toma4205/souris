@@ -2,6 +2,7 @@
 
 $equipeManager = new EquipeManager($bdd);
 $joueurEquipeManager = new JoueurEquipeManager($bdd);
+$caracEquipeManager = new CaricatureEquipeManager($bdd);
 
 $equipe = $equipeManager->findEquipeByCoachEtLigue($coach->id(), $ligue->id());
 $equipes = $equipeManager->findEquipeByLigue($ligue->id());
@@ -37,6 +38,8 @@ foreach ($joueursLigue as $cle => $joueur)
     $topATT[] = $joueur;
   }
 }
+
+$caracsEquipe = $caracEquipeManager->findByLigue($ligue->id());
 
 include_once('vue/classementLigue.php');
 ?>

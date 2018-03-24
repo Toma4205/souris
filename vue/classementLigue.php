@@ -35,7 +35,12 @@ require_once("vue/commun/enteteflex.php");
         $index = 1;
         foreach($equipes as $value)
         {
-          echo '<tr><td>' . $index . ' . ' . $value->nom() . '</td>';
+          echo '<tr><td>' . $index . ' . ' . $value->nom();
+          if ($index == sizeof($equipes)) {
+            echo '<img src="web/img/souris.png" class="margin_left_5px" title="La souris actuelle"
+              alt="" width="15px" height="15px"/>';
+          }
+          echo '</td>';
           echo '<td>' . ((3 * $value->nbVictoire()) + $value->nbNul()) . '</td>';
           echo '<td>' . $value->nbMatch() . '</td>';
           echo '<td>' . $value->nbVictoire() . '</td>';
@@ -280,7 +285,7 @@ require_once("vue/commun/enteteflex.php");
         echo '</div>';
     }
 
-    foreach ($equipes as $cle => $value)
+    foreach ($equipes as $value)
     {
       echo '<div id="effectif' . $value->id(). '"';
       if ($value->id() != $equipe->id())
@@ -298,9 +303,41 @@ require_once("vue/commun/enteteflex.php");
   ?>
 </section>
 <section id="sectionTrophees" class="cache">
-  <div>
-    <p>A venir Trophées ...</p>
-  </div>
+  <?php
+
+  function afficherBlocTrophee($idEquipe, $nomEquipe, $caracs)
+  {
+    echo '<div id="trophees' . $idEquipe . '" class="detail_trophee_equipe margin_auto">';
+    echo '<div class="detail_trophee_equipe_lib">' . $nomEquipe . '</div>';
+    foreach($caracs as $carac) {
+        if ($carac->idEquipe() == $idEquipe) {
+          $libLong = str_replace("%J",'<b>'.$carac->nom().'</b>',$carac->libelleCaricature());
+          $libLong = str_replace("%T",'<b>'.$carac->total().'</b>',$libLong);
+
+          echo '<div class="detail_trophee_equipe_trophee conteneurRow">';
+          echo '<div class="width_130px conteneurColumn margin_0">';
+          echo '<div class="detail_trophee_equipe_trophee_lib_court">' . $carac->libelleCourtCaricature() . '</div>';
+          echo '<img src="web/img/caricature/' . $carac->code() . '.png" class="margin_auto"
+            title="' . $carac->libelleCourtCaricature() . '" alt="" width="40px" height="40px"/>';
+          echo '</div>';
+          echo '<div class="detail_trophee_equipe_trophee_lib_long margin_auto">' . $libLong . '</div>';
+          echo '</div>';
+        }
+    }
+    echo '</div>';
+  }
+
+  if (isset($caracsEquipe) && sizeof($caracsEquipe) > 0) {
+    echo '<div>';
+    foreach($equipes as $value) {
+      afficherBlocTrophee($value->id(), $value->nom(), $caracsEquipe);
+    }
+    echo '</div>';
+  } else {
+    echo '<div><br/>Ne soyez pas si hâtif.<br/>Les trophées seront distribués une fois la ligue terminée.</div>';
+  }
+
+  ?>
 </section>
 <?php
 // Le pied de page
