@@ -40,7 +40,7 @@ class CompoEquipeManager extends ManagerBase
   {
     $joueurs = [];
 
-    $q = $this->_bdd->prepare('SELECT jce.*, jr.nom, jr.position, jr2.nom as nom_remplacant, 
+    $q = $this->_bdd->prepare('SELECT jce.*, jr.nom, jr.position, jr2.nom as nom_remplacant,
       jr2.prenom as prenom_remplacant, jr.equipe as code_equipe
       FROM joueur_compo_equipe  jce
       JOIN joueur_reel jr ON jr.id = jce.id_joueur_reel
@@ -64,12 +64,15 @@ class CompoEquipeManager extends ManagerBase
     $q->bindValue(':equipe', $idEquipe);
     $q->execute();
 
-    $q = $this->_bdd->prepare('INSERT INTO compo_equipe(id_cal_ligue, id_equipe, code_tactique, code_bonus_malus)
-        VALUES(:calLigue, :equipe, :tactique, :bonus)');
+    $q = $this->_bdd->prepare('INSERT INTO compo_equipe(id_cal_ligue, id_equipe, code_tactique,
+        code_bonus_malus, pari_dom, pari_ext)
+        VALUES(:calLigue, :equipe, :tactique, :bonus, :dom, :ext)');
     $q->bindValue(':calLigue', $idCalLigue);
     $q->bindValue(':equipe', $idEquipe);
     $q->bindValue(':tactique', $compo->codeTactique());
     $q->bindValue(':bonus', $compo->codeBonusMalus());
+    $q->bindValue(':dom', $compo->pariDom());
+    $q->bindValue(':ext', $compo->pariExt());
     $q->execute();
 	}
 

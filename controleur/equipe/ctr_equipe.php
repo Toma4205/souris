@@ -46,6 +46,13 @@ if (isset($_POST['changerTactique']))
 {
   $compoEquipe->setCode_tactique($_POST['choixTactique']);
   $compoEquipe->setCode_bonus_malus($_POST['choixBonus']);
+  if (isset($_POST['pariDom'])) {
+    $compoEquipe->setPari_dom($_POST['pariDom']);
+  }
+  if (isset($_POST['pariExt'])) {
+    $compoEquipe->setPari_ext($_POST['pariExt']);
+  }
+  
   foreach ($_POST as $name => $valeur)
   {
     if (substr($name, 0, 8) == 'rentrant') {
@@ -66,6 +73,13 @@ if (isset($_POST['changerTactique']))
 elseif (isset($_POST['enregistrer']))
 {
   $compoEquipe->setCode_tactique($_POST['choixTactique']);
+  if (isset($_POST['pariDom'])) {
+    $compoEquipe->setPari_dom($_POST['pariDom']);
+  }
+  if (isset($_POST['pariExt'])) {
+    $compoEquipe->setPari_ext($_POST['pariExt']);
+  }
+
   if ($_POST['choixBonus'] != '')
   {
     $compoEquipe->setCode_bonus_malus($_POST['choixBonus']);

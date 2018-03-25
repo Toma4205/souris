@@ -23,8 +23,8 @@ if (isset($calReel) && $ligue->etat() == EtatLigue::EN_COURS)
 
   <?php include_once('equipe/equipe_infos_compo.php') ?>
 
-  <div class="conteneurRow">
-    <div class="conteneurColumnGauche width_40pc">
+  <div id="rowCompoEquipe" class="conteneurRow">
+    <div id="contenuCompoEquipe" class="conteneurColumnGauche width_40pc">
 
       <?php include_once('equipe/equipe_titu.php') ?>
       <?php include_once('equipe/equipe_remplacant.php') ?>
@@ -38,7 +38,10 @@ if (isset($calReel) && $ligue->etat() == EtatLigue::EN_COURS)
 
     </div>
   </div>
-  <div>
+
+  <?php include_once('equipe/equipe_pari.php') ?>
+
+  <div class="margin_top_1rem">
     <input type="submit" value="Valider la compo" name="enregistrer"
       onclick="return controlerBonus();" class="marginBottom width_200px" />
   </div>

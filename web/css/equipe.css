@@ -60,6 +60,10 @@
   margin: auto;
   margin-top: 0.5rem;
 }
+.compo_equipe_infos_journee {
+  background-color: #dcebf5;
+  margin-top: .5rem;
+}
 .detail_compo {
   margin: 1rem 0;
   border-bottom: 2px dashed #141b4D;
@@ -120,6 +124,7 @@
 }
 .detail_calendrier_reel_match {
   padding: .3rem 0;
+  font-size: .8rem;
   border-bottom: 1px dashed #141b4D;
 }
 
@@ -141,4 +146,28 @@
 .spanChoixJoueur {
   width: 1.7rem;
   display: inline-block;
+}
+
+.section_pari {
+  padding: 1rem 0;
+}
+
+.signeRemplacement {
+  margin: 0 5px;
+}
+#rowCompoEquipe {
+  border-bottom: 2px dashed #141b4D;
+}
+#contenuCompoEquipe p, #remplacant, #divRemplacant p {
+  margin: 0;
+  padding-top: 5px;
+  font-weight: bold;
+}
+#titulaire, #remplacant, #remplacement, #capitaine {
+  border-bottom: solid #141b4D;
+  font-weight: bold;
+  font-variant: small-caps;
+}
+#titulaire p {
+  text-align: left;
 }

@@ -1,5 +1,5 @@
 <div class="conteneurRow detail_compo">
-  <div class="conteneurColumn">
+  <div class="conteneurColumn margin_top_0">
     <div class="detail_compo_titre">Choix tactique</div>
     <div class="message_ingo">(Si 4 DEF, +0.5 pour chaque /<br/> Si 5 DEF, +1 pour chaque)</div>
     <?php
@@ -61,7 +61,7 @@
       }
       ?>
   </div>
-  <div class="conteneurColumn">
+  <div class="conteneurColumn margin_top_0">
     <div class="detail_compo_titre">Capitaine</div>
     <div class="message_ingo">(+0.5 si équipe réelle gagne /<br/> -1 si équipe réelle perd)</div>
     <select name="choixCapitaine" class="selectChoixCapitaine">
@@ -78,13 +78,14 @@
          ?>
     </select>
   </div>
-  <div class="conteneurColumn">
+  <div class="conteneurColumn margin_top_0">
     <div class="detail_compo_titre">Bonus/Malus<span id="imgSuppBonus" class="detail_compo_bonus_malus_supp cache"
       onclick="javascript:suppSelectBonusMalus();" title="Supprimer bonus sélectionné">
-      <img src="web/img/croix.jpg" alt="X" width="10px" height="10px"/></span></div>
+      <img src="web/img/croix.jpg" alt="X" width="10px" height="10px"/></span>
+    </div>
     <input type="hidden" id="choixBonus" name="choixBonus" value="<?php echo $compoEquipe->codeBonusMalus(); ?>" />
     <?php
-      if (isset($bonusMalus))
+      if (isset($bonusMalus) && sizeof($bonusMalus) > 0)
       {
         $tabBonus = [];
         foreach ($bonusMalus as $value) {
@@ -142,7 +143,7 @@
 
         echo '</div>';
       } else {
-        echo '<div>Plus de bonus/malus disponible.</div>';
+        echo '<div class="margin_top_1rem font_size_point_8rem">Plus de bonus/malus disponible.</div>';
       }
      ?>
     <select name="choixJoueurBonus" class="selectChoixJoueurBonus cache">

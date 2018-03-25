@@ -46,14 +46,26 @@
   width: 300px !important;
 }
 
+.width_4pc {
+  width: 4% !important;
+}
 .width_6pc {
   width: 6% !important;
+}
+.width_7pc {
+  width: 7% !important;
+}
+.width_8pc {
+  width: 8% !important;
 }
 .width_10pc {
   width: 10% !important;
 }
 .width_25pc {
   width: 25% !important;
+}
+.width_30pc {
+  width: 30% !important;
 }
 .width_35pc {
   width: 35% !important;

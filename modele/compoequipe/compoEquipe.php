@@ -8,6 +8,8 @@ class CompoEquipe extends ClasseBase
   private $_id;
   private $_codeTactique;
   private $_codeBonusMalus;
+  private $_pariDom;
+  private $_pariExt;
 
   // Jointure table;
   private $_libCourtBonusMalus;
@@ -24,6 +26,8 @@ class CompoEquipe extends ClasseBase
   public function id() { return $this->_id; }
   public function codeTactique() { return $this->_codeTactique; }
   public function codeBonusMalus() { return $this->_codeBonusMalus; }
+  public function pariDom() { return $this->_pariDom; }
+  public function pariExt() { return $this->_pariExt; }
   public function libCourtBonusMalus() { return $this->_libCourtBonusMalus; }
   public function libLongBonusMalus() { return $this->_libLongBonusMalus; }
   public function nomJoueurReelEquipe() { return $this->_nomJoueurReelEquipe; }
@@ -45,11 +49,21 @@ class CompoEquipe extends ClasseBase
       $this->_codeBonusMalus = $codeBonusMalus;
   }
 
+  public function setPari_dom($pariDom)
+  {
+      $this->_pariDom = $pariDom;
+  }
+
+  public function setPari_ext($pariExt)
+  {
+      $this->_pariExt = $pariExt;
+  }
+
   public function setLibCourtBonusMalus($libCourtBonusMalus)
   {
       $this->_libCourtBonusMalus = $libCourtBonusMalus;
   }
-  
+
   public function setLibLongBonusMalus($libLongBonusMalus)
   {
       $this->_libLongBonusMalus = $libLongBonusMalus;

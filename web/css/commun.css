@@ -180,6 +180,18 @@ div#contenu {
 .margin_auto_vertical {
   margin: auto 0 !important;
 }
+.margin_left_5px {
+  margin-left: 5px;
+}
+.margin_right_5px {
+  margin-right: 5px;
+}
+.margin_top_1rem {
+  margin-top: 1rem;
+}
+.margin_top_0 {
+  margin-top: 0;
+}
 .text_align_left {
   text-align: left !important;
 }
@@ -313,9 +325,6 @@ p.colonne {
 .padding_bottom_15px {
   padding-bottom: 15px;
 }
-.margin_left_5px {
-  margin-left: 5px;
-}
 
 /* ACCUEIL */
 .sectionAccueil {
@@ -378,25 +387,7 @@ p.colonne {
 .selectChoixJoueurREMPL {
   width: 250px;
 }
-.signeRemplacement {
-  margin: 0 5px;
-}
-#rowCompoEquipe {
-  padding-bottom: 15px;
-}
-#contenuCompoEquipe p, #remplacant, #divRemplacant p {
-  margin: 0;
-  padding-top: 5px;
-  font-weight: bold;
-}
-#titulaire, #remplacant, #remplacement, #capitaine {
-  border-bottom: solid #141b4D;
-  font-weight: bold;
-  font-variant: small-caps;
-}
-#titulaire p {
-  text-align: left;
-}
+
 
 /* CLASSEMENTS */
 header.menuClassement {

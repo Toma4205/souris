@@ -5,8 +5,9 @@
       $trouve = 0;
       if($joueur->etat() == $etat) {
           echo '<li class="detail_etat_joueur conteneurRow">';
-          echo '<div class="width_10pc"><img src="web/img/maillot/shirt_' . strtolower($joueur->codeEquipe()) . '.png" alt="' . $joueur->codeEquipe() . '" width="20px" height="20px" /></div>';
-          echo '<div class="width_35pc text_align_left margin_auto_vertical">'.$joueur->nom().' '.$joueur->prenom().'</div>';
+          echo '<div class="width_10pc margin_right_5px"><img src="web/img/maillot/shirt_' . strtolower($joueur->codeEquipe()) . '.png"
+            alt="' . $joueur->codeEquipe() . '" width="20px" height="20px" /></div>';
+          echo '<div class="text_align_left margin_auto_vertical width_90pc">'.$joueur->nom().'</div>';
           echo '</li>';
           $trouve = 1;
       }
