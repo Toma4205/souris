@@ -2772,7 +2772,95 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 
 	if ($maj_stats_classement) {
 		mise_a_jour_stat_classement($constante_num_journee_cal_reel, $constanteJourneeFormatLong, $req_ligues_concernees);
+		verifierPariTruque($constante_num_journee_cal_reel, $ligue_unique);
 	}
+}
+
+function verifierPariTruque($constante_num_journee_cal_reel, $ligue_unique)
+{
+	addLogEvent('Début vérification des paris truqués.');
+
+	global $bdd;
+	if(is_null($ligue_unique)) {
+		$q = $bdd->prepare('SELECT ce.id_equipe, e.id_coach, l.nom
+			FROM compo_equipe ce
+      JOIN equipe e ON e.id = ce.id_equipe
+			JOIN calendrier_ligue cl ON cl.id = ce.id_cal_ligue
+			JOIN ligue l on l.id = e.id_ligue
+			JOIN calendrier_reel cr ON cr.num_journee = cl.num_journee_cal_reel
+			WHERE cr.num_journee = :num
+			AND ce.pari_dom = cl.score_dom AND ce.pari_ext = cl.score_ext');
+	  $q->execute([':num' => $constante_num_journee_cal_reel]);
+	} else {
+		$q = $bdd->prepare('SELECT ce.id_equipe, e.id_coach, l.nom
+			FROM compo_equipe ce
+      JOIN equipe e ON e.id = ce.id_equipe
+			JOIN calendrier_ligue cl ON cl.id = ce.id_cal_ligue
+			JOIN ligue l on l.id = e.id_ligue
+			JOIN calendrier_reel cr ON cr.num_journee = cl.num_journee_cal_reel
+			WHERE cr.num_journee = :num AND cl.id_ligue = :id
+			AND ce.pari_dom = cl.score_dom AND ce.pari_ext = cl.score_ext');
+	  $q->execute([':num' => $constante_num_journee_cal_reel, ':id' => $ligue_unique]);
+	}
+
+	$tabBonus = getNomenclatureBonusMalus();
+	while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+	{
+		$bonus = $tabBonus[rand(0,4)];
+		$equipe = $donnees['id_equipe'];
+		$coach = $donnees['id_coach'];
+		$nomLigue = $donnees['nom'];
+		$libActu = 'Congrats ! Tu as gagné un bonus "' . $bonus['libelle_court'] .
+			'" dans la ligue "' . $nomLigue . '" grâce à ton pari truqué.';
+
+		$q2 = $bdd->prepare('INSERT INTO bonus_malus(code, id_equipe) VALUES(:code, :idEquipe)');
+		$q2->bindValue(':code', $bonus['code']);
+		$q2->bindValue(':idEquipe', $equipe);
+		$q2->execute();
+
+		creerActualiteCoach($coach, $equipe, $libActu);
+
+		addLogEvent('Ajout du bonus ' . $bonus['code'] . ' pour l\'équipe ' . $equipe . ' (coach=' . $coach . ').');
+	}
+	$q->closeCursor();
+
+	addLogEvent('Fin vérification des paris truqués.');
+}
+
+function getNomenclatureBonusMalus()
+{
+	global $bdd;
+
+	$q = $bdd->prepare('SELECT code, libelle_court FROM nomenclature_bonus_malus');
+	$q->execute();
+	// TODO Ajouter bonus quand prise en compte OK dans cron
+
+	$tabBonus = [];
+	while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+	{
+		$code = $donnees['code'];
+		if ($code == ConstantesAppli::BONUS_MALUS_FUMIGENE
+			|| $code == ConstantesAppli::BONUS_MALUS_DIN_ARB
+			|| $code == ConstantesAppli::BONUS_MALUS_FAM_STA
+			|| $code == ConstantesAppli::BONUS_MALUS_BUS
+			|| $code == ConstantesAppli::BONUS_MALUS_CON_ZZ) {
+			$tabBonus[] = $donnees;
+		}
+	}
+
+	return $tabBonus;
+}
+
+function creerActualiteCoach($idCoach, $idEquipe, $libelle)
+{
+	global $bdd;
+
+	$q2 = $bdd->prepare('INSERT INTO actualite_coach(id_coach, id_equipe, libelle, date_creation)
+		VALUES(:coach, :equipe, :libelle, NOW())');
+	$q2->bindValue(':coach', $idCoach);
+	$q2->bindValue(':equipe', $idEquipe);
+	$q2->bindValue(':libelle', $libelle);
+	$q2->execute();
 }
 
 function getLiguesATraiter($numJournee)

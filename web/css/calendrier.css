@@ -77,7 +77,7 @@
   font-weight: bold;
   line-height: 1.2;
 }
-.detail_match_bandeau_equipe_coach {
+.detail_match_bandeau_equipe_coach, .detail_match_bandeau_equipe_pari {
   margin-top: .4rem;
   font-size: 0.8rem;
   color: rgba(255,255,255,0.5);

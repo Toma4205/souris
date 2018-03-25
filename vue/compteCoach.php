@@ -64,13 +64,13 @@ require_once("vue/commun/enteteflex.php");
 </section>
 <section>
     <header>Actualités</header>
+    <div>
     <?php
-    $nbActu = 0;
-    if (sizeof($ligues) > 0)
-    {
-      echo '<div>';
-      echo '<ul>';
 
+    $nbActu = 0;
+    if (sizeof($ligues) > 0 || sizeof($actus) > 0)
+    {
+      echo '<ul>';
       foreach($ligues as $value)
       {
         if ($value->etat() == EtatLigue::CREATION)
@@ -80,17 +80,26 @@ require_once("vue/commun/enteteflex.php");
             $nbActu++;
             echo '<li class="detail_action_actu">';
             echo '<span class="float_left image_action_actu"><img src="web/img/actu_compte_coach.png" alt="" width="50px" height="50px"/></span>';
-            echo '<b>' . $value->nomCoachCreateur() . '</b> doit valider ta participation à la ligue <b>"' . $value->nom() . '"</b>.</li>';
+            echo '<b>' . $value->nomCoachCreateur() . '</b> doit valider ta participation à la ligue <b>"' . $value->nom() . '"</b>.';
+            echo '</li>';
           }
         }
       }
+      foreach($actus as $value)
+      {
+        $nbActu++;
+        echo '<li class="detail_action_actu">';
+        echo '<span class="float_left image_action_actu"><img src="web/img/actu_compte_coach.png" alt="" width="50px" height="50px"/></span>';
+        echo $value->libelle();
+        echo '</li>';
+      }
       echo '</ul>';
-      echo '</div>';
     }
     if ($nbActu == 0) {
-      echo '<div>Aucune actualité pour le moment. <b>#viedeouf</b></div>';
+      echo 'Aucune actualité pour le moment. <b>#viedeouf</b>';
     }
     ?>
+    </div>
 </section>
 <section id="sectionMesLigues">
       <header>Mes ligues</header>

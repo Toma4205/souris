@@ -82,6 +82,7 @@ function afficherButeur($joueurs, $joueursAdv, $codeBonusAdv, $nomJoueur, $statu
       <div class="detail_match_bandeau_equipe_logo">
         <img src="web/img/coach/<?php echo $tabNomenclStyleCoach[$equipeDom->codeStyleCoach()]; ?>" alt="Logo équipe dom." width="80px" height="80px"/>
       </div>
+      <div class="detail_match_bandeau_equipe_pari">Pari truqué : <?php if (isset($compoDom)) {echo $compoDom->pariDom() . ' - ' . $compoDom->pariExt();} ?></div>
       <div class="detail_match_bandeau_equipe_buteur">
         <ul>
           <?php
@@ -134,6 +135,7 @@ function afficherButeur($joueurs, $joueursAdv, $codeBonusAdv, $nomJoueur, $statu
       <div class="detail_match_bandeau_equipe_logo">
         <img src="web/img/coach/<?php echo $tabNomenclStyleCoach[$equipeExt->codeStyleCoach()]; ?>" alt="Logo équipe ext." width="80px" height="80px"/>
       </div>
+      <div class="detail_match_bandeau_equipe_pari">Pari truqué : <?php if (isset($compoExt)) {echo $compoExt->pariDom() . ' - ' . $compoExt->pariExt();} ?></div>
       <div class="detail_match_bandeau_equipe_buteur">
         <ul>
           <?php

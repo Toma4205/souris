@@ -42,7 +42,7 @@ if (isset($calReel) && $ligue->etat() == EtatLigue::EN_COURS)
   <?php include_once('equipe/equipe_pari.php') ?>
 
   <div class="margin_top_1rem">
-    <input type="submit" value="Valider la compo" name="enregistrer"
+    <input type="submit" value="Valider la journée" name="enregistrer"
       onclick="return controlerBonus();" class="marginBottom width_200px" />
   </div>
   <div id="messageErreurBonus" class="cache">Jean-Michel à moitié... Ta saisie du bonus/malus est incomplète !</div>

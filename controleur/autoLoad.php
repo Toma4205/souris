@@ -9,7 +9,7 @@ function autoload($classname)
     "modele/nomenclature/$classname.php", "modele/joueurequipe/$classname.php",
     "modele/calendrierligue/$classname.php", "modele/bonusmalus/$classname.php",
     "modele/calendrierreel/$classname.php", "modele/compoequipe/$classname.php",
-    "modele/caricatureequipe/$classname.php");
+    "modele/caricatureequipe/$classname.php", "modele/actualitecoach/$classname.php");
 
     foreach ($sources as $source) {
           if (file_exists($source)) {

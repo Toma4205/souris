@@ -3,10 +3,12 @@
 $managerConfrere = new ConfrereManager($bdd);
 $managerLigue = new LigueManager($bdd);
 $managerCalReel = new CalendrierReelManager($bdd);
+$managerActuCoach = new ActualiteCoachManager($bdd);
 
 $confreres = $managerConfrere->findConfreresByIdCoach($coach->id());
 $_SESSION[ConstantesSession::LISTE_CONFRERES] = $confreres;
 $numJourneeEnCours = $managerCalReel->findNumJourneeEnCours();
+$actus = $managerActuCoach->findByCoach($coach->id());
 
 if (isset($_POST['continuerCreaLigue']))
 {
