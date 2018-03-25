@@ -26,8 +26,6 @@ function afficherBonusMalus($codeBonus, $libBonus, $libLongBonus, $nomJoueurEqui
       echo '<img src="web/img/bonusmalus/PNG_butcher.png" title="'.$libLongBonus.'" alt="bonus" width="40px" height="40px"/>';
     } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_CHA_GB) {
       echo '<img src="web/img/bonusmalus/PNG_changementGardien.png" title="'.$libLongBonus.'" alt="bonus" width="40px" height="40px"/>';
-    } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_PAR_TRU) {
-      echo '<img src="web/img/bonusmalus/PNG_pari.png" title="'.$libLongBonus.'" alt="bonus" width="40px" height="40px"/>';
     } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_CON_ZZ) {
       echo '<img src="web/img/bonusmalus/PNG_zizou.png" title="'.$libLongBonus.'" alt="bonus" width="40px" height="40px"/>';
     }

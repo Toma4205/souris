@@ -276,8 +276,6 @@ require_once("vue/commun/enteteflex.php");
                   $bonusTrouve = '<img src="web/img/bonusmalus/PNG_butcher.png" alt="bonus" width="40px" height="40px"/>';
                 } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_CHA_GB) {
                   $bonusTrouve = '<img src="web/img/bonusmalus/PNG_changementGardien.png" alt="bonus" width="40px" height="40px"/>';
-                } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_PAR_TRU) {
-                  $bonusTrouve = '<img src="web/img/bonusmalus/PNG_pari.png" alt="bonus" width="40px" height="40px"/>';
                 } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_CON_ZZ) {
                   $bonusTrouve = '<img src="web/img/bonusmalus/PNG_zizou.png" alt="bonus" width="40px" height="40px"/>';
                 }

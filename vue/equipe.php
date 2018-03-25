@@ -380,8 +380,6 @@ if (isset($calReel) && $ligue->etat() == EtatLigue::EN_COURS)
                 echo '<img src="web/img/bonusmalus/PNG_butcher.png" title="'.$libLongBonus.'" alt="bonus" width="40px" height="40px"/>';
               } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_CHA_GB) {
                 echo '<img src="web/img/bonusmalus/PNG_changementGardien.png" title="'.$libLongBonus.'" alt="bonus" width="40px" height="40px"/>';
-              } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_PAR_TRU) {
-                echo '<img src="web/img/bonusmalus/PNG_pari.png" title="'.$libLongBonus.'" alt="bonus" width="40px" height="40px"/>';
               } else if ($codeBonus == ConstantesAppli::BONUS_MALUS_CON_ZZ) {
                 echo '<img src="web/img/bonusmalus/PNG_zizou.png" title="'.$libLongBonus.'" alt="bonus" width="40px" height="40px"/>';
               }
@@ -526,7 +524,7 @@ if (isset($calReel) && $ligue->etat() == EtatLigue::EN_COURS)
             if (isset($joueurs)) {
                 $trouve = 0;
 				echo '<div class="detail_effectif calendrier_reel_journee_bloc">';
-				echo '<div class="calendrier_reel_journee_titre">Fragiles</div>';	
+				echo '<div class="calendrier_reel_journee_titre">Fragiles</div>';
                 echo '<ul>';
                 foreach($joueurs as $joueur)
                 {
@@ -542,9 +540,9 @@ if (isset($calReel) && $ligue->etat() == EtatLigue::EN_COURS)
 				}
                 echo '</ul>';
                 echo '</div>';
-				
+
 				echo '<div class="detail_effectif calendrier_reel_journee_bloc">';
-				echo '<div class="calendrier_reel_journee_titre">Nerveux</div>';	
+				echo '<div class="calendrier_reel_journee_titre">Nerveux</div>';
                 echo '<ul>';
                 foreach($joueurs as $joueur)
                 {
@@ -560,9 +558,9 @@ if (isset($calReel) && $ligue->etat() == EtatLigue::EN_COURS)
 				}
                 echo '</ul>';
                 echo '</div>';
-				
+
 				echo '<div class="detail_effectif calendrier_reel_journee_bloc">';
-				echo '<div class="calendrier_reel_journee_titre">Vacanciers</div>';	
+				echo '<div class="calendrier_reel_journee_titre">Vacanciers</div>';
                 echo '<ul>';
                 foreach($joueurs as $joueur)
                 {
