@@ -6,6 +6,7 @@ class JoueurCompoEquipe extends ClasseBase
 {
   // Champs BDD
   private $_idJoueurReel;
+  private $_idCompo;
   private $_numero;
   private $_capitaine;
   private $_note;
@@ -32,6 +33,7 @@ class JoueurCompoEquipe extends ClasseBase
   }
 
   public function idJoueurReel() { return $this->_idJoueurReel; }
+  public function idCompo() { return $this->_idCompo; }
   public function numero() { return $this->_numero; }
   public function capitaine() { return $this->_capitaine; }
   public function note() { return $this->_note; }
@@ -53,6 +55,11 @@ class JoueurCompoEquipe extends ClasseBase
   public function setId_joueur_reel($idJoueurReel)
   {
     $this->_idJoueurReel = (int) $idJoueurReel;
+  }
+
+  public function setId_compo($id)
+  {
+    $this->_idCompo = (int) $id;
   }
 
   public function setNumero($numero)
@@ -134,7 +141,7 @@ class JoueurCompoEquipe extends ClasseBase
   {
       $this->_prenomRemplacant = $prenom;
   }
-  
+
   public function setCode_equipe($code)
   {
       $this->_codeEquipe = $code;
