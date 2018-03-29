@@ -61,7 +61,7 @@ class CalendrierReelManager extends ManagerBase
   public function findMatchsByJournee($numJournee)
   {
     $q = $this->_bdd->prepare('SELECT rr.equipeDomicile, rr.equipeVisiteur, n.libelle as libelleDomicile,
-        n2.libelle as libelleVisiteur
+        n2.libelle as libelleVisiteur, rr.statut
         FROM resultatsl1_reel rr
         JOIN nomenclature_equipe n ON n.code = rr.equipeDomicile
         JOIN nomenclature_equipe n2 ON n2.code = rr.equipeVisiteur
