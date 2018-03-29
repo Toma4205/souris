@@ -127,7 +127,10 @@
   font-size: .8rem;
   border-bottom: 1px dashed #141b4D;
 }
-
+.match_annule {
+  color: red;
+  font-weight: bold;
+}
 .detail_etat_joueur {
   padding: .3rem 0;
   border-bottom: 1px dashed #141b4D;
