@@ -12,7 +12,8 @@ class BonusMalusManager extends ManagerBase
   public function findBonusMalusByEquipe($idEquipe, $idCalLigue)
   {
     $bonusMalus = [];
-    $q = $this->_bdd->prepare('SELECT b.code, n.libelle_court as libelle_court, n.libelle as libelle, n.select_joueur
+    $q = $this->_bdd->prepare('SELECT b.code, n.libelle_court as libelle_court,
+      n.libelle as libelle, n.select_joueur
       FROM bonus_malus b
       JOIN nomenclature_bonus_malus n ON n.code = b.code
       WHERE b.id_equipe = :idEquipe
@@ -116,7 +117,7 @@ class BonusMalusManager extends ManagerBase
   public function reinitBonusMalusCompoEquipe($idEquipe, $idCalLigue)
   {
     $q = $this->_bdd->prepare('UPDATE bonus_malus SET id_cal_ligue = NULL,
-      id_joueur_reel_equipe = NULL, id_joueur_reel_adverse = NULL, mi_temps = NULL
+      id_joueur_reel_equipe = NULL, id_joueur_reel_adverse = NULL
       WHERE id_cal_ligue = :calLigue AND id_equipe = :equipe');
     $q->bindValue(':calLigue', $idCalLigue);
     $q->bindValue(':equipe', $idEquipe);
@@ -139,13 +140,11 @@ class BonusMalusManager extends ManagerBase
 
     // Mise à jour du bonusMalus en BDD
     $q = $this->_bdd->prepare('UPDATE bonus_malus SET id_cal_ligue = :calLigue,
-      id_joueur_reel_equipe = :idJoueurEquipe, id_joueur_reel_adverse = :idJoueurAdv,
-      mi_temps = :miTemps
+      id_joueur_reel_equipe = :idJoueurEquipe, id_joueur_reel_adverse = :idJoueurAdv
       WHERE id = :id');
     $q->bindValue(':calLigue', $idCalLigue);
     $q->bindValue(':idJoueurEquipe', $bonus->idJoueurReelEquipe());
     $q->bindValue(':idJoueurAdv', $bonus->idJoueurReelAdverse());
-    $q->bindValue(':miTemps', $bonus->miTemps());
     $q->bindValue(':id', $bonusBase->id());
     $q->execute();
 	}

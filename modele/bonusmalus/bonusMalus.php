@@ -12,7 +12,6 @@ class BonusMalus extends ClasseBase
   private $_idCalLigue;
   private $_idJoueurReelEquipe;
   private $_idJoueurReelAdverse;
-  private $_miTemps;
 
   // Champs tables jointes
   private $_libelleCourt;
@@ -28,7 +27,6 @@ class BonusMalus extends ClasseBase
   public function selectJoueur() { return $this->_selectJoueur; }
   public function idJoueurReelEquipe() { return $this->_idJoueurReelEquipe; }
   public function idJoueurReelAdverse() { return $this->_idJoueurReelAdverse; }
-  public function miTemps() { return $this->_miTemps; }
   public function libelle() { return $this->_libelle; }
   public function libelleCourt() { return $this->_libelleCourt; }
 
@@ -55,11 +53,6 @@ class BonusMalus extends ClasseBase
   public function setId_joueur_reel_adverse($idJoueurReelAdverse)
   {
     $this->_idJoueurReelAdverse = $idJoueurReelAdverse;
-  }
-
-  public function setMi_temps($miTemps)
-  {
-      $this->_miTemps = $miTemps;
   }
 
   public function setLibelle($libelle)

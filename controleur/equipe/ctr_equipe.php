@@ -41,7 +41,6 @@ $tabSortant = [];
 $tabNote = [];
 $capitaine = -1;
 $joueurBonus = -1;
-$miTempsBonus = -1;
 if (isset($_POST['changerTactique']))
 {
   $compoEquipe->setCode_tactique($_POST['choixTactique']);
@@ -52,7 +51,7 @@ if (isset($_POST['changerTactique']))
   if (isset($_POST['pariExt'])) {
     $compoEquipe->setPari_ext($_POST['pariExt']);
   }
-  
+
   foreach ($_POST as $name => $valeur)
   {
     if (substr($name, 0, 8) == 'rentrant') {
@@ -68,7 +67,6 @@ if (isset($_POST['changerTactique']))
   $capitaine = $_POST["choixCapitaine"];
   $joueurBonus = $_POST["choixJoueurBonus"];
   $joueurAdvBonus = $_POST["choixJoueurAdvBonus"];
-  $miTempsBonus = $_POST["choixMiTempsBonus"];
 }
 elseif (isset($_POST['enregistrer']))
 {
@@ -87,9 +85,6 @@ elseif (isset($_POST['enregistrer']))
     $bonus = new BonusMalus(['code' => $_POST['choixBonus']]);
     if ($_POST['choixJoueurBonus'] != -1 && $_POST[$_POST['choixJoueurBonus']] != -1) {
       $bonus->setId_joueur_reel_equipe($_POST[$_POST['choixJoueurBonus']] );
-    }
-    if ($_POST['choixMiTempsBonus'] != -1) {
-      $bonus->setMi_temps($_POST['choixMiTempsBonus']);
     }
     if ($_POST['choixJoueurAdvBonus'] != -1) {
       $bonus->setId_joueur_reel_adverse($_POST['choixJoueurAdvBonus']);
@@ -152,7 +147,6 @@ elseif (isset($_POST['enregistrer']))
   $capitaine = $_POST["choixCapitaine"];
   $joueurBonus = $_POST["choixJoueurBonus"];
   $joueurAdvBonus = $_POST["choixJoueurAdvBonus"];
-  $miTempsBonus = $_POST["choixMiTempsBonus"];
 }
 elseif ($calLigue->id() != null)
 {
@@ -167,7 +161,6 @@ elseif ($calLigue->id() != null)
     if ($bonus != null) {
       $joueurBonus = $bonus->idJoueurReelEquipe();
       $joueurAdvBonus = $bonus->idJoueurReelAdverse();
-      $miTempsBonus = $bonus->miTemps();
     }
 
     $joueursCompo = $compoEquipeManager->findJoueurCompoByCompo($compoEquipe->id());

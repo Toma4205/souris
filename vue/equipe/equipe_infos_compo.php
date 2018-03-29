@@ -172,18 +172,5 @@
           }
          ?>
     </select>
-    <select name="choixMiTempsBonus" class="selectChoixMiTempsBonus cache">
-        <option value="-1">...</option>
-        <?php
-          for ($i = 1; $i <= 2; $i++)
-          {
-            if ($miTempsBonus == $i) {
-              echo '<option value="' . $i . '" selected="selected">Mi-Temps ' . $i . '</option>';
-            } else {
-              echo '<option value="' . $i . '">Mi-Temps ' . $i . '</option>';
-            }
-          }
-         ?>
-    </select>
   </div>
 </div>
