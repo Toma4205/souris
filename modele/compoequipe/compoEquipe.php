@@ -16,7 +16,6 @@ class CompoEquipe extends ClasseBase
   private $_libLongBonusMalus;
   private $_nomJoueurReelEquipe;
   private $_nomJoueurReelAdverse;
-  private $_miTemps;
 
   public function __construct(array $donnees)
   {
@@ -32,7 +31,6 @@ class CompoEquipe extends ClasseBase
   public function libLongBonusMalus() { return $this->_libLongBonusMalus; }
   public function nomJoueurReelEquipe() { return $this->_nomJoueurReelEquipe; }
   public function nomJoueurReelAdverse() { return $this->_nomJoueurReelAdverse; }
-  public function miTemps() { return $this->_miTemps; }
 
   public function setId($id)
   {
@@ -77,11 +75,6 @@ class CompoEquipe extends ClasseBase
   public function setNomJoueurReelAdverse($nomJoueurReelAdverse)
   {
       $this->_nomJoueurReelAdverse = $nomJoueurReelAdverse;
-  }
-
-  public function setMiTemps($miTemps)
-  {
-      $this->_miTemps = $miTemps;
   }
 }
 ?>
