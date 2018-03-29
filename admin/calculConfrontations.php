@@ -23,6 +23,9 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 	if (count($ligues_concernees) == 0 || empty($ligues_concernees)) {
 		addLogEvent('Aucune ligue sur la journee '.$constante_num_journee_cal_reel);
 	} else {
+
+		initialiserNoteJoueurMatchAnnule($constanteJourneeFormatLong);
+
 		$cacheNote = creerCacheNoteJoueurReel($constanteJourneeFormatLong);
 		addLogEvent('Récupération du cache des notes pour la journée '.$constanteJourneeFormatLong.' pour '.sizeof($cacheNote).' joueurs.');
 
@@ -432,6 +435,49 @@ function raz_table_joueur_compo_equipe_sur_journee($constante_num_journee_cal_re
 	}
 
 	$upd_remise_a_zero_jce->closeCursor();
+}
+
+function initialiserNoteJoueurMatchAnnule($journee)
+{
+	global $bdd;
+	$q = $bdd->prepare('SELECT cle_roto_primaire FROM joueur_reel WHERE equipe IN (
+    	SELECT equipeDomicile
+    	FROM resultatsl1_reel WHERE journee = :journee AND winOrLoseDomicile = :ANNULE)
+		OR equipe IN (
+    	SELECT equipeVisiteur
+    	FROM resultatsl1_reel WHERE journee = :journee AND winOrLoseVisiteur = :ANNULE)');
+	$q->execute(['journee' => $journee, 'ANNULE' => 'ANNULE']);
+
+	$insert = $bdd->prepare('INSERT IGNORE INTO joueur_stats(id,journee,a_joue,minutes,titulaire,est_rentre,
+				est_sorti,jaune,jaune_rouge,rouge,but,passe_d,second_passe_d,tir,tir_cadre,interception,centre,
+				centre_reussi,occasion_creee,contre,total_tacle,tacle_reussi,faute_commise,faute_subie,passe,
+				passe_tentee,centre_reussi_dans_le_jeu,duel_aerien_gagne,grosse_occasion_creee,ballon_recupere,
+				dribble,duel_gagne,ballon_touche,ballon_touche_int_surface,tir_int_surface,tir_ext_surface,
+				tir_cadre_int_surface,tir_cadre_ext_surface,but_int_surface,but_ext_surface,ballon_perdu,csc,
+				penalty_tire,penalty_marque,penalty_rate,penalty_arrete,corner_tire,corner_centre,corner_gagne,
+				coup_franc_centre,coup_franc_centre_reussi,coup_franc_tire,coup_franc_cadre,coup_franc_marque,
+				but_concede,cleansheet,arret,arret_tir_int_surface,arret_tir_ext_surface,sortie_ext_surface_reussie,
+				penalty_concede,penalty_subi_gb,penalty_arrete_gb,degagement,degagement_reussi,degagement_poing,
+				6_buts_ou_plus_pris_sans_penalty,5_buts_pris_sans_penalty,4_buts_pris_sans_penalty,
+				3_buts_pris_sans_penalty,2_buts_pris_sans_penalty,1_but_pris_sans_penalty,rouge_60,rouge_75,
+				rouge_80,rouge_85,centre_rate,clean_60,clean_60D,ecart_moins_5,ecart_moins_4,ecart_moins_3,
+				ecart_moins_2,ecart_plus_2,ecart_plus_3,ecart_plus_4,grosse_occasion_ratee,malus_defaite,
+				15_passes_OK_30,15_passes_OK_40,15_passes_OK_50,15_passes_OK_90,15_passes_OK_95,15_passes_OK_100,
+				25_passes_OK_30,25_passes_OK_40,25_passes_OK_50,25_passes_OK_90,25_passes_OK_95,25_passes_OK_100,
+				tacle_rate,tir_non_cadre,80_ballons_touches,90_ballons_touches,100_ballons_touches,bonus_victoire,
+				coup_franc_rate,note)
+			VALUES(:id,:journee,1,90,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5)');
+
+	$nbMaj = 0;
+	while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+	{
+		$nbMaj++;
+		$insert->execute(['id' => $donnees['cle_roto_primaire'], 'journee' => $journee]);
+	}
+
+	addLogEvent('Insertion de ' . $nbMaj . ' lignes dans joueur_stats suite aux matchs annulés.');
 }
 
 function creerCacheNoteJoueurReel($journee)
