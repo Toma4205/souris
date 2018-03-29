@@ -1,6 +1,6 @@
 <?php
 // Affichage des bonus/malus dans le detail_match
-function afficherBonusMalus($codeBonus, $libBonus, $libLongBonus, $nomJoueurEquipe, $nomJoueurAdv, $miTemps, $codeTactique)
+function afficherBonusMalus($codeBonus, $libBonus, $libLongBonus, $nomJoueurEquipe, $nomJoueurAdv, $codeTactique)
 {
   echo '<div class="detail_match_equipe_bonus_malus">';
   echo '<div class="detail_match_equipe_titre">Bonus</div>';
@@ -33,11 +33,7 @@ function afficherBonusMalus($codeBonus, $libBonus, $libLongBonus, $nomJoueurEqui
     echo '<div class="detail_match_equipe_bonus_malus_joueur">';
     echo '<div class="detail_match_equipe_bonus_malus_joueur_bloc">';
     if ($nomJoueurEquipe != null) {
-      echo '<div>' . $nomJoueurEquipe;
-      if ($miTemps != null) {
-        echo ' (mi-temps : ' . $miTemps . ')';
-      }
-      echo '</div>';
+      echo '<div>' . $nomJoueurEquipe . '</div>';
     }
     if ($nomJoueurAdv != null) {
       echo '<div>Adv : ' . $nomJoueurAdv . '</div>';
@@ -290,7 +286,7 @@ function afficherBonusMalus($codeBonus, $libBonus, $libLongBonus, $nomJoueurEqui
   <div class="detail_match_equipe_g">
     <?php if (isset($compoDom)){afficherBonusMalus($compoDom->codeBonusMalus(),
       $compoDom->libCourtBonusMalus(), $compoDom->libLongBonusMalus(), $compoDom->nomJoueurReelEquipe(),
-      $compoDom->nomJoueurReelAdverse(), $compoDom->miTemps(), $compoDom->codeTactique());} ?>
+      $compoDom->nomJoueurReelAdverse(), $compoDom->codeTactique());} ?>
     <?php if (isset($joueursDom)){afficherTitulaires($joueursDom, $compoDom->codeTactique());} else {echo '<div>Aucune compo</div>';} ?>
     <?php if (isset($joueursDom)){afficherRemplacants($joueursDom);} ?>
     <?php if (isset($joueursDom) && $match->statut() >= ConstantesAppli::STATUT_CAL_TERMINE){afficherMoyennes($joueursDom, $compoDom->codeTactique());} ?>
@@ -298,7 +294,7 @@ function afficherBonusMalus($codeBonus, $libBonus, $libLongBonus, $nomJoueurEqui
   <div class="detail_match_equipe_d">
     <?php if (isset($compoExt)){afficherBonusMalus($compoExt->codeBonusMalus(),
       $compoExt->libCourtBonusMalus(), $compoExt->libLongBonusMalus(), $compoExt->nomJoueurReelEquipe(),
-      $compoExt->nomJoueurReelAdverse(), $compoExt->miTemps(), $compoExt->codeTactique());} ?>
+      $compoExt->nomJoueurReelAdverse(), $compoExt->codeTactique());} ?>
     <?php if (isset($joueursExt)){afficherTitulaires($joueursExt, $compoExt->codeTactique());} else {echo '<div>Aucune compo</div>';} ?>
     <?php if (isset($joueursExt)){afficherRemplacants($joueursExt);} ?>
     <?php if (isset($joueursExt) && $match->statut() >= ConstantesAppli::STATUT_CAL_TERMINE){afficherMoyennes($joueursExt, $compoExt->codeTactique());} ?>

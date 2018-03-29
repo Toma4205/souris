@@ -412,13 +412,22 @@ function raz_table_joueur_compo_equipe_sur_journee($constante_num_journee_cal_re
 	if(is_null($ligue_unique))
 	{
 		addLogEvent('FONCTION raz_table_joueur_compo_equipe_sur_journee - Toutes les ligues');
-		$upd_remise_a_zero_jce = $bdd->prepare('UPDATE joueur_compo_equipe, calendrier_ligue, compo_equipe SET joueur_compo_equipe.note = NULL, joueur_compo_equipe.note_bonus = NULL, joueur_compo_equipe.nb_but_reel = NULL, joueur_compo_equipe.nb_but_virtuel = NULL, joueur_compo_equipe.nb_csc = NULL, joueur_compo_equipe.numero_definitif = NULL
-			WHERE calendrier_ligue.num_journee_cal_reel = :num_journee_cal_reel AND calendrier_ligue.id = compo_equipe.id_cal_ligue AND compo_equipe.id = joueur_compo_equipe.id_compo;');
+		$upd_remise_a_zero_jce = $bdd->prepare('UPDATE joueur_compo_equipe, calendrier_ligue, compo_equipe
+			SET joueur_compo_equipe.note = NULL, joueur_compo_equipe.note_bonus = NULL,
+			joueur_compo_equipe.nb_but_reel = NULL, joueur_compo_equipe.nb_but_virtuel = NULL,
+			joueur_compo_equipe.nb_csc = NULL, joueur_compo_equipe.numero_definitif = NULL
+			WHERE calendrier_ligue.num_journee_cal_reel = :num_journee_cal_reel
+			AND calendrier_ligue.id = compo_equipe.id_cal_ligue AND compo_equipe.id = joueur_compo_equipe.id_compo;');
 		$upd_remise_a_zero_jce->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel));
 	}else{
 		addLogEvent('FONCTION raz_table_joueur_compo_equipe_sur_journee - Uniquement la ligue n°'.$ligue_unique);
-		$upd_remise_a_zero_jce = $bdd->prepare('UPDATE joueur_compo_equipe, calendrier_ligue, compo_equipe SET joueur_compo_equipe.note = NULL, joueur_compo_equipe.note_bonus = NULL, joueur_compo_equipe.nb_but_reel = NULL, joueur_compo_equipe.nb_but_virtuel = NULL, joueur_compo_equipe.nb_csc = NULL, joueur_compo_equipe.numero_definitif = NULL
-			WHERE calendrier_ligue.num_journee_cal_reel = :num_journee_cal_reel AND calendrier_ligue.id = compo_equipe.id_cal_ligue AND compo_equipe.id = joueur_compo_equipe.id_compo AND calendrier_ligue.id_ligue = :id_ligue;');
+		$upd_remise_a_zero_jce = $bdd->prepare('UPDATE joueur_compo_equipe, calendrier_ligue, compo_equipe
+			SET joueur_compo_equipe.note = NULL, joueur_compo_equipe.note_bonus = NULL,
+			joueur_compo_equipe.nb_but_reel = NULL, joueur_compo_equipe.nb_but_virtuel = NULL,
+			joueur_compo_equipe.nb_csc = NULL, joueur_compo_equipe.numero_definitif = NULL
+			WHERE calendrier_ligue.num_journee_cal_reel = :num_journee_cal_reel
+			AND calendrier_ligue.id = compo_equipe.id_cal_ligue AND compo_equipe.id = joueur_compo_equipe.id_compo
+			AND calendrier_ligue.id_ligue = :id_ligue;');
 		$upd_remise_a_zero_jce->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $ligue_unique));
 	}
 
