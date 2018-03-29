@@ -3,18 +3,18 @@
     function afficherMatchCalendrierReel($match)
     {
         $cssMatch = '';
-        if ($match->statut() == 1) {
+        if ($match->statut() == ConstantesAppli::STATUT_MATCH_TERMINE) {
             $cssMatch = ' match_annule';
         }
         echo '<li class="detail_calendrier_reel_match conteneurRow'.$cssMatch.'">';
         echo '<div class="width_10pc"><img src="web/img/maillot/shirt_' . strtolower($match->equipeDomicile()) . '.png" alt="' . $match->equipeDomicile() . '" width="20px" height="20px" /></div>';
         echo '<div class="width_35pc text_align_right margin_auto_vertical">'.$match->libelleDomicile().'</div>';
-        if ($match->statut() == 1) {
+        if ($match->statut() == ConstantesAppli::STATUT_MATCH_TERMINE) {
             echo '<div class="width_10pc margin_auto_vertical font_size_point_6rem">Annulé</div>';
         } else {
             echo '<div class="width_10pc margin_auto_vertical">vs</div>';
         }
-        
+
         echo '<div class="width_35pc text_align_left margin_auto_vertical">'.$match->libelleVisiteur().'</div>';
         echo '<div class="width_10pc"><img src="web/img/maillot/shirt_' . strtolower($match->equipeVisiteur()) . '.png" alt="' . $match->equipeVisiteur() . '" width="20px" height="20px" /></div>';
         echo '</li>';

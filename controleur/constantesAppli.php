@@ -30,7 +30,6 @@ class ConstantesAppli {
     const BONUS_MALUS_MAU_CRA = 'MAU_CRA';
     const BONUS_MALUS_BOUCHER = 'BOUCHER';
     const BONUS_MALUS_CHA_GB = 'CHA_GB';
-    const BONUS_MALUS_PAR_TRU = 'PAR_TRU';
     const BONUS_MALUS_CON_ZZ = 'CON_ZZ';
 
     const MERCATO_ENCHERE = 'E';
@@ -42,6 +41,8 @@ class ConstantesAppli {
     const STATUT_CAL_EN_COURS = 1;
     const STATUT_CAL_TERMINE = 2;
     const STATUT_CAL_CLOTURE = 3;
+
+    const STATUT_MATCH_TERMINE = 1;
 
 	  const RATIO_PEPITE = 1;
 }
