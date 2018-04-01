@@ -1,9 +1,11 @@
 <?php
 
-function traiterFinTourMercato(LigueManager $ligueManager, JoueurEquipeManager $joueurEquipeManager,
-  $idLigue, $tourMercato)
+function traiterFinTourMercato(LigueManager $ligueManager,EquipeManager $equipeManager,
+  JoueurEquipeManager $joueurEquipeManager, $idLigue, $tourMercato)
 {
   $joueurEquipeManager->affecterJoueurAEquipe($idLigue, $tourMercato);
+  $equipeManager->majBudgetRestant($idLigue);
+
   $_SESSION[ConstantesSession::LIGUE_CREA] = $ligueManager->findLigueById($idLigue);
 
   // Redirection du visiteur vers la page d'accueil
@@ -38,12 +40,12 @@ if (isset($_POST['validationMercato']))
       $budget -= $prixAchat;
     }
   }
-  $equipeManager->majBudgetRestant($equipe->id(), $budget);
-  $equipe->setBudget_restant($budget);
 
   if ($joueurEquipeManager->isTourMercatoTermine($creaLigue->id(), $tourMercato))
   {
-    traiterFinTourMercato($ligueManager, $joueurEquipeManager, $creaLigue->id(), $tourMercato);
+    traiterFinTourMercato($ligueManager, $equipeManager, $joueurEquipeManager, $creaLigue->id(), $tourMercato);
+    // On rappelle pour avoir la maj du budget restant
+    $equipe = $equipeManager->findEquipeByCoachEtLigue($coach->id(), $creaLigue->id());
   }
 }
 elseif (isset($_POST['clotureMercato']))
@@ -76,7 +78,7 @@ elseif (isset($_POST['clotureMercato']))
   }
   elseif ($joueurEquipeManager->isTourMercatoTermine($creaLigue->id(), $tourMercato))
   {
-    traiterFinTourMercato($ligueManager, $joueurEquipeManager, $creaLigue->id(), $tourMercato);
+    traiterFinTourMercato($ligueManager, $equipeManager, $joueurEquipeManager, $creaLigue->id(), $tourMercato);
   }
   else
   {

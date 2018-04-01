@@ -90,6 +90,16 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 								$joueur['position'], $joueur['numero'], $joueur['cle_roto_primaire'], $cacheNbDefParTectique[$tactiqueExt],
 								$bonusExt, $idJoueurReelExt, $bonusDom, $idJoueurReelAdvDom, $constanteJourneeFormatLong);
 						}
+					} elseif ($idCompo == $idCompoDom && $bonusDom == ConstantesAppli::BONUS_MALUS_BOUCHER
+						&& $idJoueurReel == $idJoueurReelDom) {
+						// On force l'application du bonus Boucher même si le joueur n'a pas joué
+						addLogEvent('Bonus '.ConstantesAppli::BONUS_MALUS_BOUCHER);
+						update_note_joueur_note_bonus(0, 0, $idCompo, $idJoueurReel,$joueur['numero'],$joueur['cle_roto_primaire']);
+					} elseif ($idCompo == $idCompoExt && $bonusExt == ConstantesAppli::BONUS_MALUS_BOUCHER
+						&& $idJoueurReel == $idJoueurReelExt) {
+						// On force l'application du bonus Boucher même si le joueur n'a pas joué
+						addLogEvent('Bonus '.ConstantesAppli::BONUS_MALUS_BOUCHER);
+						update_note_joueur_note_bonus(0, 0, $idCompo, $idJoueurReel,$joueur['numero'],$joueur['cle_roto_primaire']);
 					} else {
 						addLogEvent('Compo ' . $idCompo . ') ' . $joueur['numero'] . ' - ' . $joueur['cle_roto_primaire'].' (id='.$idJoueurReel.') n\'a pas joué.');
 					}
@@ -141,6 +151,11 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 								addLogEvent('Compo '.$donnees['id_compo'].') '.$donnees['numero'].' - Joueur '.$donnees['cle_roto_primaire'].' (id='.$donnees['id_joueur_reel'].') traité dans boucle suivante.');
 						}
 					}
+				} else if ($donnees['note'] == 0) {
+						// Un joueur a 0 en cas du BONUS/MALUS Boucher
+						addLogEvent('Compo '.$donnees['id_compo'].') ' . $donnees['cle_roto_primaire'].' (id='.$donnees['id_joueur_reel'].') a 0 (bonus BOUCHER) et reste dans la compo => '.$donnees['numero']);
+						update_numero_definitif($donnees['numero'],$donnees['id_compo'],$donnees['id_joueur_reel']);
+						unset($tab_effectif[$cle]);
 				} elseif (is_null($donnees['numero_remplacement'])){
 						// Le joueur a une note et ne fait l'objet d'aucun remplacement tactique donc il est directement dans l'effectif définitif
 						addLogEvent('Compo '.$donnees['id_compo'].') ' . $donnees['cle_roto_primaire'].' (id='.$donnees['id_joueur_reel'].') a joué et n\'est pas remplacé => '.$donnees['numero']);
@@ -163,15 +178,12 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 			// On vérifie si un joueur de la ligne inférieur a joué parmis les remplaçants encore disponibles
 			// On applique une minoration de la note si il y a remplacement
 
-			//$tab_effectif = get_effectifs_non_remplace_ligue_journee($constante_num_journee_cal_reel,$constanteConfrontationLigue);
-			//foreach($tab_effectif as $donnees)
 			foreach($tab_effectif as $cle => $donnees)
 			{
 				if ($donnees['note'] == NULL) {
 
 					$estRemplace = 0;
 					$lignesRemplacant = $tabRempl[$donnees['id_compo']];
-					//$lignesRemplacant = get_effectifs_remplacant_ligue_journee_equipe($constante_num_journee_cal_reel,$constanteConfrontationLigue,$donnees['id_equipe']);
 					if (sizeof($lignesRemplacant) == 0) {
 						//Aucun remplaçant, le joueur reste dans la compo
 						addLogEvent('Compo '.$donnees['id_compo'].') Aucun remplaçant, le joueur '.$donnees['cle_roto_primaire'].' (id='.$donnees['id_joueur_reel'].') reste dans la compo => '.$donnees['numero']);
@@ -221,15 +233,12 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 			// On vérifie si un défenseur a joué parmis les remplaçants encore disponibles
 			// On applique une minoration de la note si il y a remplacement
 
-			//$tab_effectif = get_attaquants_non_remplace_ligue_journee($constante_num_journee_cal_reel,$constanteConfrontationLigue);
-			//foreach($tab_effectif as $donnees)
 			foreach($tab_effectif as $cle => $donnees)
 			{
 				if ($donnees['position'] == ConstantesAppli::ATTAQUANT && $donnees['note'] == NULL) {
 
 						$estRemplace = 0;
 
-						//$lignesRemplacant = get_effectifs_remplacant_ligue_journee_equipe($constante_num_journee_cal_reel,$constanteConfrontationLigue,$donnees['id_equipe']);
 						$lignesRemplacant = $tabRempl[$donnees['id_compo']];
 						if (sizeof($lignesRemplacant) == 0) {
 							//Aucun remplaçant, le joueur reste dans la compo
@@ -282,8 +291,6 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 			// On update les numéros définitifs
 			// L'équipe doit être complète
 
-			//Requete qui renvoie tous les joueurs titulaires, avec une note inférieur à la note minimum du remplacement tactique et un remplaçant ayant joué encore sur le banc
-			//$tab_effectif = get_joueurAvecRemplacementTactiqueActif($constante_num_journee_cal_reel,$constanteConfrontationLigue);
 			foreach($tab_effectif as $cle => $donnees)
 			{
 				if ($donnees['note_min_remplacement'] != NULL && $donnees['note'] < $donnees['note_min_remplacement']) {
@@ -400,12 +407,13 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 						. ', compo=' . $id_compo_deja_affecte . ')');
 				}
 			}
-			//Application des malus équipe de l'adversaire (MAJ Note)
 		}	//FIN DE BOUCLE FOR EACH SUR LA LIGUE
 	}	//FIN DU IF SUR LA LIGUE
 
 	addLogEvent( ' ************************ NETTOYAGE DES NUMEROS DEFINITIFS A ZERO ET DES NOTES DES REMPLACANTS **************************');;
 	nettoyage_joueur_compo_equipe();
+
+	// TODO MPL virer cette méthode
 	impactCSC($constanteJourneeFormatLong, $constante_num_journee_cal_reel);
 
 	if ($maj_stats_classement) {
@@ -611,53 +619,58 @@ function initialiserNoteJoueurCompo($idJoueurReel, $idCompo, $note, $capitaine, 
 
 	// TODO Bonus ConstantesAppli::BONUS_MALUS_SEL_TRI
 
-	$avecBoucher = FALSE;
-	// Prise en compte des bonus
-	if($bonus == ConstantesAppli::BONUS_MALUS_CON_ZZ){
-		$note += 0.5;
-		$note_bonus += 0.5;
-	} elseif($bonus == ConstantesAppli::BONUS_MALUS_FAM_STA && $idJoueurBonus == $idJoueurReel) {
-		$note += 1;
-		$note_bonus += 1;
-		addLogEvent('Bonus '.ConstantesAppli::BONUS_MALUS_FAM_STA);
-	} elseif($bonus == ConstantesAppli::BONUS_MALUS_BOUCHER && $idJoueurBonus == $idJoueurReel) {
-		$note = 0;
-		$note_bonus = 0;
-		$avecBoucher = TRUE;
-		addLogEvent('Bonus '.ConstantesAppli::BONUS_MALUS_BOUCHER);
-	} elseif($bonus == ConstantesAppli::BONUS_MALUS_BUS) {
-		// Pris en compte boucle 7
-	} elseif($bonus == ConstantesAppli::BONUS_MALUS_DIN_ARB) {
-		// Pris en compte boucle 8
-	} elseif($bonus == ConstantesAppli::BONUS_MALUS_CHA_GB && $numero == 1) {
-		addLogEvent('Bonus '.ConstantesAppli::BONUS_MALUS_CHA_GB.' pris en compte en Boucle 4.');
-	}
-
 	// Prise en compte des malus
 	if($bonusAdv == ConstantesAppli::BONUS_MALUS_MAU_CRA && $idJoueurAdvBonus == $idJoueurReel) {
 		$note -= 1;
 		$note_bonus -= 1;
 		addLogEvent('Malus '.ConstantesAppli::BONUS_MALUS_MAU_CRA);
 	} elseif($bonusAdv == ConstantesAppli::BONUS_MALUS_BOUCHER && $idJoueurAdvBonus == $idJoueurReel) {
-		$note = 0;
-		$note_bonus = 0;
+		$note = NULL;
+		$note_bonus = NULL;
 		$avecBoucher = TRUE;
 		addLogEvent('Malus '.ConstantesAppli::BONUS_MALUS_BOUCHER);
 	} elseif($bonusAdv == ConstantesAppli::BONUS_MALUS_FUMIGENE && $numero == 1) {
 		addLogEvent('Malus '.ConstantesAppli::BONUS_MALUS_FUMIGENE.' pris en compte en Boucle 6.');
 	}
 
-	//Vérification des plafonds
-	if($note > 10){
-		addLogEvent($cleRotoPrimaire.' (id='.$idJoueurReel.', compo='.$idCompo.') a eu la note de '.$note.' (bonus='.$note_bonus.') => on plafonne à 10.');
-		$note = 10;
-	}elseif($note < 0.5 && $avecBoucher == FALSE){
-		$note = 0.5;
-		addLogEvent($cleRotoPrimaire.' (id='.$idJoueurReel.', compo='.$idCompo.') a eu la note de '.$note.' (bonus='.$note_bonus.') => on force à 0,5.');
+
+	$avecBoucher = FALSE;
+	// Prise en compte des bonus
+	if($bonus == ConstantesAppli::BONUS_MALUS_CON_ZZ){
+			$note += 0.5;
+			$note_bonus += 0.5;
+	} elseif($bonus == ConstantesAppli::BONUS_MALUS_FAM_STA && $idJoueurBonus == $idJoueurReel) {
+			$note += 1;
+			$note_bonus += 1;
+			addLogEvent('Bonus '.ConstantesAppli::BONUS_MALUS_FAM_STA);
+	} elseif($bonus == ConstantesAppli::BONUS_MALUS_BOUCHER && $idJoueurBonus == $idJoueurReel) {
+			$note = 0;
+			$note_bonus = 0;
+			$avecBoucher = TRUE;
+			addLogEvent('Bonus '.ConstantesAppli::BONUS_MALUS_BOUCHER);
+	} elseif($bonus == ConstantesAppli::BONUS_MALUS_BUS) {
+			// Pris en compte boucle 7
+	} elseif($bonus == ConstantesAppli::BONUS_MALUS_DIN_ARB) {
+			// Pris en compte boucle 8
+	} elseif($bonus == ConstantesAppli::BONUS_MALUS_CHA_GB && $numero == 1) {
+			addLogEvent('Bonus '.ConstantesAppli::BONUS_MALUS_CHA_GB.' pris en compte en Boucle 4.');
 	}
 
-	/*  UPDATE DES NOTES DANS LA TABLE */
-	update_note_joueur_note_bonus($note, $note_bonus, $idCompo, $idJoueurReel,$numero,$cleRotoPrimaire);
+	if ($note !== NULL) {
+		//Vérification des plafonds
+		if($note > 10){
+			addLogEvent($cleRotoPrimaire.' (id='.$idJoueurReel.', compo='.$idCompo.') a eu la note de '.$note.' (bonus='.$note_bonus.') => on plafonne à 10.');
+			$note = 10;
+		}elseif($note < 0.5 && $avecBoucher == FALSE){
+			$note = 0.5;
+			addLogEvent($cleRotoPrimaire.' (id='.$idJoueurReel.', compo='.$idCompo.') a eu la note de '.$note.' (bonus='.$note_bonus.') => on force à 0,5.');
+		}
+
+		/*  UPDATE DES NOTES DANS LA TABLE */
+		update_note_joueur_note_bonus($note, $note_bonus, $idCompo, $idJoueurReel,$numero,$cleRotoPrimaire);
+	} else {
+		addLogEvent('Compo ' . $idCompo . ') ' . $numero . ' - ' . $cleRotoPrimaire.' (id='.$idJoueurReel.') est considéré comme n\'ayant pas joué (note null).');
+	}
 }
 
 //Vérifie si le capitaine a gagné ou perdu  - Renvoie sous forme de tableau //Renvoie 0 si NUL, 1 si Defaite et 2 si Victoire
@@ -732,25 +745,6 @@ function getRemplacantsParCompo($idCompo)
 	return $tab_effectif;
 }
 
-//Récupère les remplaçant concernés sur une ligue, sur une equipe et sur une journée - Renvoie sous forme de tableau
-function get_effectifs_remplacant_ligue_journee_equipe($constante_num_journee_cal_reel,$constanteConfrontationLigue,$id_equipe)
-{
-	addLogEvent('FONCTION get_effectifs_remplacant_ligue_journee_equipe');
-	global $bdd;
-
-	$req_remplacant = $bdd->prepare('SELECT t3.id_joueur_reel, t4.cle_roto_primaire,  t4.position, t3.numero,
-    t3.note, t3.note_bonus, t3.numero_definitif
-    FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4
-    WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id
-    AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero > 11 AND t2.id_equipe = :id_equipe
-    AND t3.numero_definitif IS NULL ORDER By t3.numero');
-	$req_remplacant->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue, 'id_equipe' => $id_equipe));
-
-	$tab_effectif = $req_remplacant->fetchAll();
-	$req_remplacant->closeCursor();
-	return $tab_effectif;
-}
-
 //Change le numero définitif d'un joueur en fonction de la compo, et l'id_joueur_reel
 function update_numero_definitif($numero_definitif,$id_compo,$id_joueur_reel)
 {
@@ -769,42 +763,13 @@ function updateButReelEtCscCompo($journee, $idCompo)
 		SET jce.nb_but_reel = js.but, jce.nb_csc = js.csc
 		WHERE jce.id_compo = :id
 		AND jce.numero_definitif IS NOT NULL
+		AND jce.note > 0
 		AND jce.id_joueur_reel = jr.id
 		AND js.id IN (jr.cle_roto_primaire, jr.cle_roto_secondaire)
 		AND js.journee = :journee');
 
 	$q->execute(array('journee' => $journee, 'id' => $idCompo));
 	$q->closeCursor();
-}
-
-//Récupère les effectifs titulaires n'ayant pas été remplacés sur une ligue et sur une journée - Renvoie sous forme de tableau
-function get_effectifs_non_remplace_ligue_journee($constante_num_journee_cal_reel,$constanteConfrontationLigue)
-{
-	addLogEvent('FONCTION get_effectifs_non_remplace_ligue_journee');
-	global $bdd;
-
-	$req_effectif_nonRemplace = $bdd->prepare('SELECT t3.id_compo, t2.id_equipe, t3.id_joueur_reel,
-    t4.cle_roto_primaire, t4.position, t3.numero, t3.note, t3.numero_definitif
-    FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4
-    WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id
-    AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero < 12 AND t3.numero_definitif IS NULL
-    AND t3.note IS NULL ORDER BY id_compo, t3.numero ASC');
-	$req_effectif_nonRemplace->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue));
-
-	$tab_effectif = $req_effectif_nonRemplace->fetchAll();
-	$req_effectif_nonRemplace->closeCursor();
-	return $tab_effectif;
-}
-
-//Change la note d'un joueur dans une compo
-function update_note_joueur_compo($note,$id_compo,$id_joueur_reel)
-{
-	addLogEvent('FONCTION update_note_joueur_compo => id='.$id_joueur_reel.' (compo='.$id_compo.') obtient note '.$note);
-	global $bdd;
-
-	$upd_noteJoueurCompo = $bdd->prepare('UPDATE joueur_compo_equipe SET note = :note WHERE id_compo = :id_compo AND id_joueur_reel = :id_joueur_reel ;');
-	$upd_noteJoueurCompo->execute(array('note' => $note, 'id_compo' => $id_compo, 'id_joueur_reel' => $id_joueur_reel));
-	$upd_noteJoueurCompo->closeCursor();
 }
 
 //Change le bonus perçu par un joueur dans une compo
@@ -816,46 +781,6 @@ function update_note_bonus_joueur_compo($note,$id_compo,$id_joueur_reel)
 	$upd_noteBonus = $bdd->prepare('UPDATE joueur_compo_equipe SET note_bonus = :note WHERE id_compo = :id_compo AND id_joueur_reel = :id_joueur_reel ;');
 	$upd_noteBonus->execute(array('note' => $note, 'id_compo' => $id_compo, 'id_joueur_reel' => $id_joueur_reel));
 	$upd_noteBonus->closeCursor();
-}
-
-//Récupère joueurs avec remplacement tactique actif - Renvoie sous forme de tableau
-function get_joueurAvecRemplacementTactiqueActif($constante_num_journee_cal_reel,$constanteConfrontationLigue)
-{
-	addLogEvent('FONCTION get_joueurAvecRemplacementTactiqueActif');
-	global $bdd;
-
-	$req_joueurAvecRemplacementTactiqueActif= $bdd->prepare('SELECT DISTINCT t3.id_joueur_reel, t3.id_compo,
-    t4.cle_roto_primaire, t3.numero, t3.id_joueur_reel_remplacant
-    FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4
-    WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id
-    AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero < 12 AND t3.numero_definitif IS NULL
-    AND t3.note IS NOT NULL AND t3.note < t3.note_min_remplacement AND t3.id_joueur_reel_remplacant IN (
-      SELECT t3.id_joueur_reel
-      FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4
-      WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = id_ligue AND t2.id_cal_ligue = t1.id
-      AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero > 11 AND t3.numero_definitif IS NULL
-      AND t3.note IS NOT NULL)');
-
-	$req_joueurAvecRemplacementTactiqueActif->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue));
-
-	$tab_effectif = $req_joueurAvecRemplacementTactiqueActif->fetchAll();
-	$req_joueurAvecRemplacementTactiqueActif->closeCursor();
-	return $tab_effectif;
-}
-
-//Récupère tous les joueurs titulaires, ayant joué mais n'ayant pas encore de numéro définitif - Renvoie sous forme de tableau
-function get_joueurRestants($constante_num_journee_cal_reel,$constanteConfrontationLigue)
-{
-	addLogEvent('FONCTION get_joueurRestants');
-	global $bdd;
-
-	$req_joueursRestants= $bdd->prepare('SELECT t3.id_compo, t3.id_joueur_reel, t4.cle_roto_primaire, t3.note, t3.numero, t3.numero_definitif FROM calendrier_ligue t1, compo_equipe t2, joueur_compo_equipe t3, joueur_reel t4 WHERE t1.num_journee_cal_reel = :num_journee_cal_reel AND t1.id_ligue = :id_ligue AND t2.id_cal_ligue = t1.id AND t3.id_compo = t2.id AND t4.id = t3.id_joueur_reel AND t3.numero < 12 AND t3.numero_definitif IS NULL AND t3.note IS NOT NULL ;');
-
-	$req_joueursRestants->execute(array('num_journee_cal_reel' => $constante_num_journee_cal_reel, 'id_ligue' => $constanteConfrontationLigue));
-
-	$tab_effectif = $req_joueursRestants->fetchAll();
-	$req_joueursRestants->closeCursor();
-	return $tab_effectif;
 }
 
 //Requete qui renvoie la liste des équipes ayant joué sur la journée ainsi que les malus appliquées
@@ -896,9 +821,8 @@ function appliquerBonusMalus($bonus, $idEquipe, $idEquipeAdv, $idCompo, $idCompo
 						$noteUpdateGardien = 0.5 ;
 					}
 
-					addLogEvent('FUMIGENE: Malus de -1 sur le gardien de la compo '.$idCompoAdv.' => note : '.$noteUpdateGardien);
-					update_note_gardien($noteUpdateGardien,$idCompoAdv);
-					update_note_bonus_joueur_compo($noteGardienAdverse['note_bonus']-1,$idCompoAdv,$noteGardienAdverse['id_joueur_reel']);
+					addLogEvent('FUMIGENE: Malus de -1 sur le gardien de la compo '.$idCompoAdv.'.');
+					update_note_joueur_note_bonus($noteUpdateGardien, $noteGardienAdverse['note_bonus']-1, $idCompoAdv, $noteGardienAdverse['id_joueur_reel'],$noteGardienAdverse['numero'],$noteGardienAdverse['cle_roto_primaire'])
 				}
 			}
 		}
@@ -925,27 +849,17 @@ function get_note_gardien_equipe($idCompo)
 	addLogEvent('FONCTION get_note_gardien_equipe => Compo ' . $idCompo);
 	global $bdd;
 
-	$req_note_gardien = $bdd->prepare('SELECT note, note_bonus, id_joueur_reel
-		FROM joueur_compo_equipe
-		WHERE numero_definitif = 1 AND id_compo = :id');
+	$req_note_gardien = $bdd->prepare('SELECT jce.note, jce.note_bonus, jce.id_joueur_reel, jce.numero,
+		jr.cle_roto_primaire
+		FROM joueur_compo_equipe jce
+		JOIN joueur_reel jr ON jr.id = jce.id_joueur_reel
+		WHERE jce.numero_definitif = 1 AND jce.id_compo = :id');
 	$req_note_gardien->execute(array('id' => $idCompo));
 
 	$tab_note = $req_note_gardien->fetchAll();
 	$req_note_gardien->closeCursor();
 
 	return $tab_note;
-}
-
-//Change la note du gardien fonction de la compo
-function update_note_gardien($note,$id_compo)
-{
-	addLogEvent('FONCTION update_note_gardien (compo='.$id_compo.', note='.$note.')');
-	global $bdd;
-
-	//MALUS FUMIGENE Update note gardien
-	$upd_note_gardien = $bdd->prepare('UPDATE joueur_compo_equipe SET note = :note WHERE id_compo = :id_compo AND numero_definitif = 1 ;');
-	$upd_note_gardien->execute(array('note' => $note, 'id_compo' => $id_compo));
-	$upd_note_gardien->closeCursor();
 }
 
 //Récupère les confrontations d'une journée sur une ligue - Renvoie sous forme de tableau
@@ -1262,11 +1176,13 @@ function nettoyage_joueur_compo_equipe()
 	addLogEvent('FONCTION nettoyage_joueur_compo_equipe');
 	global $bdd;
 
-	$upd_pas_de_note_remplacant = $bdd->prepare('UPDATE joueur_compo_equipe SET note = NULL WHERE numero > 11 AND numero_definitif IS NULL;');
+	$upd_pas_de_note_remplacant = $bdd->prepare('UPDATE joueur_compo_equipe
+		SET note = NULL, note_bonus = NULL WHERE numero > 11 AND numero_definitif IS NULL;');
 	$upd_pas_de_note_remplacant->execute();
 	$upd_pas_de_note_remplacant->closeCursor();
 
-	$upd_numero_definitif_zero = $bdd->prepare('UPDATE joueur_compo_equipe SET numero_definitif = NULL WHERE (numero_definitif = 0 OR note IS NULL);');
+	$upd_numero_definitif_zero = $bdd->prepare('UPDATE joueur_compo_equipe
+		SET numero_definitif = NULL WHERE (numero_definitif = 0 OR note IS NULL);');
 	$upd_numero_definitif_zero->execute();
 	$upd_numero_definitif_zero->closeCursor();
 }
@@ -1567,6 +1483,7 @@ function getNomenclatureBonusMalus()
 			|| $code == ConstantesAppli::BONUS_MALUS_FAM_STA
 			|| $code == ConstantesAppli::BONUS_MALUS_BUS
       || $code == ConstantesAppli::BONUS_MALUS_MAU_CRA
+			|| $code == ConstantesAppli::BONUS_MALUS_BOUCHER
 			|| $code == ConstantesAppli::BONUS_MALUS_CON_ZZ) {
 			$tabBonus[] = $donnees;
 		}

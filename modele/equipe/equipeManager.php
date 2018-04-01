@@ -9,13 +9,22 @@ class EquipeManager extends ManagerBase
     $this->setDb($bdd);
   }
 
-  public function majBudgetRestant($idEquipe, $budget)
+  public function majBudgetRestant($idLigue)
   {
-    $q = $this->_bdd->prepare('UPDATE equipe SET budget_restant = :budget WHERE id = :id');
-    $q->bindValue(':id', $idEquipe);
-    $q->bindValue(':budget', $budget);
+    $q = $this->_bdd->prepare('SELECT SUM(je.prix) as somme, je.id_equipe
+      FROM joueur_equipe je
+      JOIN equipe e ON e.id = je.id_equipe
+      WHERE e.id_ligue = :id AND je.date_validation IS NOT NULL
+      GROUP BY je.id_equipe');
+    $q->execute(['id' => $idLigue]);
 
-    $q->execute();
+    while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+    {
+      $q2 = $this->_bdd->prepare('UPDATE equipe SET budget_restant = :budget WHERE id = :id');
+      $q2->bindValue(':id', $donnees['id_equipe']);
+      $q2->bindValue(':budget', ConstantesAppli::BUDGET_INIT - $donnees['somme']);
+      $q2->execute();
+    }
   }
 
   public function findEquipeEnAttenteMercato($idLigue, $tour)

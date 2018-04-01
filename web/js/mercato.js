@@ -14,7 +14,7 @@ $(document).ready(function() {
     //console.log("deb:"+new Date().toISOString().split('T')[1]);
     gererTableMercato();
     //console.log("inter:"+new Date().toISOString().split('T')[1]);
-    // recalculerBudgetRestant();
+    recalculerBudgetRestant();
     //console.log("fin:"+new Date().toISOString().split('T')[1]);
 });
 
