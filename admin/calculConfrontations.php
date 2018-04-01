@@ -822,7 +822,7 @@ function appliquerBonusMalus($bonus, $idEquipe, $idEquipeAdv, $idCompo, $idCompo
 					}
 
 					addLogEvent('FUMIGENE: Malus de -1 sur le gardien de la compo '.$idCompoAdv.'.');
-					update_note_joueur_note_bonus($noteUpdateGardien, $noteGardienAdverse['note_bonus']-1, $idCompoAdv, $noteGardienAdverse['id_joueur_reel'],$noteGardienAdverse['numero'],$noteGardienAdverse['cle_roto_primaire'])
+					update_note_joueur_note_bonus($noteUpdateGardien, $noteGardienAdverse['note_bonus']-1, $idCompoAdv, $noteGardienAdverse['id_joueur_reel'],$noteGardienAdverse['numero'],$noteGardienAdverse['cle_roto_primaire']);
 				}
 			}
 		}
