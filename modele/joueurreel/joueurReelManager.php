@@ -45,7 +45,8 @@ class JoueurReelManager extends ManagerBase
     $joueurs = [];
 
 		$q = $this->_bdd->prepare('SELECT j.*, n.libelle as libelleEquipe FROM joueur_reel j
-        JOIN nomenclature_equipe n ON j.equipe = n.code');
+        JOIN nomenclature_equipe n ON j.equipe = n.code
+        WHERE j.nouvel_id IS NULL');
     $q->execute();
 
 		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
