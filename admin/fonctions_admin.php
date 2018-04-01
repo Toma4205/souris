@@ -327,6 +327,10 @@ function initializeJournee($numJournee){
     {
       $idCalLigue = getCalLigueByEquipeEtJournee($idEquipe, $numJournee);
       $compo = getCompoEquipePrecedente($idEquipe, $numJournee - 1);
+			if ($compo == NULL) {
+				// Si équipe exempt à la journée précédente
+				$compo = getCompoEquipePrecedente($idEquipe, $numJournee - 2);
+			}
 
       if ($compo != null) {
 				addLogEvent('Equipe ' . $idEquipe . ' : Compo précédente ' . $compo->id() . '.');
