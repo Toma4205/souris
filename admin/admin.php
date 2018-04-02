@@ -21,6 +21,10 @@ if (isset($_POST['lancerCron']))
 } elseif (isset($_POST['importerStatsBDD']))
 {
 	include_once('importJourneeBDD.php');
+} elseif (isset($_POST['scrapResMaxi']))
+{
+	include_once('secure_admin.php');
+	scrapMaxi(31);
 }
 
 function afficherLog()
@@ -28,15 +32,15 @@ function afficherLog()
     date_default_timezone_set('Europe/Paris');
 	$year_month = date("YF");
 	$fichier = 'logs/'.$year_month.'.log';
-	
+
     //$file = './admin/logs/2018March.log';
     $data = file_get_contents($fichier);
     $newdata = explode("\n", $data); //create array separate by new lines
-    rsort($newdata); 
-    foreach($newdata as $line){ 
-        echo $line."\n"; 
+    rsort($newdata);
+    foreach($newdata as $line){
+        echo $line."\n";
     }
-    
+
     return $fichier;
 }
 
@@ -80,15 +84,18 @@ function afficherLog()
 		<p>
 			<a class="bouton" href="#titreMajFinLigue">Maj fin ligue</a>
 		</p>
+		<p>
+			<a class="bouton" href="#titreScrapMaxi">Scrap résultats Maxi</a>
+		</p>
 
 	<HR size=2 align=center width="100%">
 	<h2 id="titreLancerCron">Lancer CRON</h2>
 	<form method="post" id="lancerCron" action="">
 			<input type="submit" name="lancerCron" value="J'me lance" />
 			<br/>
-			<?php 
+			<?php
 			    echo '<textarea style="width:900px;height:400px;" name="fichierLog">';
-			    $fichier = afficherLog(); 
+			    $fichier = afficherLog();
 			    echo '</textarea><br/>';
 			    echo '<div>Fichier de log : ' . $fichier . '</div>';
 			?>
@@ -454,10 +461,10 @@ function afficherLog()
 	?>
 	<h5>Liste des titulaires sans correspondance dans "joueur_reel"</h5>
 	<?php
-		$req1 = $bdd->query('SELECT t1.journee, t1.id 
-		    FROM joueur_stats t1  
+		$req1 = $bdd->query('SELECT t1.journee, t1.id
+		    FROM joueur_stats t1
 		    WHERE t1.titulaire = 1 AND NOT EXISTS (
-		        SELECT t2.cle_roto_primaire 
+		        SELECT t2.cle_roto_primaire
 		        FROM joueur_reel t2
 		        WHERE t1.id IN (t2.cle_roto_primaire, t2.cle_roto_secondaire)
 		    ) ORDER BY t1.journee DESC, t1.id ASC');
@@ -573,6 +580,20 @@ function afficherLog()
 	 ?>
 	 <div>
 		 <input type="submit" name="majFinLigue" value="Maj fin ligue" />
+	</div>
+</form>
+
+<HR size=2 align=center width="100%">
+<h2 id="titreScrapMaxi">Scrap résultats Maxi</h2>
+<form method="post" id="scrapResMaxi" action="">
+	<?php
+	if (isset($messageScrapResMaxi))
+	{
+		echo '<p>' . $messageScrapResMaxi . '</p>';
+	}
+	 ?>
+	 <div>
+		 <input type="submit" name="scrapResMaxi" value="Scrap Rés." />
 	</div>
 </form>
 
