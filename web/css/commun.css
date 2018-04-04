@@ -376,14 +376,6 @@ p.colonne {
 .selectChoixRempl {
   width: 180px;
 }
-.selectChoixCapitaine, .selectChoixJoueurBonus, .selectChoixMiTempsBonus {
-  width: 65px;
-  margin: auto;
-  margin-bottom: 10px;
-}
-.selectChoixMiTempsBonus {
-  width: 100px !important;
-}
 .selectChoixJoueurREMPL {
   width: 250px;
 }

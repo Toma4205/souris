@@ -174,3 +174,13 @@
 #titulaire p {
   text-align: left;
 }
+.selectChoixCapitaine, .selectChoixJoueurBonus {
+  width: 65px;
+  margin: auto;
+  margin-bottom: 10px;
+}
+.selectChoixJoueurAdvBonus {
+  width: 220px;
+  margin: auto;
+  margin-bottom: 10px;
+}

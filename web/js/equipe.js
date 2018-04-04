@@ -34,18 +34,13 @@ function submitForm(name) {
 // Appelée lors de la validation de l'équipe
 function controlerBonus() {
   var formOK = true;
-  if (!$('select[name="choixJoueurBonus"]').hasClass('cache')) {
+  if (!$('#blocChoixJoueurBonus').hasClass('cache')) {
     if ($('select[name="choixJoueurBonus"]').find(":selected").val() == -1) {
       formOK = false;
     }
   }
   if (!$('select[name="choixJoueurAdvBonus"]').hasClass('cache')) {
     if ($('select[name="choixJoueurAdvBonus"]').find(":selected").val() == -1) {
-      formOK = false;
-    }
-  }
-  if (!$('select[name="choixMiTempsBonus"]').hasClass('cache')) {
-    if ($('select[name="choixMiTempsBonus"]').find(":selected").val() == -1) {
       formOK = false;
     }
   }
@@ -67,9 +62,8 @@ function suppSelectBonusMalus() {
     }
   });
 
-  cacherAfficherSelectByName('choixJoueurBonus', true);
-  cacherAfficherSelectByName('choixMiTempsBonus', true);
-  cacherAfficherSelectByName('choixJoueurAdvBonus', true);
+  cacherAfficherBlocByName('blocChoixJoueurBonus', true);
+  cacherAfficherBlocByName('blocChoixJoueurAdvBonus', true);
 }
 
 function selectBonusMalus(val) {
@@ -80,37 +74,26 @@ function selectBonusMalus(val) {
 
   if (val == 'MAU_CRA' || val == 'BOUCHER') {
     // Affichage joueur adv
-    cacherAfficherSelectByName('choixJoueurAdvBonus', false);
-    cacherAfficherSelectByName('choixMiTempsBonus', true);
-
-    $('select[name="choixMiTempsBonus"]').val(-1);
+    cacherAfficherBlocByName('blocChoixJoueurAdvBonus', false);
 
     if (val == 'BOUCHER') {
-      cacherAfficherSelectByName('choixJoueurBonus', false);
+      cacherAfficherBlocByName('blocChoixJoueurBonus', false);
     } else {
-      cacherAfficherSelectByName('choixJoueurBonus', true);
+      cacherAfficherBlocByName('blocChoixJoueurBonus', true);
       $('select[name="choixJoueurBonus"]').val(-1);
     }
-  } else if (val == 'CHA_GB' || val == 'PAR_TRU' || val == 'FAM_STA') {
+  } else if (val == 'CHA_GB' || val == 'FAM_STA') {
     // Affichage joueur equipe
-    cacherAfficherSelectByName('choixJoueurBonus', false);
-    cacherAfficherSelectByName('choixJoueurAdvBonus', true);
+    cacherAfficherBlocByName('blocChoixJoueurBonus', false);
+    cacherAfficherBlocByName('blocChoixJoueurAdvBonus', true);
 
     $('select[name="choixJoueurAdvBonus"]').val(-1);
-    if (val == 'PAR_TRU') {
-      cacherAfficherSelectByName('choixMiTempsBonus', false);
-    } else {
-      $('select[name="choixMiTempsBonus"]').val(-1);
-      cacherAfficherSelectByName('choixMiTempsBonus', true);
-    }
   } else {
     $('select[name="choixJoueurBonus"]').val(-1);
     $('select[name="choixJoueurAdvBonus"]').val(-1);
-    $('select[name="choixMiTempsBonus"]').val(-1);
 
-    cacherAfficherSelectByName('choixJoueurAdvBonus', true);
-    cacherAfficherSelectByName('choixJoueurBonus', true);
-    cacherAfficherSelectByName('choixMiTempsBonus', true);
+    cacherAfficherBlocByName('blocChoixJoueurAdvBonus', true);
+    cacherAfficherBlocByName('blocChoixJoueurBonus', true);
   }
 
   // Gestion de la css
@@ -125,11 +108,11 @@ function selectBonusMalus(val) {
   });
 }
 
-function cacherAfficherSelectByName(select, cacher) {
-  if (cacher && !$('select[name="' + select + '"]').hasClass('cache')) {
-    $('select[name="' + select + '"]').addClass('cache');
-  } else if (!cacher && $('select[name="' + select + '"]').hasClass('cache')) {
-    $('select[name="' + select + '"]').removeClass('cache');
+function cacherAfficherBlocByName(bloc, cacher) {
+  if (cacher && !$('#' + bloc).hasClass('cache')) {
+    $('#' + bloc).addClass('cache');
+  } else if (!cacher && $('#' + bloc).hasClass('cache')) {
+    $('#' + bloc).removeClass('cache');
   }
 }
 

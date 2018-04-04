@@ -146,7 +146,9 @@
         echo '<div class="margin_top_1rem font_size_point_8rem">Plus de bonus/malus disponible.</div>';
       }
      ?>
-    <select name="choixJoueurBonus" class="selectChoixJoueurBonus cache">
+    <div id="blocChoixJoueurBonus" class="cache">
+      <div class="detail_compo_bonus_malus_lib">Joueur équipe</div>
+      <select name="choixJoueurBonus" class="selectChoixJoueurBonus">
         <option value="-1">...</option>
         <?php
           for ($i = 1; $i <= 11; $i++)
@@ -158,19 +160,23 @@
             }
           }
          ?>
-    </select>
-    <select name="choixJoueurAdvBonus" class="selectChoixJoueur cache">
+       </select>
+    </div>
+    <div id="blocChoixJoueurAdvBonus" class="cache">
+      <div class="detail_compo_bonus_malus_lib">Joueur adverse</div>
+      <select name="choixJoueurAdvBonus" class="selectChoixJoueurAdvBonus">
         <option value="-1">...</option>
         <?php
           foreach ($joueursAdvBonus as $joueur)
           {
             if ($joueurAdvBonus == $joueur->id()) {
-              echo '<option value="' . $joueur->id() . '" selected="selected">' . $joueur->nom() . '</option>';
+              echo '<option value="' . $joueur->id() . '" selected="selected">' . $joueur->nom() . ' - ' . $joueur->libelleEquipe() . '</option>';
             } else {
-              echo '<option value="' . $joueur->id() . '">' . $joueur->nom() . '</option>';
+              echo '<option value="' . $joueur->id() . '">' . $joueur->nom() . ' - ' . $joueur->libelleEquipe() . '</option>';
             }
           }
          ?>
-    </select>
+       </select>
+    </div>
   </div>
 </div>
