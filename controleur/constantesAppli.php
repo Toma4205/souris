@@ -40,7 +40,7 @@ class ConstantesAppli {
     const STATUT_CAL_DEFAUT = 0;
     const STATUT_CAL_EN_COURS = 1;
     const STATUT_CAL_TERMINE = 2;
-    const STATUT_CAL_CLOTURE = 3;
+    const STATUT_CAL_CLOTURE = 6;
 
     const STATUT_MATCH_TERMINE = 1;
 

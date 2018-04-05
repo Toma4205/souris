@@ -67,7 +67,7 @@ if ($tabJournee !== null)
 	addLogEvent('Début traitement journée ' . $numJournee . ' (statut=' . $statut . ')');
 	if ($statut == 0) {
 		if (strtotime("now")-strtotime($journee['date_heure_debut']) >= 0) {
-			addLogEvent('Date de début dépassée (' . $journee['date_heure_debut'] . ') => initialisation de la journée.');
+			addLogEvent('Statut 0) Date de début dépassée (' . $journee['date_heure_debut'] . ') => initialisation de la journée.');
 			dump_pre_journee($numJournee);
 
 			//L'INIT n'a pas été fait alors faire le SCRIPT ZERO
@@ -131,20 +131,45 @@ if ($tabJournee !== null)
 	}
 	if ($statut == 2) {
 		if (strtotime("now -6 hours")-strtotime($journee['date_heure_fin'])>=0) {
-			addLogEvent('Nous avons terminé '.$numJournee.' depuis plus de 6h => mise à jour des ligues.');
+			addLogEvent('Statut 2) Nous avons terminé '.$numJournee.' depuis plus de 6h => mise à jour des ligues.');
 
 			get_csv_from_roto($numJourneeLong);
 			calculer_notes_joueurs();
 			calculer_confrontations_journee($numJournee, null, TRUE);
-			maj_ligues_fin_journee($numJournee);
+
 			setStatutJournee($numJournee,3);
 			$statut = 3;
 		} else {
-			addLogEvent('Délai d\'attente pour clôture de la journée non atteint => RAS.');
+			addLogEvent('Statut 2) Délai d\'attente pour clôture de la journée non atteint => RAS.');
 		}
 	}
 	if ($statut == 3) {
-		addLogEvent('Journée clôturée => RAS.');
+		addLogEvent('Statut 3) Mise à jour des classements.');
+
+		$req_ligues_concernees = $bdd->prepare('SELECT distinct id_ligue FROM calendrier_ligue WHERE num_journee_cal_reel = :num_journee_cal_reel;');
+		mise_a_jour_stat_classement($numJournee, $numJourneeLong, $req_ligues_concernees);
+
+		setStatutJournee($numJournee,4);
+		$statut = 4;
+	}
+	if ($statut == 4) {
+		addLogEvent('Statut 4) Vérification des paris truqués.');
+
+		verifierPariTruque($numJournee, null);
+
+		setStatutJournee($numJournee,5);
+		$statut = 5;
+	}
+	if ($statut == 5) {
+		addLogEvent('Statut 5) Traitement des ligues terminées.');
+
+		maj_ligues_fin_journee($numJournee);
+		
+		setStatutJournee($numJournee,6);
+		$statut = 6;
+	}
+	if ($statut == 6) {
+		addLogEvent('Statut 6) Journée clôturée => RAS.');
 	}
 }
 else {

@@ -117,7 +117,7 @@ function getStatutJournee($num_journee){
 
 //Retourne le statut d'une journée selon la table calendrier_reel
 function setStatutJournee($num_journee,$statut){
-	addLogEvent('FUNCTION setStatutJournee');
+	addLogEvent('FUNCTION setStatutJournee => '.$statut);
 	global $bdd;
 	$updStatutJournee = $bdd->prepare('UPDATE calendrier_reel SET statut = :statut WHERE num_journee = :num_journee');
 	$updStatutJournee->execute(array('num_journee' => $num_journee, 'statut' => $statut));

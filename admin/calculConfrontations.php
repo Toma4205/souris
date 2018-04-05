@@ -416,11 +416,6 @@ function calculer_confrontations_journee($constante_num_journee_cal_reel, $ligue
 	// TODO MPL virer cette méthode
 	impactCSC($constanteJourneeFormatLong, $constante_num_journee_cal_reel);
 
-	if ($maj_stats_classement) {
-		mise_a_jour_stat_classement($constante_num_journee_cal_reel, $constanteJourneeFormatLong, $req_ligues_concernees);
-		verifierPariTruque($constante_num_journee_cal_reel, $ligue_unique);
-	}
-
   addLogEvent('Fin calcul des confrontations.');
 }
 
