@@ -39,7 +39,7 @@ function controlerBonus() {
       formOK = false;
     }
   }
-  if (!$('select[name="choixJoueurAdvBonus"]').hasClass('cache')) {
+  if (!$('#blocChoixJoueurAdvBonus').hasClass('cache')) {
     if ($('select[name="choixJoueurAdvBonus"]').find(":selected").val() == -1) {
       formOK = false;
     }
