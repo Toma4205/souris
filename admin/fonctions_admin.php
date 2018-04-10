@@ -249,7 +249,28 @@ function getJoueurEquipeByEquipe($idEquipe)
 		(je.nb_but_reel + je.nb_but_virtuel) as totalBut, j.position, j.id
     FROM joueur_equipe je
     JOIN joueur_reel j ON je.id_joueur_reel = j.id
-    WHERE id_equipe = :id');
+    WHERE je.id_equipe = :id');
+  $q->execute([':id' => $idEquipe]);
+
+  $joueurs = [];
+  while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+  {
+    $joueurs[] = new JoueurEquipe($donnees);
+  }
+  $q->closeCursor();
+
+  return $joueurs;
+}
+
+function getJoueurEquipeValideByEquipe($idEquipe)
+{
+	global $bdd;
+
+  $q = $bdd->prepare('SELECT j.position, j.id
+    FROM joueur_equipe je
+    JOIN joueur_reel j ON je.id_joueur_reel = j.id
+    WHERE je.id_equipe = :id
+		AND je.date_validation IS NOT NULL');
   $q->execute([':id' => $idEquipe]);
 
   $joueurs = [];
@@ -338,7 +359,7 @@ function initializeJournee($numJournee){
         $idCompo = creerCompoCommePrecedente($compo, $idEquipe, $idCalLigue, $joueurs);
       } else {
 				addLogEvent('Equipe ' . $idEquipe . ' : Première compo.');
-        $joueurs = getJoueurEquipeByEquipe($idEquipe);
+        $joueurs = getJoueurEquipeValideByEquipe($idEquipe);
         $idCompo = creerPremiereCompo($idEquipe, $idCalLigue, $joueurs);
       }
 
