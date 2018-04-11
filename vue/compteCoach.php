@@ -89,11 +89,13 @@ require_once("vue/commun/enteteflex.php");
       {
         $nbActu++;
         echo '<li class="detail_action_actu conteneurRow" id="actu_'.$value->id().'">';
-        echo '<div><span class="float_left image_action_actu"><img src="web/img/actu_compte_coach.png" alt="" width="50px" height="50px"/></span>';
-        echo $value->libelle();
-        echo '</div><div class="margin_auto"></div><div class="conteneurRowDroite margin_auto_vertical">';
+        echo '<div class="conteneurRowGauche image_action_actu margin_0"><img src="web/img/actu_compte_coach.png" alt="" width="50px" height="50px"/></div>';
+        echo '<div class="conteneurRowGauche text_align_left margin_0">'.$value->libelle().'</div>';
+        echo '<div class="margin_auto"></div>';
+        echo '<div class="conteneurRowDroite margin_auto_vertical">';
         echo '<img src="web/img/croix.jpg" alt="" width="20px" height="20px" onclick="supprimerActualite(\''.$value->id().'\')"/>';
-        echo '</div></li>';
+        echo '</div>';
+        echo '</li>';
       }
       echo '</ul>';
     }
