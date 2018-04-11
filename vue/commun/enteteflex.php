@@ -13,6 +13,7 @@
           }
          ?>
         <link rel="icon" type="image/png" href="web/img/classicoach_minimalist_logo.png" />
+        <script src="web/js/commun.js"></script>
         <script src="web/js/constantes.js"></script>
         <script src="web/js/jquery-1.12.4.js"></script>
         <script src="web/js/jquery.dataTables.min.js"></script>
@@ -103,5 +104,7 @@ if (isset($coach))
 
 <div class="fond">
   <form id="formPrincipal" action="" method="post">
+    <div id="messageTempOk"></div>
+    <div id="messageTempKo"></div>
     <div id="contenu">
       <div class="conteneurColumn width_90pc">

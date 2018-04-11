@@ -88,16 +88,23 @@ require_once("vue/commun/enteteflex.php");
       foreach($actus as $value)
       {
         $nbActu++;
-        echo '<li class="detail_action_actu">';
-        echo '<span class="float_left image_action_actu"><img src="web/img/actu_compte_coach.png" alt="" width="50px" height="50px"/></span>';
+        echo '<li class="detail_action_actu conteneurRow" id="actu_'.$value->id().'">';
+        echo '<div><span class="float_left image_action_actu"><img src="web/img/actu_compte_coach.png" alt="" width="50px" height="50px"/></span>';
         echo $value->libelle();
-        echo '</li>';
+        echo '</div><div class="margin_auto"></div><div class="conteneurRowDroite margin_auto_vertical">';
+        echo '<img src="web/img/croix.jpg" alt="" width="20px" height="20px" onclick="supprimerActualite(\''.$value->id().'\')"/>';
+        echo '</div></li>';
       }
       echo '</ul>';
     }
-    if ($nbActu == 0) {
-      echo 'Aucune actualité pour le moment. <b>#viedeouf</b>';
+
+    echo '<div id="message_aucune_actu" class="';
+    if ($nbActu > 0) {
+      echo 'cache';
     }
+    echo '">Aucune actualité pour le moment. <b>#viedeouf</b></div>';
+
+    echo '<div id="count_actu" class="cache">'.$nbActu.'</div>';
     ?>
     </div>
 </section>
@@ -176,6 +183,7 @@ require_once("vue/commun/enteteflex.php");
         }
           ?>
 </section>
+
 <?php
 // Le pied de page
 require_once("vue/commun/pied_de_pageflex.php");
