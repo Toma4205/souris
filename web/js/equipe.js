@@ -7,6 +7,7 @@ var tabCompoATT = [];
 var tabRempl = [];
 var tabRentrant = [];
 var tabSortant = [];
+var DIV_TIT_GB = 'divTitulaireGB';
 var DIV_TIT_DEF = 'divTitulaireDEF';
 var DIV_TIT_MIL = 'divTitulaireMIL';
 var DIV_TIT_ATT = 'divTitulaireATT';
@@ -32,7 +33,7 @@ function submitForm(name) {
 }
 
 // Appelée lors de la validation de l'équipe
-function controlerBonus() {
+function controlerTitulairesEtBonus() {
   var formOK = true;
   if (!$('#blocChoixJoueurBonus').hasClass('cache')) {
     if ($('select[name="choixJoueurBonus"]').find(":selected").val() == -1) {
@@ -47,8 +48,33 @@ function controlerBonus() {
   if (!formOK && $('#messageErreurBonus').hasClass('cache')) {
     $('#messageErreurBonus').removeClass('cache');
   }
-
-  return formOK;
+  
+  var formTitu = true;
+  $('#' + DIV_TIT_GB + ' select').each(function() {
+    if ($(this).find(":selected").val() == -1) {
+      formTitu = false;
+    }
+  });
+  $('#' + DIV_TIT_DEF + ' select').each(function() {
+    if ($(this).find(":selected").val() == -1) {
+      formTitu = false;
+    }
+  });
+  $('#' + DIV_TIT_MIL + ' select').each(function() {
+    if ($(this).find(":selected").val() == -1) {
+      formTitu = false;
+    }
+  });
+  $('#' + DIV_TIT_ATT + ' select').each(function() {
+    if ($(this).find(":selected").val() == -1) {
+      formTitu = false;
+    }
+  });
+  if (!formTitu && $('#messageErreurTitulaires').hasClass('cache')) {
+    $('#messageErreurTitulaires').removeClass('cache');
+  }
+  
+  return formOK && formTitu;
 }
 
 function suppSelectBonusMalus() {
