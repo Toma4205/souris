@@ -43,8 +43,9 @@ if (isset($calReel) && $ligue->etat() == EtatLigue::EN_COURS)
 
   <div class="margin_top_1rem">
     <input type="submit" value="Valider la journée" name="enregistrer"
-      onclick="return controlerBonus();" class="marginBottom width_200px" />
+      onclick="return controlerTitulairesEtBonus();" class="marginBottom width_200px" />
   </div>
+  <div id="messageErreurTitulaires" class="cache">Règle n°1 du foot : mettre 11 titulaires !</div>
   <div id="messageErreurBonus" class="cache">Jean-Michel à moitié... Ta saisie du bonus/malus est incomplète !</div>
   <?php
   } // Fin du IF $calLigue->id() != null
