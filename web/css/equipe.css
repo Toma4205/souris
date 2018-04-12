@@ -141,7 +141,7 @@
   padding: 1rem 0;
 }
 
-#messageErreurBonus {
+#messageErreurBonus, #messageErreurTitulaires {
   font-size: .8rem;
   font-weight: bold;
   padding: .5rem 0;
