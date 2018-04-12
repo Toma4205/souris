@@ -40,7 +40,7 @@
     {
       echo '<div class="detail_effectif">';
       echo '<div class="detail_effectif_titre">Gardien</div>';
-      echo '<div>';
+      echo '<div id="divTitulaireGB">';
       afficherContenuSelect('1. ', 1, $gb, $tabCompo);
       echo '</div>';
       echo '</div>';
