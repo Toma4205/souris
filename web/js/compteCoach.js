@@ -33,7 +33,6 @@ function supprimerActualite(id) {
         success : function(code_html, statut){
            retourSuppActu(code_html);
         },
-
         error : function(resultat, statut, erreur){
           retourSuppActu(0);
         },

@@ -1,5 +1,5 @@
 <?php
-function afficherContenuSelectRentrant($numRempl, $def, $mil, $att, $tabRempl, $tabRentrant)
+function afficherContenuSelectRentrant($numRempl, $gb, $def, $mil, $att, $tabRempl, $tabGBRempl, $tabRentrant)
 {
   $contenu = '<select name="rentrant_' . $numRempl . '" class="selectChoixRempl" onchange="javascript:onSelectionRentrant(\''. $numRempl . '\');">';
   if (isset($tabRentrant[$numRempl]) && $tabRentrant[$numRempl] == -1) {
@@ -8,15 +8,20 @@ function afficherContenuSelectRentrant($numRempl, $def, $mil, $att, $tabRempl, $
     $contenu .= '<option value="-1">...</option>';
   }
 
-  $contenu .= ajouterOptionRentrant($numRempl, $def, $tabRempl, $tabRentrant);
-  $contenu .= ajouterOptionRentrant($numRempl, $mil, $tabRempl, $tabRentrant);
-  $contenu .= ajouterOptionRentrant($numRempl, $att, $tabRempl, $tabRentrant);
+  if ($numRempl < 6) {
+    $contenu .= ajouterOptionRentrant($numRempl, $def, $tabRempl, $tabRentrant);
+    $contenu .= ajouterOptionRentrant($numRempl, $mil, $tabRempl, $tabRentrant);
+    $contenu .= ajouterOptionRentrant($numRempl, $att, $tabRempl, $tabRentrant);
+  } else {
+    $contenu .= ajouterOptionRentrant($numRempl, $gb, $tabGBRempl, $tabRentrant);
+  }
+
   $contenu .= '</select>';
 
   echo $contenu;
 }
 
-function afficherContenuSelectSortant($numRempl, $def, $mil, $att, $tabTitu, $tabRrentrant, $tabSortant)
+function afficherContenuSelectSortant($numRempl, $gb, $def, $mil, $att, $tabTitu, $tabGbTitu, $tabRrentrant, $tabSortant)
 {
   $contenu = '<select name="sortant_' . $numRempl . '" class="selectChoixRempl" onchange="javascript:onSelectionSortant(\''. $numRempl . '\');">';
   if (isset($tabSortant[$numRempl]) && $tabSortant[$numRempl] == -1) {
@@ -25,9 +30,14 @@ function afficherContenuSelectSortant($numRempl, $def, $mil, $att, $tabTitu, $ta
     $contenu .= '<option value="-1">...</option>';
   }
 
-  $contenu .= ajouterOptionSortant($numRempl, $def, $tabTitu, $tabRrentrant, $tabSortant);
-  $contenu .= ajouterOptionSortant($numRempl, $mil, $tabTitu, $tabRrentrant, $tabSortant);
-  $contenu .= ajouterOptionSortant($numRempl, $att, $tabTitu, $tabRrentrant, $tabSortant);
+  if ($numRempl < 6) {
+    $contenu .= ajouterOptionSortant($numRempl, $def, $tabTitu, $tabRrentrant, $tabSortant);
+    $contenu .= ajouterOptionSortant($numRempl, $mil, $tabTitu, $tabRrentrant, $tabSortant);
+    $contenu .= ajouterOptionSortant($numRempl, $att, $tabTitu, $tabRrentrant, $tabSortant);
+  } else {
+    $contenu .= ajouterOptionSortant($numRempl, $gb, $tabTitu, $tabRrentrant, $tabSortant);
+  }
+
   $contenu .= '</select>';
 
   echo $contenu;
@@ -94,10 +104,12 @@ function ajouterOptionSortant($numPosition, $joueurs, $tabTitu, $tabRrentrant, $
 
 <?php
     $tabTitu = [];
+    $tabGbTitu = [];
     $tabRempl = [];
     $tabGB = [];
+    $tabGBRempl = [];
     foreach ($gb as $joueur) {
-        $tabGB[] = $joueur->id();
+        $tabGB[$joueur->id()] = $joueur->id();
     }
 
     foreach ($tabCompo as $numero => $joueur) {
@@ -107,32 +119,43 @@ function ajouterOptionSortant($numPosition, $joueurs, $tabTitu, $tabRrentrant, $
             $tabTitu[$numero] = $joueur;
           } elseif ($cleGB == 0) {
             $tabRempl[$numero] = $joueur;
+          } else {
+            $tabGBRempl[$numero] = $joueur;
           }
+        } else {
+          $tabGbTitu = $joueur;
         }
     }
 
-if (isset($gb))
-{
-  for ($numRemplacement = 1; $numRemplacement <= 5; $numRemplacement++)
-  {
-  echo '<div class="conteneurRow padding_bottom_15px">';
+    if (isset($gb))
+    {
+      for ($numRemplacement = 1; $numRemplacement <= 6; $numRemplacement++)
+      {
+        // numRemplacement 6 => pour bonus changement gardien
 
-  echo '<div>';
-  afficherContenuSelectRentrant($numRemplacement, $def, $mil, $att, $tabRempl, $tabRentrant);
-  echo '</div>';
-  echo '<div class="signeRemplacement"><img src="web/img/rempl.png" alt=" > " width="20px" height="20px" /></div>';
-  echo '<div>';
-  afficherContenuSelectSortant($numRemplacement, $def, $mil, $att, $tabTitu, $tabRentrant, $tabSortant);
+        if ($numRemplacement == 6) {
+          echo '<div id="libDivRemplacement_6" class="message_ingo cache">Remplacement gardien</div>';
+          echo '<div id="divRemplacement_'.$numRemplacement.'" class="conteneurRow padding_bottom_15px cache">';
+        } else {
+          echo '<div id="divRemplacement_'.$numRemplacement.'" class="conteneurRow padding_bottom_15px">';
+        }
 
-  $value = '';
-  if (isset($tabNote[$numRemplacement])) {
-      $value = 'value="' . $tabNote[$numRemplacement] . '" ';
-  }
-  echo '<input class="width_25px margin_left_5px" type="text" name="note_' . $numRemplacement . '" onchange="javascript:verifierNote(' . $numRemplacement . ');" maxlength="3" ' . $value . '/>';
-  echo '</div>';
-  echo '</div>';
-  }
-}
+        echo '<div>';
+        afficherContenuSelectRentrant($numRemplacement, $gb, $def, $mil, $att, $tabRempl, $tabGBRempl, $tabRentrant);
+        echo '</div>';
+        echo '<div class="signeRemplacement"><img src="web/img/rempl.png" alt=" > " width="20px" height="20px" /></div>';
+        echo '<div>';
+        afficherContenuSelectSortant($numRemplacement, $gb, $def, $mil, $att, $tabTitu, $tabGbTitu, $tabRentrant, $tabSortant);
+
+        $value = '';
+        if (isset($tabNote[$numRemplacement])) {
+          $value = 'value="' . $tabNote[$numRemplacement] . '" ';
+        }
+        echo '<input class="width_25px margin_left_5px" type="text" name="note_' . $numRemplacement . '" onchange="javascript:verifierNote(' . $numRemplacement . ');" maxlength="3" ' . $value . '/>';
+        echo '</div>';
+        echo '</div>';
+      }
+    }
 ?>
 
 </section>

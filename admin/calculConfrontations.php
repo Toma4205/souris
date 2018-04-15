@@ -821,20 +821,6 @@ function appliquerBonusMalus($bonus, $idEquipe, $idEquipeAdv, $idCompo, $idCompo
 				}
 			}
 		}
-	}elseif($bonus == ConstantesAppli::BONUS_MALUS_BOUCHER){
-		//A FAIRE
-		//Un joueur à 0 et sans but dans chaque camp
-		addLogEvent( $bonus);
-	}elseif($bonus == ConstantesAppli::BONUS_MALUS_CHA_GB){
-		//A FAIRE
-		//Remplacement tactique sur le gardien
-		addLogEvent( $bonus);
-	}elseif($bonus == ConstantesAppli::BONUS_MALUS_DIN_ARB){
-		addLogEvent($bonus.' (traité en boucle 8)')	;
-	}elseif($bonus == ConstantesAppli::BONUS_MALUS_MAU_CRA){
-		//A FAIRE
-		//Note de -1 pour un joueur adverse
-		addLogEvent( $bonus);
 	}
 }
 
@@ -1479,7 +1465,8 @@ function getNomenclatureBonusMalus()
 			|| $code == ConstantesAppli::BONUS_MALUS_BUS
       || $code == ConstantesAppli::BONUS_MALUS_MAU_CRA
 			|| $code == ConstantesAppli::BONUS_MALUS_BOUCHER
-			|| $code == ConstantesAppli::BONUS_MALUS_CON_ZZ) {
+			|| $code == ConstantesAppli::BONUS_MALUS_CON_ZZ
+			|| $code == ConstantesAppli::BONUS_MALUS_CHA_GB) {
 			$tabBonus[] = $donnees;
 		}
 	}

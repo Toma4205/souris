@@ -9,6 +9,8 @@ if (isset($calReel) && $ligue->etat() == EtatLigue::EN_COURS)
 ?>
 <section>
   <input type="hidden" name="numJourneeCalReel" value="<?php echo $calReel->numJournee(); ?>"/>
+  <input type="hidden" name="_0" value="<?php echo $equipe->id(); ?>"/>
+  <input type="hidden" name="_1" value="<?php echo $calLigue->id(); ?>"/>
 
   <!-- ******************** -->
   <!-- AFFICHAGE DU BANDEAU -->
@@ -45,8 +47,8 @@ if (isset($calReel) && $ligue->etat() == EtatLigue::EN_COURS)
     <input type="submit" value="Valider la journée" name="enregistrer"
       onclick="return controlerTitulairesEtBonus();" class="marginBottom width_200px" />
   </div>
-  <div id="messageErreurTitulaires" class="cache">Règle n°1 du foot : mettre 11 titulaires !</div>
-  <div id="messageErreurBonus" class="cache">Jean-Michel à moitié... Ta saisie du bonus/malus est incomplète !</div>
+  <div id="messageErreurTitulaires" class="cache erreur">Règle n°1 du foot : mettre 11 titulaires !</div>
+  <div id="messageErreurBonus" class="cache erreur">Jean-Michel à moitié... Ta saisie du bonus/malus est incomplète !</div>
   <?php
   } // Fin du IF $calLigue->id() != null
   else

@@ -19,7 +19,7 @@ require_once("vue/commun/enteteflex.php");
           $nbAction++;
           echo '<li class="detail_action_actu conteneurRow">';
           echo '<div><span class="float_left image_action_actu"><img src="web/img/action_mercato_compte_coach.png" alt="" width="50px" height="50px"/></span>';
-          echo 'Ton équipe n\'est pas terminée pour la ligue <b>"' . $value->nom() . '"</b> !';
+          echo 'Ton équipe n\'est pas terminée pour la ligue <b>' . $value->nom() . '</b> !';
           echo '</div><div class="margin_auto"></div><div class="conteneurRowDroite margin_auto_vertical">';
           echo '<input type="submit" class="font_size_point_8rem" value="Je prends Ney et Fekir" name="continuerCreaLigue[' . $value->id() . ']" />';
           echo '</div></li>';
@@ -31,7 +31,7 @@ require_once("vue/commun/enteteflex.php");
             $nbAction++;
             echo '<li class="detail_action_actu conteneurRow">';
             echo '<div><span class="float_left image_action_actu"><img src="web/img/action_creation_compte_coach.png" alt="" width="50px" height="50px"/></span>';
-            echo 'Ta ligue <b>"' . $value->nom() . '"</b> est toujours en cours de création !';
+            echo 'Ta ligue <b>' . $value->nom() . '</b> est toujours en cours de création !';
             echo '</div><div class="margin_auto"></div><div class="conteneurRowDroite margin_auto_vertical">';
             echo '<input type="submit" class="font_size_point_8rem" value="J\'y vais" name="continuerCreaLigue[' . $value->id() . ']" />';
             echo '<input type="submit" class="font_size_point_8rem" value="J\'abandonne" name="suppCreaLigue[' . $value->id() . ']" onclick="return confirmerSuppCreaLigue(\'' . $value->nom() . '\');" />';
@@ -42,7 +42,7 @@ require_once("vue/commun/enteteflex.php");
             $nbAction++;
             echo '<li class="detail_action_actu">';
             echo '<span class="float_left image_action_actu"><img src="web/img/action_invit_compte_coach.png" alt="" width="50px" height="50px"/></span>';
-            echo '<b>' . $value->nomCoachCreateur() . '</b> t\'invite dans sa ligue <b>"' . $value->nom() . '".</b>';
+            echo '<b>' . $value->nomCoachCreateur() . '</b> t\'invite dans sa ligue <b>' . $value->nom() . '.</b>';
             if ($value->libellePari() != null) {
               echo '<br/> (enjeu : <b>' . $value->libellePari() . '</b>)';
             }

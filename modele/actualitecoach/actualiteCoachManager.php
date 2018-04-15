@@ -29,7 +29,7 @@ class ActualiteCoachManager extends ManagerBase
 
   public function supprimerActu($id)
   {
-    $q = $this->_bdd->prepare('UPDATE actualite_coachf SET date_suppression = NOW() WHERE id = :id');
+    $q = $this->_bdd->prepare('UPDATE actualite_coach SET date_suppression = NOW() WHERE id = :id');
 		$q->bindValue(':id', $id);
 
 		$q->execute();
