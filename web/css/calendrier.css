@@ -224,7 +224,7 @@
   margin: 0 .5rem;
   width: 20px;
 }
-.detail_match_equipe_joueur_tontonpat {
+.detail_match_equipe_joueur_tontonpat, .detail_match_equipe_joueur_boucher {
   margin: 0 .5rem;
   width: 65px;
 }
