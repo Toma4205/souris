@@ -14,6 +14,8 @@ class CompoEquipe extends ClasseBase
   // Jointure table;
   private $_libCourtBonusMalus;
   private $_libLongBonusMalus;
+  private $_idJoueurReelEquipe;
+  private $_idJoueurReelAdverse;
   private $_nomJoueurReelEquipe;
   private $_nomJoueurReelAdverse;
 
@@ -29,6 +31,8 @@ class CompoEquipe extends ClasseBase
   public function pariExt() { return $this->_pariExt; }
   public function libCourtBonusMalus() { return $this->_libCourtBonusMalus; }
   public function libLongBonusMalus() { return $this->_libLongBonusMalus; }
+  public function idJoueurReelEquipe() { return $this->_idJoueurReelEquipe; }
+  public function idJoueurReelAdverse() { return $this->_idJoueurReelAdverse; }
   public function nomJoueurReelEquipe() { return $this->_nomJoueurReelEquipe; }
   public function nomJoueurReelAdverse() { return $this->_nomJoueurReelAdverse; }
 
@@ -65,6 +69,16 @@ class CompoEquipe extends ClasseBase
   public function setLibLongBonusMalus($libLongBonusMalus)
   {
       $this->_libLongBonusMalus = $libLongBonusMalus;
+  }
+
+  public function setIdJoueurReelEquipe($idJoueurReelEquipe)
+  {
+      $this->_idJoueurReelEquipe = $idJoueurReelEquipe;
+  }
+  
+  public function setIdJoueurReelAdverse($idJoueurReelAdverse)
+  {
+      $this->_idJoueurReelAdverse = $idJoueurReelAdverse;
   }
 
   public function setNomJoueurReelEquipe($nomJoueurReelEquipe)

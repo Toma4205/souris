@@ -11,7 +11,8 @@ class CompoEquipeManager extends ManagerBase
 
   public function findCompoByEquipeEtCalLigue($idEquipe, $idCalLigue)
   {
-    $q = $this->_bdd->prepare('SELECT ce.*, jr.nom as nomJoueurReelEquipe,
+    $q = $this->_bdd->prepare('SELECT ce.*, bm.id_joueur_reel_equipe as idJoueurReelEquipe,
+      bm.id_joueur_reel_adverse as idJoueurReelAdverse, jr.nom as nomJoueurReelEquipe,
       jr2.nom as nomJoueurReelAdverse, n.libelle_court as libCourtBonusMalus,
       n.libelle as libLongBonusMalus
       FROM compo_equipe ce
