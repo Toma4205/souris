@@ -17,7 +17,7 @@ require_once("vue/commun/enteteflex.php");
 	  <div class="container-fluid">
       		<div class="row">
 				<div class="col-sm-3">
-					<ul class="nav nav-pills nav-stacked">
+					<!--<ul class="nav nav-pills nav-stacked">
 						<li role="presentation" class="active"><a href="#speed">En speed</a></li>
 						<li role="presentation"><a href="#debuter">Pour débuter</a></li>
 						<li role="presentation"><a href="#nouvelle">Nouvelle ligue</a></li>
@@ -32,7 +32,7 @@ require_once("vue/commun/enteteflex.php");
 						<li role="presentation"><a href="#tonton">Tonton Pat et P'tit jeune</a></li>
 						<li role="presentation"><a href="#gagner">Gagner une ligue</a></li>
 						<li role="presentation"><a href="#conference">Conférence de presse</a></li>
-					  </ul>
+					  </ul>-->
 				</div>	
 				<div class="col-sm-9">
 					<div class="row">
@@ -154,9 +154,9 @@ require_once("vue/commun/enteteflex.php");
 							<br/>
 							Tu peux aligner 7 remplaçants sur la feuille de match.
 							<br/>
-							<strong>Stratégie de remplacement : </strong>Comme tu es un fin stratège, tu peux définir des règles de remplacement en fonction de la note obtenue par le titulaire. C'est compliqué ? Attends, prenons un exemple, tu positionnes Marcel en défenseur titulaire et Laurent en défenseur remplaçant. Tu peux définir la règle suivante : Manu remplace Marcel si Marcel a une note inférieur à 5. Capiche !? Il ne peut pas y avoir de stratégie de remplacement sur un gardien (sauf BONUS).
+							<strong>Stratégie de remplacement : </strong>Comme tu es un fin stratège, tu peux définir des règles de remplacement en fonction de la note obtenue par le titulaire. C'est compliqué ? Attends, prenons un exemple, tu positionnes Marcel en défenseur titulaire et Laurent en défenseur remplaçant. Tu peux définir la règle suivante : Laurent remplace Marcel si Marcel a une note inférieur à 5. Capiche !? Il ne peut pas y avoir de stratégie de remplacement sur un gardien (sauf BONUS).
 							<br/>
-							<strong>Les chouchous du coach : </strong>si tu avais aligné un joueur titulaire qui n'a finalement pas joué en réalité (la honte...), il se fera remplacé par un des remplaçants. L'heureux remplaçant sera le joueur qui a le même poste et qui est assis le plus proche du coach (chouchou). Si aucun remplaçant n'a le même poste que le titulaire absent alors il pourra être remplacé par un poste plus offensif  (un défenseur peut être remplacé par un milieu ou un attaquant et un milieu peut être remplacé par un attaquant). Dans ce cas, le remplaçant ne joue pas à son poste de prédilection, sa note prend donc un malus de -0,5 par poste de différence avec le titulaire. Les gardiens ne peuvent pas être remplacés par un joueur de champ.
+							<strong>Les chouchous du coach : </strong>si tu avais aligné un joueur titulaire qui n'a finalement pas joué en réalité (la honte...), il se fera remplacé par un des remplaçants. L'heureux remplaçant sera le joueur qui a le même poste et qui est assis le plus proche du coach (chouchou). Si aucun remplaçant n'a le même poste que le titulaire absent alors il pourra être remplacé par un poste plus défensif  (un attaquant peut être remplacé par un milieu ou un défenseur et un milieu peut être remplacé par un défenseur). Dans ce cas, le remplaçant ne joue pas à son poste de prédilection, sa note prend donc un malus de -0,5 par poste de différence avec le titulaire. Les gardiens ne peuvent pas être remplacés par un joueur de champ.
 						</div>
 					</div>
 					<div id="bonus" class="col-sm-12">
@@ -169,7 +169,7 @@ require_once("vue/commun/enteteflex.php");
 							</div>
 							<div class="col-sm-9">
 								<div style="line-height : 20px; text-align: justify;">
-									<strong>Le Bus</strong> : c'est la stratégie défensive maximum ! Tu n'encaisseras aucun but basé sur la note des joueurs adverses. Seuls les buts réels de ton adversaire comptera.
+									<strong>Le Bus</strong> : c'est la stratégie défensive maximum ! Tu n'encaisseras aucun but basé sur la note des joueurs adverses. Seuls les buts réels de ton adversaire compteront.
 									<br/>
 									<br/>
 								</div>
