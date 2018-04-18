@@ -17,6 +17,13 @@
         <script src="web/js/constantes.js"></script>
         <script src="web/js/jquery-1.12.4.js"></script>
         <script src="web/js/jquery.dataTables.min.js"></script>
+		
+		<script src="web/bootstrap/dist/js/bootstrap.min.js"></script>
+		
+		<!-- Ces deux appels font buguer l'affichage du menu principal
+			<link href="web/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+		<script src="web/bootstrap/js/jquery.min.js"></script>
+		-->
         <?php
           if (isset($vueJs))
           {
@@ -88,6 +95,7 @@ if (isset($coach))
     afficherMenu('creationLigue', 'Créer une ligue');
     afficherMenu('prepaMercato', 'Préparer mon mercato');
     afficherMenu('gestionCompteCoach', 'Mon compte');
+	afficherMenu('reglement', 'Réglement');
   }
   elseif (isset($ligue))
   {

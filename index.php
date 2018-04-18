@@ -63,6 +63,12 @@ elseif (isset($_SESSION[ConstantesSession::COACH]))
         unset($_SESSION[ConstantesSession::EQUIPE_CREA]);
         require_once('controleur/prepaMercato/ctr_prepaMercato.php');
     }
+	elseif ($_GET['section'] == 'reglement')
+    {
+        unset($_SESSION[ConstantesSession::LIGUE_CREA]);
+        unset($_SESSION[ConstantesSession::EQUIPE_CREA]);
+        require_once('controleur/reglement/ctr_reglement.php');
+    }
 
     if (isset($_SESSION[ConstantesSession::LIGUE]))
     {
